@@ -1,0 +1,463 @@
+.home {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.firstSection {
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.homeBanner {
+    width: 95%;
+    height: 100%;
+    position: relative;
+    border-radius: 25px;
+}
+
+.homeBanner h1, .homeBanner p {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    color: #F3F0EB;
+    margin: 0;
+    padding: 0;
+}
+
+.homeBanner h1 {
+    top: 30%;
+    font-size: 12.5rem;
+}
+
+.homeBanner p {
+    top: 53.5%;
+    font-size: 2.813rem;
+    font-weight: 100;
+}
+
+.homeBanner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 75%;
+    border-radius: 25px;
+}
+
+.bannerFilters {
+    width: 90%;
+    height: 105px;
+    bottom: 0;
+    margin-bottom: -1px;
+    position: absolute;
+    background-color: #F3F0EB;
+    border-radius: 25px 25px 0px 0px;
+}
+
+.edgeLeft {
+    position: absolute;
+    left: 0;
+    margin-left: -1.6%;
+    bottom: 1;
+    width: 25px;
+    height: 35px;
+    object-fit: fill;
+}
+
+.edgeRight {
+    position: absolute;
+    right: 0;
+    margin-right: -1.6%;
+    bottom: 1;
+    width: 25px;
+    height: 35px;
+    object-fit: fill;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+.filterContent {
+    width: calc(100% - 5%);
+    height: 100px;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.allFilters {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    width: 100%;
+    position: relative;
+}
+
+.filtersLeft {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    width: 75%;
+}
+
+.filterDestination, .filterCalender {
+    width: 100%;
+}
+
+.filterDestination, .filterCalender, .filterPeople {
+    display: flex;
+    flex-direction: row;
+}
+
+.filterDestination i, .filterCalender i, .filterPeople i {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    border: 4px solid #1F1B17;
+    background-color: white;
+    color: #1F1B17;
+    border-radius: 999px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.filterDestination input, .filterCalender input, .filterPeople input {
+    background-color: white;
+    border-radius: 0px 15px 15px 0px;
+    padding-left: 25px;
+    margin-left: -15px;
+    border: none;
+    z-index: 1;
+    height: 40px;
+    width: 100%;
+    font-size: 1.125rem;
+    color: #1F1B17;
+}
+
+.filterSearch {
+    background-color: #B88A44;
+    color: #F3F0EB;
+    border: none;
+    height: 35px;
+    width: 90px;
+    font-size: 1.125rem;
+    border-radius: 999px;
+    transition: 0.15s;
+}
+
+.filterSearch:hover {
+    cursor: pointer;
+    transition: 0.25s;
+    background-color: #6B7A3A;
+}
+
+.secondSection {
+    width: 100%;
+    height: 100%;
+    max-height: 650px;
+    padding-bottom: 75px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: #F3F0EB;
+    border-radius: 0px 0px 25px 25px;
+    z-index: 1;
+    color: #1F1B17;
+}
+
+.secondBorder {
+    width: 90%;
+    height: 100%;
+}
+
+.typeTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 280px;
+}
+
+.typeTitle h2 {
+    font-size: 3.438rem;
+}
+
+.typeTitle p {
+    font-size: 1.875rem;
+    font-style: italic;
+    font-weight: 400;
+}
+
+.typeContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 25px;
+    gap: 50px;
+    position: relative;
+}
+
+.hotelType {
+    width: 100%;
+    height: 300px;
+    transition: 0.15s;
+}
+
+.hotelType img {
+    background-color: #B88A44;
+    width: 100%;
+    height: 250px;
+    border-radius: 25px 25px 5px 5px;
+    -webkit-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
+    -moz-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
+    box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
+    transition: 0.25s;
+    object-fit: cover;
+}
+
+.hotelType h3 {
+    width: 100%;
+    font-size: 1.5rem;
+    font-weight: 100;
+    height: 50px;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    color: #1F1B17;
+}
+
+.hotelType:hover {
+    transition: 0.25s;
+    cursor: pointer;
+
+    img {
+        height: 275px; 
+        transition: 0.25s;
+    }
+}
+
+.thirdSection {
+    background-color: #B88A44;
+    height: 80vh;
+    max-height: 750px;
+    z-index: 2;
+    margin-top: -50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.thirdBorder {
+    width: 90%;
+    height: 70%;
+    position: relative;
+}
+
+.thirdContent {
+    display: flex;
+    justify-content: space-between;
+    gap: 5%;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.thirdContent img {
+    width: 55%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 25px;
+}
+
+.thirdInfo {
+    width: 45%;
+    color: #F3F0EB;
+    position: relative;
+}
+
+.thirdInfo h2 {
+    font-size: 3.125rem;
+}
+
+.thirdInfo p {
+    font-size: 2.188rem;
+}
+
+.registerButton {
+    background-color: #F3F0EB;
+    color: #1F1B17;
+    border: none;
+    font-size: 20px;
+    border-radius: 999px;
+    width: 160px;
+    height: 50px;
+    transition: 0.15s;
+    position: absolute;
+    top: 75%;
+    left: 45%;
+    transform: translate(-50%);
+}
+
+.registerButton:hover {
+    transition: 0.35s;
+    cursor: pointer;
+    background-color: #1F1B17;
+    color: #F3F0EB;
+}
+
+.fourthSection {
+    margin-top: -50px;
+    width: 100%;
+    height: 100%;
+    max-height: 850px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: #F3F0EB;
+    border-radius: 25px 25px 0px 0px;
+    z-index: 1;
+    margin-bottom: 0;
+    padding-bottom: 50px;
+}
+
+.fourthBorder {
+    width: 90%;
+}
+
+.fourthTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 280px;
+    color: #1F1B17;
+    margin-top: 50px;
+}
+
+.fourthTitle h2 {
+    font-size: 3.438rem;
+}
+
+.fourthTitle a {
+    font-size: 1.875rem;
+    font-style: italic;
+    color: #1F1B17;
+    transition: 0.25s;
+}
+
+.fourthTitle a:hover {
+    transition: 0.25s;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.popularHotels {
+    height: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.hotelCard {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border-radius: 25px 25px 5px 5px;
+    position: relative;
+    -webkit-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
+    -moz-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
+    box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
+}
+
+.hotelCard img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 25px 25px 5px 5px;
+}
+
+.hotelInfo {
+    background-color: #B88A44;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+    width: calc(90% - 5%);
+    max-width: 300px;
+    border-radius: 15px 15px 0px 0px;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    padding-top: 5%;
+    color: #F3F0EB;
+    height: 25%;
+    transition: 0.15s;
+    overflow: hidden;
+}
+
+.hotelInfo h3 {
+    font-size: 1.25rem;
+    margin: 0;
+    padding: 0;
+    margin-top: -7.5px;
+    overflow: hidden;
+
+    display: -webkit-box;  
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis; 
+}
+
+.hotelInfo p {
+    font-size: 1.125rem;
+    font-style: italic;
+    margin-top: 5px;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.starRating {
+    color: #F3F0EB;
+    width: 12px;
+    height: 12px;
+    display: flex;
+    gap: 10px;
+}
+
+.hotelInfo span {
+    margin-top: 15px;
+    bottom: 15px;
+    position: absolute;
+    text-align: right;
+    width: 90%;
+    text-decoration: underline;
+    opacity: 0;
+}
+
+.hotelCard:hover {
+    cursor: pointer;
+
+    .hotelInfo {
+        height: 35%;
+        transition: 0.25s;
+        background-color: #6B7A3A;
+    }
+
+    span {
+        opacity: 1;
+    }
+}

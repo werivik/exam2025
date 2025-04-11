@@ -1,0 +1,225 @@
+header {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    padding-top: 2.5%;
+    top: 0;
+    transition: 0.15s;
+    font-family: "Playfair Display", serif;
+  }
+  
+  nav {
+    position: relative;
+    height: 100%;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    transition: 0.15s;
+  }
+
+  nav ul li a, a, li a {
+    font-size: 1.25rem;
+  }
+
+  header.scrolled {
+    padding-top: 0%;
+    transition: 0.15s;
+  }
+
+  header.scrolled nav {
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 0px 0px 25px 25px;
+    transition: 0.15s;
+    background-color: #1f1b1731;
+  }
+
+  .menu {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: 0.25s;
+  color: white;
+
+  display: flex;
+  flex-direction: row;
+  gap: 7.5px;
+  border-radius: 5px;
+  border: solid rgba(255, 255, 255, 0) 2px;
+  padding-left: 5px;
+  padding-right: 5px;
+  height: 2.188rem;
+  margin-left: -5px;
+  margin-top: 10px;
+ }
+
+ .menu:hover {
+  transition: 0.25s;
+  border: solid white 2px;
+}
+
+.headerRightLinks {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 2.188rem;
+    width: 40%;
+}
+
+.headerRightLinks li {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.headerRightLinks li a {
+  border: solid 2px rgba(255, 255, 255, 0);
+  border-radius: 5px;
+  margin-right: -5px;
+  padding-right: 5px;
+  padding-left: 5px;
+  height: 2.188rem;
+  transition: 0.25s;
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: 0.25s;
+  color: white;
+}
+
+.headerRightLinks li a:hover {
+  transition: 0.25s;
+  border: solid white 2px;
+}
+
+.headerLogo {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    transition: 0.35s;
+}
+
+.headerLogoHover {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    transition: 0.35s;
+}
+
+.searchContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  transition: 0.25s;
+}
+
+.searchContainer.searchOpen {
+  justify-content: space-between;
+  transition: 0.25s;
+
+}
+
+.searchInput {
+  padding: 0.25rem;
+  border: none;
+  border-radius: 10px;
+  top: 0;
+  margin-top: -5px;
+  width: 100%;
+  min-width: 100%;
+  position: absolute;
+  z-index: 998;
+  font-size: 1rem;
+  transition: 0.25s;
+}
+
+.suggestionsList {
+  width: calc(100% - 0.25rem);
+  position: absolute;
+  top: 90%;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+  text-align: left;
+  padding-left: 0.25rem;
+  left: 0;
+  font-size: 1.25rem;
+  background-color: white;
+  border-radius: 0px 0px 10px 10px;
+  z-index: 997;
+  transition: 0.25s;
+  -webkit-box-shadow: inset 0px 1px 67px -53px rgba(0,0,0,0.39);
+  -moz-box-shadow: inset 0px 1px 67px -53px rgba(0,0,0,0.39);
+  box-shadow: inset 0px 1px 67px -53px rgba(0,0,0,0.39);  
+}
+
+.suggestionItem {
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  transition: 0.25s;
+}
+
+.suggestionItem:hover {
+  background-color: #f2f2f2;
+  transition: 0.25s;
+}
+
+.suggestionLabel {
+  opacity: 50%;
+  font-size: 0.85rem;
+  width: 60px;
+  transition: 0.25s;
+}
+
+.searchContainer i {
+  z-index: 999;
+  border: solid 2px rgba(255, 255, 255, 0);
+  border-radius: 5px;
+  margin-right: -5px;
+  padding-right: 5px;
+  padding-left: 5px;
+  height: 2.188rem;
+  transition: 0.25s;
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: 0.25s;
+  color: white;
+}
+
+.searchContainer i:hover {
+  transition: 0.25s;
+  border: solid white 2px;
+  cursor: pointer;
+}
+
+.searchbarContent {
+  display: none;
+  right: 100%;
+  transition: 0.25s;
+}
+
+.searchbarContent {
+  margin-right: -50px;
+}
