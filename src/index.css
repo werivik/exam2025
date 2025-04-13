@@ -29,3 +29,16 @@ h1 {
     font-weight: 800;
     font-style: normal;
 }
+
+.pageContent {
+    transition: filter 0.3s ease;
+  }
+  
+  .pageContent.blurred {
+    filter: blur(25px);
+    pointer-events: none;
+  }
+  
+  .testBlurred {
+    filter: blur(25px);
+  }

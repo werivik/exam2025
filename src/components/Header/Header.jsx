@@ -16,7 +16,8 @@ function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
   // Scroll behavior
   useEffect(() => {
     if (location.pathname === "/") {
@@ -110,24 +111,38 @@ function Header() {
 
   return (
     <header className={scrolled ? styles.scrolled : ""}>
+
       <nav className={styles.nav}>
         {/* Left Menu Button */}
-        <Link to="/" className={styles.menu}>
-          <i className="fa-solid fa-ellipsis-vertical"></i> Menu
-        </Link>
+        
+{/* Left Menu Button */}
+{!isSidebarOpen && (
+  <button className={styles.menuOpen} onClick={() => setIsSidebarOpen(true)}>
+    <i className="fa-solid fa-ellipsis-vertical"></i> Menu
+  </button>
+)}
 
-        <li className={styles.menuLinks}>
-          <Link to="/">Home</Link>
-          <Link to="/hotels">Venues</Link>
-          <Link to="/">My Bookings</Link>
-
-          <Link to="/about">About Us</Link>
-          <Link to="/contact">Contact Us</Link>
-
-          <Link to="/login">Login</Link>
-          <Link to="/register">Register</Link>
-        </li>
-
+{/* Sidebar Menu */}
+{isSidebarOpen && (
+  <div className={styles.sidebarHeader}>
+    <button className={styles.sidebarClose} onClick={() => setIsSidebarOpen(false)}>
+    <i class="fa-solid fa-angles-left"></i> Hide Menu
+    </button>
+    <li className={styles.menuLinks}>
+      <Link to="/">Home</Link>
+      <Link to="/hotels">Venues</Link>
+      <Link to="/costumer-profile">My Bookings</Link>
+    </li>
+    <li className={styles.menuLinks}>
+      <Link to="/about">About Us</Link>
+      <Link to="/contact">Contact Us</Link>
+    </li>
+    <li className={styles.menuLinks}>
+      <Link to="/login-costumer">Login</Link>
+      <Link to="/register-costumer">Register</Link>
+    </li>
+  </div>
+)}
 
         {/* Logo */}
         <Link to="/">
