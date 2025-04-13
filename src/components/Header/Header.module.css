@@ -223,3 +223,15 @@ header {
 .searchbarContent {
   margin-right: -50px;
 }
+
+.menuLinks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.menuLinks a {
+  color: white;
+  text-decoration: none;
+}

@@ -13,7 +13,7 @@ function Header() {
   const [venues, setVenues] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // Manage search bar visibility
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -27,7 +27,9 @@ function Header() {
 
       window.addEventListener("scroll", handleScroll);
       return () => window.removeEventListener("scroll", handleScroll);
-    } else {
+    } 
+    
+    else {
       setScrolled(true);
     }
   }, [location.pathname]);
@@ -42,7 +44,9 @@ function Header() {
         });
         const data = await res.json();
         setVenues(data.data || []);
-      } catch (err) {
+      } 
+      
+      catch (err) {
         console.error("Error fetching venues:", err);
       }
     };
@@ -111,6 +115,19 @@ function Header() {
         <Link to="/" className={styles.menu}>
           <i className="fa-solid fa-ellipsis-vertical"></i> Menu
         </Link>
+
+        <li className={styles.menuLinks}>
+          <Link to="/">Home</Link>
+          <Link to="/hotels">Venues</Link>
+          <Link to="/">My Bookings</Link>
+
+          <Link to="/about">About Us</Link>
+          <Link to="/contact">Contact Us</Link>
+
+          <Link to="/login">Login</Link>
+          <Link to="/register">Register</Link>
+        </li>
+
 
         {/* Logo */}
         <Link to="/">
