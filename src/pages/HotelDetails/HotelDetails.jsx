@@ -19,6 +19,9 @@ const HotelDetails = () => {
     const [loading, setLoading] = useState(true);
     const [currentSlide, setCurrentSlide] = useState(0);
 
+    const [showScrollIcon, setShowScrollIcon] = useState(true);
+
+
     useEffect(() => {
         const fetchHotel = async () => {
             try {
@@ -44,6 +47,20 @@ const HotelDetails = () => {
 
         fetchHotel();
     }, [id]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+          if (window.scrollY === 0) {
+            setShowScrollIcon(true);
+          } else {
+            setShowScrollIcon(false);
+          }
+        };
+      
+        window.addEventListener('scroll', handleScroll);
+      
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
 
     const handleNext = () => {
         if (!hotel?.media?.length) return;
@@ -140,21 +157,27 @@ const HotelDetails = () => {
                     )}
                 </div>
 
+                {showScrollIcon && (
+  <div className={styles.scrollIcon}>
+    <i className={`fa-solid fa-chevron-down ${styles.bounceIcon}`}></i>
+    <i className={`fa-solid fa-chevron-down ${styles.bounceIcon} ${styles.delay}`}></i>
+  </div>
+)}
                 <div className={styles.titleLocation}>
                     <h1>{hotel.name}</h1>
-                    <p>{hotel.location?.address}, {hotel.location?.city}, {hotel.location?.country}</p>
+                    <p><i class="fa-solid fa-location-dot"></i>{hotel.location?.address}, {hotel.location?.city}, {hotel.location?.country}</p>
                 </div>
 
                 <div className={styles.hotelInfo}>
                 <div className={styles.hotelInfoLeft}>
-                    <p><strong>Rating:</strong> {hotel.rating}</p>
-                    <p><strong>Description:</strong> {hotel.description}</p>
+                    <p className={styles.hotelRating}><strong>Rating:</strong> {hotel.rating} Stars</p>
+                    <p><strong>Description</strong><br></br>{hotel.description}</p>
                     <p><strong>Max Guests:</strong> {hotel.maxGuests}</p>
                 </div>
 
                 <div className={styles.hotelInfoRight}> 
-                    <p><strong>Price:</strong> ${hotel.price} / night</p>
-                    <button>Book Room</button>
+                    <p><strong>Price:</strong> ${hotel.price} / per night</p>
+                    <button className={styles.bookButton}>Book Room</button>
                 </div>
                 </div>
             </div>

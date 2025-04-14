@@ -201,10 +201,9 @@ function Header() {
               )}
             </div>
             <i
-              className="fa-solid fa-magnifying-glass"
-              onClick={toggleSearchBar}
-              style={{ color: isSearchOpen ? "#1F1B17" : "white" }}
-            ></i>
+  className={`fa-solid fa-magnifying-glass ${isSearchOpen ? styles.searchActive : styles.searchInactive}`}
+  onClick={toggleSearchBar}
+/>
           </li>
           <li>
             <Link to="/hotels">Venues</Link>

@@ -102,9 +102,110 @@
     width: 100%;
 }
 
+.scrollIcon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0rem;
+    margin-top: 2.8rem;
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 100%;
+  }
+  
+  .hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+  }
+  
+  .bounceIcon {
+    animation: bounce 1.5s infinite;
+    font-size: 1.5rem;
+    color: #1F1B17;
+    margin-top: -10px;
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+  
+    50% {
+      transform: translateY(20px);
+    }
+  }  
+
 .titleLocation {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    background-color: pink;
+    align-items: center;
+    height: 280px;
+    font-family: "Playfair Display", serif;
+}
+
+.titleLocation h1 {
+    font-size: 3.438rem;
+}
+
+.titleLocation p {
+    font-size: 1.875rem;
+    font-weight: 400;
+}
+
+.titleLocation i {
+    margin-right: 15px;
+    font-size: 20px;
+}
+
+.hotelInfo {
+    font-size: 1.5rem;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    font-family: "Playfair Display", serif;
+}
+
+.hotelInfoLeft {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.hotelInfoRight {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.hotelRating {
+    font-size: 2rem;
+    margin-top: 0;
+}
+
+.bookButton {
+    background-color: #B88A44;
+    color: #F3F0EB;
+    border: none;
+    height: 65px;
+    width: 240px;
+    font-size: 2rem;
+    border-radius: 999px;
+    transition: 0.15s;
+    font-family: "Playfair Display", serif;
+}
+
+.bookButton:hover {
+    cursor: pointer;
+    transition: 0.25s;
+    background-color: #6B7A3A;
 }

@@ -22,6 +22,7 @@ header {
     justify-content: space-between;
     font-size: 1.25rem;
     transition: 0.15s;
+    color: #f2f2f2;
   }
 
   nav ul li a, a, li a {
@@ -44,14 +45,22 @@ header {
     color: #1F1B17;
   }
 
-  header.scrolled nav .headerRightLinks li a, header.scrolled nav .menuOpen, header.scrolled nav .menuOpen i, header.scrolled nav .headerRightLinks .searchContainer i {
+  header.scrolled nav .headerRightLinks li a, header.scrolled nav .menuOpen, header.scrolled nav .menuOpen i, header.scrolled nav .headerRightLinks .searchInactive {
     color: #1F1B17;
     transition: 0.25s;
   }
 
-  header.scrolled nav .headerRightLinks li a:hover, header.scrolled nav .menuOpen:hover {
+  header.scrolled nav .headerRightLinks li a:hover, header.scrolled nav .menuOpen:hover ,header.scrolled nav .searchInactive:hover {
     transition: 0.25s;
     border-color: #1F1B17;
+  }
+
+  header.scrolled .searchContainer {
+    color: #1F1B17;
+  }
+
+  .searchContainer .searchActive {
+    color: #1F1B17;
   }
 
   .menuOpen {
@@ -95,6 +104,7 @@ header {
     align-items: flex-end;
     gap: 2.188rem;
     width: 40%;
+    color: #f2f2f2;
 }
 
 .headerRightLinks li {
@@ -211,6 +221,11 @@ header {
   transition: 0.25s;
 }
 
+.searchContainer {
+  color: #1F1B17;
+  color: #f2f2f2;
+}
+
 .searchContainer i {
   z-index: 999;
   border: solid 2px rgba(255, 255, 255, 0);
@@ -225,10 +240,18 @@ header {
   display: flex;
   align-items: center;
   transition: 0.25s;
-  color: white;
 }
 
-.searchContainer i:hover {
+.searchActive {
+  color: #1F1B17;
+  cursor: pointer;
+}
+
+.searchInactive {
+  color: #f2f2f2;
+}
+
+.searchInactive:hover {
   transition: 0.25s;
   border: solid white 2px;
   cursor: pointer;
