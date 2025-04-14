@@ -1,3 +1,102 @@
-.HotelDetailsStyle {
+.pageContent {
     min-height: 100vh;
+    margin-top: 75px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.pageStyle {
+    width: 95%;
+    position: relative;
+}
+
+.slideshowSection {
+    background-color: white;
+    border-radius: 10px;
+    width: calc(100% - 10px);
+    height: 80vh;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+
+.slideshowLeft {
+    width: 20%;
+    height: calc(100%-10px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px;
+    margin-right: 0px;
+    overflow: hidden;
+}
+
+.previewImage {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    cursor: pointer; 
+    transition: transform 0.3s ease-in-out;
+}
+
+.slideshowRight {
+    width: 100%;
+    height: calc(100%-10px);
+    position: relative;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.slideshowRight img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.slideshowLeft img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.slideshowButtons {
+    position: absolute;
+    width: 100.5%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.slideshowButtons img {
+    width: 45px;
+    height: 99px;
+    object-fit: contain; 
+    cursor: pointer;
+}
+
+.slideshowButtonPrev {
+    transform: scaleX(-1);
+}
+
+.noSlideshow {
+    position: relative;
+    width: 100%;
+    height: calc(100%-10px);
+    margin: 10px;
+    position: relative;
+}
+
+.noSlideshow img {
+    object-fit: cover;
+    border-radius: 5px;
+    height: 100%;
+    width: 100%;
 }
