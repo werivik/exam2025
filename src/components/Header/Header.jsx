@@ -100,10 +100,22 @@ function Header() {
   };
 
   const handleSelect = (item) => {
-    navigate("/hotels");
+    if (item.type === "Venue") {
+      const selectedVenue = venues.find(v => v.name === item.value);
+
+      if (selectedVenue?.id) {
+        navigate(`/hotel-details/${selectedVenue.id}`);
+      }
+    } 
+    
+    else {
+      navigate("/hotels");
+    }
+  
     setSearchTerm("");
     setSuggestions([]);
   };
+  
 
   const toggleSearchBar = () => {
     setIsSearchOpen((prevState) => !prevState);
@@ -177,7 +189,7 @@ function Header() {
                     <li
                       key={index}
                       className={styles.suggestionItem}
-                      onClick={() => item.type !== "None" && handleSelect(item.value)}
+                      onClick={() => item.type !== "None" && handleSelect(item)}
                     >
                       {item.type !== "None" && (
                         <span className={styles.suggestionLabel}>{item.type}</span>

@@ -87,7 +87,7 @@ const HotelDetails = () => {
                 <div className={styles.slideshowSection}>
                     {hasGallery && (
                         <div className={styles.slideshowSection}>
-                            {/* Left Section (Thumbnail Carousel) */}
+                            {/* Left Section */}
                             <div className={styles.slideshowLeft}>
                                 {thumbnailImages.map((item, index) => (
                                     <img
@@ -140,12 +140,23 @@ const HotelDetails = () => {
                     )}
                 </div>
 
-                <h1>{hotel.name}</h1>
-                <p><strong>Location:</strong> {hotel.location?.address}, {hotel.location?.city}, {hotel.location?.country}</p>
-                <p><strong>Description:</strong> {hotel.description}</p>
-                <p><strong>Price:</strong> ${hotel.price} / night</p>
-                <p><strong>Max Guests:</strong> {hotel.maxGuests}</p>
-                <p><strong>Rating:</strong> {hotel.rating}</p>
+                <div className={styles.titleLocation}>
+                    <h1>{hotel.name}</h1>
+                    <p>{hotel.location?.address}, {hotel.location?.city}, {hotel.location?.country}</p>
+                </div>
+
+                <div className={styles.hotelInfo}>
+                <div className={styles.hotelInfoLeft}>
+                    <p><strong>Rating:</strong> {hotel.rating}</p>
+                    <p><strong>Description:</strong> {hotel.description}</p>
+                    <p><strong>Max Guests:</strong> {hotel.maxGuests}</p>
+                </div>
+
+                <div className={styles.hotelInfoRight}> 
+                    <p><strong>Price:</strong> ${hotel.price} / night</p>
+                    <button>Book Room</button>
+                </div>
+                </div>
             </div>
         </section>
     );

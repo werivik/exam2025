@@ -36,11 +36,22 @@ header {
   header.scrolled nav {
     padding-left: 2.5%;
     padding-right: 2.5%;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border-radius: 0px 0px 25px 25px;
     transition: 0.15s;
-    background-color: #1f1b1731;
+    background-color: #f2f2f268;
+    color: #1F1B17;
+  }
+
+  header.scrolled nav .headerRightLinks li a, header.scrolled nav .menuOpen, header.scrolled nav .menuOpen i, header.scrolled nav .headerRightLinks .searchContainer i {
+    color: #1F1B17;
+    transition: 0.25s;
+  }
+
+  header.scrolled nav .headerRightLinks li a:hover, header.scrolled nav .menuOpen:hover {
+    transition: 0.25s;
+    border-color: #1F1B17;
   }
 
   .menuOpen {
@@ -146,7 +157,6 @@ header {
 .searchContainer.searchOpen {
   justify-content: space-between;
   transition: 0.25s;
-
 }
 
 .searchInput {

@@ -160,23 +160,24 @@ const Home = () => {
                         </div>
                         <div className={styles.popularHotels}>
                         {hotels.map((hotel) => (
-  <div key={hotel.id} className={styles.hotelCard}>
-    <img
-      src={hotel.media?.[0]?.url || registerImage}
-      alt={hotel.media?.[0]?.alt || hotel.name}
-    />
-    <div className={styles.hotelInfo}>
-      <h3>{hotel.name}</h3>
-      <p>
-        {hotel.location?.city || "Uknown City"},{" "}
-        {hotel.location?.country || "Uknown Country"}
-      </p>
-      <div className={styles.starRating}>
-        {renderStars(hotel.rating || 0)}
-      </div>
-      <span>See more</span>
+                            <Link to={`/hotel-details/${hotel.id}`} key={hotel.id} className={styles.hotelCard}>
+  <img
+    src={hotel.media?.[0]?.url || registerImage}
+    alt={hotel.media?.[0]?.alt || hotel.name}
+  />
+  <div className={styles.hotelInfo}>
+    <h3>{hotel.name}</h3>
+    <p>
+      {hotel.location?.city || "Unknown City"},{" "}
+      {hotel.location?.country || "Unknown Country"}
+    </p>
+    <div className={styles.starRating}>
+      {renderStars(hotel.rating || 0)}
     </div>
+    <span>See more</span>
   </div>
+</Link>
+
 ))}
 
                         </div>
