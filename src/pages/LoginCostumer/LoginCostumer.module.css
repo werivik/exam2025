@@ -9,6 +9,8 @@
     background-position: center;
     background-size: cover;
     position: relative;
+    font-family: "Playfair Display", serif;
+    color: #000000;
 }
 
 .loginStyle {
@@ -22,12 +24,103 @@
 }
 
 .loginContent {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);    
-    background-color: rgba(255, 255, 255, 0.198);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);    
+    background-color: #f3f0ebb5;
     height: 75%;
     margin-top: 5%;
-    width: 50%;
     padding: 1rem;
     border-radius: 10px;
+    width: 25rem;
+    position: relative;
 }
+
+.loginContent h2 {
+    font-size: 2rem;
+    font-family: "Playfair Display", serif;
+    margin: 0;
+    padding: 0;
+    margin-top: 2.5rem;
+    text-align: center;
+}
+
+.loginContent h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    margin-top: 1rem;
+    padding: 0;
+    text-align: center;
+}
+
+.inputForm {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    height: 60%;
+    margin-top: -2rem;
+    justify-content: center;
+    font-family: "Playfair Display", serif;
+}
+
+.inputForm input {
+    height: 2.125rem;
+    font-size: 1.125rem;
+    font-family: "Playfair Display", serif;
+    background-color: #F3F0EB;
+    border: none;
+    border-radius: 5px;
+    padding-left: 0.5rem;
+}
+
+.BottomOptions {
+    position: absolute;
+    padding-bottom: 2rem;
+    bottom: 0;
+    text-align: center;
+    font-size: 1.125rem;
+    width: calc(100% - 2.25rem);
+}
+
+.BottomOptions a {
+    color: #6B522D;
+    font-size: 1.125rem;
+    font-family: "Playfair Display", serif;
+}
+
+.loginButton {
+    padding: 0.5rem;
+    font-size: 1.125rem;
+    font-family: "Playfair Display", serif;
+    background-color: #1F1B17;
+    border-radius: 999px;
+    color: white;
+    border: none;
+    width: 8rem;
+    position: absolute;
+    top: 62.5%;
+    left: 50%;
+    transform: translate(-55%);
+    transition: 0.25s;
+}
+
+.loginButton:hover {
+    cursor: pointer;
+    transition: 0.25s;
+    background-color: #6B7A3A;
+}
+
+.active {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.active:hover{
+    cursor: pointer;
+    transition: 0.25s;
+    background-color: #6B7A3A;
+}
+
+.inactive {
+    opacity: 0.5;
+    pointer-events: none;
+  }

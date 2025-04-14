@@ -302,12 +302,3 @@ header {
   border: solid white 2px;
   cursor: pointer;
 }
-
-.pageContent {
-  transition: filter 0.25s ease;
-}
-
-.blurred {
-  filter: blur(25px);
-  pointer-events: none;
-}
