@@ -24,26 +24,41 @@ const renderStars = (rating) => {
 };
 
 const HotelCardSecondType = ({ hotel }) => {
+  const isLoading = !hotel;
+
   return (
-    <Link to={`/hotel-details/${hotel.id}`} key={hotel.id} className={styles.hotelCard}>
-      <div className={styles.rating}>
-        <div className={styles.stars}>{renderStars(hotel.rating || 0)}</div>
-      </div>
-      <img
-        src={hotel.media?.[0]?.url || '/path/to/default-image.jpg'}
-        alt={hotel.media?.[0]?.alt || hotel.name}
-        className={styles.hotelImage}
-      />
-      <div className={styles.hotelInfo}>
-        <h3>{hotel.name}</h3>
-        <p className={styles.hotelLocation}>
-          {hotel.location?.city || 'Unknown City'}, {hotel.location?.country || 'Unknown Country'}
-        </p>
-        <p className={styles.hotelPrice}>
-          <span>from</span> ${hotel.price || '—'}<span> / per night</span>
-        </p>
-        <p className={styles.seeMore}>See more</p>
-      </div>
+    <Link to={`/hotel-details/${hotel?.id}`} key={hotel?.id} className={styles.hotelCard}>
+      {isLoading ? (
+        <div className={styles.loadingCard}>
+          <div className={styles.loadingImage}></div>
+          <div className={styles.loadingInfo}>
+            <div className={styles.loadingLine}></div>
+            <div className={styles.loadingLine}></div>
+            <div className={styles.loadingLine}></div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className={styles.rating}>
+            <div className={styles.stars}>{renderStars(hotel.rating || 0)}</div>
+          </div>
+          <img
+            src={hotel.media?.[0]?.url || '/path/to/default-image.jpg'}
+            alt={hotel.media?.[0]?.alt || hotel.name}
+            className={styles.hotelImage}
+          />
+          <div className={styles.hotelInfo}>
+            <h3>{hotel.name}</h3>
+            <p className={styles.hotelLocation}>
+              {hotel.location?.city || 'Unknown City'}, {hotel.location?.country || 'Unknown Country'}
+            </p>
+            <p className={styles.hotelPrice}>
+              <span>from</span> ${hotel.price || '—'}<span> / per night</span>
+            </p>
+            <p className={styles.seeMore}>See more</p>
+          </div>
+        </>
+      )}
     </Link>
   );
 };

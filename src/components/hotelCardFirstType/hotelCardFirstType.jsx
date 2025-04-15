@@ -26,22 +26,37 @@ const hotelCardFirstType = ({ hotel }) => {
     return stars;
   };
 
+  const isLoading = !hotel;
+
   return (
-    <Link to={`/hotel-details/${hotel.id}`} key={hotel.id} className={styles.hotelCard}>
-        <div className={styles.starRating}>
-          {renderStars(hotel.rating || 0)}
+    <Link to={`/hotel-details/${hotel?.id}`} key={hotel?.id} className={styles.hotelCard}>
+      {isLoading ? (
+        <div className={styles.loadingCard}>
+          <div className={styles.loadingImage}></div>
+          <div className={styles.loadingInfo}>
+            <div className={styles.loadingLine}></div>
+            <div className={styles.loadingLine}></div>
+            <div className={styles.loadingLine}></div>
+          </div>
         </div>
-      <img
-        src={hotel.media?.[0]?.url || registerImage}
-        alt={hotel.media?.[0]?.alt || hotel.name}
-      />
-      <div className={styles.hotelInfo}>
-        <h3>{hotel.name}</h3>
-        <p>
-          {hotel.location?.city || "Unknown City"}, {hotel.location?.country || "Unknown Country"}
-        </p>
-        <span>See more</span>
-      </div>
+      ) : (
+        <>
+          <div className={styles.starRating}>
+            {renderStars(hotel.rating || 0)}
+          </div>
+          <img
+            src={hotel.media?.[0]?.url || registerImage}
+            alt={hotel.media?.[0]?.alt || hotel.name}
+          />
+          <div className={styles.hotelInfo}>
+            <h3>{hotel.name}</h3>
+            <p>
+              {hotel.location?.city || "Unknown City"}, {hotel.location?.country || "Unknown Country"}
+            </p>
+            <span>See more</span>
+          </div>
+        </>
+      )}
     </Link>
   );
 };

@@ -2,16 +2,11 @@ import { useEffect, useState } from 'react';
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
 import styles from './Hotels.module.css';
-import registerImage from "/media/hotelTypes/hotelReseption.jpeg";
-import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-
-import LoadingCard from '../../components/LoadingCard/LoadingCard.jsx';
 import HotelCardSecondType from '../../components/HotelCardSecondType/HotelCardSecondType.jsx';
 
 const Hotels = () => {
     const [hotels, setHotels] = useState([]);
-    const [allLocations, setAllLocations] = useState([]);
     const [filteredHotels, setFilteredHotels] = useState([]);
     const [filters, setFilters] = useState({
         continent: '',
@@ -28,12 +23,11 @@ const Hotels = () => {
     const [availableRatings, setAvailableRatings] = useState([1, 2, 3, 4, 5]);
     const [loading, setLoading] = useState(true);
     const [visibleCount, setVisibleCount] = useState(16);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [noMatches, setNoMatches] = useState(false);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, []);      
+    }, []);
 
     useEffect(() => {
         const fetchHotels = async () => {
@@ -62,22 +56,8 @@ const Hotels = () => {
                 });
 
                 setMetaFilters(Array.from(metaKeys));
-
-                const locationsSet = new Set();
-                hotelsData.forEach(hotel => {
-                    if (hotel.location) {
-                        locationsSet.add(hotel.location.continent);
-                        locationsSet.add(hotel.location.country);
-                        locationsSet.add(hotel.location.city);
-                    }
-                });
-
-                setAllLocations(Array.from(locationsSet));
-
                 setLoading(false);
-            } 
-            
-            catch (error) {
+            } catch (error) {
                 console.error("Error fetching hotels:", error);
                 setLoading(false);
             }
@@ -91,22 +71,22 @@ const Hotels = () => {
             const matchesContinent = filters.continent ? hotel.location.continent === filters.continent : true;
             const matchesCountry = filters.country ? hotel.location.country === filters.country : true;
             const matchesCity = filters.city ? hotel.location.city === filters.city : true;
-    
-            const totalGuests = 
-            parseInt(filters.adults || 0) + 
-            parseInt(filters.children || 0) + 
-            parseInt(filters.assisted || 0);
+
+            const totalGuests =
+                parseInt(filters.adults || 0) +
+                parseInt(filters.children || 0) +
+                parseInt(filters.assisted || 0);
 
             const matchesGuests = hotel.maxGuests >= totalGuests;
-    
-            const matchesRating = filters.ratings.length > 0 
-                ? filters.ratings.includes(Math.floor(hotel.rating)) 
+
+            const matchesRating = filters.ratings.length > 0
+                ? filters.ratings.includes(Math.floor(hotel.rating))
                 : true;
 
             const matchesMeta = Object.keys(filters.meta).every(metaKey => {
                 return filters.meta[metaKey] === false || hotel.meta[metaKey] === true;
             });
-    
+
             return matchesContinent && matchesCountry && matchesCity && matchesGuests && matchesRating && matchesMeta;
         });
 
@@ -114,12 +94,10 @@ const Hotels = () => {
 
         if (filtered.length === 0) {
             setNoMatches(true);
-        } 
-        
-        else {
+        } else {
             setNoMatches(false);
         }
-    }, [filters, hotels]);    
+    }, [filters, hotels]);
 
     const handleFilterChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -132,8 +110,7 @@ const Hotels = () => {
 
                 return { ...prev, ratings: newRatings };
             });
-        } 
-        else if (type === 'checkbox') {
+        } else if (type === 'checkbox') {
             setFilters(prev => ({
                 ...prev,
                 meta: {
@@ -141,8 +118,7 @@ const Hotels = () => {
                     [name]: checked,
                 }
             }));
-        } 
-        else {
+        } else {
             setFilters(prev => ({
                 ...prev,
                 [name]: value
@@ -151,28 +127,7 @@ const Hotels = () => {
     };
 
     const loadMore = () => {
-        setVisibleCount((prev) => Math.min(prev + 8, hotels.length));
-    };
-
-    const renderStars = (rating) => {
-        const stars = [];
-        const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 >= 0.4 && rating % 1 <= 0.6;
-        const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-        for (let i = 0; i < fullStars; i++) {
-            stars.push(<img key={`full-${i}`} src="/media/rating/star-solid.svg" alt="Full Star" />);
-        }
-
-        if (hasHalfStar) {
-            stars.push(<img key="half" src="/media/rating/star-half-stroke-solid.svg" alt="Half Star" />);
-        }
-
-        for (let i = 0; i < emptyStars; i++) {
-            stars.push(<img key={`empty-${i}`} src="/media/rating/star-regular.svg" alt="Empty Star" />);
-        }
-
-        return stars;
+        setVisibleCount((prev) => Math.min(prev + 8, filteredHotels.length));
     };
 
     const location = useLocation();
@@ -190,17 +145,6 @@ const Hotels = () => {
         }
     }, [location.state]);
 
-    const handleEditClick = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
-
-    const handleGuestChange = (type, increment) => {
-        setFilters(prev => ({
-            ...prev,
-            [type]: Math.max(type === "adults" ? 1 : 0, prev[type] + increment),
-        }));
-    };
-
     return (
         <div className={styles.HotelsStyle}>
             <section className={styles.leftSection}>
@@ -209,43 +153,9 @@ const Hotels = () => {
                     <div className={styles.allFilters}>
                         <div className={styles.filterPeople}>
                             <div className={styles.guestSelector}>
-                                <p onClick={handleEditClick} className={styles.totalGuests}>
+                                <p className={styles.totalGuests}>
                                     {`${filters.adults} Adults, ${filters.children} Children, ${filters.assisted} Assisted`}
                                 </p>
-                                {dropdownOpen && (
-                                    <div className={styles.guestControls}>
-                                        <div className={styles.guestType}>
-                                            <span className={styles.guestTypeLabel}>Adults</span>
-                                            <div className={styles.counterControls}>
-                                                {filters.adults > 1 && (
-                                                    <button className={styles.guestButtons} onClick={() => handleGuestChange("adults", -1)}>-</button>
-                                                )}
-                                                <span>{filters.adults}</span>
-                                                <button className={styles.guestButtons} onClick={() => handleGuestChange("adults", 1)}>+</button>
-                                            </div>
-                                        </div>
-                                        <div className={styles.guestType}>
-                                            <span className={styles.guestTypeLabel}>Children</span>
-                                            <div className={styles.counterControls}>
-                                                {filters.children > 0 && (
-                                                    <button className={styles.guestButtons} onClick={() => handleGuestChange("children", -1)}>-</button>
-                                                )}
-                                                <span>{filters.children}</span>
-                                                <button className={styles.guestButtons} onClick={() => handleGuestChange("children", 1)}>+</button>
-                                            </div>
-                                        </div>
-                                        <div className={styles.guestType}>
-                                            <span className={styles.guestTypeLabel}>Assisted Guests</span>
-                                            <div className={styles.counterControls}>
-                                                {filters.assisted > 0 && (
-                                                    <button className={styles.guestButtons} onClick={() => handleGuestChange("assisted", -1)}>-</button>
-                                                )}
-                                                <span>{filters.assisted}</span>
-                                                <button className={styles.guestButtons} onClick={() => handleGuestChange("assisted", 1)}>+</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
                             </div>
                         </div>
                         <div className={styles.categoryFilter}>
@@ -321,7 +231,7 @@ const Hotels = () => {
                     {loading ? (
                         <div className={styles.allHotels}>
                             {Array.from({ length: 6 }).map((_, index) => (
-                                <LoadingCard key={index} />
+                                <HotelCardSecondType key={index} hotel={null} />
                             ))}
                         </div>
                     ) : (
