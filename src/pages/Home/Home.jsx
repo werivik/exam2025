@@ -4,15 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import styles from './Home.module.css';
 
-import slideshowNext from "/media/icons/slideshow-next-button.png";
-import slideshowPrev from "/media/icons/slideshow-next-button.png";
-
 import homeBanner from "/media/images/banner2.png";
 import Edge from "/media/images/beige-edge.png";
-
-import fullStar from "/media/rating/star-solid.svg";
-import emptyStar from "/media/rating/star-regular.svg";
-import halfStar from "/media/rating/star-half-stroke-solid.svg";
 
 import registerImage from "/media/hotelTypes/hotelReseption.jpeg";
 
@@ -23,12 +16,14 @@ import wifiImage from "/media/metaImages/wifi.jpeg";
 
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
+import HotelCardFirstType from '../../components/HotelCardFirstType/HotelCardFirstType.jsx';
 
 const Home = () => {
   const [hotels, setHotels] = useState([]);
   const [allLocations, setAllLocations] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [showScrollIcon, setShowScrollIcon] = useState(true);
+  const [showGuestDropdown, setShowGuestDropdown] = useState(false);
   const [filters, setFilters] = useState({
     destination: "",
     startDate: "",
@@ -40,7 +35,7 @@ const Home = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-}, []);   
+  }, []);   
 
   useEffect(() => {
     const fetchHotels = async () => {
@@ -98,9 +93,8 @@ const Home = () => {
         setShowScrollIcon(false);
       }
     };
-  
+
     window.addEventListener('scroll', handleScroll);
-  
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -129,32 +123,11 @@ const Home = () => {
   };
 
   const navigate = useNavigate();
-    
-  const renderStars = (rating) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.4 && rating % 1 <= 0.6;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<img key={`full-${i}`} src={fullStar} alt="Full Star" />);
-    }
-
-    if (hasHalfStar) {
-      stars.push(<img key="half" src={halfStar} alt="Half Star" />);
-    }
-
-    for (let i = 0; i < emptyStars; i++) {
-      stars.push(<img key={`empty-${i}`} src={emptyStar} alt="Empty Star" />);
-    }
-
-    return stars;
-  };
 
   const handleGuestsChange = (e) => {
     const { name, value } = e.target;
     if (name === "children" && value > 0 && (filters.adults === 0 && filters.disabled === 0)) {
-      alert("At least one adult or disabled guest must be present if there are children.");
+      alert("At least one adult or Assisted guest must be present if there are children.");
       return;
     }
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -174,43 +147,43 @@ const Home = () => {
   const applyFilters = async () => {
     const totalGuests =
       parseInt(filters.adults) + parseInt(filters.disabled);
-  
+
     if (totalGuests < 1) {
       alert("Please enter at least one adult or assisted guest.");
       return;
     }
-  
+
     if (!filters.startDate) {
       alert("Please select a start date.");
       return;
     }
-  
+
     if (filters.destination.trim()) {
       try {
         let query = `${VENUES}/search`;
         const params = new URLSearchParams();
-  
+
         params.append("q", filters.destination.trim());
-  
+
         if (filters.startDate) {
           params.append("startDate", filters.startDate);
         }
-  
+
         if (filters.endDate) {
           params.append("endDate", filters.endDate);
         }
-  
+
         query += `?${params.toString()}`;
-  
+
         const response = await fetch(query, {
           method: "GET",
           headers: headers(),
         });
-  
+
         if (!response.ok) throw new Error("Failed to fetch filtered results");
-  
+
         const result = await response.json();
-  
+
         const filtered = result.data.filter((venue) => {
           const matchesGuests =
             venue.maxGuests >=
@@ -219,18 +192,25 @@ const Home = () => {
             parseInt(filters.disabled);
           return matchesGuests;
         });
-  
+
         setHotels(filtered);
-  
+
       } 
       
       catch (error) {
         console.error("Error filtering venues:", error);
       }
     }
-  
+
     navigate("/hotels", { state: { filters } });
   };
+
+  const HotelTypeSkeleton = () => (
+    <div className={`${styles.hotelType} ${styles.skeleton}`}>
+      <div className={styles.skeletonImage}></div>
+      <div className={styles.skeletonText}></div>
+    </div>
+  );
   
   return (
     <div className={styles.home}>
@@ -305,54 +285,70 @@ const Home = () => {
                 </div>
               </div>
               <div className={styles.filterPeople}>
-  <i className="fa-solid fa-person"></i>
-  <div className={styles.guestsInputs}>
-    <label className={styles.filterPeopleAdults}>
-      Adults
-      <input
-        name="adults"
-        type="number"
-        min="1"
-        value={filters.adults}
-        onChange={handleGuestsChange}
-      />
-    </label>
-    <label>
-      Children
-      <input
-        name="children"
-        type="number"
-        min="0"
-        value={filters.children}
-        onChange={handleGuestsChange}
-      />
-    </label>
-    <label>
-      Assisted Guests
-      <input
-        name="disabled"
-        type="number"
-        min="0"
-        value={filters.disabled}
-        onChange={handleGuestsChange}
-      />
-    </label>
-    {(filters.children > 0 || filters.disabled > 0) && (
-      <p>{renderGuestInfo()}</p>
-    )}
-  </div>
-</div>
+                <i className="fa-solid fa-person"></i>
+                <div
+                  className={styles.guestSelector}
+                  onClick={() => setShowGuestDropdown((prev) => !prev)}
+                >
+                  <p>{renderGuestInfo()}</p>
+                  <div
+                    className={`${styles.dropdownMenu} ${
+                      showGuestDropdown ? styles.open : ""
+                    }`}
+                  >
+                    {["adults", "children", "disabled"].map((type) => (
+                      <div key={type} className={styles.dropdownRow}>
+                        <span className={styles.label}>
+                          {type === "adults"
+                            ? "Adults"
+                            : type === "children"
+                            ? "Children"
+                            : "Assisted Guests"}
+                        </span>
+                        <div className={styles.counterControls}>
+                          {/* Conditionally render the "-" button */}
+                          {filters[type] > 0 && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setFilters((prev) => ({
+                                  ...prev,
+                                  [type]: Math.max(0, prev[type] - 1),
+                                }));
+                              }}
+                            >
+                              -
+                            </button>
+                          )}
+                          <span>{filters[type]}</span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setFilters((prev) => ({
+                                ...prev,
+                                [type]: prev[type] + 1,
+                              }));
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <button
+                className={styles.filterSearch}
+                onClick={applyFilters}
+                disabled={
+                  (parseInt(filters.adults) + parseInt(filters.disabled) < 1) ||
+                  !filters.startDate
+                }
+              >
+                Search
+              </button>
             </div>
-            <button
-  className={styles.filterSearch}
-  onClick={applyFilters}
-  disabled={
-    (parseInt(filters.adults) + parseInt(filters.disabled) < 1) ||
-    !filters.startDate
-  }
->
-  Search
-</button>
           </div>
           <img src={Edge} className={styles.edgeRight} alt="" />
         </div>
@@ -371,78 +367,66 @@ const Home = () => {
             <h2>Choose your perfect Stay</h2>
             <p>“A journey of a thousand miles begins<br />with a single step.”</p>
           </div>
+
           <div className={styles.typeContent}>
-          <div
-  className={styles.hotelType}
-  onClick={() =>
-    navigate("/hotels", {
-      state: {
-        filters: {
-          meta: {
-            breakfast: true,
-          },
-        },
-      },
-    })
-  }
->
-  <img src={breakfastImage} alt="Breakfast" />
-  <h3>Breakfast Included</h3>
-</div>
+            {hotels.length === 0 ? (
+              <>
+                <HotelTypeSkeleton />
+                <HotelTypeSkeleton />
+                <HotelTypeSkeleton />
+                <HotelTypeSkeleton />
+              </>
+            ) : (
+              <>
+                <div
+                  className={styles.hotelType}
+                  onClick={() =>
+                    navigate("/hotels", {
+                      state: { filters: { meta: { breakfast: true } } },
+                    })
+                  }
+                >
+                  <img src={breakfastImage} alt="Breakfast" />
+                  <h3>Breakfast Included</h3>
+                </div>
 
-<div
-  className={styles.hotelType}
-  onClick={() =>
-    navigate("/hotels", {
-      state: {
-        filters: {
-          meta: {
-            parking: true,
-          },
-        },
-      },
-    })
-  }
->
-  <img src={parkingImage} alt="Free Parking" />
-  <h3>Free Parking</h3>
-</div>
+                <div
+                  className={styles.hotelType}
+                  onClick={() =>
+                    navigate("/hotels", {
+                      state: { filters: { meta: { parking: true } } },
+                    })
+                  }
+                >
+                  <img src={parkingImage} alt="Free Parking" />
+                  <h3>Free Parking</h3>
+                </div>
 
-<div
-  className={styles.hotelType}
-  onClick={() =>
-    navigate("/hotels", {
-      state: {
-        filters: {
-          meta: {
-            wifi: true,
-          },
-        },
-      },
-    })
-  }
->
-  <img src={wifiImage} alt="Excellent WiFi" />
-  <h3>Excellent WiFi</h3>
-</div>
+                <div
+                  className={styles.hotelType}
+                  onClick={() =>
+                    navigate("/hotels", {
+                      state: { filters: { meta: { wifi: true } } },
+                    })
+                  }
+                >
+                  <img src={wifiImage} alt="Excellent WiFi" />
+                  <h3>Excellent WiFi</h3>
+                </div>
 
-<div
-  className={styles.hotelType}
-  onClick={() =>
-    navigate("/hotels", {
-      state: {
-        filters: {
-          meta: {
-            pets: true,
-          },
-        },
-      },
-    })
-  }
->
-  <img src={animalImage} alt="Animal Friendly" />
-  <h3>Animal Friendly</h3>
-</div>
+                <div
+                  className={styles.hotelType}
+                  onClick={() =>
+                    navigate("/hotels", {
+                      state: { filters: { meta: { pets: true } } },
+                    })
+                  }
+                >
+                  <img src={animalImage} alt="Animal Friendly" />
+                  <h3>Animal Friendly</h3>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -458,7 +442,7 @@ const Home = () => {
             </div>
           </div>
           <div className={styles.thirdContentLogin}>
-          <img src={registerImage} alt="Reception" />
+            <img src={registerImage} alt="Reception" />
             <div className={styles.thirdInfo}>
               <h2>Welcome back Username, <br></br>What would you like to do today?</h2>
               <Link>My Upcoming Bookings</Link>
@@ -479,23 +463,7 @@ const Home = () => {
             </div>
             <div className={styles.popularHotels}>
               {hotels.map((hotel) => (
-                <Link to={`/hotel-details/${hotel.id}`} key={hotel.id} className={styles.hotelCard}>
-                  <img
-                    src={hotel.media?.[0]?.url || registerImage}
-                    alt={hotel.media?.[0]?.alt || hotel.name}
-                  />
-                  <div className={styles.hotelInfo}>
-                    <h3>{hotel.name}</h3>
-                    <p>
-                      {hotel.location?.city || "Unknown City"},{" "}
-                      {hotel.location?.country || "Unknown Country"}
-                    </p>
-                    <div className={styles.starRating}>
-                      {renderStars(hotel.rating || 0)}
-                    </div>
-                    <span>See more</span>
-                  </div>
-                </Link>
+                <HotelCardFirstType key={hotel.id} hotel={hotel} />
               ))}
             </div>
           </div>

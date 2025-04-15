@@ -6,6 +6,9 @@ import registerImage from "/media/hotelTypes/hotelReseption.jpeg";
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
+import LoadingCard from '../../components/LoadingCard/LoadingCard.jsx';
+import HotelCardSecondType from '../../components/HotelCardSecondType/HotelCardSecondType.jsx';
+
 const Hotels = () => {
     const [hotels, setHotels] = useState([]);
     const [allLocations, setAllLocations] = useState([]);
@@ -14,13 +17,19 @@ const Hotels = () => {
         continent: '',
         country: '',
         city: '',
-        maxGuests: 1,
+        adults: 1,
+        children: 0,
+        assisted: 0,
         minRating: 0,
         meta: {},
+        ratings: [],
     });
     const [metaFilters, setMetaFilters] = useState([]);
+    const [availableRatings, setAvailableRatings] = useState([1, 2, 3, 4, 5]);
     const [loading, setLoading] = useState(true);
     const [visibleCount, setVisibleCount] = useState(16);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [noMatches, setNoMatches] = useState(false);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -64,6 +73,7 @@ const Hotels = () => {
                 });
 
                 setAllLocations(Array.from(locationsSet));
+
                 setLoading(false);
             } 
             
@@ -81,22 +91,49 @@ const Hotels = () => {
             const matchesContinent = filters.continent ? hotel.location.continent === filters.continent : true;
             const matchesCountry = filters.country ? hotel.location.country === filters.country : true;
             const matchesCity = filters.city ? hotel.location.city === filters.city : true;
-            const matchesGuests = hotel.maxGuests >= filters.maxGuests;
-            const matchesRating = hotel.rating >= (filters.minRating || 0);
+    
+            const totalGuests = 
+            parseInt(filters.adults || 0) + 
+            parseInt(filters.children || 0) + 
+            parseInt(filters.assisted || 0);
+
+            const matchesGuests = hotel.maxGuests >= totalGuests;
+    
+            const matchesRating = filters.ratings.length > 0 
+                ? filters.ratings.includes(Math.floor(hotel.rating)) 
+                : true;
 
             const matchesMeta = Object.keys(filters.meta).every(metaKey => {
                 return filters.meta[metaKey] === false || hotel.meta[metaKey] === true;
             });
-
+    
             return matchesContinent && matchesCountry && matchesCity && matchesGuests && matchesRating && matchesMeta;
         });
 
         setFilteredHotels(filtered);
-    }, [filters, hotels]);
+
+        if (filtered.length === 0) {
+            setNoMatches(true);
+        } 
+        
+        else {
+            setNoMatches(false);
+        }
+    }, [filters, hotels]);    
 
     const handleFilterChange = (e) => {
         const { name, value, type, checked } = e.target;
-        if (type === 'checkbox') {
+
+        if (name === 'ratings') {
+            setFilters(prev => {
+                const newRatings = checked
+                    ? [...prev.ratings, parseInt(value)]
+                    : prev.ratings.filter(rating => rating !== parseInt(value));
+
+                return { ...prev, ratings: newRatings };
+            });
+        } 
+        else if (type === 'checkbox') {
             setFilters(prev => ({
                 ...prev,
                 meta: {
@@ -105,7 +142,6 @@ const Hotels = () => {
                 }
             }));
         } 
-        
         else {
             setFilters(prev => ({
                 ...prev,
@@ -141,18 +177,29 @@ const Hotels = () => {
 
     const location = useLocation();
 
-useEffect(() => {
-  if (location.state?.filters) {
-    setFilters(prev => ({
-      ...prev,
-      ...location.state.filters,
-      meta: {
-        ...prev.meta,
-        ...location.state.filters.meta
-      }
-    }));
-  }
-}, [location.state]);
+    useEffect(() => {
+        if (location.state?.filters) {
+            setFilters(prev => ({
+                ...prev,
+                ...location.state.filters,
+                meta: {
+                    ...prev.meta,
+                    ...location.state.filters.meta
+                }
+            }));
+        }
+    }, [location.state]);
+
+    const handleEditClick = () => {
+        setDropdownOpen(!dropdownOpen);
+    };
+
+    const handleGuestChange = (type, increment) => {
+        setFilters(prev => ({
+            ...prev,
+            [type]: Math.max(type === "adults" ? 1 : 0, prev[type] + increment),
+        }));
+    };
 
     return (
         <div className={styles.HotelsStyle}>
@@ -160,6 +207,47 @@ useEffect(() => {
                 <div className={styles.leftBorder}>
                     <h2>Filters</h2>
                     <div className={styles.allFilters}>
+                        <div className={styles.filterPeople}>
+                            <div className={styles.guestSelector}>
+                                <p onClick={handleEditClick} className={styles.totalGuests}>
+                                    {`${filters.adults} Adults, ${filters.children} Children, ${filters.assisted} Assisted`}
+                                </p>
+                                {dropdownOpen && (
+                                    <div className={styles.guestControls}>
+                                        <div className={styles.guestType}>
+                                            <span className={styles.guestTypeLabel}>Adults</span>
+                                            <div className={styles.counterControls}>
+                                                {filters.adults > 1 && (
+                                                    <button className={styles.guestButtons} onClick={() => handleGuestChange("adults", -1)}>-</button>
+                                                )}
+                                                <span>{filters.adults}</span>
+                                                <button className={styles.guestButtons} onClick={() => handleGuestChange("adults", 1)}>+</button>
+                                            </div>
+                                        </div>
+                                        <div className={styles.guestType}>
+                                            <span className={styles.guestTypeLabel}>Children</span>
+                                            <div className={styles.counterControls}>
+                                                {filters.children > 0 && (
+                                                    <button className={styles.guestButtons} onClick={() => handleGuestChange("children", -1)}>-</button>
+                                                )}
+                                                <span>{filters.children}</span>
+                                                <button className={styles.guestButtons} onClick={() => handleGuestChange("children", 1)}>+</button>
+                                            </div>
+                                        </div>
+                                        <div className={styles.guestType}>
+                                            <span className={styles.guestTypeLabel}>Assisted Guests</span>
+                                            <div className={styles.counterControls}>
+                                                {filters.assisted > 0 && (
+                                                    <button className={styles.guestButtons} onClick={() => handleGuestChange("assisted", -1)}>-</button>
+                                                )}
+                                                <span>{filters.assisted}</span>
+                                                <button className={styles.guestButtons} onClick={() => handleGuestChange("assisted", 1)}>+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                         <div className={styles.categoryFilter}>
                             <h3>Destination</h3>
                             <label>
@@ -190,48 +278,40 @@ useEffect(() => {
                                 </select>
                             </label>
                         </div>
-
-                        <div className={styles.occupancyFilter}>
-                            <h3>Max Guests:</h3>
-                            <input
-                                type="number"
-                                name="maxGuests"
-                                min="1"
-                                value={filters.maxGuests}
-                                onChange={handleFilterChange}
-                            />
-                        </div>
-
                         <div className={styles.ratingFilter}>
                             <h3>Rating:</h3>
-                            <input
-                                type="number"
-                                name="minRating"
-                                min="0"
-                                max="5"
-                                value={filters.minRating}
-                                onChange={handleFilterChange}
-                            />
-                        </div>
-
-                        <div className={styles.metaFilter}>
-                            <h3>Facilities:</h3>
-                            {metaFilters.map((metaKey) => (
-                                <label key={metaKey}>
+                            {availableRatings.map((rating) => (
+                                <label key={rating}>
                                     <input
                                         type="checkbox"
-                                        name={metaKey}
-                                        checked={filters.meta[metaKey] || false}
+                                        name="ratings"
+                                        value={rating}
+                                        checked={filters.ratings.includes(rating)}
                                         onChange={handleFilterChange}
                                     />
-                                    {metaKey.charAt(0).toUpperCase() + metaKey.slice(1)}
+                                    {rating} Star{rating > 1 ? 's' : ''}
                                 </label>
+                            ))}
+                        </div>
+                        <div className={styles.metaFilter}>
+                            <h3>Meta Filters:</h3>
+                            {metaFilters.length > 0 && metaFilters.map((metaKey) => (
+                                <div key={metaKey} className={styles.metaCheckbox}>
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            name={metaKey}
+                                            checked={filters.meta[metaKey] || false}
+                                            onChange={handleFilterChange}
+                                        />
+                                        {metaKey}
+                                    </label>
+                                </div>
                             ))}
                         </div>
                     </div>
                 </div>
             </section>
-
             <section className={styles.rightSection}>
                 <div className={styles.rightBorder}>
                     <div className={styles.rightTitles}>
@@ -239,33 +319,22 @@ useEffect(() => {
                         <p>...with Restelle</p>
                     </div>
                     {loading ? (
-                        <div>Loading hotels...</div>
+                        <div className={styles.allHotels}>
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <LoadingCard key={index} />
+                            ))}
+                        </div>
                     ) : (
                         <>
-                            <div className={styles.allHotels}>
-                                {filteredHotels.slice(0, visibleCount).map((hotel) => (
-                                    <Link to={`/hotel-details/${hotel.id}`} key={hotel.id} className={styles.hotelCard}>
-                                        <div className={styles.rating}>
-                                            <div className={styles.stars}>{renderStars(hotel.rating || 0)}</div>
-                                        </div>
-                                        <img
-                                            src={hotel.media?.[0]?.url || registerImage}
-                                            alt={hotel.media?.[0]?.alt || hotel.name}
-                                            className={styles.hotelImage}
-                                        />
-                                        <div className={styles.hotelInfo}>
-                                            <h3>{hotel.name}</h3>
-                                            <p className={styles.hotelLocation}>
-                                                {hotel.location?.city || "Unknown City"}, {hotel.location?.country || "Unknown Country"}
-                                            </p>
-                                            <p className={styles.hotelPrice}>
-                                                <span>from</span> ${hotel.price || "—"}<span> / per night</span>
-                                            </p>
-                                            <p className={styles.seeMore}>See more</p>
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
+                            {noMatches ? (
+                                <p>Could not find a match. Please try again with different credentials or try again later.</p>
+                            ) : (
+                                <div className={styles.allHotels}>
+                                    {filteredHotels.slice(0, visibleCount).map((hotel) => (
+                                        <HotelCardSecondType key={hotel.id} hotel={hotel} />
+                                    ))}
+                                </div>
+                            )}
                             {visibleCount < filteredHotels.length && (
                                 <button className={styles.loadMoreButton} onClick={loadMore}>
                                     Load More

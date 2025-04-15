@@ -1,0 +1,41 @@
+.loadingCard {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    border-radius: 25px 25px 5px 5px;
+    background-color: #E0E0E0;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.loadingImage {
+    width: 100%;
+    height: 60%;
+    background-color: #ccc;
+    border-radius: 25px 25px 5px 5px;
+}
+
+.loadingInfo {
+    padding: 10px 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.loadingLine {
+    height: 10px;
+    width: 100%;
+    background-color: #ccc;
+    border-radius: 5px;
+}
+
+@keyframes pulse {
+    0% {
+        background-color: #f0f0f0;
+    }
+    50% {
+        background-color: #ddd;
+    }
+    100% {
+        background-color: #f0f0f0;
+    }
+}
