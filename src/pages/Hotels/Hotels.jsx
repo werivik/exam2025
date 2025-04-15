@@ -161,29 +161,29 @@ useEffect(() => {
                     <h2>Filters</h2>
                     <div className={styles.allFilters}>
                         <div className={styles.categoryFilter}>
-                            <h3>Destination:</h3>
+                            <h3>Destination</h3>
                             <label>
-                                Continent:
+                                <span>Continent</span>
                                 <select name="continent" onChange={handleFilterChange} value={filters.continent}>
-                                    <option value="">All</option>
+                                    <option value="">All Continents</option>
                                     {Array.from(new Set(hotels.map(hotel => hotel.location.continent))).map((continent, index) => (
                                         <option key={index} value={continent}>{continent}</option>
                                     ))}
                                 </select>
                             </label>
                             <label>
-                                Country:
+                                <span>Country</span>
                                 <select name="country" onChange={handleFilterChange} value={filters.country}>
-                                    <option value="">All</option>
+                                    <option value="">All Countries</option>
                                     {Array.from(new Set(hotels.map(hotel => hotel.location.country))).map((country, index) => (
                                         <option key={index} value={country}>{country}</option>
                                     ))}
                                 </select>
                             </label>
                             <label>
-                                City:
+                                <span>City</span>
                                 <select name="city" onChange={handleFilterChange} value={filters.city}>
-                                    <option value="">All</option>
+                                    <option value="">All Cities</option>
                                     {Array.from(new Set(hotels.map(hotel => hotel.location.city))).map((city, index) => (
                                         <option key={index} value={city}>{city}</option>
                                     ))}

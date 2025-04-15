@@ -1,6 +1,7 @@
 .home {
     width: 100%;
     min-height: 100vh;
+    margin-bottom: 100px;
 }
 
 .firstSection {
@@ -541,6 +542,7 @@
     font-style: italic;
     color: #1F1B17;
     transition: 0.25s;
+    text-decoration: none;
 }
 
 .fourthTitle a:hover {
@@ -556,6 +558,7 @@
     flex-direction: row;
     justify-content: space-between;
     gap: 25px;
+    margin-top: 50px;
 }
 
 .hotelCard {

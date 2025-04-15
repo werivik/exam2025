@@ -475,7 +475,7 @@ const Home = () => {
           <div className={styles.fourthContent}>
             <div className={styles.fourthTitle}>
               <h2>Explore Our Most Popular Hotels<br />for Every Traveler</h2>
-              <Link to="/hotels">Browse All</Link>
+              <Link to="/hotels" className={styles.browseAllLink}>Browse All</Link>
             </div>
             <div className={styles.popularHotels}>
               {hotels.map((hotel) => (
