@@ -103,20 +103,24 @@
     display: flex;
     flex-direction: row;
     gap: 25px;
-    width: 75%;
+    width: 70%;
 }
 
 .filterDestination, .filterCalender {
     width: 100%;
+    z-index: 996;
 }
 
 .filterDestination, .filterCalender, .filterPeople {
     display: flex;
     flex-direction: row;
+    z-index: 996;
+    position: relative;
 }
 
 .filterDestination i, .filterCalender i, .filterPeople i {
     width: 32px;
+    min-width: 32px;
     height: 32px;
     object-fit: contain;
     border: 4px solid #1F1B17;
@@ -128,19 +132,99 @@
     align-items: center;
     justify-content: center;
     font-size: 1.25rem;
+    z-index: 997;
 }
 
-.filterDestination input, .filterCalender input, .filterPeople input {
+.filterDestination input, .filterPeople input {
     background-color: white;
     border-radius: 0px 15px 15px 0px;
-    padding-left: 25px;
-    margin-left: -15px;
+    padding-left: 35px;
+    margin-left: -25px;
     border: none;
     z-index: 1;
     height: 40px;
     width: 100%;
     font-size: 1.125rem;
     color: #1F1B17;
+    z-index: 996;
+}
+
+.filterCalender {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.filterCalender input {
+    width: 50%;
+    left: 10%;
+    border-radius: 0px 15px 15px 0px;
+    padding-left: 35px;
+    margin-left: -25px;
+    border: none;
+    z-index: 1;
+    height: 40px;
+    width: 100%;
+    font-size: 1.125rem;
+    color: #1F1B17;
+    z-index: 996;
+}
+
+.filterCalender .startDateFilter {
+    z-index: 3;
+    background-color: white;
+    width: 50%;
+}
+.filterCalender .endDateFilter {
+    width: 50%;
+    z-index: 2;
+}
+
+.filterPeople {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 35%;
+    height: 100%;
+    margin-right: 25px;
+}
+
+.filterPeople .guestsInputs {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .filterPeople .guestsInputs label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background-color: white;
+    padding-left: 10px;
+    font-size: 1rem;
+    color: #1F1B17;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 0px 15px 15px 0px;
+  }
+
+.filterPeople .guestsInputs input {
+    width: 45px;
+    margin-right: 0;
+    padding-right: 0;
+    padding-left: 10px;
+    margin: 0;
+    height: 100%;
+}
+
+.filterPeople .guestsInputs .filterPeopleAdults{
+    padding-left: 35px;
+    margin-left: -25px;
 }
 
 .filterSearch {
@@ -159,6 +243,95 @@
     transition: 0.25s;
     background-color: #6B7A3A;
 }
+
+.suggestionsList {
+    position: absolute;
+    top: 0%;
+    padding-top: 1.5rem;
+    width: 100%;
+    padding-left: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: white;
+    font-size: 1rem;
+    z-index: 995;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .suggestionsList li {
+    list-style: none;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+    padding-left: 50px;
+  }
+  
+  .suggestionsList li:hover {
+    cursor: pointer;
+    background-color: #f0f0f0;
+  }
+
+  .filterCalender {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .fa-calendar-days {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+  input[type="date"] {
+    z-index: 1;
+  }
+
+  .filterSearch:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  } 
+  
+  .scrollIcon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0rem;
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 100%;
+    z-index: 997;
+    top: 94%;
+  }
+  
+  .hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+  }
+  
+  .bounceIcon {
+    animation: bounce 1.5s infinite;
+    font-size: 1.5rem;
+    color: #1F1B17;
+    margin-top: -10px;
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+  
+    50% {
+      transform: translateY(20px);
+    }
+  }  
 
 .secondSection {
     width: 100%;
@@ -242,7 +415,7 @@
     cursor: pointer;
 
     img {
-        height: 275px; 
+        height: 285px; 
         transition: 0.25s;
     }
 }
@@ -265,7 +438,7 @@
     position: relative;
 }
 
-.thirdContent {
+.thirdContentRegister {
     display: flex;
     justify-content: space-between;
     gap: 5%;
@@ -274,7 +447,16 @@
     position: relative;
 }
 
-.thirdContent img {
+.thirdContentLogin {
+    display: none;
+    justify-content: space-between;
+    gap: 5%;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.thirdContentRegister img, .thirdContentLogin img {
     width: 55%;
     height: 100%;
     object-fit: cover;
@@ -288,18 +470,18 @@
 }
 
 .thirdInfo h2 {
-    font-size: 3.125rem;
+    font-size: 3rem;
 }
 
 .thirdInfo p {
-    font-size: 2.188rem;
+    font-size: 1.5rem;
 }
 
 .registerButton {
     background-color: #F3F0EB;
     color: #1F1B17;
     border: none;
-    font-size: 20px;
+    font-size: 1.25rem;
     border-radius: 999px;
     width: 160px;
     height: 50px;
@@ -308,6 +490,10 @@
     top: 75%;
     left: 45%;
     transform: translate(-50%);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .registerButton:hover {

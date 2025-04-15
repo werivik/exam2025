@@ -21,6 +21,9 @@ const HotelDetails = () => {
 
     const [showScrollIcon, setShowScrollIcon] = useState(true);
 
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);   
 
     useEffect(() => {
         const fetchHotel = async () => {
@@ -52,7 +55,9 @@ const HotelDetails = () => {
         const handleScroll = () => {
           if (window.scrollY === 0) {
             setShowScrollIcon(true);
-          } else {
+          } 
+          
+          else {
             setShowScrollIcon(false);
           }
         };

@@ -1,23 +1,33 @@
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import styles from './Hotels.module.css';
-import registerImage from "/media/hotelTypes/hotelReseption.jpeg";
-
-import fullStar from "/media/rating/star-solid.svg";
-import emptyStar from "/media/rating/star-regular.svg";
-import halfStar from "/media/rating/star-half-stroke-solid.svg";
-
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
+import styles from './Hotels.module.css';
+import registerImage from "/media/hotelTypes/hotelReseption.jpeg";
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const Hotels = () => {
     const [hotels, setHotels] = useState([]);
-    const [visibleCount, setVisibleCount] = useState(8);
+    const [allLocations, setAllLocations] = useState([]);
+    const [filteredHotels, setFilteredHotels] = useState([]);
+    const [filters, setFilters] = useState({
+        continent: '',
+        country: '',
+        city: '',
+        maxGuests: 1,
+        minRating: 0,
+        meta: {},
+    });
+    const [metaFilters, setMetaFilters] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [visibleCount, setVisibleCount] = useState(16);
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);      
 
     useEffect(() => {
         const fetchHotels = async () => {
-            setLoading(true);
             try {
                 const response = await fetch(`${VENUES}?sort=rating&sortOrder=desc`, {
                     method: 'GET',
@@ -29,16 +39,80 @@ const Hotels = () => {
                 }
 
                 const data = await response.json();
-                setHotels(Array.isArray(data.data) ? data.data : []);
-            } catch (error) {
+                const hotelsData = Array.isArray(data.data) ? data.data : [];
+                setHotels(hotelsData);
+                setFilteredHotels(hotelsData);
+
+                const metaKeys = new Set();
+                hotelsData.forEach(hotel => {
+                    if (hotel.meta) {
+                        Object.keys(hotel.meta).forEach(key => {
+                            metaKeys.add(key);
+                        });
+                    }
+                });
+
+                setMetaFilters(Array.from(metaKeys));
+
+                const locationsSet = new Set();
+                hotelsData.forEach(hotel => {
+                    if (hotel.location) {
+                        locationsSet.add(hotel.location.continent);
+                        locationsSet.add(hotel.location.country);
+                        locationsSet.add(hotel.location.city);
+                    }
+                });
+
+                setAllLocations(Array.from(locationsSet));
+                setLoading(false);
+            } 
+            
+            catch (error) {
                 console.error("Error fetching hotels:", error);
-            } finally {
                 setLoading(false);
             }
         };
 
         fetchHotels();
     }, []);
+
+    useEffect(() => {
+        const filtered = hotels.filter(hotel => {
+            const matchesContinent = filters.continent ? hotel.location.continent === filters.continent : true;
+            const matchesCountry = filters.country ? hotel.location.country === filters.country : true;
+            const matchesCity = filters.city ? hotel.location.city === filters.city : true;
+            const matchesGuests = hotel.maxGuests >= filters.maxGuests;
+            const matchesRating = hotel.rating >= (filters.minRating || 0);
+
+            const matchesMeta = Object.keys(filters.meta).every(metaKey => {
+                return filters.meta[metaKey] === false || hotel.meta[metaKey] === true;
+            });
+
+            return matchesContinent && matchesCountry && matchesCity && matchesGuests && matchesRating && matchesMeta;
+        });
+
+        setFilteredHotels(filtered);
+    }, [filters, hotels]);
+
+    const handleFilterChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        if (type === 'checkbox') {
+            setFilters(prev => ({
+                ...prev,
+                meta: {
+                    ...prev.meta,
+                    [name]: checked,
+                }
+            }));
+        } 
+        
+        else {
+            setFilters(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
+    };
 
     const loadMore = () => {
         setVisibleCount((prev) => Math.min(prev + 8, hotels.length));
@@ -51,19 +125,34 @@ const Hotels = () => {
         const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
         for (let i = 0; i < fullStars; i++) {
-            stars.push(<img key={`full-${i}`} src={fullStar} alt="Full Star" />);
+            stars.push(<img key={`full-${i}`} src="/media/rating/star-solid.svg" alt="Full Star" />);
         }
 
         if (hasHalfStar) {
-            stars.push(<img key="half" src={halfStar} alt="Half Star" />);
+            stars.push(<img key="half" src="/media/rating/star-half-stroke-solid.svg" alt="Half Star" />);
         }
 
         for (let i = 0; i < emptyStars; i++) {
-            stars.push(<img key={`empty-${i}`} src={emptyStar} alt="Empty Star" />);
+            stars.push(<img key={`empty-${i}`} src="/media/rating/star-regular.svg" alt="Empty Star" />);
         }
 
         return stars;
     };
+
+    const location = useLocation();
+
+useEffect(() => {
+  if (location.state?.filters) {
+    setFilters(prev => ({
+      ...prev,
+      ...location.state.filters,
+      meta: {
+        ...prev.meta,
+        ...location.state.filters.meta
+      }
+    }));
+  }
+}, [location.state]);
 
     return (
         <div className={styles.HotelsStyle}>
@@ -72,30 +161,72 @@ const Hotels = () => {
                     <h2>Filters</h2>
                     <div className={styles.allFilters}>
                         <div className={styles.categoryFilter}>
-                            <h3>Categories:</h3>
-                            <p>Beach</p>
-                            <p>Pool</p>
-                            <p>Spa</p>
-                            <p>Family</p>
-                            <p>Animal Friendly</p>
-                            <p>Hike Trails</p>
-                            <p>Child-free</p>
+                            <h3>Destination:</h3>
+                            <label>
+                                Continent:
+                                <select name="continent" onChange={handleFilterChange} value={filters.continent}>
+                                    <option value="">All</option>
+                                    {Array.from(new Set(hotels.map(hotel => hotel.location.continent))).map((continent, index) => (
+                                        <option key={index} value={continent}>{continent}</option>
+                                    ))}
+                                </select>
+                            </label>
+                            <label>
+                                Country:
+                                <select name="country" onChange={handleFilterChange} value={filters.country}>
+                                    <option value="">All</option>
+                                    {Array.from(new Set(hotels.map(hotel => hotel.location.country))).map((country, index) => (
+                                        <option key={index} value={country}>{country}</option>
+                                    ))}
+                                </select>
+                            </label>
+                            <label>
+                                City:
+                                <select name="city" onChange={handleFilterChange} value={filters.city}>
+                                    <option value="">All</option>
+                                    {Array.from(new Set(hotels.map(hotel => hotel.location.city))).map((city, index) => (
+                                        <option key={index} value={city}>{city}</option>
+                                    ))}
+                                </select>
+                            </label>
                         </div>
+
                         <div className={styles.occupancyFilter}>
-                            <h3>Occupancy:</h3>
-                            <p>1 Adult</p>
+                            <h3>Max Guests:</h3>
+                            <input
+                                type="number"
+                                name="maxGuests"
+                                min="1"
+                                value={filters.maxGuests}
+                                onChange={handleFilterChange}
+                            />
                         </div>
-                        <div className={styles.priceFilter}>
-                            <h3>Price Range:</h3>
-                            <p>$ 175 - $ 899</p>
+
+                        <div className={styles.ratingFilter}>
+                            <h3>Rating:</h3>
+                            <input
+                                type="number"
+                                name="minRating"
+                                min="0"
+                                max="5"
+                                value={filters.minRating}
+                                onChange={handleFilterChange}
+                            />
                         </div>
-                        <div className={styles.bedFilter}>
-                            <h3>Bed types:</h3>
-                            <p>Single</p>
-                            <p>Twin</p>
-                            <p>Queen</p>
-                            <p>King</p>
-                            <p>XL King</p>
+
+                        <div className={styles.metaFilter}>
+                            <h3>Facilities:</h3>
+                            {metaFilters.map((metaKey) => (
+                                <label key={metaKey}>
+                                    <input
+                                        type="checkbox"
+                                        name={metaKey}
+                                        checked={filters.meta[metaKey] || false}
+                                        onChange={handleFilterChange}
+                                    />
+                                    {metaKey.charAt(0).toUpperCase() + metaKey.slice(1)}
+                                </label>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -112,7 +243,7 @@ const Hotels = () => {
                     ) : (
                         <>
                             <div className={styles.allHotels}>
-                                {hotels.slice(0, visibleCount).map((hotel) => (
+                                {filteredHotels.slice(0, visibleCount).map((hotel) => (
                                     <Link to={`/hotel-details/${hotel.id}`} key={hotel.id} className={styles.hotelCard}>
                                         <div className={styles.rating}>
                                             <div className={styles.stars}>{renderStars(hotel.rating || 0)}</div>
@@ -135,7 +266,7 @@ const Hotels = () => {
                                     </Link>
                                 ))}
                             </div>
-                            {visibleCount < hotels.length && (
+                            {visibleCount < filteredHotels.length && (
                                 <button className={styles.loadMoreButton} onClick={loadMore}>
                                     Load More
                                 </button>

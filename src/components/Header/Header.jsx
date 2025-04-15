@@ -153,6 +153,9 @@ function Header() {
       <Link to="/login-costumer">Login</Link>
       <Link to="/register-costumer">Register</Link>
     </li>
+    <li className={styles.menuLinks}>
+      <Link to="/profile-costumer">My Profile</Link>
+    </li>
   </div>
 )}
 
