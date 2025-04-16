@@ -15,6 +15,7 @@ const LoginAdmin = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log('Form submitted');
     setError('');
 
     if (!isFormValid) {
@@ -33,19 +34,32 @@ const LoginAdmin = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('Login Error Response:', errorData);
         throw new Error(errorData?.errors?.[0]?.message || 'Login failed');
       }
 
       const data = await response.json();
+      console.log('Login Success:', data);
+
+      console.log('Is Venue Manager:', data.data.venueManager);
 
       localStorage.setItem('token', data.data.accessToken);
       localStorage.setItem('username', data.data.name);
 
-      navigate('/user-page');
+      if (data.data.venueManager) {
+        console.log('Redirecting to Venue Manager Dashboard');
+        navigate('/venue-manager-dashboard');
+      } 
+      
+      else {
+        console.log('Redirecting to Admin Profile');
+        navigate('/admin-profile');
+      }
     } 
     
     catch (err) {
       setError(err.message || 'Something went wrong');
+      console.error('Error during login:', err);
     } 
     
     finally {
@@ -54,11 +68,12 @@ const LoginAdmin = () => {
   };
 
   return (
-    <div className={styles.loginPage}>
+    <div className={styles.pageContent}>
       <div className={styles.loginStyle}>
         <div className={styles.loginContent}>
           <h2>Holidaze</h2>
           <h1>Welcome to Holidaze</h1>
+          <p>Login as a Venue Manager</p>
           <form onSubmit={handleLogin} className={styles.loginForm}>
             <input
               type="email"

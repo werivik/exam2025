@@ -5,7 +5,7 @@ import styles from './CostumerProfile.module.css';
 const CostumerProfile = () => {
 
     return (
-        <div className={styles.HomeStyle}>
+        <div className={styles.pageContent}>
             <h1>Welcome</h1>
         </div>
     );

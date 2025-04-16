@@ -146,7 +146,7 @@ const Hotels = () => {
     }, [location.state]);
 
     return (
-        <div className={styles.HotelsStyle}>
+        <div className={styles.pageContent}>
             <section className={styles.leftSection}>
                 <div className={styles.leftBorder}>
                     <h2>Filters</h2>

@@ -101,12 +101,11 @@ const RegisterCostumer = () => {
   };
 
   return (
-    <div className={styles.registerPage}>
+    <div className={styles.pageContent}>
       <div className={styles.registerStyle}>
         <div className={styles.registerContent}>
           <h2>Holidaze</h2>
-          <h1>Register a Customer Account</h1>
-
+          <h1>Register as a Costumer</h1>
           <form onSubmit={handleRegister} className={styles.registerForm}>
             <input
               type="text"

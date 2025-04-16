@@ -43,7 +43,10 @@ const RegisterAdmin = () => {
         throw new Error(errorData?.errors?.[0]?.message || 'Registration failed');
       }
 
-      navigate('/login-costumer');
+      const data = await response.json();
+      console.log('Register Response:', data);
+
+      navigate('/login-admin');
     } 
     
     catch (err) {
@@ -56,11 +59,11 @@ const RegisterAdmin = () => {
   };
 
   return (
-    <div className={styles.registerPage}>
+    <div className={styles.pageContent}>
       <div className={styles.registerStyle}>
         <div className={styles.registerContent}>
           <h2>Holidaze</h2>
-          <h1>Create a Customer Account</h1>
+          <p>Register a Venue Manager</p>
           <form onSubmit={handleRegister} className={styles.registerForm}>
             <input
               type="text"

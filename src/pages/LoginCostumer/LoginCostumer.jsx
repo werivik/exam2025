@@ -59,6 +59,7 @@ const LoginCostumer = () => {
         <div className={styles.loginContent}>
           <h2>Holidaze</h2>
           <h1>Welcome to Holidaze</h1>
+          <p>Login as a Costumer</p>
           <form onSubmit={handleLogin} className={styles.inputForm}>
             <input
               type="email"

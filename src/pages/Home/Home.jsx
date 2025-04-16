@@ -213,7 +213,7 @@ const Home = () => {
   );
   
   return (
-    <div className={styles.home}>
+    <div className={styles.pageContent}>
       <section className={styles.firstSection}>
         <div className={styles.homeBanner}>
           <h1>Holidaze</h1>
