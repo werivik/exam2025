@@ -18,7 +18,6 @@ function Header() {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
-  // Scroll behavior
   useEffect(() => {
     if (location.pathname === "/") {
       const handleScroll = () => {
@@ -35,7 +34,6 @@ function Header() {
     }
   }, [location.pathname]);
 
-  // Fetch venues on load
   useEffect(() => {
     const fetchVenues = async () => {
       try {
@@ -55,7 +53,6 @@ function Header() {
     fetchVenues();
   }, []);
 
-  // Debounced search logic
   const handleSearch = useCallback(
     debounce((input) => {
       const term = input.toLowerCase();
