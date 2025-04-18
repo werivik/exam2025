@@ -74,7 +74,7 @@ const LoginAdmin = () => {
           <h2>Holidaze</h2>
           <h1>Welcome to Holidaze</h1>
           <p>Login as a Venue Manager</p>
-          <form onSubmit={handleLogin} className={styles.loginForm}>
+          <form onSubmit={handleLogin} className={styles.inputForm}>
             <input
               type="email"
               placeholder="Email"
@@ -101,8 +101,10 @@ const LoginAdmin = () => {
             </button>
             {error && <p className={styles.error}>{error}</p>}
           </form>
+          <div className={styles.BottomOptions}>
           <p>Don't have an account? Register one <Link to="/register-admin">here</Link></p>
-          <p>Are you a Visitor? Login <Link to="/login-costumer">Here</Link></p>
+          <p>Are you a Costumer? Login <Link to="/login-costumer">Here</Link></p>
+          </div>
         </div>
       </div>
     </div>

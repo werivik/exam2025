@@ -62,12 +62,13 @@ const RegisterAdmin = () => {
     <div className={styles.pageContent}>
       <div className={styles.registerStyle}>
         <div className={styles.registerContent}>
-          <h2>Holidaze</h2>
-          <p>Register a Venue Manager</p>
-          <form onSubmit={handleRegister} className={styles.registerForm}>
+        <h2>Holidaze</h2>
+          <h1>Welcome to Holidaze</h1>
+          <p>Register as a Venue Manager</p>
+          <form onSubmit={handleRegister} className={styles.inputForm}>
             <input
               type="text"
-              placeholder="Full Name"
+              placeholder="Venue Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -99,7 +100,9 @@ const RegisterAdmin = () => {
             </button>
             {error && <p className={styles.error}>{error}</p>}
           </form>
-          <p>Already have an account? <Link to="/login-costumer">Login here</Link></p>
+          <div className={styles.BottomOptions}>
+          <p>Already have an account? <Link to="/login-admin">Login here</Link></p>
+          </div>
         </div>
       </div>
     </div>
