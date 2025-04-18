@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './RegisterAdmin.module.css';
 import { AUTH_REGISTER } from '../../constants';
@@ -11,6 +11,13 @@ const RegisterAdmin = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
   const isFormValid =
     name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
@@ -62,7 +69,7 @@ const RegisterAdmin = () => {
     <div className={styles.pageContent}>
       <div className={styles.registerStyle}>
         <div className={styles.registerContent}>
-        <h2>Holidaze</h2>
+          <h2>Holidaze</h2>
           <h1>Welcome to Holidaze</h1>
           <p>Register as a Venue Manager</p>
           <form onSubmit={handleRegister} className={styles.inputForm}>
@@ -101,7 +108,7 @@ const RegisterAdmin = () => {
             {error && <p className={styles.error}>{error}</p>}
           </form>
           <div className={styles.BottomOptions}>
-          <p>Already have an account? <Link to="/login-admin">Login here</Link></p>
+            <p>Already have an account? <Link to="/login-admin">Login here</Link></p>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './LoginCostumer.module.css';
 import { AUTH_LOGIN } from '../../constants';
@@ -10,6 +10,13 @@ const LoginCostumer = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
   const isFormValid = email.trim() !== '' && password.trim() !== '';
 
@@ -77,20 +84,24 @@ const LoginCostumer = () => {
               required
               className={styles.input}
             />
-<button
-  type="submit"
-  disabled={!isFormValid || isSubmitting}
-  className={`${styles.loginButton} ${isFormValid && !isSubmitting ? styles.active : styles.inactive}`}
->
-  {isSubmitting ? 'Logging in...' : 'Login'}
-</button>
+            <button
+              type="submit"
+              disabled={!isFormValid || isSubmitting}
+              className={`${styles.loginButton} ${isFormValid && !isSubmitting ? styles.active : styles.inactive}`}
+            >
+              {isSubmitting ? 'Logging in...' : 'Login'}
+            </button>
 
-            
             {error && <p className={styles.error}>{error}</p>}
           </form>
           <div className={styles.BottomOptions}>
-          <p>Don't have an account? Register one <Link to="/register-costumer">here</Link></p>
-          <p>Are you a Manager? Login <Link to="/login-admin">Here</Link></p>
+            <p>
+              Don't have an account? Register one{' '}
+              <Link to="/register-costumer">here</Link>
+            </p>
+            <p>
+              Are you a Manager? Login <Link to="/login-admin">Here</Link>
+            </p>
           </div>
         </div>
       </div>

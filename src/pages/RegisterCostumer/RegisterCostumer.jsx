@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './RegisterCostumer.module.css';
 import { AUTH_REGISTER } from '../../constants';
@@ -14,6 +14,13 @@ const RegisterCostumer = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
   const validateEmail = (email) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -86,7 +93,6 @@ const RegisterCostumer = () => {
       }
 
       alert('Registration successful! Redirecting to login...');
-      
       navigate('/login-costumer');
     } 
     
@@ -104,29 +110,29 @@ const RegisterCostumer = () => {
     <div className={styles.pageContent}>
       <div className={styles.registerStyle}>
         <div className={styles.registerContent}>
-        <h2>Holidaze</h2>
+          <h2>Holidaze</h2>
           <h1>Welcome to Holidaze</h1>
           <p>Register as a Costumer</p>
           <form onSubmit={handleRegister} className={styles.inputForm}>
             <div className={styles.nameInputs}>
-            <input
-              type="text"
-              name="name"
-              placeholder="First Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className={styles.input}
-            />
-                        <input
-              type="text"
-              name="name"
-              placeholder="Last Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className={styles.input}
-            />
+              <input
+                type="text"
+                name="name"
+                placeholder="First Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className={styles.input}
+              />
+              <input
+                type="text"
+                name="name"
+                placeholder="Last Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className={styles.input}
+              />
             </div>
             <input
               type="email"
@@ -158,15 +164,15 @@ const RegisterCostumer = () => {
             {error && <p className={styles.error}>{error}</p>}
           </form>
 
-<div className={styles.BottomOptions}>
-<p>
-            Already have an account?{' '}
-            <Link to="/login-costumer">Login here</Link>
-          </p>
-          <p>
-            Are you a Venue Manager? <Link to="/login-admin">Login here</Link>
-          </p>
-</div>
+          <div className={styles.BottomOptions}>
+            <p>
+              Already have an account?{' '}
+              <Link to="/login-costumer">Login here</Link>
+            </p>
+            <p>
+              Are you a Venue Manager? <Link to="/login-admin">Login here</Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

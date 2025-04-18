@@ -121,8 +121,17 @@ function Header() {
     setIsSearchOpen((prevState) => !prevState);
   };
 
+  const loginOrRegisterRoutes = [
+    "/login-admin",
+    "/login-costumer",
+    "/register-admin",
+    "/register-costumer",
+  ];
+  
+  const isSimpleHeader = loginOrRegisterRoutes.includes(location.pathname);  
+
   return (
-    <header className={scrolled ? styles.scrolled : ""}>
+<header className={`${scrolled && !isSimpleHeader ? styles.scrolled : ""} ${isSimpleHeader ? styles.simpleHeader : ""}`}>
 
       <nav className={styles.nav}>
         {/* Left Menu Button */}

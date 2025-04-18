@@ -367,3 +367,38 @@ header {
   border: solid white 2px;
   cursor: pointer;
 }
+
+.simpleHeader {
+  background: none;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  top: 0 !important;
+  color: white !important;
+  position: fixed !important;
+  width: 100%;
+  z-index: 999;
+}
+
+.simpleHeader nav {
+  background: none !important;
+  color: white !important;
+  padding: 0;
+}
+
+.simpleHeader nav .headerRightLinks li a,
+.simpleHeader nav .menuOpen,
+.simpleHeader nav .menuOpen i,
+.simpleHeader nav .searchInactive {
+  color: white !important;
+  border-color: transparent !important;
+}
+
+.simpleHeader .searchActive {
+  color: white !important;
+}
+
+.simpleHeader nav ul li a:hover,
+.simpleHeader nav .menuOpen:hover,
+.simpleHeader nav .searchInactive:hover {
+  border-color: white !important;
+}

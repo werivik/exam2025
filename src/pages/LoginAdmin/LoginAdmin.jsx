@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './LoginAdmin.module.css';
 import { AUTH_LOGIN } from '../../constants';
@@ -10,6 +10,13 @@ const LoginAdmin = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
   const isFormValid = email.trim() !== '' && password.trim() !== '';
 
@@ -102,8 +109,12 @@ const LoginAdmin = () => {
             {error && <p className={styles.error}>{error}</p>}
           </form>
           <div className={styles.BottomOptions}>
-          <p>Don't have an account? Register one <Link to="/register-admin">here</Link></p>
-          <p>Are you a Costumer? Login <Link to="/login-costumer">Here</Link></p>
+            <p>
+              Don't have an account? Register one <Link to="/register-admin">here</Link>
+            </p>
+            <p>
+              Are you a Costumer? Login <Link to="/login-costumer">Here</Link>
+            </p>
           </div>
         </div>
       </div>
