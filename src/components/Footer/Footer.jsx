@@ -9,8 +9,8 @@ function Footer() {
     <footer>
       <div className={styles.footerBorder}>
         <div className={styles.footerTitles}>
-          <h2>Restelle</h2>
-          <p>Elegance meet Comfort</p>
+          <h2>Holidaze</h2>
+          <p>Elegance meets Comfort</p>
         </div>
         <div className={styles.footerRight}>
         </div>
