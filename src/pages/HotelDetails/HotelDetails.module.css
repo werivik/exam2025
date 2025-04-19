@@ -231,11 +231,41 @@
     width: 70%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .hotelInfoRight {
     width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: flex-start;
+    gap: 50px;
+    position: relative;
+}
+
+.favoriteVenue {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    position: relative;
+}
+
+.emptyHeart, .fullHeart {
+    position: absolute;
+    left: 0;
+    margin-left: -35px;
+    cursor: pointer;
+    color: #1F1B17;
+}
+
+.fullHeart {
+    opacity: 0;
+}
+
+.hotelInfoRight .priceAndBooking {
     display: flex;
     flex-direction: column;
     align-items: end;
@@ -272,4 +302,9 @@
     gap: 0px;
     margin: 0;
     padding: 0;
+}
+
+.favoriteVenue {
+    margin-top: 0;
+    padding-top: 0;
 }

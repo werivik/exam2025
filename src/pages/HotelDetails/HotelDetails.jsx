@@ -176,8 +176,19 @@ const HotelDetails = () => {
                         <p><strong>Max Guests</strong> {hotel.maxGuests}</p>
                         </div>
                         <div className={styles.hotelInfoRight}>
+                        <div className={styles.favoriteVenue}>
+                            <div className={styles.emptyHeart}>
+                            <i class="fa-regular fa-heart"></i>
+                            </div>
+                            <div className={styles.fullHeart}>
+                            <i class="fa-solid fa-heart"></i>
+                            </div>
+                            <p>Favorite Venue</p>
+                        </div>
+                        <div className={styles.priceAndBooking}>
                         <p>Price: <strong>$ {hotel.price}</strong> / per night</p>
                         <button className={styles.bookButton}>Book Room</button>
+                        </div>
                         </div>
                 </div>
             </div>
