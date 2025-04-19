@@ -105,51 +105,55 @@ const HotelDetails = () => {
                     </div>
                 </div>
                 <div className={styles.slideshowSection}>
-                    {mediaArray.length > 0 && (
-                        <div className={styles.slideshowSection}>
-                            <div className={styles.slideshowLeft}>
-                                <div className={styles.slideshowLeftContent}>
-                                    {leftImages.map((item, index) => (
-                                        <img
-                                            key={`${item.url}-${index}`}
-                                            src={item.url}
-                                            alt={item.alt || `Preview ${index}`}
-                                            className={`${styles.previewImage} ${index === 0 ? styles.activePreview : ''}`}
-                                            onClick={() => setCurrentSlide(index)}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                            <div className={styles.slideshowRight}>
-                                <div className={styles.slideshowButtons}>
-                                    <div className={styles.slideshowButtonPrev} onClick={handlePrev}>
-                                        <img src={slideshowPrev} alt="Previous" />
-                                    </div>
-                                    <div className={styles.slideshowButtonNext} onClick={handleNext}>
-                                        <img src={slideshowNext} alt="Next" />
-                                    </div>
-                                </div>
-                                <div className={styles.slideshowProgress}>
-                                    <p>{currentSlide + 1} out of {mediaArray.length}</p>
-                                </div>
-                                <img
-                                    src={currentImage}
-                                    alt={currentAlt}
-                                    className={styles.detailImage}
-                                />
-                            </div>
-                        </div>
-                    )}
-                    {mediaArray.length === 0 && (
-                        <div className={styles.noSlideshow}>
-                            <img
-                                src={hotel.bannerImageUrl || '/default-banner.jpg'}
-                                alt="Banner"
-                                className={styles.detailImage}
-                            />
-                        </div>
-                    )}
-                </div>
+  {mediaArray.length >= 2 ? (
+    <div className={styles.slideshowSection}>
+      <div className={styles.slideshowLeft}>
+        <div className={styles.slideshowLeftContent}>
+        {leftImages.map((item, index) => {
+  const dynamicHeight = leftImages.length === 2 ? '50%' : '32.4%';
+
+  return (
+    <img
+      key={`${item.url}-${index}`}
+      src={item.url}
+      alt={item.alt || `Preview ${index}`}
+      style={{ height: dynamicHeight }}
+      className={`${styles.previewImage} ${index === 0 ? styles.activePreview : ''}`}
+      onClick={() => setCurrentSlide(index)}
+    />
+  );
+})}
+        </div>
+      </div>
+      <div className={styles.slideshowRight}>
+        <div className={styles.slideshowButtons}>
+          <div className={styles.slideshowButtonPrev} onClick={handlePrev}>
+            <img src={slideshowPrev} alt="Previous" />
+          </div>
+          <div className={styles.slideshowButtonNext} onClick={handleNext}>
+            <img src={slideshowNext} alt="Next" />
+          </div>
+        </div>
+        <div className={styles.slideshowProgress}>
+          <p>{currentSlide + 1} out of {mediaArray.length}</p>
+        </div>
+        <img
+          src={currentImage}
+          alt={currentAlt}
+          className={styles.detailImage}
+        />
+      </div>
+    </div>
+  ) : (
+    <div className={styles.noSlideshow}>
+      <img
+        src={hotel.bannerImageUrl || mediaArray[0]?.url || '/default-banner.jpg'}
+        alt={hotel.name}
+        className={styles.detailImage}
+      />
+    </div>
+  )}
+</div>
                 <div className={styles.hotelInfoBottom}>
                 <div className={styles.hotelInfoLeft}>
                         <p className={styles.hotelRating}><strong>Rating</strong> {hotel.rating} <img 
