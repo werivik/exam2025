@@ -96,6 +96,14 @@ const HotelDetails = () => {
         }
     }, [checkInDate, checkOutDate, hotel?.price]);
     
+    const isGuestSelectionValid = filters.adults + filters.disabled >= 1;
+
+    useEffect(() => {
+        if (hotel?.price && checkInDate && checkOutDate) {
+            calculateTotalPrice();
+        }
+    }, [checkInDate, checkOutDate, hotel?.price]);
+    
     const calculateTotalPrice = () => {
         if (!checkInDate || !checkOutDate || !hotel?.price) return;
     
@@ -108,22 +116,22 @@ const HotelDetails = () => {
         const total = nights * pricePerNight;
     
         setTotalPrice(total);
-    };     
+    };
     
     const renderGuestInfo = () => {
         let guestInfo = `${filters.adults} Adult${filters.adults !== 1 ? "s" : ""}`;
         if (filters.children > 0) {
-          guestInfo += `, ${filters.children} Child${filters.children !== 1 ? "ren" : ""}`;
+            guestInfo += `, ${filters.children} Child${filters.children !== 1 ? "ren" : ""}`;
         }
         if (filters.disabled > 0) {
-          guestInfo += `, ${filters.disabled} Disabled${filters.disabled !== 1 ? "s" : ""}`;
-        }
+            guestInfo += `, ${filters.disabled} Assisted Guest${filters.disabled !== 1 ? "s" : ""}`;
+        }        
         return guestInfo;
-      };    
-      
-      const dropdownRef = useRef(null);
-
-      useEffect(() => {
+    };
+    
+    const dropdownRef = useRef(null);
+    
+    useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setShowGuestDropdown(false);
@@ -134,14 +142,15 @@ const HotelDetails = () => {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);    
-
+    }, []);
+    
     if (loading) return <div className={styles.pageStyle}><p>Loading...</p></div>;
     if (!hotel) return <div className={styles.pageStyle}><p>Hotel not found.</p></div>;
-
+    
     const mediaArray = getValidMedia(hotel.media);
     const currentImage = mediaArray[currentSlide]?.url;
     const currentAlt = mediaArray[currentSlide]?.alt || hotel.name;
+    
 
     return (
         <section className={styles.pageContent}>
@@ -261,11 +270,11 @@ const HotelDetails = () => {
       {["adults", "children", "disabled"].map((type) => (
         <div key={type} className={styles.dropdownRow}>
           <span className={styles.label}>
-            {type === "adults"
-              ? "Adults"
-              : type === "children"
-              ? "Children"
-              : "Assisted Guests"}
+          {type === "adults"
+  ? "Adults"
+  : type === "children"
+  ? "Children"
+  : `Assisted Guest${filters.disabled !== 1 ? "s" : ""}`}
           </span>
           <div className={styles.counterControls}>
             {filters[type] > 0 && (
@@ -299,13 +308,30 @@ const HotelDetails = () => {
     </div>
   </div>
 </div>
-    <button className={styles.searchRoom}>Search</button>
+<button 
+  className={styles.searchRoom} 
+  disabled={!isGuestSelectionValid}
+>
+  Search
+</button>
+
+{!isGuestSelectionValid && (
+  <p className={styles.warningText}>
+    At least one adult or assisted guest must be present.
+  </p>
+)}
+
 </div>
                         </div>
                         <div className={styles.dividerLine}></div>
                         <div className={styles.bookPrice}>
                             <p>Total Price: <strong>$ {totalPrice.toFixed(2)}</strong> <span>/ $ {hotel.price} per night</span></p>
-                            <button className={styles.bookButton}>Book Room</button>
+                            <button 
+  className={styles.bookButton} 
+  disabled={!isGuestSelectionValid}
+>
+  Book Room
+</button>
                         </div>
                     </div>
                 </div>

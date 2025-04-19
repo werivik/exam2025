@@ -484,3 +484,14 @@
     min-width: 20px;
     text-align: center;
   }
+
+  .warningText {
+    position: absolute;
+    top: 40%;
+    z-index: 1;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: solid red 2px;
+    transition: 0.25s;
+  }
