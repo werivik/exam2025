@@ -36,10 +36,10 @@ export const AUTH_KEY = `${AUTH}/f7d9660d-4dba-4b16-82c6-1a4669e99612`;
 
 /* Venues */
 export const VENUES = `${API_BASE}/holidaze/venues`;
-export const VENUE_SINGLE = `${API_BASE}holidaze/venues/<id>`;
-export const VENUE_CREATE = `${API_BASE}holidaze/venues`;
-export const VENUE_UPDATE = `${API_BASE}holidaze/venues/<id>`;
-export const VENUE_DELETE = `${API_BASE}holidaze/venues/<id>`;
+export const VENUE_SINGLE = `${API_BASE}/holidaze/venues/<id>`;
+export const VENUE_CREATE = `${API_BASE}/holidaze/venues`;
+export const VENUE_UPDATE = `${API_BASE}/holidaze/venues/<id>`;
+export const VENUE_DELETE = `${API_BASE}/holidaze/venues/<id>`;
 
 /* Bookings */
 export const BOOKINGS_ALL = `${API_BASE}/holidaze/bookings`;

@@ -25,6 +25,7 @@ const HotelDetails = () => {
     
     const [currentSlide, setCurrentSlide] = useState(0);
     const [leftImages, setLeftImages] = useState([]);
+    const [owner, setOwner] = useState(null);
 
     const [filters, setFilters] = useState({
         adults: 1,
@@ -38,31 +39,55 @@ const HotelDetails = () => {
 
     useEffect(() => {
         const fetchHotel = async () => {
-            try {
-                const response = await fetch(`${VENUES}/${id}`, {
-                    method: 'GET',
+          try {
+            const response = await fetch(`${VENUES}/${id}`, {
+              method: 'GET',
+              headers: headers(),
+            });
+      
+            if (!response.ok) throw new Error("Failed to fetch hotel details");
+      
+            const result = await response.json();
+            setHotel(result.data);
+      
+            const mediaArray = getValidMedia(result.data.media);
+            setLeftImages(mediaArray.slice(0, 3));
+      
+            if (result.data?.owner?.name) {
+                try {
+                  const ownerRes = await fetch(`${VENUES}/../profiles/${result.data.owner.name}?_venues=true`, {
                     headers: headers(),
+                  });
+                  const ownerJson = await ownerRes.json();
+                  setOwner(ownerJson.data);
+                } 
+                
+                catch (ownerErr) {
+                  console.error("Failed to fetch owner profile:", ownerErr);
+                }
+              }
+              if (!owner) {
+                setOwner({
+                  name: "Test Owner",
+                  avatar: {
+                    url: "/media/images/mdefault.jpg",
+                    alt: "Placeholder"
+                  }
                 });
-
-                if (!response.ok) throw new Error("Failed to fetch hotel details");
-
-                const result = await response.json();
-                setHotel(result.data);
-                const mediaArray = getValidMedia(result.data.media);
-                setLeftImages(mediaArray.slice(0, 3));
-            } 
-            
-            catch (error) {
-                console.error("Error fetching hotel:", error);
-            } 
-            
-            finally {
-                setLoading(false);
-            }
+              }              
+          } 
+          
+          catch (error) {
+            console.error("Error fetching hotel:", error);
+          } 
+          
+          finally {
+            setLoading(false);
+          }
         };
-
+      
         fetchHotel();
-    }, [id]);
+      }, [id]);       
 
     const handleNext = () => {
         if (!hotel?.media?.length) return;
@@ -161,8 +186,20 @@ const HotelDetails = () => {
                         <p><i className="fa-solid fa-location-dot"></i>{hotel.location?.address}, {hotel.location?.city}, {hotel.location?.country}</p>
                     </div>
                     <div className={styles.hotelInfoTopRight}>
-                        <p>Price: <strong>$ {hotel.price}</strong> / per night</p>
-                        <button className={styles.bookButton}>Book Room</button>
+                    {owner && (
+  <div className={styles.venueOwner}>
+    <h3>Venue Host</h3>
+    <div className={styles.venueProfileName}>
+    {owner.avatar?.url && (
+      <img
+        src={owner.avatar.url}
+        alt={owner.avatar.alt || `${owner.name}'s avatar`}
+      />
+    )}
+    <p>{owner.name}</p>
+    </div>
+  </div>
+)}
                     </div>
                 </div>
                 <div className={styles.slideshowSection}>
@@ -219,17 +256,62 @@ const HotelDetails = () => {
                         <p className={styles.hotelRating}><strong>Rating</strong> {hotel.rating} <img src="/media/rating/star-solid.svg" alt="Star" className={styles.singleStar} /></p>
                         <p className={styles.description}><strong>Description</strong><br />{hotel.description}</p>
                         {hotel.meta && (
-                            <div className={styles.meta}>
-                                <h3>Amenities</h3>
-                                <ul>
-                                    {hotel.meta?.wifi && <li><i className="fa-solid fa-wifi"></i> Wi-Fi</li>}
-                                    {hotel.meta?.parking && <li><i className="fa-solid fa-car"></i> Free Parking</li>}
-                                    {hotel.meta?.breakfast && <li><i className="fa-solid fa-utensils"></i> Breakfast Included</li>}
-                                    {hotel.meta?.pets && <li><i className="fa-solid fa-paw"></i> Pets Allowed</li>}
-                                </ul>
-                            </div>
-                        )}
-                        <p><strong>Max Guests</strong> {hotel.maxGuests}</p>
+  <div className={styles.meta}>
+    <h3>Venue Amenities</h3>
+    <ul>
+    <li>
+  {hotel.meta.wifi ? (
+    <div className={styles.included}>
+      <i className="fa-solid fa-check"></i>
+    </div>
+  ) : (
+    <div className={styles.notIncluded}>
+      <i className="fa-solid fa-xmark"></i>
+    </div>
+  )}
+  <i className="fa-solid fa-wifi" style={{ opacity: hotel.meta.wifi ? 1 : 0.5 }}></i> <p style={{ opacity: hotel.meta.wifi ? 1 : 0.5 }}>Wi-Fi</p>
+</li>
+<li>
+  {hotel.meta.parking ? (
+    <div className={styles.included}>
+      <i className="fa-solid fa-check"></i>
+    </div>
+  ) : (
+    <div className={styles.notIncluded}>
+      <i className="fa-solid fa-xmark"></i>
+    </div>
+  )}
+  <i className="fa-solid fa-car" style={{ opacity: hotel.meta.parking ? 1 : 0.5 }}></i> <p style={{ opacity: hotel.meta.parking ? 1 : 0.5 }}>Free Parking</p>
+</li>
+
+<li>
+  {hotel.meta.breakfast ? (
+    <div className={styles.included}>
+      <i className="fa-solid fa-check"></i>
+    </div>
+  ) : (
+    <div className={styles.notIncluded}>
+      <i className="fa-solid fa-xmark"></i>
+    </div>
+  )}
+  <i className="fa-solid fa-utensils"  style={{ opacity: hotel.meta.breakfast ? 1 : 0.5 }}></i> <p  style={{ opacity: hotel.meta.breakfast ? 1 : 0.5 }}>Breakfast Included</p>
+</li>
+
+<li>
+  {hotel.meta.pets ? (
+    <div className={styles.included}>
+      <i className="fa-solid fa-check"></i>
+    </div>
+  ) : (
+    <div className={styles.notIncluded}>
+      <i className="fa-solid fa-xmark"></i>
+    </div>
+  )}
+  <i className="fa-solid fa-paw" style={{ opacity: hotel.meta.pets ? 1 : 0.5 }}></i> <p style={{ opacity: hotel.meta.pets ? 1 : 0.5 }}>Pets Allowed</p>
+</li>
+    </ul>
+  </div>
+)}
                     </div>
                     <div className={styles.hotelInfoRight}>
                         <div className={styles.bookDateGuest}>
@@ -332,6 +414,9 @@ const HotelDetails = () => {
 >
   Book Room
 </button>
+
+<div className={styles.dividerLine}></div>
+<p><strong>Max Guests</strong> {hotel.maxGuests}</p>
                         </div>
                     </div>
                 </div>
