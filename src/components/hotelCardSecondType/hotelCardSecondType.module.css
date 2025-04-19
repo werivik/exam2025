@@ -72,19 +72,27 @@
     margin-top: 0px;
     font-size: 15px;
     font-style: normal;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+.hotelPrice p {
+  opacity: 75%;
 }
 
 .hotelPrice span {
-    margin-top: 5px;
     font-size: 15px;
     font-weight: 700;
     font-size: 18px;
+    opacity: 100%;
 }
 
 .seeMore {
     display: none;
     width: 95%;
-    margin-top: -5px;
+    margin-top: -25px;
     text-align: right;
     text-decoration: underline;
     transition: 0.25s;
