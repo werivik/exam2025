@@ -100,7 +100,7 @@ const HotelDetails = () => {
                         <p><i className="fa-solid fa-location-dot"></i>{hotel.location?.address}, {hotel.location?.city}, {hotel.location?.country}</p>
                     </div>
                     <div className={styles.hotelInfoTopRight}> 
-                        <p><strong>Price:</strong> ${hotel.price} / per night</p>
+                        <p>Price: <strong>$ {hotel.price}</strong> / per night</p>
                         <button className={styles.bookButton}>Book Room</button>
                     </div>
                 </div>
@@ -150,18 +150,31 @@ const HotelDetails = () => {
                         </div>
                     )}
                 </div>
-                {showScrollIcon && (
-                    <div className={styles.scrollIcon}>
-                        <i className={`fa-solid fa-chevron-down ${styles.bounceIcon}`}></i>
-                        <i className={`fa-solid fa-chevron-down ${styles.bounceIcon} ${styles.delay}`}></i>
-                    </div>
-                )}
-                <div className={styles.hotelInfo}>
-                    <div className={styles.hotelInfoLeft}>
-                        <p className={styles.hotelRating}><strong>Rating:</strong> {hotel.rating} Stars</p>
+                <div className={styles.hotelInfoBottom}>
+                <div className={styles.hotelInfoLeft}>
+                        <p className={styles.hotelRating}><strong>Rating</strong> {hotel.rating} <img 
+                            src="/media/rating/star-solid.svg" 
+                            alt="Star" 
+                            className={styles.singleStar} 
+                          /></p>
                         <p><strong>Description</strong><br />{hotel.description}</p>
-                        <p><strong>Max Guests:</strong> {hotel.maxGuests}</p>
-                    </div>
+                        {hotel.meta && (
+  <div className={styles.meta}>
+    <h4>Amenities</h4>
+    <ul>
+    {hotel.meta?.wifi && <li><i class="fa-solid fa-wifi"></i> Wi-Fi</li>}
+    {hotel.meta?.parking && <li><i class="fa-solid fa-car"></i> Free Parking</li>}
+    {hotel.meta?.breakfast && <li><i class="fa-solid fa-utensils"></i> Breakfast Included</li>}
+    {hotel.meta?.pets && <li><i class="fa-solid fa-paw"></i> Pets Allowed</li>}
+    </ul>
+  </div>
+)}
+                        <p><strong>Max Guests</strong> {hotel.maxGuests}</p>
+                        </div>
+                        <div className={styles.hotelInfoRight}>
+                        <p>Price: <strong>$ {hotel.price}</strong> / per night</p>
+                        <button className={styles.bookButton}>Book Room</button>
+                        </div>
                 </div>
             </div>
         </section>

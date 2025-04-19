@@ -406,11 +406,11 @@
 }
 
 .typeTitle h2 {
-    font-size: 3.438rem;
+    font-size: 3.5rem;
 }
 
 .typeTitle p {
-    font-size: 1.875rem;
+    font-size: 2.188rem;
     font-style: italic;
     font-weight: 400;
 }
@@ -620,11 +620,11 @@
 }
 
 .fourthTitle h2 {
-    font-size: 3.438rem;
+    font-size: 3.5rem;
 }
 
 .fourthTitle a {
-    font-size: 1.875rem;
+    font-size: 2.188rem;
     font-style: italic;
     color: #1F1B17;
     transition: 0.25s;

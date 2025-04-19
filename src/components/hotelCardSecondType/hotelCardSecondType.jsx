@@ -58,7 +58,7 @@ const HotelCardSecondType = ({ hotel }) => {
               {hotel.location?.city || 'Unknown City'}, {hotel.location?.country || 'Unknown Country'}
             </p>
             <p className={styles.hotelPrice}>
-              <p>From</p> <span>${hotel.price || '—'}</span><p> / per night</p>
+              <p>From</p> <strong>$ {hotel.price || '—'}</strong><p> / per night</p>
             </p>
             <p className={styles.seeMore}>See more</p>
           </div>

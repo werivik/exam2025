@@ -38,7 +38,7 @@
 }
 
 .titleLocation p {
-    font-size: 1.5rem;
+    font-size: 2.188rem;
     font-weight: 400;
     margin-bottom: 10px;
     margin-top: 0;
@@ -46,31 +46,54 @@
 
 .titleLocation i {
     margin-right: 15px;
-    font-size: 20px;
+    font-size: 2rem;
 }
 
-.hotelInfoRight {
+.hotelInfoTopRight {
     width: 30%;
     display: flex;
     flex-direction: column;
     align-items: end;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 20px;
+}
+
+.hotelInfoTopRight p {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.hotelInfoTopRight p strong {
+    font-size: 1.563rem;
 }
 
 .hotelRating {
     font-size: 2rem;
     margin-top: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.hotelRating strong {
+    margin-right: 15px;
+}
+
+.hotelRating img {
+    width: 20px;
+    height: 20px;
+    margin-bottom: -10px;
 }
 
 .bookButton {
     background-color: #B88A44;
     color: #F3F0EB;
     border: none;
-    height: 45px;
-    width: 150px;
-    font-size: 1.25rem;
-    border-radius: 999px;
+    height: 50px;
+    width: 180px;
+    font-size: 1.6rem;
+    border-radius: 15px;
     transition: 0.15s;
     font-family: "Playfair Display", serif;
 }
@@ -193,43 +216,7 @@
     width: 100%;
 }
 
-.scrollIcon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0rem;
-    margin-top: 2.8rem;
-    opacity: 1;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    position: absolute;
-    width: 100%;
-  }
-  
-  .hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-10px);
-  }
-  
-  .bounceIcon {
-    animation: bounce 1.5s infinite;
-    font-size: 1.5rem;
-    color: #1F1B17;
-    margin-top: -10px;
-  }
-  
-  @keyframes bounce {
-    0%, 100% {
-      transform: translateY(0);
-    }
-  
-    50% {
-      transform: translateY(20px);
-    }
-  }  
-
-
-.hotelInfo {
+.hotelInfoBottom {
     font-size: 1.5rem;
     margin-top: 50px;
     position: relative;
@@ -245,4 +232,36 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.hotelInfoRight {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.hotelInfoRight p {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.hotelInfoRight p strong {
+    font-size: 1.563rem;
+}
+
+.meta ul {
+    list-style: none;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.meta ul li {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 20px;
 }
