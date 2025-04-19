@@ -64,12 +64,6 @@ const HotelDetails = () => {
         fetchHotel();
     }, [id]);
 
-    useEffect(() => {
-        const handleScroll = () => setShowScrollIcon(window.scrollY === 0);
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
     const handleNext = () => {
         if (!hotel?.media?.length) return;
         const mediaArray = getValidMedia(hotel.media);
