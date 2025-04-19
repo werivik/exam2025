@@ -161,10 +161,10 @@ const HotelDetails = () => {
                             alt="Star" 
                             className={styles.singleStar} 
                           /></p>
-                        <p><strong>Description</strong><br />{hotel.description}</p>
+                        <p className={styles.description}><strong>Description</strong><br />{hotel.description}</p>
                         {hotel.meta && (
   <div className={styles.meta}>
-    <h4>Amenities</h4>
+    <h3>Amenities</h3>
     <ul>
     {hotel.meta?.wifi && <li><i class="fa-solid fa-wifi"></i> Wi-Fi</li>}
     {hotel.meta?.parking && <li><i class="fa-solid fa-car"></i> Free Parking</li>}
