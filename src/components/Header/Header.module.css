@@ -210,10 +210,11 @@ header {
   cursor: pointer;
   margin-bottom: 0.5rem;
   transition: 0.25s;
+  color: #1F1B17;
 }
 
 .suggestionItem:hover {
-  background-color: #f2f2f2;
+  background-color: #e7e3e3b0;
   transition: 0.25s;
 }
 
@@ -323,15 +324,6 @@ header {
  .menuLinks a:hover::after{
   transform: scaleX(1);
 }
-
- /*
-.menuLinks a:hover {
-  cursor: pointer;
-  transition: 0.25s;
-  margin-left: 1rem;
-  text-decoration: underline;
-}
-*/
 
 .sidebarClose {
   color: inherit;
