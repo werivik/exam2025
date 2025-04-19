@@ -57,7 +57,9 @@ const Hotels = () => {
 
                 setMetaFilters(Array.from(metaKeys));
                 setLoading(false);
-            } catch (error) {
+            } 
+            
+            catch (error) {
                 console.error("Error fetching hotels:", error);
                 setLoading(false);
             }
@@ -94,7 +96,9 @@ const Hotels = () => {
 
         if (filtered.length === 0) {
             setNoMatches(true);
-        } else {
+        } 
+        
+        else {
             setNoMatches(false);
         }
     }, [filters, hotels]);
@@ -110,7 +114,9 @@ const Hotels = () => {
 
                 return { ...prev, ratings: newRatings };
             });
-        } else if (type === 'checkbox') {
+        } 
+        
+        else if (type === 'checkbox') {
             setFilters(prev => ({
                 ...prev,
                 meta: {
@@ -118,7 +124,9 @@ const Hotels = () => {
                     [name]: checked,
                 }
             }));
-        } else {
+        } 
+        
+        else {
             setFilters(prev => ({
                 ...prev,
                 [name]: value

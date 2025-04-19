@@ -155,3 +155,22 @@
     }
   }
   
+  .hotelCard:hover {
+    cursor: pointer;
+    transition: 0.25s;
+    background-color: #6B7A3A;
+
+    .hotelInfo {
+        transition: 0.25s;
+        color: #F3F0EB;
+    }
+
+    .hotelImage {
+        height: 52.5%;
+        transition: 0.25s;
+    }
+
+    .seeMore {
+        display: block;
+    }
+}

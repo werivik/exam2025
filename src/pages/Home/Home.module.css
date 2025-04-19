@@ -649,14 +649,6 @@
     transform: scaleX(1);
   }
 
-/*
-.fourthTitle a:hover {
-    transition: 0.25s;
-    cursor: pointer;
-    text-decoration: underline;
-}
-*/
-
 .popularHotels {
     height: 400px;
     width: 100%;
@@ -666,62 +658,3 @@
     gap: 25px;
     margin-top: 50px;
 }
-
-.loadingCard {
-    width: 100%;
-    height: 400px;
-    position: relative;
-    border-radius: 25px 25px 5px 5px;
-    background-color: #E0E0E0;
-    animation: pulse 1.5s infinite ease-in-out;
-  }
-  
-  .loadingImage {
-    width: 100%;
-    height: 60%;
-    background-color: #ccc;
-    border-radius: 25px 25px 5px 5px;
-  }
-  
-  .loadingInfo {
-    padding: 10px 5px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .loadingLine {
-    height: 10px;
-    width: 100%;
-    background-color: #ccc;
-    border-radius: 5px;
-  }
-  
-  @keyframes pulse {
-    0% {
-      background-color: #f0f0f0;
-    }
-    50% {
-      background-color: #ddd;
-    }
-    100% {
-      background-color: #f0f0f0;
-    }
-  }
-  
-  .skeleton {
-    background-color: #f0f0f0;
-    animation: pulse 1.5s infinite;
-  }
-  
-  .skeletonImage {
-    height: 150px;
-    background-color: #ddd;
-  }
-  
-  .skeletonText {
-    height: 20px;
-    background-color: #ccc;
-    margin-top: 10px;
-  }
-  

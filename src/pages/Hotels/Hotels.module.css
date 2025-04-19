@@ -152,35 +152,6 @@
     position: relative;
 }
 
-.seeMore {
-    display: none;
-    width: 95%;
-    text-align: right;
-    text-decoration: underline;
-    transition: 0.25s;
-    color: #F3F0EB;
-}
-
-.hotelCard:hover {
-    cursor: pointer;
-    transition: 0.25s;
-    background-color: #6B7A3A;
-
-    .hotelInfo {
-        transition: 0.25s;
-        color: #F3F0EB;
-    }
-
-    .hotelImage {
-        height: 52.5%;
-        transition: 0.25s;
-    }
-
-    .seeMore {
-        display: block;
-    }
-}
-
 .loadMoreButton {
     background-color: #1F1B17;
     color: white;
