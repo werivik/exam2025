@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import styles from './HotelDetails.module.css';
 
@@ -124,7 +125,22 @@ const HotelDetails = () => {
           guestInfo += `, ${filters.disabled} Disabled${filters.disabled !== 1 ? "s" : ""}`;
         }
         return guestInfo;
-      };      
+      };    
+      
+      const dropdownRef = useRef(null);
+
+      useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowGuestDropdown(false);
+            }
+        };
+    
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);    
 
     if (loading) return <div className={styles.pageStyle}><p>Loading...</p></div>;
     if (!hotel) return <div className={styles.pageStyle}><p>Hotel not found.</p></div>;
@@ -238,9 +254,10 @@ const HotelDetails = () => {
                             <div className={styles.filterPeople}>
   <i className="fa-solid fa-person"></i>
   <div
-    className={styles.guestSelector}
-    onClick={() => setShowGuestDropdown((prev) => !prev)}
-  >
+  className={styles.guestSelector}
+  onClick={() => setShowGuestDropdown((prev) => !prev)}
+  ref={dropdownRef}
+>
     <p>{renderGuestInfo()}</p>
     <div
       className={`${styles.dropdownMenu} ${
