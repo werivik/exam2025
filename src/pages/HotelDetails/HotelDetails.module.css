@@ -300,6 +300,11 @@
     height: 30px;
 }
 
+.bookDateGuest h3 {
+    margin-bottom: 50px;
+    font-size: 1.8rem;
+}
+
 .bookDate {
     margin-bottom: 25px;
 }

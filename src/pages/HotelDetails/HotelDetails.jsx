@@ -191,7 +191,7 @@ const HotelDetails = () => {
                         </div>
                         <div className={styles.dividerLine}></div>
                         <div className={styles.bookPrice}>
-                            <p>Total Price: <strong>$ 750</strong> <span>/ per night</span></p>
+                            <p>Total Price: <strong>$ {hotel.price}</strong> <span>/ per night</span></p>
                             <button className={styles.bookButton}>Book Room</button>
                         </div>
                         <div className={styles.dividerLine}></div>
