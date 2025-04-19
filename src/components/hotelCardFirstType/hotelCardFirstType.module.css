@@ -57,18 +57,31 @@
 }
 
 .starRating {
-    color: #F3F0EB;
-    width: 12px;
-    height: 12px;
-    display: flex;
-    gap: 5px;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-    background-color: white;
-    width: 100px;
-    padding: 2.5px;
-    border-radius: 0px 0px 5px 5px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  background-color: white;
+  width: 100px;
+  text-align: center;
+  border-radius: 0px 0px 15px 15px;
+  padding-bottom: 2.5px;
+  color: #1F1B17;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.starRating img {
+  width: 15px;
+  height: 15px;
+}
+
+.starRating span {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
 }
 
 .hotelInfo span {

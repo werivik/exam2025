@@ -39,9 +39,14 @@ const HotelCardSecondType = ({ hotel }) => {
         </div>
       ) : (
         <>
-          <div className={styles.rating}>
-            <div className={styles.stars}>{renderStars(hotel.rating || 0)}</div>
-          </div>
+<div className={styles.starRating}>
+  <span>{hotel.rating?.toFixed(1) || "0.0"}</span>
+  <img 
+    src="/media/rating/star-solid.svg" 
+    alt="Star" 
+    className={styles.singleStar} 
+  />
+</div>
           <img
             src={hotel.media?.[0]?.url || '/path/to/default-image.jpg'}
             alt={hotel.media?.[0]?.alt || hotel.name}
