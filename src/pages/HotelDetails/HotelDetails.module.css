@@ -265,7 +265,7 @@
 }
 
 .hotelInfoRight {
-    width: 25%;
+    width: 375px;
     display: flex;
     flex-direction: column;
     gap: 50px;
@@ -285,6 +285,18 @@
 
 .bookPrice {
     text-align: right;
+}
+
+.bookPrice p {
+    font-size: 20px;
+}
+
+.bookPrice strong {
+    font-size: 25px;
+}
+
+.bookPrice span {
+    opacity: 75%;
 }
 
 .favoriteVenue i {
