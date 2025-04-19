@@ -1,7 +1,7 @@
 .hotelCard {
     width: 100%;
     height: 100%;
-    height: 400px;
+    height: 415px;
     position: relative;
     border-radius: 25px 25px 5px 5px;
     transition: 0.25s;
@@ -10,7 +10,7 @@
 
 .hotelImage {
     width: 100%;
-    height: 60%;
+    height: 65%;
     object-fit: cover;
     border-radius: 25px 25px 5px 5px;
     border-radius: 25px 25px 5px 5px;
@@ -51,15 +51,14 @@
     color: #1F1B17;
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 10px;
     transition: 0.25s;
-    padding-left: 5px;
 }
 
 .hotelInfo h3 {
     font-size: 24px;
     margin-bottom: 0;
-    margin-top: 7.5px;
+    margin-top: 15px;
 }
 
 .hotelLocation {
@@ -71,22 +70,26 @@
 
 .hotelPrice {
     margin-top: 0px;
-    font-size: 18px;
+    font-size: 15px;
     font-style: normal;
 }
 
 .hotelPrice span {
     margin-top: 5px;
     font-size: 15px;
+    font-weight: 700;
+    font-size: 18px;
 }
 
 .seeMore {
     display: none;
     width: 95%;
+    margin-top: -5px;
     text-align: right;
     text-decoration: underline;
     transition: 0.25s;
     color: #F3F0EB;
+    font-size: 18px;
 }
 
 .hotelCard:hover {
@@ -97,6 +100,7 @@
     .hotelInfo {
         transition: 0.25s;
         color: #F3F0EB;
+        padding-left: 5px;
     }
 
     .hotelImage {
@@ -154,23 +158,3 @@
       opacity: 0.3;
     }
   }
-  
-  .hotelCard:hover {
-    cursor: pointer;
-    transition: 0.25s;
-    background-color: #6B7A3A;
-
-    .hotelInfo {
-        transition: 0.25s;
-        color: #F3F0EB;
-    }
-
-    .hotelImage {
-        height: 52.5%;
-        transition: 0.25s;
-    }
-
-    .seeMore {
-        display: block;
-    }
-}

@@ -2,7 +2,7 @@
     min-height: 100vh;
     margin-top: 75px;
     display: flex;
-    gap: 2.5%;
+    gap: 10px;
     padding-bottom: 150px;
     margin-bottom: 100px;
     color: #1F1B17;
@@ -11,10 +11,10 @@
 .leftSection {
     width: 350px;
     background-color: #B88A44;
-    border-radius: 5px 25px 25px 5px;
+    border-radius: 0px 25px 25px 0px;
+    padding-left: 2.5%;
     height: 90vh;
     position: sticky;
-    left: 2.5%;
     top: 75px;
     margin-bottom: 25px;
     display: flex;
