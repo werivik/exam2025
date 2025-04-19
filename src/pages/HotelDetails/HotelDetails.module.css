@@ -8,6 +8,7 @@
     position: relative;
     padding-bottom: 200px;
     color: #1F1B17;
+    font-family: "Playfair Display", serif;
 }
 
 .pageStyle {
@@ -324,6 +325,7 @@
     border-radius: 0px 25px 25px 0px;
     border: none;
     font-size: 20px;
+    font-family: "Playfair Display", serif;
 }
 
 .bookGuests input {
@@ -334,6 +336,7 @@
     border-radius: 0px 25px 25px 0px;
     border: none;
     font-size: 20px;
+    font-family: "Playfair Display", serif;
 }
 
 .bookGuests {
@@ -344,11 +347,12 @@
 
 .searchRoom {
     background-color: #1F1B17;
-    border-radius: 25px;
+    border-radius: 15px;
     border: none;
     font-size: 18px;
     width: 85px;
     color: white;
+    font-family: "Playfair Display", serif;
 }
 
 .searchRoom:hover {
