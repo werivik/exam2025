@@ -59,12 +59,17 @@ header {
     color: #1F1B17;
   }
 
+  header.scrolled .sidebarHeader {
+    margin-left: -10%;
+    padding-left: 10%;
+  }
+
   .searchContainer .searchActive {
     color: #1F1B17;
   }
 
   .menuOpen {
-    position: relative;
+  position: relative;
   color: inherit;
   text-decoration: none;
   display: flex;
@@ -279,13 +284,16 @@ header {
   height: 100vh;
   left: 0;
   width: 250px;
-  margin-left: -6%;
-  padding-left: 5%;
+  margin-left: -15%;
+  padding-left: 15%;
+  top: -45px;
+  padding-top: 45px;
   font-family: "Playfair Display", serif;
   display: flex;
   flex-direction: column;
   gap: 50px;
   transition: transform 0.25s ease;
+  z-index: 999;
 }
 
 .menuLinks {
@@ -426,4 +434,10 @@ header {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+.blurred {
+  filter: blur(5px);
+  transition: filter 0.3s ease;
+  pointer-events: none;
 }

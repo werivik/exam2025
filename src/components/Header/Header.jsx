@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
 import styles from "./Header.module.css";
@@ -17,7 +17,7 @@ function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const sidebarRef = useRef(null);
   
   useEffect(() => {
     if (location.pathname === "/") {
@@ -114,7 +114,6 @@ function Header() {
     setSuggestions([]);
   };
   
-
   const toggleSearchBar = () => {
     setIsSearchOpen((prevState) => !prevState);
   };
@@ -126,97 +125,157 @@ function Header() {
     "/register-costumer",
   ];
   
-  const isSimpleHeader = loginOrRegisterRoutes.includes(location.pathname);  
+  const isSimpleHeader = loginOrRegisterRoutes.includes(location.pathname); 
+  
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSidebarOpen(false);
+      }
+    }
 
+    if (isSidebarOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } 
+    
+    else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSidebarOpen]);
+
+  useEffect(() => {
+    const pageContents = document.querySelectorAll('.pageContent');
+    pageContents.forEach((el) => {
+      if (isSidebarOpen) {
+        el.classList.add('blurred');
+      } 
+      
+      else {
+        el.classList.remove('blurred');
+      }
+    });
+  }, [isSidebarOpen]);
+  
   return (
-<header className={`${scrolled && !isSimpleHeader ? styles.scrolled : ""} ${isSimpleHeader ? styles.simpleHeader : ""}`}>
+    <div ref={sidebarRef}>
+<header
+  className={`${scrolled && !isSimpleHeader ? styles.scrolled : ""} ${
+    isSimpleHeader ? styles.simpleHeader : ""
+  }`}
+>
+  <nav className={styles.nav}>
+    {!isSidebarOpen && (
+      <button
+        className={styles.menuOpen}
+        onClick={() => setIsSidebarOpen(true)}
+      >
+        <i className="fa-solid fa-ellipsis-vertical"></i> Menu
+      </button>
+    )}
 
-      <nav className={styles.nav}>
-        {/* Left Menu Button */}
-{!isSidebarOpen && (
-  <button className={styles.menuOpen} onClick={() => setIsSidebarOpen(true)}>
-    <i className="fa-solid fa-ellipsis-vertical"></i> Menu
-  </button>
-)}
-{/* Sidebar Menu */}
-{isSidebarOpen && (
-  <div className={styles.sidebarHeader}>
-    <button className={styles.sidebarClose} onClick={() => setIsSidebarOpen(false)}>
-    <i class="fa-solid fa-angles-left"></i> Hide Menu
-    </button>
-    <li className={styles.menuLinks}>
-      <Link to="/">Home</Link>
-      <Link to="/hotels">Venues</Link>
-      <Link to="/costumer-profile">My Bookings</Link>
-    </li>
-    <li className={styles.menuLinks}>
-      <Link to="/about">About Us</Link>
-      <Link to="/contact">Contact Us</Link>
-    </li>
-    <li className={styles.menuLinks}>
-    <Link to="/login-costumer">Login</Link>
-    <Link to="/register-costumer">Register</Link>
-    </li>
-    <li className={styles.menuLinks}>
-      <Link to="/profile-costumer">My Profile</Link>
-    </li>
-  </div>
-)}
-        {/* Logo */}
-        <Link to="/">
-          <img
-            src={isHovered ? headerLogoHover : headerLogo}
-            alt="Logo"
-            className={isHovered ? styles.headerLogoHover : styles.headerLogo}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          />
-        </Link>
+    {isSidebarOpen && (
+      <div className={styles.sidebarHeader}>
+        <button
+          className={styles.sidebarClose}
+          onClick={() => setIsSidebarOpen(false)}
+        >
+          <i className="fa-solid fa-angles-left"></i> Hide Menu
+        </button>
+        <li className={styles.menuLinks}>
+          <Link to="/">Home</Link>
+          <Link to="/hotels">Venues</Link>
+          <Link to="/costumer-profile">My Bookings</Link>
+        </li>
+        <li className={styles.menuLinks}>
+          <Link to="/about">About Us</Link>
+          <Link to="/contact">Contact Us</Link>
+        </li>
+        <li className={styles.menuLinks}>
+          <Link to="/login-costumer">Login</Link>
+          <Link to="/register-costumer">Register</Link>
+        </li>
+        <li className={styles.menuLinks}>
+          <Link to="/profile-costumer">My Profile</Link>
+        </li>
+      </div>
+    )}
 
-        {/* Right Links and Search */}
-        <ul className={styles.headerRightLinks}>
-          <li
-            className={`${styles.searchContainer} ${isSearchOpen ? styles.searchOpen : ""}`}
+    <div
+      className={`${styles.headerContent} ${
+        isSidebarOpen ? styles.blurred : ""
+      }`}
+    >
+      <Link to="/">
+        <img
+          src={isHovered ? headerLogoHover : headerLogo}
+          alt="Logo"
+          className={
+            isHovered ? styles.headerLogoHover : styles.headerLogo
+          }
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        />
+      </Link>
+
+      <ul className={styles.headerRightLinks}>
+        <li
+          className={`${styles.searchContainer} ${
+            isSearchOpen ? styles.searchOpen : ""
+          }`}
+        >
+          <div
+            className={styles.searchbarContent}
+            style={{ display: isSearchOpen ? "block" : "none" }}
           >
-            <div
-              className={styles.searchbarContent}
-              style={{ display: isSearchOpen ? "block" : "none" }}
-            >
-              <input
-                type="text"
-                className={styles.searchInput}
-                placeholder="Search venues, cities, or countries..."
-                value={searchTerm}
-                onChange={handleInputChange}
-              />
-              {searchTerm && suggestions.length > 0 && (
-                <ul className={styles.suggestionsList}>
-                  {suggestions.map((item, index) => (
-                    <li
-                      key={index}
-                      className={styles.suggestionItem}
-                      onClick={() => item.type !== "None" && handleSelect(item)}
-                    >
-                      {item.type !== "None" && (
-                        <span className={styles.suggestionLabel}>{item.type}</span>
-                      )}
-                      {item.value}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <i
-  className={`fa-solid fa-magnifying-glass ${isSearchOpen ? styles.searchActive : styles.searchInactive}`}
-  onClick={toggleSearchBar}
-/>
-          </li>
-          <li>
-            <Link to="/hotels">Venues</Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+            <input
+              type="text"
+              className={styles.searchInput}
+              placeholder="Search venues, cities, or countries..."
+              value={searchTerm}
+              onChange={handleInputChange}
+            />
+            {searchTerm && suggestions.length > 0 && (
+              <ul className={styles.suggestionsList}>
+                {suggestions.map((item, index) => (
+                  <li
+                    key={index}
+                    className={styles.suggestionItem}
+                    onClick={() =>
+                      item.type !== "None" && handleSelect(item)
+                    }
+                  >
+                    {item.type !== "None" && (
+                      <span className={styles.suggestionLabel}>
+                        {item.type}
+                      </span>
+                    )}
+                    {item.value}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <i
+            className={`fa-solid fa-magnifying-glass ${
+              isSearchOpen
+                ? styles.searchActive
+                : styles.searchInactive
+            }`}
+            onClick={toggleSearchBar}
+          />
+        </li>
+        <li>
+          <Link to="/hotels">Venues</Link>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+</div>
   );
 }
 

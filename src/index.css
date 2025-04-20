@@ -42,3 +42,10 @@ h1 {
   .testBlurred {
     filter: blur(25px);
   }
+
+  .blurred {
+    filter: blur(10px);
+    transition: filter 0.3s ease;
+    pointer-events: none;
+  }
+  

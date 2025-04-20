@@ -2,29 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './hotelCardFirstType.module.css';
 import registerImage from "/media/hotelTypes/hotelReseption.jpeg";
+import stars from "/media/rating/christmas-stars.png";
 
 const hotelCardFirstType = ({ hotel }) => {
-
-  const renderStars = (rating) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.4 && rating % 1 <= 0.6;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<img key={`full-${i}`} src="/media/rating/star-solid.svg" alt="Full Star" />);
-    }
-
-    if (hasHalfStar) {
-      stars.push(<img key="half" src="/media/rating/star-half-stroke-solid.svg" alt="Half Star" />);
-    }
-
-    for (let i = 0; i < emptyStars; i++) {
-      stars.push(<img key={`empty-${i}`} src="/media/rating/star-regular.svg" alt="Empty Star" />);
-    }
-
-    return stars;
-  };
 
   const isLoading = !hotel;
 
@@ -44,7 +24,7 @@ const hotelCardFirstType = ({ hotel }) => {
 <div className={styles.starRating}>
   <span>{hotel.rating?.toFixed(1) || "0.0"}</span>
   <img 
-    src="/media/rating/star-solid.svg" 
+    src={stars} 
     alt="Star" 
     className={styles.singleStar} 
   />

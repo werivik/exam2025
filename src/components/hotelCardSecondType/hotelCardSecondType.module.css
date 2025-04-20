@@ -33,7 +33,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .starRating img {
@@ -104,7 +104,7 @@
 .hotelCard:hover {
     cursor: pointer;
     transition: 0.25s;
-    background-color: #6B7A3A;
+    background-color: #6b7a3a;
 
     .hotelInfo {
         transition: 0.25s;

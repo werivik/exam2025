@@ -6,7 +6,6 @@ import styles from './Home.module.css';
 import homeBanner from "/media/images/banner2.png";
 import Edge from "/media/images/beige-edge.png";
 import registerImage from "/media/hotelTypes/hotelReseption.jpeg";
-
 import animalImage from "/media/metaImages/animal.jpeg";
 import breakfastImage from "/media/metaImages/breakfast.jpeg";
 import parkingImage from "/media/metaImages/parking.jpeg";
@@ -14,7 +13,8 @@ import wifiImage from "/media/metaImages/wifi.jpeg";
 
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
-import HotelCardFirstType from '../../components/HotelCardFirstType/HotelCardFirstType.jsx';
+import HotelCardFirstType from '../../components/HotelCardFirstType/HotelCardFirstType';
+import CustomCalender from '../../components/CostumCalender/CostumCalender';
 
 const Home = () => {
   const [hotels, setHotels] = useState([]);
@@ -23,6 +23,30 @@ const Home = () => {
   const [showScrollIcon, setShowScrollIcon] = useState(true);
   const [showGuestDropdown, setShowGuestDropdown] = useState(false);
   const guestDropdownRef = useRef(null);
+  const [checkInDate, setCheckInDate] = useState("");
+  const [checkOutDate, setCheckOutDate] = useState("");
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedDateType, setSelectedDateType] = useState('start');
+
+  const toggleCalendar = (type) => {
+    setShowCalendar(false);
+    setSelectedDateType(type);
+    setTimeout(() => {
+      setShowCalendar(true);
+    }, 0);
+  };  
+
+  const handleDateChange = (newDate) => {
+    if (selectedDateType === 'start') {
+      setCheckInDate(newDate);
+      setFilters(prev => ({ ...prev, startDate: newDate }));
+    } 
+    else {
+      setCheckOutDate(newDate);
+      setFilters(prev => ({ ...prev, endDate: newDate }));
+    }
+    setShowCalendar(false);
+  };  
 
   const [filters, setFilters] = useState({
     destination: "",
@@ -35,12 +59,10 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Fetch hotels and extract top rated & unique locations
   useEffect(() => {
     const fetchHotels = async () => {
       try {
@@ -66,7 +88,9 @@ const Home = () => {
         });
 
         setAllLocations(Array.from(locationsSet));
-      } catch (error) {
+      } 
+      
+      catch (error) {
         console.error("Error fetching hotels:", error);
       }
     };
@@ -74,7 +98,6 @@ const Home = () => {
     fetchHotels();
   }, []);
 
-  // Scroll icon toggle
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollIcon(window.scrollY === 0);
@@ -84,7 +107,6 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handle suggestions with debounce
   const handleDestinationSuggestions = useCallback(
     debounce((input) => {
       if (!input) return setSuggestions([]);
@@ -97,14 +119,12 @@ const Home = () => {
     [allLocations]
   );
 
-  // Handle text inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
     if (name === "destination") handleDestinationSuggestions(value);
   };
 
-  // Handle guest counter change
   const handleGuestsChange = (e) => {
     const { name, value } = e.target;
     if (name === "children" && value > 0 && filters.adults === 0 && filters.disabled === 0) {
@@ -114,7 +134,6 @@ const Home = () => {
     setFilters(prev => ({ ...prev, [name]: value }));
   };
 
-  // Guest info display
   const renderGuestInfo = () => {
     let guestInfo = `${filters.adults} Adult${filters.adults !== 1 ? "s" : ""}`;
     if (filters.children > 0) guestInfo += `, ${filters.children} Child${filters.children !== 1 ? "ren" : ""}`;
@@ -122,7 +141,6 @@ const Home = () => {
     return guestInfo;
   };
 
-  // Apply filters and navigate
   const applyFilters = async () => {
     const totalGuests = parseInt(filters.adults) + parseInt(filters.disabled);
     if (totalGuests < 1) return alert("Please enter at least one adult or assisted guest.");
@@ -174,7 +192,6 @@ const Home = () => {
     };
   }, []);  
 
-  // Placeholder loading skeleton
   const HotelTypeSkeleton = () => (
     <div className={`${styles.hotelType} ${styles.skeleton}`}>
       <div className={styles.skeletonImage}></div>
@@ -183,8 +200,8 @@ const Home = () => {
   );
 
   return (
+    <>
     <div className={styles.pageContent}>
-      {/* Banner & Filters */}
       <section className={styles.firstSection}>
         <div className={styles.homeBanner}>
           <h1>Holidaze</h1>
@@ -196,9 +213,7 @@ const Home = () => {
           <img src={Edge} className={styles.edgeLeft} alt="" />
           <div className={styles.filterContent}>
             <div className={styles.allFilters}>
-              {/* Left filters */}
               <div className={styles.filtersLeft}>
-                {/* Destination */}
                 <div className={styles.filterDestination}>
                   <i className="fa-solid fa-location-dot"></i>
                   <input
@@ -226,37 +241,43 @@ const Home = () => {
                     </ul>
                   )}
                 </div>
-
-                {/* Calendar */}
                 <div className={styles.filterCalender}>
-                  <i
-                    className="fa-solid fa-calendar-days"
-                    onClick={() => {
-                      const startDateInput = document.getElementById('start-date');
-                      startDateInput.focus();
-                      startDateInput.click();
-                    }}
-                  ></i>
-                  <input
-                    id="start-date"
-                    name="startDate"
-                    type="date"
-                    value={filters.startDate}
-                    onChange={handleInputChange}
-                    className={styles.startDateFilter}
-                  />
-                  <input
-                    id="end-date"
-                    name="endDate"
-                    type="date"
-                    value={filters.endDate}
-                    onChange={handleInputChange}
-                    className={styles.endDateFilter}
-                  />
-                </div>
-              </div>
+        <i
+          className="fa-solid fa-calendar-days"
+          onClick={() => toggleCalendar('start')}
+        ></i>
+        <input
+          className={styles.startDateFilter}
+          type="text"
+          value={checkInDate}
+          placeholder="Start Date"
+          onClick={() => toggleCalendar('start')}
+          readOnly
+        />
 
-              {/* Guests */}
+        <i
+          className="fa-solid fa-calendar-days"
+          onClick={() => toggleCalendar('end')}
+        ></i>
+        <input
+          className={styles.endDateFilter}
+          type="text"
+          value={checkOutDate}
+          placeholder="End Date"
+          onClick={() => toggleCalendar('end')}
+          readOnly
+        />
+        <div className={styles.costumCalenderPosition}>
+        {showCalendar && (
+  <CustomCalender
+    key={selectedDateType + checkInDate + checkOutDate}
+    value={selectedDateType === 'start' ? checkInDate : checkOutDate}
+    onDateChange={handleDateChange}
+  />
+)}
+        </div>
+      </div>
+              </div>
               <div className={styles.filterPeople}>
                 <i className="fa-solid fa-person"></i>
                 <div
@@ -289,8 +310,6 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Search Button */}
               <button
                 className={styles.filterSearch}
                 onClick={applyFilters}
@@ -305,16 +324,12 @@ const Home = () => {
           <img src={Edge} className={styles.edgeRight} alt="" />
         </div>
       </section>
-
-      {/* Scroll Icon */}
       {showScrollIcon && (
         <div className={styles.scrollIcon}>
           <i className={`fa-solid fa-chevron-down ${styles.bounceIcon}`}></i>
           <i className={`fa-solid fa-chevron-down ${styles.bounceIcon} ${styles.delay}`}></i>
         </div>
       )}
-
-      {/* Section: Choose Hotel Type */}
       <section className={styles.secondSection}>
         <div className={styles.secondBorder}>
           <div className={styles.typeTitle}>
@@ -352,8 +367,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Section: Register or Logged In View */}
       <section className={styles.thirdSection}>
         <div className={styles.thirdBorder}>
           <div className={styles.thirdContentRegister}>
@@ -377,8 +390,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Section: Popular Hotels */}
       <section className={styles.fourthSection}>
         <div className={styles.fourthBorder}>
           <div className={styles.fourthContent}>
@@ -396,6 +407,7 @@ const Home = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

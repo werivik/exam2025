@@ -245,6 +245,13 @@
     display: flex;
     flex-direction: row;
     gap: 10px;
+    position: relative;
+  }
+
+  .costumCalenderPosition {
+    position: absolute;
+    top: -475px;
+    transition: 0.25s;
   }
 
   .fa-calendar-days {
@@ -406,11 +413,11 @@
 }
 
 .typeTitle h2 {
-    font-size: 3.5rem;
+    font-size: 3rem;
 }
 
 .typeTitle p {
-    font-size: 2.188rem;
+    font-size: 1.8rem;
     font-style: italic;
     font-weight: 400;
 }
@@ -561,7 +568,7 @@
 }
 
 .thirdInfo p {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
 }
 
 .registerButton {
@@ -620,11 +627,11 @@
 }
 
 .fourthTitle h2 {
-    font-size: 3.5rem;
+    font-size: 3rem;
 }
 
 .fourthTitle a {
-    font-size: 2.188rem;
+    font-size: 1.8rem;
     font-style: italic;
     color: #1F1B17;
     transition: 0.25s;
