@@ -110,6 +110,7 @@ header {
     flex-direction: row;
     align-items: flex-end;
     gap: 2.188rem;
+    margin-top: 7px;
     width: 40%;
     color: #f2f2f2;
 }
