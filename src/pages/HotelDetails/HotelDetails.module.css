@@ -65,29 +65,6 @@
     gap: 10px;
 }
 
-.venueOwner h3 {
-    font-size: 1.5rem;
-    margin: 0;
-    padding: 0;
-    text-align: right;
-}
-
-.venueProfileName {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    font-size: 1.25rem;
-    align-items: center;
-}
-
-.venueProfileName  img {
-    width: 35px;
-    height: 35px;
-    border-radius: 999px;
-    border: solid #1F1B17 2px;
-    background-color: white;
-}
-
 .hotelRating {
     font-size: 2rem;
     margin-top: 0;
@@ -95,6 +72,9 @@
     flex-direction: row;
     gap: 5px;
     align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
 }
 
 .hotelRating strong {
@@ -103,8 +83,8 @@
 }
 
 .hotelRating img {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     margin-bottom: -10px;
 }
 
@@ -300,6 +280,22 @@
     gap: 0px;
     margin: 0;
     padding: 0;
+}
+
+.venueProfileName {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    font-size: 1.25rem;
+    align-items: center;
+}
+
+.venueProfileName  img {
+    width: 35px;
+    height: 35px;
+    border-radius: 999px;
+    border: solid #1F1B17 2px;
+    background-color: white;
 }
 
 .hotelInfoRight {
@@ -527,5 +523,22 @@
     padding: 10px;
     border-radius: 10px;
     border: solid red 2px;
+    transition: 0.25s;
+  }
+
+  .favoriteVenue {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .emptyHeart {
+    width: 25px;
+    height: 25px;
+  }
+
+  .emptyHeart:hover {
+    cursor: pointer;
     transition: 0.25s;
   }

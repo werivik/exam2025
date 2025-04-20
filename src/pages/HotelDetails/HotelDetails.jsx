@@ -5,6 +5,9 @@ import styles from './HotelDetails.module.css';
 
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
+import stars from "/media/rating/christmas-stars.png";
+import emptyHeart from "/media/icons/emptyHeart.png";
+import fullHeart from "/media/icons/fullHeart.png";
 
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
@@ -170,7 +173,7 @@ const HotelDetails = () => {
     }, []);
     
     if (loading) return <div className={styles.pageStyle}><p>Loading...</p></div>;
-    if (!hotel) return <div className={styles.pageStyle}><p>Hotel not found.</p></div>;
+    if (!hotel) return <div className={styles.pageStyle}><p>Venue not found.</p></div>;
     
     const mediaArray = getValidMedia(hotel.media);
     const currentImage = mediaArray[currentSlide]?.url;
@@ -186,20 +189,7 @@ const HotelDetails = () => {
                         <p><i className="fa-solid fa-location-dot"></i>{hotel.location?.address}, {hotel.location?.city}, {hotel.location?.country}</p>
                     </div>
                     <div className={styles.hotelInfoTopRight}>
-                    {owner && (
-  <div className={styles.venueOwner}>
-    <h3>Venue Host</h3>
-    <div className={styles.venueProfileName}>
-    {owner.avatar?.url && (
-      <img
-        src={owner.avatar.url}
-        alt={owner.avatar.alt || `${owner.name}'s avatar`}
-      />
-    )}
-    <p>{owner.name}</p>
-    </div>
-  </div>
-)}
+                    <p className={styles.hotelRating}><strong>Rating:</strong> {hotel.rating} <img src={stars} alt="Star" className={styles.singleStar} /></p>
                     </div>
                 </div>
                 <div className={styles.slideshowSection}>
@@ -253,7 +243,6 @@ const HotelDetails = () => {
                 </div>
                 <div className={styles.hotelInfoBottom}>
                     <div className={styles.hotelInfoLeft}>
-                        <p className={styles.hotelRating}><strong>Rating</strong> {hotel.rating} <img src="/media/rating/star-solid.svg" alt="Star" className={styles.singleStar} /></p>
                         <p className={styles.description}><strong>Description</strong><br />{hotel.description}</p>
                         {hotel.meta && (
   <div className={styles.meta}>
@@ -310,6 +299,20 @@ const HotelDetails = () => {
   <i className="fa-solid fa-paw" style={{ opacity: hotel.meta.pets ? 1 : 0.5 }}></i> <p style={{ opacity: hotel.meta.pets ? 1 : 0.5 }}>Pets Allowed</p>
 </li>
     </ul>
+  </div>
+)}
+                    {owner && (
+  <div className={styles.venueOwner}>
+    <p><strong>Venue Host</strong></p>
+    <div className={styles.venueProfileName}>
+    {owner.avatar?.url && (
+      <img
+        src={owner.avatar.url}
+        alt={owner.avatar.alt || `${owner.name}'s avatar`}
+      />
+    )}
+    <p>{owner.name}</p>
+    </div>
   </div>
 )}
                     </div>
@@ -416,7 +419,12 @@ const HotelDetails = () => {
 </button>
                         </div>
                         <div className={styles.dividerLine}></div>
-<p><strong>Max Guests</strong> {hotel.maxGuests}</p>
+                         <p><strong>Max Guests</strong> {hotel.maxGuests}</p>
+                        <div className={styles.dividerLine}></div>
+                        <div className={styles.favoriteVenue}>
+                          <img src={emptyHeart} className={styles.emptyHeart}></img>
+                          <p>Favorite Venue</p>
+                        </div>
                     </div>
                 </div>
             </div>
