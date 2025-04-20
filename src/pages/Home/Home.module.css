@@ -265,11 +265,6 @@
   input[type="date"] {
     z-index: 1;
   }
-
-  .filterSearch:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  } 
   
   .guestSelector {
     background-color: white;
@@ -664,4 +659,43 @@
     justify-content: space-between;
     gap: 25px;
     margin-top: 50px;
+}
+
+.warningPopup {
+  position: absolute;
+  background-color: #B88A44;
+  width: 350px;
+  height: 100px;
+  right: 0;
+  top: -115px;
+  z-index: 994;
+  padding: 1rem;
+  border-radius: 15px;
+  color: white;
+}
+
+.popupContent {
+  position: relative;
+}
+
+.popupContent h2 {
+  margin: 0;
+  padding: 0;
+}
+
+.closeWarningPopup {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  border-radius: 999px;
+  border: none;
+  background-color: white;
+  transition: 0.25s;
+}
+
+.closeWarningPopup:hover {
+  background-color: #1F1B17;
+  color: white;
+  transition: 0.25s;
 }

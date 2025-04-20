@@ -199,6 +199,20 @@ const Home = () => {
     </div>
   );
 
+  const [showWarning, setShowWarning] = useState(false);
+
+  const checkConditionsForSearch = () => {
+    const totalGuests = parseInt(filters.adults) + parseInt(filters.disabled);
+    if (totalGuests < 1 || !filters.startDate) {
+      setShowWarning(true);
+    } 
+    
+    else {
+      setShowWarning(false);
+      applyFilters();
+    }
+  };
+
   return (
     <>
     <div className={styles.pageContent}>
@@ -311,15 +325,22 @@ const Home = () => {
                 </div>
               </div>
               <button
-                className={styles.filterSearch}
-                onClick={applyFilters}
-                disabled={
-                  (parseInt(filters.adults) + parseInt(filters.disabled) < 1) || !filters.startDate
-                }
-              >
-                Search
-              </button>
+        className={styles.filterSearch}
+        onClick={checkConditionsForSearch}
+        disabled={false}
+      >
+        Search
+      </button>
             </div>
+            {showWarning && (
+        <div className={styles.warningPopup}>
+          <div className={styles.popupContent}>
+            <h2>Warning</h2>
+            <p>Please enter at least one adult or assisted guest, and select a start date to use the filter.</p>
+            <button onClick={() => setShowWarning(false)} className={styles.closeWarningPopup}>X</button>
+          </div>
+        </div>
+      )}
           </div>
           <img src={Edge} className={styles.edgeRight} alt="" />
         </div>

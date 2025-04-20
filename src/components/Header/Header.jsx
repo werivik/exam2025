@@ -6,6 +6,7 @@ import headerLogo from "/media/logo/logo-default.png";
 import headerLogoHover from "/media/logo/logo-hover.png";
 import { VENUES } from "../../constants";
 import { headers } from "../../headers";
+import { isLoggedIn, logout } from "../../auth/auth";
 
 function Header() {
   const [isHovered, setIsHovered] = useState(false);
@@ -18,6 +19,7 @@ function Header() {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(isLoggedIn());
   
   useEffect(() => {
     if (location.pathname === "/") {
@@ -126,6 +128,12 @@ function Header() {
   ];
   
   const isSimpleHeader = loginOrRegisterRoutes.includes(location.pathname); 
+
+  const handleLogout = () => {
+    logout();
+    setIsUserLoggedIn(false);
+    navigate("/");
+  };
   
   useEffect(() => {
     function handleClickOutside(event) {
@@ -177,7 +185,7 @@ function Header() {
             </button>
           )}
   
-          {isSidebarOpen && (
+  {isSidebarOpen && (
             <div className={styles.sidebarHeader}>
               <button
                 className={styles.sidebarClose}
@@ -188,22 +196,30 @@ function Header() {
               <li className={styles.menuLinks}>
                 <Link to="/">Home</Link>
                 <Link to="/hotels">Venues</Link>
-                <Link to="/costumer-profile">My Bookings</Link>
+                {isUserLoggedIn && (
+  <Link to="/costumer-profile">My Bookings</Link>
+)}
               </li>
               <li className={styles.menuLinks}>
                 <Link to="/about">About Us</Link>
                 <Link to="/contact">Contact Us</Link>
               </li>
               <li className={styles.menuLinks}>
-                <Link to="/login-costumer">Login</Link>
-                <Link to="/register-costumer">Register</Link>
-              </li>
-              <li className={styles.menuLinks}>
-                <Link to="/profile-costumer">My Profile</Link>
+                {isUserLoggedIn ? (
+                  <>
+                    <Link to="/profile-costumer">My Profile</Link>
+                    <button onClick={handleLogout}>Logout</button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/login-costumer">Login</Link>
+                    <Link to="/register-costumer">Register</Link>
+                  </>
+                )}
               </li>
             </div>
           )}
-  
+
           <div
             className={`${styles.headerContent} ${
               isSidebarOpen ? styles.blurred : ""
