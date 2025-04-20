@@ -414,10 +414,9 @@ const HotelDetails = () => {
 >
   Book Room
 </button>
-
-<div className={styles.dividerLine}></div>
-<p><strong>Max Guests</strong> {hotel.maxGuests}</p>
                         </div>
+                        <div className={styles.dividerLine}></div>
+<p><strong>Max Guests</strong> {hotel.maxGuests}</p>
                     </div>
                 </div>
             </div>

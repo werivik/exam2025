@@ -2,7 +2,7 @@
     min-height: 100vh;
     margin-top: 75px;
     display: flex;
-    gap: 10px;
+    gap: 2.5%;
     padding-bottom: 150px;
     margin-bottom: 100px;
     color: #1F1B17;
@@ -112,14 +112,14 @@
 
 .rightSection {
     position: relative;
-    width: 100%;
+    width: 66.5%;
     height: 100%;
     display: flex;
     justify-content: center;
 }
 
 .rightBorder {
-    width: 93.8%;
+    width: 100%;
     color: #1F1B17;
 }
 
