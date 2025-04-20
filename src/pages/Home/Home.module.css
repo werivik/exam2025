@@ -16,7 +16,7 @@
 }
 
 .homeBanner {
-    width: 95%;
+    width: 90%;
     height: 100%;
     position: relative;
     border-radius: 25px;
@@ -53,7 +53,7 @@
 }
 
 .bannerFilters {
-    width: 90%;
+    width: 85%;
     height: 105px;
     bottom: 0;
     margin-bottom: -1px;
@@ -393,8 +393,8 @@
 }
 
 .secondBorder {
-    width: 90%;
-    height: 100%;
+  width: 85%;
+  height: 100%;
 }
 
 .typeTitle {
@@ -520,8 +520,8 @@
 }
 
 .thirdBorder {
-    width: 90%;
-    height: 70%;
+  width: 85%;
+  height: 70%;
     position: relative;
 }
 
@@ -606,7 +606,7 @@
 }
 
 .fourthBorder {
-    width: 90%;
+    width: 85%;
 }
 
 .fourthTitle {

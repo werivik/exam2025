@@ -4,6 +4,7 @@ import debounce from "lodash.debounce";
 import styles from "./Header.module.css";
 import headerLogo from "/media/logo/logo-default.png";
 import headerLogoHover from "/media/logo/logo-hover.png";
+import LoginCostumer from '../LoginCostumer/LoginCostumer';
 import { VENUES } from "../../constants";
 import { headers } from "../../headers";
 
@@ -17,6 +18,7 @@ function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   
   useEffect(() => {
     if (location.pathname === "/") {
@@ -127,6 +129,17 @@ function Header() {
   
   const isSimpleHeader = loginOrRegisterRoutes.includes(location.pathname);  
 
+  {showLoginModal && (
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalContent}>
+        <button className={styles.closeModal} onClick={() => setShowLoginModal(false)}>
+          &times;
+        </button>
+        <LoginCostumer />
+      </div>
+    </div>
+  )}  
+
   return (
 <header className={`${scrolled && !isSimpleHeader ? styles.scrolled : ""} ${isSimpleHeader ? styles.simpleHeader : ""}`}>
 
@@ -156,7 +169,7 @@ function Header() {
       <Link to="/contact">Contact Us</Link>
     </li>
     <li className={styles.menuLinks}>
-      <Link to="/login-costumer">Login</Link>
+      <button onClick={() => setShowLoginModal(true)}>Login</button>
       <Link to="/register-costumer">Register</Link>
     </li>
     <li className={styles.menuLinks}>

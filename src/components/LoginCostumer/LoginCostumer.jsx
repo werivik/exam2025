@@ -61,7 +61,7 @@ const LoginCostumer = () => {
   };
 
   return (
-    <div className={styles.loginContent}>
+    <div className={styles.pageContent}>
       <div className={styles.loginStyle}>
         <div className={styles.loginContent}>
           <h2>Holidaze</h2>
