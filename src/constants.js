@@ -50,7 +50,7 @@ export const BOOKINGS_DELETE = `${API_BASE}/holidaze/bookings/<id>`;
 
 /* Profiles */
 export const PROFILES_ALL = `${API_BASE}/holidaze/profiles`;
-export const PROFILES_SINGLE = `${API_BASE}/holidaze/profiles/<name>`;
+export const PROFILES_SINGLE = `https://v2.api.noroff.dev/holidaze/profiles`;
 export const PROFILES_SINGLE_BY_BOOKINGS = `${API_BASE}/holidaze/profiles/<name>/bookings`;
 export const PROFILES_SINGLE_BY_VENUES = `${API_BASE}/holidaze/profiles/<name>/venues`;
 export const PROFILES_UPDATE = `${API_BASE}/holidaze/profiles/<name>`;
