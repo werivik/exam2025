@@ -32,7 +32,7 @@ export const API_BASE = "https://v2.api.noroff.dev";
 export const AUTH = `${API_BASE}/auth`;
 export const AUTH_LOGIN = `${AUTH}/login`;
 export const AUTH_REGISTER = `${AUTH}/register`;
-export const AUTH_KEY = `${AUTH}/f7d9660d-4dba-4b16-82c6-1a4669e99612`;
+export const API_AUTH_KEY = `${AUTH}/f7d9660d-4dba-4b16-82c6-1a4669e99612`;
 
 /* Venues */
 export const VENUES = `${API_BASE}/holidaze/venues`;

@@ -49,9 +49,11 @@ const LoginCostumer = () => {
       const data = await response.json();
 
       const name = data.data.name;
+      const token = data.data.accessToken;
+      
       setUsername(name);
-      localStorage.setItem('token', data.data.accessToken);
-      localStorage.setItem('username', name);
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('username', name);      
 
       setShowPopup(true);
       setTimeout(() => {
