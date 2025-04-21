@@ -9,7 +9,10 @@ const LoginCostumer = () => {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [username, setUsername] = useState('');
   const navigate = useNavigate();
+  const [shake, setShake] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -45,15 +48,23 @@ const LoginCostumer = () => {
 
       const data = await response.json();
 
+      const name = data.data.name;
+      setUsername(name);
       localStorage.setItem('token', data.data.accessToken);
-      localStorage.setItem('username', data.data.name);
+      localStorage.setItem('username', name);
 
-      navigate('/costumer-profile');
+      setShowPopup(true);
+      setTimeout(() => {
+        navigate('/costumer-profile');
+      }, 3000);
+
     } 
     
     catch (err) {
       setError(err.message || 'Something went wrong');
-    } 
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+    }    
     
     finally {
       setIsSubmitting(false);
@@ -62,51 +73,62 @@ const LoginCostumer = () => {
 
   return (
     <div className={styles.pageContent}>
-      <div className={styles.loginStyle}>
-        <div className={styles.loginContent}>
-          <h2>Holidaze</h2>
-          <h1>Welcome to Holidaze</h1>
-          <p>Login as a Costumer</p>
-          <form onSubmit={handleLogin} className={styles.inputForm}>
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className={styles.input}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className={styles.input}
-            />
-            <button
-              type="submit"
-              disabled={!isFormValid || isSubmitting}
-              className={`${styles.loginButton} ${isFormValid && !isSubmitting ? styles.active : styles.inactive}`}
-            >
-              {isSubmitting ? 'Logging in...' : 'Login'}
-            </button>
-
-            {error && <p className={styles.error}>{error}</p>}
-          </form>
-          <div className={styles.BottomOptions}>
-            <p>
-              Don't have an account? Register one{' '}
-              <Link to="/register-costumer">here</Link>
-            </p>
-            <p>
-              Are you a Manager? Login <Link to="/login-admin">Here</Link>
-            </p>
+      <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
+        <div className={styles.loginStyle}>
+          <div className={`${styles.loginContent} ${shake ? styles.shake : ''}`}>
+            <h2>Holidaze</h2>
+            <h1>Welcome to Holidaze</h1>
+            <p>Login as a Costumer</p>
+            <form onSubmit={handleLogin} className={styles.inputForm}>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className={styles.input}
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className={styles.input}
+              />
+              <button
+                type="submit"
+                disabled={!isFormValid || isSubmitting}
+                className={`${styles.loginButton} ${isFormValid && !isSubmitting ? styles.active : styles.inactive}`}
+              >
+                {isSubmitting ? 'Logging in...' : 'Login'}
+              </button>
+  
+              {error && <p className={styles.error}>{error}</p>}
+            </form>
+            <div className={styles.BottomOptions}>
+              <p>
+                Don't have an account? Register one{' '}
+                <Link to="/register-costumer">here</Link>
+              </p>
+              <p>
+                Are you a Manager? Login <Link to="/login-admin">Here</Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
+  
+      {showPopup && (
+        <div className={styles.popupOverlay}>
+          <div className={styles.popup}>
+            <h2>Welcome back, {username}!</h2>
+            <p>Redirecting to your profile...</p>
+          </div>
+        </div>
+      )}
     </div>
-  );
+  );  
 };
 
 export default LoginCostumer;

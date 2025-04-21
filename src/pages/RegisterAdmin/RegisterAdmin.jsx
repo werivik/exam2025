@@ -10,6 +10,7 @@ const RegisterAdmin = () => {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [shake, setShake] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,12 +23,18 @@ const RegisterAdmin = () => {
   const isFormValid =
     name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
 
+  const triggerShake = () => {
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
 
     if (!isFormValid) {
       setError('All fields are required.');
+      triggerShake();
       return;
     }
 
@@ -58,6 +65,7 @@ const RegisterAdmin = () => {
     
     catch (err) {
       setError(err.message || 'Something went wrong');
+      triggerShake();
     } 
     
     finally {
@@ -68,7 +76,7 @@ const RegisterAdmin = () => {
   return (
     <div className={styles.pageContent}>
       <div className={styles.registerStyle}>
-        <div className={styles.registerContent}>
+        <div className={`${styles.registerContent} ${shake ? styles.shake : ''}`}>
           <h2>Holidaze</h2>
           <h1>Welcome to Holidaze</h1>
           <p>Register as a Venue Manager</p>

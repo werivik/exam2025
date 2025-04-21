@@ -13,6 +13,7 @@ const RegisterCostumer = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [shake, setShake] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,14 +49,20 @@ const RegisterCostumer = () => {
     }));
   };
 
+  const triggerShake = () => {
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
 
     if (!isFormValid()) {
       setError(
-        'Please make sure your email ends in .no and password has at least 8 characters including a number.'
+        'Please make sure your email is stud.noroff.no, and password has at least 8 characters including a number.'
       );
+      triggerShake();
       return;
     }
 
@@ -89,18 +96,18 @@ const RegisterCostumer = () => {
           setError(errorData.message || 'Registration failed.');
         }
 
+        triggerShake();
         return;
       }
 
       alert('Registration successful! Redirecting to login...');
       navigate('/login-costumer');
     } 
-    
     catch (err) {
       console.error('Registration error:', err);
       setError('An unexpected error occurred. Please try again.');
+      triggerShake();
     } 
-    
     finally {
       setIsSubmitting(false);
     }
@@ -109,31 +116,20 @@ const RegisterCostumer = () => {
   return (
     <div className={styles.pageContent}>
       <div className={styles.registerStyle}>
-        <div className={styles.registerContent}>
+        <div className={`${styles.registerContent} ${shake ? styles.shake : ''}`}> {/* ✨ Shake class */}
           <h2>Holidaze</h2>
           <h1>Welcome to Holidaze</h1>
           <p>Register as a Costumer</p>
           <form onSubmit={handleRegister} className={styles.inputForm}>
-            <div className={styles.nameInputs}>
-              <input
+          <input
                 type="text"
                 name="name"
-                placeholder="First Name"
+                placeholder="username"
                 value={formData.name}
                 onChange={handleChange}
                 required
                 className={styles.input}
               />
-              <input
-                type="text"
-                name="name"
-                placeholder="Last Name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className={styles.input}
-              />
-            </div>
             <input
               type="email"
               name="email"

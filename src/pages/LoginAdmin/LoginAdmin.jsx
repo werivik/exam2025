@@ -9,6 +9,7 @@ const LoginAdmin = () => {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [shake, setShake] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,6 +21,11 @@ const LoginAdmin = () => {
 
   const isFormValid = email.trim() !== '' && password.trim() !== '';
 
+  const triggerShake = () => {
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     console.log('Form submitted');
@@ -27,6 +33,7 @@ const LoginAdmin = () => {
 
     if (!isFormValid) {
       setError('Email and Password are required.');
+      triggerShake();
       return;
     }
 
@@ -47,7 +54,6 @@ const LoginAdmin = () => {
 
       const data = await response.json();
       console.log('Login Success:', data);
-
       console.log('Is Venue Manager:', data.data.venueManager);
 
       localStorage.setItem('token', data.data.accessToken);
@@ -67,6 +73,7 @@ const LoginAdmin = () => {
     catch (err) {
       setError(err.message || 'Something went wrong');
       console.error('Error during login:', err);
+      triggerShake();
     } 
     
     finally {
@@ -77,7 +84,7 @@ const LoginAdmin = () => {
   return (
     <div className={styles.pageContent}>
       <div className={styles.loginStyle}>
-        <div className={styles.loginContent}>
+        <div className={`${styles.loginContent} ${shake ? styles.shake : ''}`}>
           <h2>Holidaze</h2>
           <h1>Welcome to Holidaze</h1>
           <p>Login as a Venue Manager</p>
