@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from './CostumerProfile.module.css';
 import { PROFILES_SINGLE } from '../../constants';
 import { headers } from '../../headers';
+import defaultAvatar from '/media/images/mdefault.jpg';
 
 const CostumerProfile = () => {
   const [userData, setUserData] = useState({});
@@ -57,23 +58,31 @@ const CostumerProfile = () => {
         <div className={styles.leftBorder}>
           <div className={styles.profileLeftTop}>
             <img
-              src={userData.avatar?.url || 'default-avatar.jpg'}
+              src={userData.avatar?.url || defaultAvatar }
               alt={userData.name || 'User Avatar'}
             />
-            <h3>Welcome, {userData.name || 'Guest'}</h3>
+            <h3>Welcome back, {userData.name || 'Guest'}</h3>
           </div>
           <div className={styles.profileShortcut}>
-            <p className={styles.shortcutLink}>My Bookings</p>
-            <p className={styles.shortcutLink}>Favorite Venues</p>
-            <p className={styles.shortcutLink}>Edit Profile</p>
+            <button onClick={scrollTo.profileBookings} className={styles.shortcutLink}>My Bookings</button>
+            <button onClick={scrollTo.profileBookings} className={styles.shortcutLink}>Favorite Venues</button>
+            <button onClick={scrollTo.profileBookings} className={styles.shortcutLink}>Edit Profile</button>
           </div>
-          <div className={styles.dividerLine}></div>
           <button className={styles.signOutButton} onClick={handleSignOut}>Sign out</button>
+          <div className={styles.dividerLine}></div>
+          <div className={styles.profileFutureBooking}>
+              <h3>Future Booking</h3>
+              <div className={styles.profileFutureBookingContent}>
+                <p>19th April 2025</p>
+                <p>Hotel Floralize</p>
+                <p>1 Adult</p>
+              </div>
+            </div>
         </div>
       </section>
       <section className={styles.rightSection}>
         <div className={styles.rightBorder}>
-          <div className={styles.profileBookings}>
+          <div className={styles.bookings}>
             <div className={styles.bookingsTitle}>
               <h2>My Bookings</h2>
               <div className={styles.bookingsFilter}>
@@ -84,14 +93,14 @@ const CostumerProfile = () => {
             <div className={styles.allBookings}>
             </div>
           </div>
-          <div className={styles.profileFavorites}>
+          <div className={styles.favorites}>
             <div className={styles.favoriteTitle}>
               <h2>Favorite Venues</h2>
             </div>
             <div className={styles.allFavorites}>
             </div>
           </div>
-          <div className={styles.profileEdit}>
+          <div className={styles.edit}>
             <div className={styles.editTitle}>
               <h2>Edit Profile</h2>
             </div>
