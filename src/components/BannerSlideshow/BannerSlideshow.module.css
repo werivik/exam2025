@@ -6,7 +6,6 @@
   border-radius: 25px;
 }
 
-/* Lanes */
 .lane {
   position: absolute;
   top: 0;
@@ -23,21 +22,18 @@
   left: 0;
 }
 
-/* Stack movement */
 .stack {
   display: flex;
   flex-direction: column;
   transition: transform 1.5s ease-in-out;
 }
 
-/* Each slice */
 .slice {
   height: 100vh;
   position: relative;
   overflow: hidden;
 }
 
-/* Wrappers for clipping */
 .leftWrapper,
 .rightWrapper {
   width: 100%;
@@ -46,7 +42,6 @@
   position: relative;
 }
 
-/* Full image size */
 .fullImage {
   position: absolute;
   top: 0;
@@ -55,17 +50,14 @@
   object-fit: cover;
 }
 
-/* Show left half */
 .leftImage {
   left: 0;
 }
 
-/* Show right half */
 .rightImage {
   left: -100%;
 }
 
-/* Text Styling */
 .bannerText {
   position: absolute;
   width: 100%;
@@ -120,7 +112,6 @@
   text-align: center;
 }
 
-/* Progress dots */
 .progressDots {
   position: absolute;
   right: 2.5%;
