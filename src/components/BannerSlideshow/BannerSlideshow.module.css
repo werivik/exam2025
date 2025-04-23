@@ -1,30 +1,27 @@
+/*
 .carouselViewport {
   width: 100%;
   height: 100vh;
   overflow: hidden;
   position: relative;
-  border-radius: 25px;
 }
 
 .slideStack {
   display: flex;
   flex-direction: column;
-  transition: transform 0.55s ease-in-out;
-  border-radius: 25px;
+  transition: transform 0.8s ease-in-out;
 }
 
 .slide {
   width: 100%;
   height: 100vh;
   position: relative;
-  border-radius: 25px;
 }
 
 .slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 25px;
 }
 
 .bannerText {
@@ -40,24 +37,83 @@
   width: 100%;
   height: 100%;
 }
+*/
+.carouselViewport {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  border-radius: 25px;
+}
+
+.lane {
+  position: absolute;
+  inset: 0;
+  width: 50%;
+  overflow: hidden;
+}
+
+.lane.right {
+  left: 50%;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  height: calc(5 * 100vh);
+  animation: laneUp 24s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+  border-radius: 25px;
+}
+
+.lane.right .stack {
+  animation: laneDown 24s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+  border-radius: 25px;
+}
+
+.slice {
+  position: relative;
+  height: 100vh;
+  border-radius: 25px;
+}
+
+.slice img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 25px;
+}
+
+.bannerText {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  color: white;
+}
 
 .bannerText h1 { 
   font-size: 12.5rem; 
   margin:0; 
   padding: 0; 
   position: absolute;
-  left: 50%;
+  top: 32.5%;
   transform: translate(-50%);
+  left: 50%;
+  width: 100%;
+  text-align: center;
 }
 
 .bannerText h2 { 
   font-size: 4rem;   
   padding: 0; 
-  top: -2.5%;
-  margin:0 0 -25px 0; 
+  top: -10%;
+  margin:0 0 -25px 0;
   position: absolute;
-  left: 50%;
+  top: 30%;
   transform: translate(-50%);
+  left: 50%;  
+  width: 100%;
+  text-align: center;
 }
 
 .bannerText p  { 
@@ -66,45 +122,87 @@
   margin:-25px 0 0 0; 
   padding: 0; 
   position: absolute;
-  left: 50%;
-  top: 25%;
+  top: 57.5%;
   transform: translate(-50%);
+  left: 50%;
+  width: 100%;
+  text-align: center;
 }
 
 .bannerText span { 
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%);
-  top: 20%;
   font-size: 2.813rem; 
   margin: 0;
   padding: 0;
+  top: 54%;
+  position: absolute;
+  transform: translate(-50%);
+  left: 50%;
+  width: 100%;
+  text-align: center;
+}
+
+@keyframes laneUp {
+  0%,
+  16.66%  { transform: translateY(0); }
+  20%,
+  36.66%  { transform: translateY(-100vh); }
+  40%,
+  56.66%  { transform: translateY(-200vh); }
+  60%,
+  76.66%  { transform: translateY(-300vh); }
+  80%,
+  96.66%  { transform: translateY(-400vh); }
+  100%     { transform: translateY(-400vh); }
+}
+
+@keyframes laneDown {
+  0%,
+  16.66%  { transform: translateY(-400vh); }
+  20%,
+  36.66%  { transform: translateY(-300vh); }
+  40%,
+  56.66%  { transform: translateY(-200vh); }
+  60%,
+  76.66%  { transform: translateY(-100vh); }
+  80%,
+  96.66%  { transform: translateY(0); }
+  100%     { transform: translateY(0); }
 }
 
 .progressDots {
   position: absolute;
-  bottom: 20%;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 2.5%;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  z-index: 5;
-}
-
-.dot, .dotActive {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  border: 2px solid #fff;
+  z-index: 20;
   transition: 0.25s;
 }
 
-.dot:hover, .dotActive:hover {
+.dot,
+.dotActive {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  transition: 0.25s;
+}
+
+.dotActive {
+  background: #fff;
+}
+
+.dot:hover {
+  transition: 0.25s;
+  cursor: pointer;
+  background-color: white;
+}
+
+.dotActive:hover {
   transition: 0.25s;
   cursor: pointer;
   background-color:#6B7A3A;
   border-color: #6B7A3A;
-  margin-top: -2.5px;
 }
-
-.dotActive { background:#fff; }
