@@ -5,134 +5,31 @@
     color: #1F1B17;
 }
 
-.firstSection, .bannerSlideshow {
-    margin-top: 2.5%;
-    width: 100%;
-    height: 92vh;
-    display: flex;
-    justify-content: center;
-    position: relative;
-}
-
-.homeBanner {
-    width: 90%;
-    height: 100%;
-    position: relative;
-    border-radius: 25px;
-}
-
-.homeBannerTitles {
-  height: 100%;
+.firstSection {
+  margin-top: 2.5%;
   width: 100%;
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%);
-  color: #F3F0EB;
-  margin: 0;
-  padding: 0;
-  gap: 0;
+  height: 92vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-} 
-
-.homeBanner h1 {
-  font-size: 12.5rem;
-  margin: 0;
-  padding: 0;
+  justify-content: center;
+  position: relative;
 }
 
-.homeBanner p {
-  font-size: 2.813rem;
-  font-weight: 100;
-  margin: 0;
-  padding: 0;
-  margin-top: -35px;
-}
-
-.progressDots {
-  position: absolute;
-  top: 84%;
-  left: 50%;
-  transform: translate(-50%);
+.heroSection {
+  width: 90%;
   display: flex;
-  flex-direction: row;
-  gap: 10px;
+  justify-content: center;
+  position: relative;
 }
 
-.dotActive {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  border: solid 2px white;
-  cursor: pointer;
-  transition: 0.25s;
-  background-color: white;
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  border: solid 2px white;
-  cursor: pointer;
-  transition: 0.25s;
-}
-
-.dot:hover {
-  cursor: pointer;
-  transition: 0.25s;
-  margin-top: -5px;
-  background-color: white;
-}
-
-.dotActive:hover {
-  margin-top: -5px;
-  background-color: #6B7A3A;
-  border: solid 2px #6B7A3A;
-}
-
-/*
-.firstSection .homeBanner h1, .firstSection .homeBanner p {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-    color: #F3F0EB;
-    margin: 0;
-    padding: 0;
-}
-
-.homeBanner h1 {
-    top: 30%;
-    font-size: 12.5rem;
-}
-
-.homeBanner p {
-    top: 53.5%;
-    font-size: 2.813rem;
-    font-weight: 100;
-    width: 100%;
-    text-align: center;
-}
-*/
-
-.homeBanner img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 75%;
-    border-radius: 25px;
-}
-
-.bannerFilters {
-    width: 85%;
+  .bannerFilters {
+    width: 95%;
     height: 105px;
     bottom: 0;
     margin-bottom: -1px;
     position: absolute;
     background-color: #F3F0EB;
     border-radius: 25px 25px 0px 0px;
+    z-index: 2;
 }
 
 .edgeLeft {
@@ -416,7 +313,7 @@
     min-width: 20px;
     text-align: center;
   }
-  
+
   .scrollIcon {
     display: flex;
     flex-direction: column;

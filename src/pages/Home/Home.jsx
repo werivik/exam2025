@@ -4,10 +4,6 @@ import { motion, useInView } from "framer-motion"
 import debounce from 'lodash.debounce';
 import styles from './Home.module.css';
 
-import homeBanner from "/media/images/banner2.png";
-import beachBanner from "/media/images/beachBannerWalking.png";
-import londonBanner from "/media/images/londonBanner.png";
-import parisBanner from "/media/images/parisBanner.png";
 
 import Edge from "/media/images/beige-edge.png";
 import registerImage from "/media/hotelTypes/hotelReseption.jpeg";
@@ -20,6 +16,7 @@ import { VENUES } from '../../constants';
 import { headers } from '../../headers';
 import HotelCardFirstType from '../../components/HotelCardFirstType/HotelCardFirstType';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
+import BannerSlideshow from '../../components/BannerSlideshow/BannerSlideshow';
 
 const Home = () => {
   const [hotels, setHotels] = useState([]);
@@ -222,14 +219,8 @@ const Home = () => {
     <>
     <div className={styles.pageContent}>
       <section className={styles.firstSection}>
-        <div className={styles.homeBanner}>
-          <div className={styles.homeBannerTitles}>
-            <h1>Holidaze</h1>
-            <p>Elegance meets Comfort</p>
-          </div>
-          <img src={homeBanner} alt="Home Banner" />
-        </div>
-
+        <div className={styles.heroSection}>
+        <BannerSlideshow />
         <div className={styles.bannerFilters}>
           <img src={Edge} className={styles.edgeLeft} alt="" />
           <div className={styles.filterContent}>
@@ -350,6 +341,7 @@ const Home = () => {
       )}
           </div>
           <img src={Edge} className={styles.edgeRight} alt="" />
+        </div>
         </div>
       </section>
       {showScrollIcon && (

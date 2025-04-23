@@ -1,0 +1,106 @@
+.carouselViewport {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.slideStack {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.8s ease-in-out;
+}
+
+.slide {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bannerText {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%);
+  color: #F3F0EB;
+  text-align: center;
+  pointer-events: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.bannerText h1 { 
+  font-size: 12.5rem; 
+  margin:0; 
+  padding: 0; 
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.bannerText h2 { 
+  font-size: 4rem;   
+  padding: 0; 
+  top: -2.5%;
+  margin:0 0 -25px 0; 
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.bannerText p  { 
+  font-size: 2rem;    
+  font-style: italic; 
+  margin:-25px 0 0 0; 
+  padding: 0; 
+  position: absolute;
+  left: 50%;
+  top: 25%;
+  transform: translate(-50%);
+}
+
+.bannerText span { 
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  top: 20%;
+  font-size: 2.813rem; 
+  margin: 0;
+  padding: 0;
+}
+
+.progressDots {
+  position: absolute;
+  bottom: 22.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 5;
+}
+
+.dot, .dotActive {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 2px solid #fff;
+  transition: 0.25s;
+}
+
+.dot:hover, .dotActive:hover {
+  transition: 0.25s;
+  cursor: pointer;
+  background-color:#6B7A3A;
+  border-color: #6B7A3A;
+  margin-top: -2.5px;
+}
+
+.dotActive { background:#fff; }
