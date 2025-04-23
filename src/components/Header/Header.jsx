@@ -277,6 +277,7 @@ function Header() {
                   onClick={toggleSearchBar}
                 />
               </li>
+              <div className={styles.divideLine}></div>
               <li>
                 <Link to="/hotels">Venues</Link>
               </li>

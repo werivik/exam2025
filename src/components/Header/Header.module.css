@@ -50,6 +50,10 @@ header {
     transition: 0.25s;
   }
 
+  header.scrolled .divideLine {
+    background-color: #1F1B17;
+  }
+
   header.scrolled nav .headerRightLinks li a:hover, header.scrolled nav .menuOpen:hover ,header.scrolled nav .searchInactive:hover {
     transition: 0.25s;
     border-color: #1F1B17;
@@ -66,6 +70,20 @@ header {
 
   .searchContainer .searchActive {
     color: #1F1B17;
+  }
+
+  .sidebarHeader {
+    display: none;
+  }
+
+  .headerRightLinks .divideLine {
+    height: 25px;
+    width: 2px;
+    background-color: white;
+    opacity: 1;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
   }
 
   .menuOpen {
@@ -105,6 +123,17 @@ header {
 }
 
 .headerRightLinks {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  height: 100%;
+  margin-top: 0;
+  justify-content: flex-end;
+  position: relative;
+}
+
+/*
+.headerRightLinks {
     list-style: none;
     display: flex;
     flex-direction: row;
@@ -113,10 +142,13 @@ header {
     margin-top: 7px;
     width: 40%;
     color: #f2f2f2;
+    position: relative;
 }
+*/
 
 .headerRightLinks li {
   height: 100%;
+  width: 100%;
   display: flex;
   align-items: center;
 }
@@ -143,18 +175,8 @@ header {
   border: solid white 2px;
 }
 
-.headerLogo {
-    height: 50px;
-    width: auto;
-    object-fit: contain;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-    transition: all 0.25s ease;
-}
-
-.headerLogoHover {
-    height: 50px;
+.headerLogo, .headerLogoHover {
+    height: 55px;
     width: auto;
     object-fit: contain;
     position: absolute;
@@ -183,7 +205,7 @@ header {
   border: none;
   border-radius: 10px;
   top: 0;
-  margin-top: 5px;
+  margin-top: 15px;
   width: 100%;
   min-width: 400px;
   right: 100%;
@@ -191,6 +213,7 @@ header {
   z-index: 998;
   font-size: 1rem;
   transition: 0.25s;
+  background-color: white;
 }
 
 .suggestionsList {
@@ -243,7 +266,7 @@ header {
   border: solid 2px rgba(255, 255, 255, 0);
   border-radius: 5px;
   margin-right: -5px;
-  padding-right: 5px;
+  padding-right: 10px;
   padding-left: 5px;
   height: 2.188rem;
   transition: 0.25s;
@@ -275,9 +298,6 @@ header {
   display: none;
   right: 100%;
   transition: 0.25s;
-}
-
-.searchbarContent {
   margin-right: -50px;
 }
 
@@ -404,29 +424,6 @@ header {
 .simpleHeader nav .menuOpen:hover,
 .simpleHeader nav .searchInactive:hover {
   border-color: white !important;
-}
-
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modalContent {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  max-width: 500px;
-  width: 90%;
-  position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .closeModal {
