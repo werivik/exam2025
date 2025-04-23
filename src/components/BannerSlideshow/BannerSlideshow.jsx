@@ -18,16 +18,24 @@ export default function BannerSlideshow() {
   const [index, setIndex] = useState(0);
   const timerRef = useRef(null);
 
-  useEffect(() => {
+  const startInterval = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
     timerRef.current = setInterval(() => {
       setIndex((prev) => (prev + 1) % slides.length);
-    }, 6000);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    startInterval();
     return () => clearInterval(timerRef.current);
   }, []);
 
   const handleDotClick = (i) => {
-    clearInterval(timerRef.current);
     setIndex(i);
+    startInterval();
   };
 
   const activeSlide = slides[index];
