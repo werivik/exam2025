@@ -277,7 +277,11 @@ function Header() {
                   onClick={toggleSearchBar}
                 />
               </li>
-              <div className={styles.divideLine}></div>
+              <div
+  className={`${styles.divideLine} ${
+    isSearchOpen ? styles.divideLineActive : ""
+  }`}
+></div>
               <li>
                 <Link to="/hotels">Venues</Link>
               </li>

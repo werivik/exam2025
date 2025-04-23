@@ -80,10 +80,15 @@ header {
     height: 25px;
     width: 2px;
     background-color: white;
+    border-radius: 999px;
     opacity: 1;
     position: absolute;
     left: 50%;
     transform: translate(-50%);
+  }
+
+  .headerRightLinks .divideLineActive {
+    left: 37.5%;
   }
 
   .menuOpen {
@@ -125,7 +130,7 @@ header {
 .headerRightLinks {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
   height: 100%;
   margin-top: 0;
   justify-content: flex-end;
@@ -156,7 +161,6 @@ header {
 .headerRightLinks li a {
   border: solid 2px rgba(255, 255, 255, 0);
   border-radius: 5px;
-  margin-right: -5px;
   padding-right: 5px;
   padding-left: 5px;
   height: 2.188rem;
@@ -265,8 +269,7 @@ header {
   z-index: 999;
   border: solid 2px rgba(255, 255, 255, 0);
   border-radius: 5px;
-  margin-right: -5px;
-  padding-right: 10px;
+  padding-right: 5px;
   padding-left: 5px;
   height: 2.188rem;
   transition: 0.25s;
