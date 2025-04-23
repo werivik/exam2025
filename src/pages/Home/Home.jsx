@@ -8,7 +8,7 @@ import styles from './Home.module.css';
 import Edge from "/media/images/beige-edge.png";
 import registerImage from "/media/hotelTypes/hotelReseption.jpeg";
 import animalImage from "/media/metaImages/animal.jpeg";
-import breakfastImage from "/media/metaImages/breakfast.jpeg";
+import breakfastImage from "/media/metaImages/breakfast.jpg";
 import parkingImage from "/media/metaImages/parking.jpeg";
 import wifiImage from "/media/metaImages/wifi.jpeg";
 
