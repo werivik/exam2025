@@ -1,43 +1,3 @@
-/*
-.carouselViewport {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-}
-
-.slideStack {
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.8s ease-in-out;
-}
-
-.slide {
-  width: 100%;
-  height: 100vh;
-  position: relative;
-}
-
-.slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.bannerText {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%);
-  color: #F3F0EB;
-  text-align: center;
-  pointer-events: none;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-*/
 .carouselViewport {
   position: relative;
   overflow: hidden;
@@ -46,6 +6,7 @@
   border-radius: 25px;
 }
 
+/* Lanes */
 .lane {
   position: absolute;
   top: 0;
@@ -62,33 +23,21 @@
   left: 0;
 }
 
+/* Stack movement */
 .stack {
   display: flex;
   flex-direction: column;
   transition: transform 1.5s ease-in-out;
 }
 
+/* Each slice */
 .slice {
   height: 100vh;
   position: relative;
+  overflow: hidden;
 }
 
-.leftHalf {
-  width: 200%;
-  height: 100%;
-  object-fit: cover;
-  object-position: left;
-  transform: translateX(0);
-}
-
-.rightHalf {
-  width: 200%;
-  height: 100%;
-  object-fit: cover;
-  object-position: right;
-  transform: translateX(-50%);
-}
-
+/* Wrappers for clipping */
 .leftWrapper,
 .rightWrapper {
   width: 100%;
@@ -97,6 +46,7 @@
   position: relative;
 }
 
+/* Full image size */
 .fullImage {
   position: absolute;
   top: 0;
@@ -105,100 +55,72 @@
   object-fit: cover;
 }
 
-.leftWrapper .fullImage {
+/* Show left half */
+.leftImage {
   left: 0;
 }
 
-.rightWrapper .fullImage {
+/* Show right half */
+.rightImage {
   left: -100%;
 }
 
+/* Text Styling */
 .bannerText {
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
   z-index: 5;
   color: white;
+  pointer-events: none;
 }
 
-.bannerText h1 { 
-  font-size: 12.5rem; 
-  margin:0; 
-  padding: 0; 
+.bannerText h1 {
+  font-size: 12.5rem;
+  margin: 0;
+  padding: 0;
   position: absolute;
   top: 32.5%;
   transform: translate(-50%);
   left: 50%;
-  width: 100%;
   text-align: center;
 }
 
-.bannerText h2 { 
-  font-size: 4rem;   
-  padding: 0; 
-  top: -10%;
-  margin:0 0 -25px 0;
+.bannerText h2 {
+  font-size: 4rem;
+  margin: 0;
+  padding: 0;
   position: absolute;
   top: 30%;
   transform: translate(-50%);
-  left: 50%;  
-  width: 100%;
+  left: 50%;
   text-align: center;
 }
 
-.bannerText p  { 
-  font-size: 2rem;    
-  font-style: italic; 
-  margin:-25px 0 0 0; 
-  padding: 0; 
+.bannerText p {
+  font-size: 2rem;
+  font-style: italic;
+  margin: 0;
+  padding: 0;
   position: absolute;
   top: 57.5%;
   transform: translate(-50%);
   left: 50%;
-  width: 100%;
   text-align: center;
 }
 
-.bannerText span { 
-  font-size: 2.813rem; 
+.bannerText span {
+  font-size: 2.813rem;
   margin: 0;
   padding: 0;
-  top: 54%;
   position: absolute;
+  top: 54%;
   transform: translate(-50%);
   left: 50%;
-  width: 100%;
   text-align: center;
 }
 
-@keyframes laneUp {
-  0%,
-  16.66%  { transform: translateY(0); }
-  20%,
-  36.66%  { transform: translateY(-100vh); }
-  40%,
-  56.66%  { transform: translateY(-200vh); }
-  60%,
-  76.66%  { transform: translateY(-300vh); }
-  80%,
-  96.66%  { transform: translateY(-400vh); }
-  100%     { transform: translateY(-400vh); }
-}
-
-@keyframes laneDown {
-  0%,
-  16.66%  { transform: translateY(-400vh); }
-  20%,
-  36.66%  { transform: translateY(-300vh); }
-  40%,
-  56.66%  { transform: translateY(-200vh); }
-  60%,
-  76.66%  { transform: translateY(-100vh); }
-  80%,
-  96.66%  { transform: translateY(0); }
-  100%     { transform: translateY(0); }
-}
-
+/* Progress dots */
 .progressDots {
   position: absolute;
   right: 2.5%;
@@ -208,7 +130,6 @@
   flex-direction: column;
   gap: 10px;
   z-index: 20;
-  transition: 0.25s;
 }
 
 .dot,
@@ -218,6 +139,7 @@
   border: 2px solid #fff;
   border-radius: 50%;
   transition: 0.25s;
+  cursor: pointer;
 }
 
 .dotActive {
@@ -225,14 +147,10 @@
 }
 
 .dot:hover {
-  transition: 0.25s;
-  cursor: pointer;
   background-color: white;
 }
 
 .dotActive:hover {
-  transition: 0.25s;
-  cursor: pointer;
-  background-color:#6B7A3A;
+  background-color: #6B7A3A;
   border-color: #6B7A3A;
 }
