@@ -23,7 +23,7 @@
 
   .bannerFilters {
     width: 95%;
-    height: 105px;
+    height: 90px;
     bottom: 0;
     margin-bottom: -1px;
     position: absolute;
@@ -324,7 +324,7 @@
     position: absolute;
     width: 100%;
     z-index: 997;
-    top: 95.5%;
+    top: 97%;
   }
   
   .hidden {
@@ -335,7 +335,7 @@
   
   .bounceIcon {
     animation: bounce 1.5s infinite;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: #1F1B17;
     margin-top: -10px;
   }
@@ -349,61 +349,6 @@
       transform: translateY(10px);
     }
   } 
-
-  /* Banner Slideshow*/
-  .bannerSlideshow {
-    display: none;
-  }
-  
-  .homeBannerTitles {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%);
-    color: #F3F0EB;
-    margin: 0;
-    padding: 0;
-    gap: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  } 
-
-  .bannerSlideshow h2 {
-    font-size: 4rem;
-    margin: 0;
-    padding: 0;
-    margin-bottom: -60px;
-  }
-  
-  .bannerSlideshow h1 {
-    font-size: 12.5rem;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .bannerSlideshow p {
-    font-size: 2rem;
-    font-weight: 100;
-    margin: 0;
-    padding: 0;
-    margin-top: -35px;
-    font-style: italic;
-  }
-
-  .bannerFindOutMore {
-    position: absolute;
-    top: 75%;
-    left: 3%;
-    font-size: 2rem;
-    background-color: transparent;
-    border: none;
-    color: white;
-  }
-
-    /* Banner Slideshow*/
 
 .secondSection {
     width: 100%;

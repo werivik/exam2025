@@ -3,24 +3,28 @@
   height: 100vh;
   overflow: hidden;
   position: relative;
+  border-radius: 25px;
 }
 
 .slideStack {
   display: flex;
   flex-direction: column;
-  transition: transform 0.8s ease-in-out;
+  transition: transform 0.55s ease-in-out;
+  border-radius: 25px;
 }
 
 .slide {
   width: 100%;
   height: 100vh;
   position: relative;
+  border-radius: 25px;
 }
 
 .slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 25px;
 }
 
 .bannerText {
@@ -79,7 +83,7 @@
 
 .progressDots {
   position: absolute;
-  bottom: 22.5%;
+  bottom: 20%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
