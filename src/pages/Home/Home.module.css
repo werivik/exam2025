@@ -5,24 +5,54 @@
     color: #1F1B17;
 }
 
-.firstSection {
+.firstSection, .bannerSlideshow {
     margin-top: 2.5%;
-    margin-bottom: 2.5%;
     width: 100%;
-    height: 90vh;
+    height: 92vh;
     display: flex;
     justify-content: center;
     position: relative;
 }
 
 .homeBanner {
-    width: 85%;
+    width: 90%;
     height: 100%;
     position: relative;
     border-radius: 25px;
 }
 
-.homeBanner h1, .homeBanner p {
+.homeBannerTitles {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%);
+  color: #F3F0EB;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+} 
+
+.homeBanner h1 {
+  font-size: 12.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.homeBanner p {
+  font-size: 2.813rem;
+  font-weight: 100;
+  margin: 0;
+  padding: 0;
+  margin-top: -35px;
+}
+
+/*
+.firstSection .homeBanner h1, .firstSection .homeBanner p {
     position: absolute;
     left: 50%;
     transform: translate(-50%);
@@ -43,6 +73,7 @@
     width: 100%;
     text-align: center;
 }
+*/
 
 .homeBanner img {
     width: 100%;
@@ -53,7 +84,7 @@
 }
 
 .bannerFilters {
-    width: 80%;
+    width: 85%;
     height: 105px;
     bottom: 0;
     margin-bottom: -1px;
@@ -354,7 +385,7 @@
     position: absolute;
     width: 100%;
     z-index: 997;
-    top: 94%;
+    top: 96%;
   }
   
   .hidden {
@@ -376,9 +407,64 @@
     }
   
     50% {
-      transform: translateY(20px);
+      transform: translateY(10px);
     }
-  }  
+  } 
+
+  /* Banner Slideshow*/
+  .bannerSlideshow {
+    display: none;
+  }
+  
+  .homeBannerTitles {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%);
+    color: #F3F0EB;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  } 
+
+  .bannerSlideshow h2 {
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+    margin-bottom: -60px;
+  }
+  
+  .bannerSlideshow h1 {
+    font-size: 12.5rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .bannerSlideshow p {
+    font-size: 2rem;
+    font-weight: 100;
+    margin: 0;
+    padding: 0;
+    margin-top: -35px;
+    font-style: italic;
+  }
+
+  .bannerFindOutMore {
+    position: absolute;
+    top: 75%;
+    left: 3%;
+    font-size: 2rem;
+    background-color: transparent;
+    border: none;
+    color: white;
+  }
+
+    /* Banner Slideshow*/
 
 .secondSection {
     width: 100%;
@@ -409,12 +495,16 @@
 
 .typeTitle h2 {
     font-size: 3rem;
+    margin: 0;
+    padding: 0;
 }
 
 .typeTitle p {
     font-size: 1.8rem;
     font-style: italic;
     font-weight: 400;
+    margin: 0;
+    padding: 0;
 }
 
 .typeContent {

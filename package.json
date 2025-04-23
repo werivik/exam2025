@@ -16,6 +16,7 @@
   "type": "commonjs",
   "dependencies": {
     "firebase": "^11.5.0",
+    "framer-motion": "^12.8.0",
     "lodash.debounce": "^4.0.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
