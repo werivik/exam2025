@@ -51,6 +51,48 @@
   margin-top: -35px;
 }
 
+.progressDots {
+  position: absolute;
+  top: 84%;
+  left: 50%;
+  transform: translate(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.dotActive {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: solid 2px white;
+  cursor: pointer;
+  transition: 0.25s;
+  background-color: white;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: solid 2px white;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.dot:hover {
+  cursor: pointer;
+  transition: 0.25s;
+  margin-top: -5px;
+  background-color: white;
+}
+
+.dotActive:hover {
+  margin-top: -5px;
+  background-color: #6B7A3A;
+  border: solid 2px #6B7A3A;
+}
+
 /*
 .firstSection .homeBanner h1, .firstSection .homeBanner p {
     position: absolute;
@@ -385,7 +427,7 @@
     position: absolute;
     width: 100%;
     z-index: 997;
-    top: 96%;
+    top: 95.5%;
   }
   
   .hidden {
