@@ -6,20 +6,21 @@ import headerLogo from "/media/logo/logo-default.png";
 import headerLogoHover from "/media/logo/logo-hover.png";
 import { VENUES } from "../../constants";
 import { headers } from "../../headers";
-import { isLoggedIn, logout } from "../../auth/auth";
+import { isLoggedIn } from "../../auth/auth";
 
 function Header() {
+  const loginOrRegisterRoutes = ['/login-costumer', '/register-costumer']
   const [isHovered, setIsHovered] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [venues, setVenues] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(isLoggedIn());
+  const location = useLocation();
+  const navigate = useNavigate();
   
   useEffect(() => {
     if (location.pathname === "/") {
@@ -31,7 +32,6 @@ function Header() {
       window.addEventListener("scroll", handleScroll);
       return () => window.removeEventListener("scroll", handleScroll);
     } 
-    
     else {
       setScrolled(true);
     }
@@ -47,7 +47,6 @@ function Header() {
         const data = await res.json();
         setVenues(data.data || []);
       } 
-      
       catch (err) {
         console.error("Error fetching venues:", err);
       }
@@ -107,7 +106,6 @@ function Header() {
         navigate(`/hotel-details/${selectedVenue.id}`);
       }
     } 
-    
     else {
       navigate("/hotels");
     }
@@ -115,26 +113,31 @@ function Header() {
     setSearchTerm("");
     setSuggestions([]);
   };
-  
+
   const toggleSearchBar = () => {
     setIsSearchOpen((prevState) => !prevState);
   };
 
-  const loginOrRegisterRoutes = [
-    "/login-admin",
-    "/login-costumer",
-    "/register-admin",
-    "/register-costumer",
-  ];
-  
   const isSimpleHeader = loginOrRegisterRoutes.includes(location.pathname); 
 
-  const handleLogout = () => {
-    logout();
-    setIsUserLoggedIn(false);
-    navigate("/");
-  };
+  useEffect(() => {
+    setIsUserLoggedIn(isLoggedIn());
   
+    const handleAuthChange = () => setIsUserLoggedIn(isLoggedIn());
+  
+    const handleStorage = (e) => {
+      if (e.key === "accessToken") handleAuthChange();
+    };
+  
+    window.addEventListener("authchange", handleAuthChange);
+    window.addEventListener("storage", handleStorage);
+  
+    return () => {
+      window.removeEventListener("authchange", handleAuthChange);
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, []);
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
@@ -145,7 +148,6 @@ function Header() {
     if (isSidebarOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } 
-    
     else {
       document.removeEventListener('mousedown', handleClickOutside);
     }
@@ -161,13 +163,16 @@ function Header() {
       if (isSidebarOpen) {
         el.classList.add('blurred');
       } 
-      
       else {
         el.classList.remove('blurred');
       }
     });
   }, [isSidebarOpen]);
-  
+
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [location.pathname]);
+
   return (
     <div ref={sidebarRef}>
       <header
@@ -176,6 +181,31 @@ function Header() {
         }`}
       >
         <nav className={styles.nav}>
+
+        <ul className={styles.menuLeftLinks}>
+  {isUserLoggedIn ? (
+    <>
+      <Link to="/profile-costumer">Profile</Link>
+      <div
+                className={`${styles.divideLine} ${
+                  isSearchOpen ? styles.divideLineActive : ""
+                }`}
+              ></div>
+      <Link to="/costumer-profile">Bookings</Link>
+    </>
+  ) : (
+    <>
+      <Link to="/login-costumer">Login</Link>
+      <div
+                className={`${styles.divideLine} ${
+                  isSearchOpen ? styles.divideLineActive : ""
+                }`}
+              ></div>
+      <Link to="/register-costumer">Register</Link>
+    </>
+  )}
+</ul>
+
           {!isSidebarOpen && (
             <button
               className={styles.menuOpen}
@@ -185,7 +215,7 @@ function Header() {
             </button>
           )}
   
-  {isSidebarOpen && (
+          {isSidebarOpen && (
             <div className={styles.sidebarHeader}>
               <button
                 className={styles.sidebarClose}
@@ -197,26 +227,25 @@ function Header() {
                 <Link to="/">Home</Link>
                 <Link to="/hotels">Venues</Link>
                 {isUserLoggedIn && (
-  <Link to="/costumer-profile">My Bookings</Link>
-)}
+                  <Link to="/costumer-profile">My Bookings</Link>
+                )}
               </li>
               <li className={styles.menuLinks}>
                 <Link to="/about">About Us</Link>
                 <Link to="/contact">Contact Us</Link>
               </li>
               <li className={styles.menuLinks}>
-                {isUserLoggedIn ? (
-                  <>
-                    <Link to="/profile-costumer">My Profile</Link>
-                    <button onClick={handleLogout}>Logout</button>
-                  </>
-                ) : (
-                  <>
-                    <Link to="/login-costumer">Login</Link>
-                    <Link to="/register-costumer">Register</Link>
-                  </>
-                )}
-              </li>
+  {isUserLoggedIn ? (
+    <>
+      <Link to="/profile-costumer">My Profile</Link>
+    </>
+  ) : (
+    <>
+      <Link to="/login-costumer">Login</Link>
+      <Link to="/register-costumer">Register</Link>
+    </>
+  )}
+</li>
             </div>
           )}
 
@@ -278,10 +307,10 @@ function Header() {
                 />
               </li>
               <div
-  className={`${styles.divideLine} ${
-    isSearchOpen ? styles.divideLineActive : ""
-  }`}
-></div>
+                className={`${styles.divideLine} ${
+                  isSearchOpen ? styles.divideLineActive : ""
+                }`}
+              ></div>
               <li>
                 <Link to="/hotels">Venues</Link>
               </li>
