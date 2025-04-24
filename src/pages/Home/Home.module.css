@@ -511,7 +511,7 @@
 }
 
 .thirdContentLogin {
-    display: none;
+    display: flex;
     justify-content: space-between;
     gap: 5%;
     width: 100%;
@@ -538,6 +538,59 @@
 
 .thirdInfo p {
     font-size: 1.8rem;
+}
+
+.thirdContentLogin .thirdInfo h2 {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.thirdContentLogin .thirdInfo h2 span {
+  font-size: 3.5rem;
+  font-style: italic;
+}
+
+.thirdContentLogin .thirdInfo h3 {
+  margin-top: 0;
+  padding-top: 0;
+  font-size: 2.35rem;
+}
+
+.thirdInfoLinks {
+  margin-top: 10%;
+  width: 90%;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  gap: 25px;
+}
+
+.thirdInfoLinks a {
+  color: white;
+  font-size: 1.8rem;
+  text-decoration: none;
+  position: relative;
+  transition: 0.25s;
+}
+
+.thirdInfoLinks a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: white;
+  bottom: -5px;
+  border-radius: 99px;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease-out;
+ }
+
+ .thirdInfoLinks a:hover::after{
+  transform: scaleX(1);
 }
 
 .registerButton {
@@ -615,15 +668,16 @@
     height: 2px;
     background: #1F1B17;
     bottom: -5px;
+    border-radius: 99px;
     left: 0;
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.25s ease-out;
-   }
-
-   .fourthTitle a:hover::after{
-    transform: scaleX(1);
   }
+
+.fourthTitle a:hover::after{
+    transform: scaleX(1);
+}
 
 .popularHotels {
     height: 400px;

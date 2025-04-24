@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion, useInView } from "framer-motion"
 import debounce from 'lodash.debounce';
 import styles from './Home.module.css';
-
+import { isLoggedIn } from "../../auth/auth";
 
 import Edge from "/media/images/beige-edge.png";
 import registerImage from "/media/hotelTypes/hotelReseption.jpeg";
@@ -29,6 +29,8 @@ const Home = () => {
   const [checkOutDate, setCheckOutDate] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDateType, setSelectedDateType] = useState('start');
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(isLoggedIn());
+  const [profile, setProfile] = useState(null);
 
   const toggleCalendar = (type) => {
     setShowCalendar(false);
@@ -215,6 +217,24 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    const update = () => setIsUserLoggedIn(isLoggedIn());
+
+    window.addEventListener("authchange", update);
+    window.addEventListener("storage", (e) => {
+      if (e.key === "accessToken") update();
+    });
+
+    update();
+
+    return () => {
+      window.removeEventListener("authchange", update);
+      window.removeEventListener("storage", update);
+    };
+  }, []);
+
+  const username = localStorage.getItem("username");
+
   return (
     <>
     <div className={styles.pageContent}>
@@ -389,6 +409,24 @@ const Home = () => {
       </section>
       <section className={styles.thirdSection}>
         <div className={styles.thirdBorder}>
+
+        {isUserLoggedIn ? (
+        <>
+<div className={styles.thirdContentLogin}>
+            <img src={registerImage} alt="Reception" />
+            <div className={styles.thirdInfo}>
+<h2>Welcome back <span>{username}</span>,</h2>
+              <h3>What would you like to do today?</h3>
+              <div className={styles.thirdInfoLinks}>
+              <Link>Upcoming Bookings</Link>
+              <Link>Check out Venues</Link>
+              <Link>See my Profile</Link>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
           <div className={styles.thirdContentRegister}>
             <img src={registerImage} alt="Reception" />
             <div className={styles.thirdInfo}>
@@ -397,17 +435,9 @@ const Home = () => {
               <Link to="/register-costumer" className={styles.registerButton}>Register</Link>
             </div>
           </div>
+        </>
+      )}
 
-          <div className={styles.thirdContentLogin}>
-            <img src={registerImage} alt="Reception" />
-            <div className={styles.thirdInfo}>
-              <h2>Welcome back Username,<br />What would you like to do today?</h2>
-              <Link>My Upcoming Bookings</Link>
-              <Link>Check out Venues</Link>
-              <Link>Let Destiny Decide!</Link>
-              <Link to="/profile-costumer" className={styles.registerButton}>My Profile</Link>
-            </div>
-          </div>
         </div>
       </section>
       <section className={styles.fourthSection}>
