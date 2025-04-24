@@ -3,7 +3,7 @@
     margin-top: 75px;
     display: flex;
     gap: 2.5%;
-    padding-bottom: 150px;
+    padding-bottom: 100px;
     margin-bottom: 100px;
     color: #1F1B17;
 }
@@ -242,4 +242,48 @@
   .guestButtons:hover {
     transition: 0.25s;
     background-color: #6B7A3A;
+  }
+
+
+
+
+
+
+  .pagination {
+    display: flex;
+    gap: 0.5rem;
+    margin: 2rem 0 0;
+    justify-content: center;
+    margin-top: 100px;
+  }
+
+  .page,
+  .pageActive {
+    padding: 0.5rem 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+  }
+  .page:hover {
+    background: #f4f4f4;
+  }
+  .pageActive {
+    background: #1F1B17;
+    color: #fff;
+    border-color: #1F1B17;
+    cursor: default;
+  }
+
+  @media (min-width: 1024px) {
+    .loadMoreButton {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .pagination {
+      display: none;
+    }
   }

@@ -153,6 +153,15 @@ const Hotels = () => {
         }
     }, [location.state]);
 
+    const PAGE_SIZE = 18;
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const pageTotal = Math.max(
+        1,
+        Math.ceil(filteredHotels.length / PAGE_SIZE)
+      );
+
     return (
         <div className={styles.pageContent}>
             <section className={styles.leftSection}>
@@ -231,36 +240,70 @@ const Hotels = () => {
                 </div>
             </section>
             <section className={styles.rightSection}>
-                <div className={styles.rightBorder}>
-                    <div className={styles.rightTitles}>
-                        <h1>Find your Dream Stay</h1>
-                        <p>...with Restelle</p>
-                    </div>
-                    {loading ? (
-                        <div className={styles.allHotels}>
-                            {Array.from({ length: 6 }).map((_, index) => (
-                                <HotelCardSecondType key={index} hotel={null} />
-                            ))}
-                        </div>
-                    ) : (
-                        <>
-                            {noMatches ? (
-                                <p>Could not find a match. Please try again with different credentials or try again later.</p>
-                            ) : (
-                                <div className={styles.allHotels}>
-                                    {filteredHotels.slice(0, visibleCount).map((hotel) => (
-                                        <HotelCardSecondType key={hotel.id} hotel={hotel} />
-                                    ))}
-                                </div>
-                            )}
-                            {visibleCount < filteredHotels.length && (
-                                <button className={styles.loadMoreButton} onClick={loadMore}>
-                                    Load More
-                                </button>
-                            )}
-                        </>
-                    )}
-                </div>
+      <div className={styles.rightBorder}>
+        <div className={styles.rightTitles}>
+          <h1>Find your Dream Stay</h1>
+          <p>...with Restelle</p>
+        </div>
+
+        {loading ? (
+          <div className={styles.allHotels}>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <HotelCardSecondType key={i} hotel={null} />
+            ))}
+          </div>
+        ) : (
+          <>
+            {noMatches ? (
+              <p>
+                Could not find a match. Please try again with different
+                credentials or try again later.
+              </p>
+            ) : (
+              <div className={styles.allHotels}>
+                {filteredHotels
+                  .slice(
+                    window.innerWidth >= 1024
+                      ? (currentPage - 1) * PAGE_SIZE
+                      : 0,
+                    window.innerWidth >= 1024
+                      ? currentPage * PAGE_SIZE
+                      : visibleCount
+                  )
+                  .map(hotel => (
+                    <HotelCardSecondType key={hotel.id} hotel={hotel} />
+                  ))}
+              </div>
+            )}
+
+            {window.innerWidth < 1024 &&
+              visibleCount < filteredHotels.length && (
+                <button
+                  className={styles.loadMoreButton}
+                  onClick={loadMore}
+                >
+                  Load More
+                </button>
+              )}
+
+            {window.innerWidth >= 1024 && pageTotal > 1 && (
+              <div className={styles.pagination}>
+                {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
+                  <button
+                    key={p}
+                    onClick={() => handlePageClick(p)}
+                    className={
+                      p === currentPage ? styles.pageActive : styles.page
+                    }
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
             </section>
         </div>
     );
