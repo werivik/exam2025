@@ -22,7 +22,7 @@ const Hotels = () => {
     const [metaFilters, setMetaFilters] = useState([]);
     const [availableRatings, setAvailableRatings] = useState([1, 2, 3, 4, 5]);
     const [loading, setLoading] = useState(true);
-    const [visibleCount, setVisibleCount] = useState(16);
+    const [visibleCount, setVisibleCount] = useState(18);
     const [noMatches, setNoMatches] = useState(false);
 
     useEffect(() => {
@@ -135,7 +135,7 @@ const Hotels = () => {
     };
 
     const loadMore = () => {
-        setVisibleCount((prev) => Math.min(prev + 8, filteredHotels.length));
+        setVisibleCount((prev) => Math.min(prev + 10, filteredHotels.length));
     };
 
     const location = useLocation();
