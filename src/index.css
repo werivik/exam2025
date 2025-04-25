@@ -20,7 +20,7 @@ body {
     height: 100%;
 }
 
-h2, h3, p, span, input, a, button {
+h2, h3, p, span, input, a {
     font-family: "Playfair Display", serif;
 }
 

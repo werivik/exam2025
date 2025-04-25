@@ -23,7 +23,8 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 250px;
+    height: 175px;
+    margin-bottom: 15px;
 }
 
 .titleLocation {
@@ -231,7 +232,7 @@
 }
 
 .hotelInfoLeft {
-    width: 60%;
+    width: 55%;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -292,7 +293,7 @@
     align-items: center;
 }
 
-.venueProfileName  img {
+.venueProfileName img {
     width: 35px;
     height: 35px;
     border-radius: 999px;
@@ -301,7 +302,7 @@
 }
 
 .hotelInfoRight {
-    width: 450px;
+    width: 40%;
     display: flex;
     flex-direction: column;
     gap: 50px;
@@ -315,7 +316,7 @@
     border-radius: 99px;
 }
 
-.bookDateGuest, .bookPrice, .favoriteVenue {
+.bookDateContent, .bookPrice, .favoriteVenue {
     width: 100%;
 }
 
@@ -324,7 +325,7 @@
     display: flex;
     flex-direction: column;
     align-items: end;
-    gap: 25px;
+    gap: 15px;
 }
 
 .bookPrice p {
@@ -339,15 +340,15 @@
     opacity: 75%;
 }
 
-.bookDateGuest .bookDate {
+.bookDateContent .bookDate {
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 30px;
+    height: 40px;
 }
 
-.bookDateGuest h3 {
+.bookDateContent h3 {
     margin-bottom: 50px;
     font-size: 1.8rem;
 }
@@ -368,7 +369,7 @@
     align-items: center;
     justify-content: center;
     background-color: white;
-    border-radius: 999px;
+    border-radius: 99px;
     border: 4px solid #1F1B17;
     position: absolute;
     z-index: 3;
@@ -386,35 +387,23 @@
 }
 
 .bookDateStart {
-    border-radius: 99px 0px 0px 99px;
+    border-radius: 15px 0px 0px 15px;
 }
 
 .bookDateEnd {
-    border-radius: 0px 99px 99px 0px;
-}
-
-.bookGuests input {
-    width: calc(65%);
-    height: 40px;
-    padding-left: 30px;
-    margin-left: 20px;
-    border-radius: 0px 25px 25px 0px;
-    border: none;
-    font-size: 20px;
-    font-family: "Playfair Display", serif;
-    z-index: 2;
+    border-radius: 0px 15px 15px 0px;
 }
 
 .bookGuests {
+    height: 40px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     margin-top: -25px;
+    position: relative;
 }
 
 .filterPeople {
     position: relative;
-    width: 70%;
+    width: calc(100% - 50px);
     height: 40px;
 }
 
@@ -429,7 +418,7 @@
     align-items: center;
     padding-left: 25px;
     margin-left: 25px;
-    width: 80%;
+    width: 100%;
     height: 100%;
     position: relative;
     cursor: pointer;
@@ -447,7 +436,7 @@
     flex-direction: column;
     position: absolute;
     top: 110%;
-    left: 0;
+    left: 5%;
     width: 90%;
     background-color: white;
     border-radius: 10px;

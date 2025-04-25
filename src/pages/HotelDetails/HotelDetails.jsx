@@ -338,7 +338,7 @@ const HotelDetails = () => {
             )}
           </div>
           <div className={styles.hotelInfoRight}>
-            <div className={styles.bookDateGuest}>
+            <div className={styles.bookDateContent}>
               <h3>Find the Perfect Date</h3>
               <div className={styles.bookDate}>
                 <i className="fa-solid fa-calendar-days" onClick={() => toggleCalendar('start')}></i>
@@ -368,6 +368,7 @@ const HotelDetails = () => {
               )}
             </div>
             <div className={styles.bookGuests}>
+              <h3></h3>
               <div className={styles.filterPeople}>
                 <i className="fa-solid fa-person"></i>
                 <div
@@ -424,17 +425,15 @@ const HotelDetails = () => {
                 </div>
               </div>
 
-              <Buttons size='small' version='v2' disabled={!isGuestSelectionValid}>
-                Search
-              </Buttons>
-
               {!isGuestSelectionValid && (
                 <p className={styles.warningText}>
                   At least one adult or assisted guest must be present.
                 </p>
               )}
             </div>
+
             <div className={styles.dividerLine}></div>
+
           <div className={styles.bookPrice}>
             <p>Total Price: <strong>$ {totalPrice.toFixed(2)}</strong> <span>/ $ {hotel.price} per night</span></p>
 

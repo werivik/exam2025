@@ -250,13 +250,14 @@ const Hotels = () => {
                 <h2>Filters</h2>
                     <div className={styles.allFilters}>
                         <div className={styles.filterPeople}>
+                            <h3>Occupancy</h3>
                             <div className={styles.guestSelector}>
                                 <p className={styles.totalGuests}>
                                     {`${filters.adults} Adults, ${filters.children} Children, ${filters.assisted} Assisted`}
                                 </p>
                             </div>
                         </div>
-                        <div className={styles.categoryFilter}>
+                        <div className={styles.destinationFilter}>
                             <h3>Destination</h3>
                             <label>
                                 <span>Continent</span>
@@ -287,7 +288,8 @@ const Hotels = () => {
                             </label>
                         </div>
                         <div className={styles.ratingFilter}>
-                            <h3>Rating:</h3>
+                            <h3>Rating</h3>
+                            <div className={styles.chooseRating}>
                             {availableRatings.map((rating) => (
                                 <label key={rating}>
                                     <input
@@ -300,9 +302,10 @@ const Hotels = () => {
                                     {rating} Star{rating > 1 ? 's' : ''}
                                 </label>
                             ))}
+                            </div>
                         </div>
                         <div className={styles.metaFilter}>
-                            <h3>Meta Filters:</h3>
+                            <h3>Meta Filters</h3>
                             {metaFilters.length > 0 && metaFilters.map((metaKey) => (
                                 <div key={metaKey} className={styles.metaCheckbox}>
                                     <label>
