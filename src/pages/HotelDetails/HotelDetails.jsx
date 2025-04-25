@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useRef, useEffect, useState } from 'react';
 import styles from './HotelDetails.module.css';
+import { motion } from "framer-motion";
 
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
@@ -11,6 +12,12 @@ import fullHeart from "/media/icons/fullHeart.png";
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
+
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+};
 
 const getValidMedia = (mediaArray) => {
   return Array.isArray(mediaArray) ? mediaArray.filter(item => typeof item.url === 'string' && item.url.trim() !== '') : [];

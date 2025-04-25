@@ -1,10 +1,17 @@
 import { useEffect, useState } from 'react';
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
+import { motion } from "framer-motion";
 import styles from './Hotels.module.css';
 import { useLocation } from 'react-router-dom';
 import HotelCardSecondType from '../../components/HotelCardSecondType/HotelCardSecondType.jsx';
 
+const pageVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+  };
+  
 const Hotels = () => {
     const [hotels, setHotels] = useState([]);
     const [filteredHotels, setFilteredHotels] = useState([]);

@@ -3,6 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './LoginCostumer.module.css';
 import { AUTH_LOGIN } from '../../constants';
 import { headers } from '../../headers';
+import { motion } from "framer-motion";
+
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+};
 
 const LoginCostumer = () => {
   const [email, setEmail] = useState('');

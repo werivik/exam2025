@@ -3,6 +3,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import styles from './RegisterCostumer.module.css';
 import { AUTH_REGISTER } from '../../constants';
 import { headers } from '../../headers';
+import { motion } from "framer-motion";
+
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+};
 
 const RegisterCostumer = () => {
   const [formData, setFormData] = useState({

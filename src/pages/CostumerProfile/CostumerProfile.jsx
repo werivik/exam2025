@@ -1,8 +1,15 @@
 import { useState, useEffect } from 'react';
 import styles from './CostumerProfile.module.css';
+import { motion } from "framer-motion";
 import { PROFILES_SINGLE } from '../../constants';
 import { headers } from '../../headers';
 import defaultAvatar from '/media/images/mdefault.jpg';
+
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+};
 
 const CostumerProfile = () => {
   const [userData, setUserData] = useState({});
