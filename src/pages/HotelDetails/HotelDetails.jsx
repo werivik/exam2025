@@ -12,6 +12,7 @@ import fullHeart from "/media/icons/fullHeart.png";
 
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
+import { updateUserProfile } from '../../auth/updateUserPofile';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
 
 const pageVariants = {
@@ -34,6 +35,7 @@ const HotelDetails = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [leftImages, setLeftImages] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [owner, setOwner] = useState(null);
   const [filters, setFilters] = useState({
     adults: 1,
@@ -64,6 +66,11 @@ const HotelDetails = () => {
         setHotel(result.data);
         const mediaArray = getValidMedia(result.data.media);
         setLeftImages(mediaArray.slice(0, 3));
+
+        const userResponse = await fetch('/user/profile', { method: 'GET', headers: headers() });
+        const userData = await userResponse.json();
+        setUserProfile(userData.data);
+
         if (result.data?.owner?.name) {
           try {
             const ownerRes = await fetch(`${VENUES}/../profiles/${result.data.owner.name}?_venues=true`, {
@@ -76,7 +83,9 @@ const HotelDetails = () => {
           catch (ownerErr) {
             console.error("Failed to fetch owner profile:", ownerErr);
           }
+
         }
+
         if (!owner) {
           setOwner({
             name: "Test Owner",
@@ -85,6 +94,7 @@ const HotelDetails = () => {
               alt: "Placeholder"
             }
           });
+
         }
       } 
       
@@ -183,6 +193,42 @@ const HotelDetails = () => {
   const mediaArray = getValidMedia(hotel.media);
   const currentImage = mediaArray[currentSlide]?.url;
   const currentAlt = mediaArray[currentSlide]?.alt || hotel.name;
+
+  const toggleFavorite = async () => {
+    try {
+      setIsFavorite(prevState => !prevState);
+
+      const userResponse = await fetch('/user/profile', { method: 'GET', headers: headers() });
+      const userData = await userResponse.json();
+      const favorites = [...userData.data.favorites];
+
+      if (isFavorite) {
+        const index = favorites.indexOf(id);
+        if (index > -1) favorites.splice(index, 1);
+      } 
+      
+      else {
+        favorites.push(id);
+      }
+
+      await updateUserProfile(userData.data.id, { favorites });
+    } 
+    
+    catch (error) {
+      console.error("Error updating favorites:", error);
+    }
+  };
+
+  const updateProfileDetails = async (newProfileData) => {
+    try {
+      const updatedProfile = await updateUserProfile(userProfile.name, newProfileData);
+      setUserProfile(updatedProfile.data);
+    } 
+    
+    catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
 
   return (
     <motion.div
@@ -443,12 +489,21 @@ const HotelDetails = () => {
 
           </div>
           <div className={styles.dividerLine}></div>
+
           <p><strong>Max Guests</strong> {hotel.maxGuests}</p>
+
           <div className={styles.dividerLine}></div>
+
           <div className={styles.favoriteVenue}>
-            <img src={emptyHeart} className={styles.emptyHeart}></img>
-            <p>Favorite Venue</p>
+          <div className={styles.heartContainer}>
+          <div 
+        className={`${styles.heart} ${isFavorite ? styles.favorited : ''}`} 
+        onClick={toggleFavorite}
+      />
+      </div>
+      <p>{isFavorite ? "Added to Favorites" : "Add to Favorites"}</p>
           </div>
+
           </div>
         </div>
       </div>

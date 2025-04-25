@@ -508,12 +508,80 @@
     align-items: center;
   }
 
-  .emptyHeart {
-    width: 25px;
-    height: 25px;
+  .heartContainer {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
   }
 
-  .emptyHeart:hover {
+  .heart {
+    position: relative;
+    width: 44px;
+    height: 40px;
+  }
+  
+  .heart::before, .heart::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 22px;
+    height: 40px;
+    border-radius: 50px 50px 0 0;
+    background: white;
+    transition: 0.25s ease-in-out;
     cursor: pointer;
-    transition: 0.25s;
+  }
+  
+  .heart::before {
+    left: 22px;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+  }
+  
+  .heart::after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+  }
+  
+  .favorited {
+    position: relative;
+    width: 44px;
+    height: 40px;
+  }
+  
+  .favorited::before, .favorited::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 22px;
+    height: 40px;
+    border-radius: 50px 50px 0 0;
+    background: #1F1B17;
+    transition: 0.25s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .favorited::before {
+    left: 22px;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+  }
+  
+  .favorited::after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+  }
+
+
+  .heart:active {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+
+  .favorited:active {
+    transform: scale(1.1);
+    opacity: 0.9;
   }
