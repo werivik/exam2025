@@ -88,24 +88,6 @@
     margin-bottom: -10px;
 }
 
-.bookButton {
-    background-color: #B88A44;
-    color: #F3F0EB;
-    border: none;
-    height: 50px;
-    width: 180px;
-    font-size: 1.6rem;
-    border-radius: 15px;
-    transition: 0.15s;
-    font-family: "Playfair Display", serif;
-}
-
-.bookButton:hover {
-    cursor: pointer;
-    transition: 0.25s;
-    background-color: #6B7A3A;
-}
-
 .slideshowSection {
     background-color: white;
     border-radius: 10px;
@@ -330,7 +312,7 @@
     height: 2px;
     width: 100%;
     background-color: #1F1B17;
-    border: 999px;
+    border-radius: 99px;
 }
 
 .bookDateGuest, .bookPrice, .favoriteVenue {
@@ -431,7 +413,9 @@
     border-radius: 15px;
     border: none;
     font-size: 18px;
-    width: 100px;
+    width: 95px;
+    height: 40px;
+    text-align: center;
     color: white;
     font-family: "Playfair Display", serif;
 }
@@ -541,6 +525,24 @@
     border: solid red 2px;
     transition: 0.25s;
   }
+
+  .bookButton {
+    background-color: #B88A44;
+    color: #F3F0EB;
+    border: none;
+    height: 55px;
+    width: 170px;
+    font-size: 22px;
+    border-radius: 25px;
+    transition: 0.15s;
+    font-family: "Playfair Display", serif;
+}
+
+.bookButton:hover {
+    cursor: pointer;
+    transition: 0.25s;
+    background-color: #6B7A3A;
+}
 
   .favoriteVenue {
     display: flex;

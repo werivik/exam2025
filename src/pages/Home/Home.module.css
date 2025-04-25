@@ -306,10 +306,10 @@
     background-color: #B88A44;
     color: #F3F0EB;
     border: none;
-    height: 35px;
-    width: 90px;
-    font-size: 1.125rem;
-    border-radius: 25px;
+    height: 40px;
+    width: 95px;
+    font-size: 18px;
+    border-radius: 15px;
     transition: 0.15s;
 }
 
@@ -602,10 +602,10 @@
     background-color: #F3F0EB;
     color: #1F1B17;
     border: none;
-    font-size: 1.25rem;
-    border-radius: 999px;
-    width: 160px;
-    height: 50px;
+    font-size: 22px;
+    border-radius: 25px;
+    width: 170px;
+    height: 55px;
     transition: 0.15s;
     position: absolute;
     top: 75%;
