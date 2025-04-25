@@ -114,6 +114,7 @@
     position: relative;
     display: flex;
     flex-direction: row;
+    overflow: hidden;
 }
 
 .slideshowLeft {
@@ -139,10 +140,24 @@
     object-fit: cover;
     cursor: pointer; 
     transition: transform 0.3s ease-in-out;
+    overflow: hidden;
 }
 
 .slideshowLeft {
     transition: transform 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.currentlyViewing {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
+    max-width: 150px;
+    padding-bottom: 2.5px;
+    text-align: center;
+    background-color: white;
+    border-radius: 0px 0px 5px 5px;
 }
 
 .slideshowLeftContent img {
@@ -158,6 +173,7 @@
     position: relative;
     margin: 10px;
     border-radius: 5px;
+    overflow: hidden;
 }
 
 .slideshowRight img {

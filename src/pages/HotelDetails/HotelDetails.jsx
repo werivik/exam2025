@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useRef, useEffect, useState } from 'react';
 import styles from './HotelDetails.module.css';
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from 'framer-motion';
 
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
@@ -203,54 +203,67 @@ const HotelDetails = () => {
           </div>
         </div>
         <div className={styles.slideshowSection}>
-          {mediaArray.length >= 2 ? (
-            <div className={styles.slideshowSection}>
-              <div className={styles.slideshowLeft}>
-                <div className={styles.slideshowLeftContent}>
-                  {leftImages.map((item, index) => {
-                    const dynamicHeight = leftImages.length === 2 ? '50%' : '32.4%';
-                    return (
-                      <img
-                        key={`${item.url}-${index}`}
-                        src={item.url}
-                        alt={item.alt || `Preview ${index}`}
-                        style={{ height: dynamicHeight }}
-                        className={`${styles.previewImage} ${index === 0 ? styles.activePreview : ''}`}
-                        onClick={() => setCurrentSlide(index)}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-              <div className={styles.slideshowRight}>
-                <div className={styles.slideshowButtons}>
-                  <div className={styles.slideshowButtonPrev} onClick={handlePrev}>
-                    <img src={slideshowPrev} alt="Previous" />
-                  </div>
-                  <div className={styles.slideshowButtonNext} onClick={handleNext}>
-                    <img src={slideshowNext} alt="Next" />
-                  </div>
-                </div>
-                <div className={styles.slideshowProgress}>
-                  <p>{currentSlide + 1} out of {mediaArray.length}</p>
-                </div>
-                <img
-                  src={currentImage}
-                  alt={currentAlt}
-                  className={styles.detailImage}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className={styles.noSlideshow}>
+  {mediaArray.length >= 2 ? (
+    <div className={styles.slideshowSection}>
+      <div className={styles.slideshowLeft}>
+        <div className={styles.slideshowLeftContent}>
+          <div className={styles.currentlyViewing}>Currently Viewing</div>
+          {leftImages.map((item, index) => {
+            const dynamicHeight = leftImages.length === 2 ? '50%' : '32.4%';
+            return (
               <img
-                src={hotel.bannerImageUrl || mediaArray[0]?.url || '/default-banner.jpg'}
-                alt={hotel.name}
-                className={styles.detailImage}
+                key={`${item.url}-${index}`}
+                src={item.url}
+                alt={item.alt || `Preview ${index}`}
+                style={{ height: dynamicHeight }}
+                className={`${styles.previewImage} ${index === 0 ? styles.activePreview : ''}`}
+                onClick={() => setCurrentSlide(index)}
               />
-            </div>
-          )}
+            );
+          })}
         </div>
+      </div>
+      <div className={styles.slideshowRight}>
+        <div className={styles.slideshowButtons}>
+          <div className={styles.slideshowButtonPrev} onClick={handlePrev}>
+            <img src={slideshowPrev} alt="Previous" />
+          </div>
+          <div className={styles.slideshowButtonNext} onClick={handleNext}>
+            <img src={slideshowNext} alt="Next" />
+          </div>
+        </div>
+        <div className={styles.slideshowProgress}>
+          <p>{currentSlide + 1} out of {mediaArray.length}</p>
+        </div>
+        
+        <AnimatePresence>
+          <motion.div
+            key={currentSlide}
+            className={styles.detailImageWrapper}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
+            <img
+              src={currentImage}
+              alt={currentAlt}
+              className={styles.detailImage}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  ) : (
+    <div className={styles.noSlideshow}>
+      <img
+        src={hotel.bannerImageUrl || mediaArray[0]?.url || '/default-banner.jpg'}
+        alt={hotel.name}
+        className={styles.detailImage}
+      />
+    </div>
+  )}
+</div>
         <div className={styles.hotelInfoBottom}>
           <div className={styles.hotelInfoLeft}>
             <p className={styles.description}><strong>Description</strong><br />{hotel.description}</p>
