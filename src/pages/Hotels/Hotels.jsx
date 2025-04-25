@@ -37,6 +37,8 @@ const Hotels = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const [buttonTop, setButtonTop] = useState('50%');
+
     useEffect(() => {
         const parsedFilters = {
             continent: searchParams.get("continent") || '',
@@ -234,9 +236,13 @@ const Hotels = () => {
             variants={pageVariants}
             transition={{ duration: 0.5, ease: "easeInOut" }}
         >
-            <button className={styles.toggleFilterButton} onClick={toggleFilters}>
-                {filtersVisible ? 'Hide Filters' : 'Show Filters'}
-            </button>
+
+<button
+  className={`${styles.toggleFilterButton} ${filtersVisible ? styles.filtersVisible : ''}`}
+  onClick={toggleFilters}
+>
+  {filtersVisible ? 'Hide Filters' : 'Show Filters'}
+</button>
 
             <section
                 className={`${styles.leftSection} ${filtersVisible ? styles.visible : styles.hidden}`}
