@@ -97,18 +97,17 @@
     text-align: right;
     text-decoration: underline;
     transition: 0.25s;
-    color: #F3F0EB;
+    color: #1F1B17;
     font-size: 18px;
 }
 
 .hotelCard:hover {
     cursor: pointer;
     transition: 0.25s;
-    background-color: #6b7a3a;
+    background-color: white;
 
     .hotelInfo {
         transition: 0.25s;
-        color: #F3F0EB;
         padding-left: 5px;
     }
 

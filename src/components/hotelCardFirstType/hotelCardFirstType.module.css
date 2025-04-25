@@ -86,7 +86,7 @@
 
 .hotelInfo span {
     margin-top: 15px;
-    bottom: 15px;
+    bottom: 10px;
     position: absolute;
     text-align: right;
     width: 90%;
@@ -99,9 +99,10 @@
     cursor: pointer;
 
     .hotelInfo {
-        height: 35%;
+        height: 32.5%;
         transition: 0.25s;
-        background-color: #6B7A3A;
+        background-color: #1F1B17;
+        color: #F3F0EB;
     }
 
     span {
