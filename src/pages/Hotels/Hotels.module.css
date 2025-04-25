@@ -6,6 +6,9 @@
     padding-bottom: 100px;
     margin-bottom: 100px;
     color: #1F1B17;
+    width: 85%;
+    margin-left: 7.5%;
+    position: relative;
 }
 
 .leftSection {
@@ -14,7 +17,7 @@
     border-radius: 0px 25px 25px 0px;
     gap: 2.5%;
     padding-left: 0;
-    margin-left: 0;
+    margin-left: -9%;
     padding-right: 25px;
     height: 90vh;
     position: sticky;
@@ -277,7 +280,7 @@
 
 .rightSection {
     position: relative;
-    width: 67.8%;
+    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -286,8 +289,8 @@
 }
 
 .rightSection.expandedRightSection {
-  width: 84.9%;
-  margin-left: 3.5%;
+  width: 100%;
+  margin-left: 5%;
 }
 
 .rightBorder {
