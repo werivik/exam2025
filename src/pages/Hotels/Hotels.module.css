@@ -12,14 +12,18 @@
     width: 350px;
     background-color: #B88A44;
     border-radius: 0px 25px 25px 0px;
-    padding-left: 2.5%;
+    gap: 2.5%;
+    padding-left: 0;
+    margin-left: 0;
+    padding-right: 25px;
     height: 90vh;
     position: sticky;
     top: 75px;
     margin-bottom: 25px;
+
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 
     transition: transform 0.5s ease, width 0.5s ease;
     transform: translateX(0); 
@@ -43,46 +47,86 @@
   display: flex;
 }
 
+.leftContent {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0;
+  align-items: flex-start;
+}
+
 .toggleFilterButton {
-  position: fixed;
-  top: 50%;
-  left: 0;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
-  background-color: #B88A44;
+  position: sticky;
   color: white;
+  background-color: #B88A44;
   border: none;
-  cursor: pointer;
-  z-index: 955;
-  transform: rotate(-90deg);
-  margin-left: -45px;
-  border-radius: 0px 0px 25px 25px;
+  padding: 10px;
+  padding-top: 30px;
+  border-radius: 0px 0px 15px 15px;
+  top: 57.5%;
+  left: 0;
   font-size: 1rem;
+  z-index: 955;
+  -ms-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform-origin: left top;
+  white-space: nowrap;
   transition: 0.25s;
 }
 
 .toggleFilterButton:hover {
   background-color: #1F1B17;
+  cursor: pointer;
   transition: 0.25s;
-  padding-top: 50px;
-  margin-top: -20px;
+  padding-top: 45px;
 }
 
 .filtersVisible {
   background-color: #1F1B17;
+  position: sticky;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 0px 0px 15px 15px;
+  top: 57.5%;
+  left: 0;
+  font-size: 1rem;
+  z-index: 955;
+  -ms-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform-origin: left top;
+  white-space: nowrap;
+  transition: 0.25s;
+}
+
+.filtersVisible:hover {
+  padding-top: 25px;
 }
 
 .leftBorder {
-  flex-direction: column;
-    color: white;
-    width: 90%;
-    height: 95%;
-    position: relative;
+  position: absolute;
+  margin-top: 5%;
+  height: 90%;
+  width: 90%;
+  padding-left: 50px;
 }
 
-.leftBorder h2 {
+.leftBorderContent {
+  flex-direction: column;
+  color: white;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.leftBorderContent h2 {
     margin: 0;
     padding: 0;
     font-size: 30px;

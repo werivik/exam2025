@@ -37,8 +37,6 @@ const Hotels = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const [buttonTop, setButtonTop] = useState('50%');
-
     useEffect(() => {
         const parsedFilters = {
             continent: searchParams.get("continent") || '',
@@ -236,19 +234,20 @@ const Hotels = () => {
             variants={pageVariants}
             transition={{ duration: 0.5, ease: "easeInOut" }}
         >
-
-<button
-  className={`${styles.toggleFilterButton} ${filtersVisible ? styles.filtersVisible : ''}`}
-  onClick={toggleFilters}
->
-  {filtersVisible ? 'Hide Filters' : 'Show Filters'}
-</button>
-
             <section
                 className={`${styles.leftSection} ${filtersVisible ? styles.visible : styles.hidden}`}
             >
-                <div className={`${styles.leftBorder} ${filtersVisible ? styles.visible : styles.hidden}`}>
-                    <h2>Filters</h2>
+                <div className={styles.leftContent}>
+                <button
+                    className={`${styles.toggleFilterButton} ${filtersVisible ? styles.filtersVisible : ''}`}
+                    onClick={toggleFilters}
+                >
+                    {filtersVisible ? 'Hide Filters' : 'Show Filters'}
+                </button>
+
+                    <div className={`${styles.leftBorder} ${filtersVisible ? styles.visible : styles.hidden}`}>
+                    <div className={styles.leftBorderContent}>
+                <h2>Filters</h2>
                     <div className={styles.allFilters}>
                         <div className={styles.filterPeople}>
                             <div className={styles.guestSelector}>
@@ -320,6 +319,9 @@ const Hotels = () => {
                         </div>
                     </div>
                 </div>
+                    </div>
+                </div>
+
             </section>
 
             <section
