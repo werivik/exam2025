@@ -93,7 +93,7 @@
 .seeMore {
     display: none;
     width: 95%;
-    margin-top: -25px;
+    margin-top: -10px;
     text-align: right;
     text-decoration: underline;
     transition: 0.25s;

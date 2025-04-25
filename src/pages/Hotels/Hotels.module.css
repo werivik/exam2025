@@ -368,9 +368,11 @@
     cursor: pointer;
     font: inherit;
   }
+  
   .page:hover {
     background: #f4f4f4;
   }
+
   .pageActive {
     background: #1F1B17;
     color: #fff;
