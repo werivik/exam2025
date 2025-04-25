@@ -115,6 +115,16 @@ const Hotels = () => {
 
                 setMetaFilters(Array.from(metaKeys));
                 setLoading(false);
+
+                const ratingsSet = new Set();
+                hotelsData.forEach(hotel => {
+                    if (hotel.rating) {
+                        ratingsSet.add(Math.floor(hotel.rating));
+                    }
+                });
+
+                setAvailableRatings(Array.from(ratingsSet).sort((a, b) => a - b));
+                setLoading(false);
             } 
             
             catch (error) {
@@ -288,22 +298,22 @@ const Hotels = () => {
                             </label>
                         </div>
                         <div className={styles.ratingFilter}>
-                            <h3>Rating</h3>
-                            <div className={styles.chooseRating}>
-                            {availableRatings.map((rating) => (
-                                <label key={rating}>
-                                    <input
-                                        type="checkbox"
-                                        name="ratings"
-                                        value={rating}
-                                        checked={filters.ratings.includes(rating)}
-                                        onChange={handleFilterChange}
-                                    />
-                                    {rating} Star{rating > 1 ? 's' : ''}
-                                </label>
-                            ))}
-                            </div>
-                        </div>
+    <h3>Rating</h3>
+    <div className={styles.chooseRating}>
+        {availableRatings.map((rating) => (
+            <label key={rating}>
+                <input
+                    type="checkbox"
+                    name="ratings"
+                    value={rating}
+                    checked={filters.ratings.includes(rating)}
+                    onChange={handleFilterChange}
+                />
+                {rating} Star{rating > 1 ? 's' : ''}
+            </label>
+        ))}
+    </div>
+</div>
                         <div className={styles.metaFilter}>
                             <h3>Meta Filters</h3>
                             {metaFilters.length > 0 && metaFilters.map((metaKey) => (
