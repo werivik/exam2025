@@ -13,6 +13,7 @@ const pageVariants = {
 
 const CostumerProfile = () => {
   const [userData, setUserData] = useState({});
+  const [favoriteVenues, setFavoriteVenues] = useState([]);  
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
@@ -43,6 +44,9 @@ const CostumerProfile = () => {
 
         console.log('Fetched user data:', data);
         setUserData(data.data || {});
+
+        const venues = data.data?._count?.venues || [];
+        setFavoriteVenues(venues);
       } 
       
       catch (error) {
@@ -112,6 +116,16 @@ const CostumerProfile = () => {
               <h2>Favorite Venues</h2>
             </div>
             <div className={styles.allFavorites}>
+              {favoriteVenues.length > 0 ? (
+                favoriteVenues.map((venue, index) => (
+                  <div key={index} className={styles.favoriteVenue}>
+                    <h3>{venue.name}</h3>
+                    <p>{venue.location}</p>
+                  </div>
+                ))
+              ) : (
+                <p>No favorite venues found.</p>
+              )}
             </div>
           </div>
           <div className={styles.edit}>
