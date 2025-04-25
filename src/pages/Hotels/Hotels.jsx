@@ -11,7 +11,7 @@ const pageVariants = {
     animate: { opacity: 1 },
     exit: { opacity: 0 },
   };
-  
+
 const Hotels = () => {
     const [hotels, setHotels] = useState([]);
     const [filteredHotels, setFilteredHotels] = useState([]);
@@ -74,6 +74,19 @@ const Hotels = () => {
 
         fetchHotels();
     }, []);
+
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+useEffect(() => {
+  const handleResize = () => setScreenWidth(window.innerWidth);
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
+const handlePageClick = (pageNum) => {
+    setCurrentPage(pageNum);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };  
 
     useEffect(() => {
         const filtered = hotels.filter(hotel => {
@@ -257,7 +270,7 @@ const Hotels = () => {
       <div className={styles.rightBorder}>
         <div className={styles.rightTitles}>
           <h1>Find your Dream Stay</h1>
-          <p>...with Restelle</p>
+          <p>...with Holidaze</p>
         </div>
 
         {loading ? (
@@ -275,46 +288,35 @@ const Hotels = () => {
               </p>
             ) : (
               <div className={styles.allHotels}>
-                {filteredHotels
-                  .slice(
-                    window.innerWidth >= 1024
-                      ? (currentPage - 1) * PAGE_SIZE
-                      : 0,
-                    window.innerWidth >= 1024
-                      ? currentPage * PAGE_SIZE
-                      : visibleCount
-                  )
-                  .map(hotel => (
-                    <HotelCardSecondType key={hotel.id} hotel={hotel} />
-                  ))}
+{filteredHotels
+  .slice(
+    screenWidth >= 1024 ? (currentPage - 1) * PAGE_SIZE : 0,
+    screenWidth >= 1024 ? currentPage * PAGE_SIZE : visibleCount
+  )
+  .map(hotel => (
+    <HotelCardSecondType key={hotel.id} hotel={hotel} />
+  ))}
               </div>
             )}
+{screenWidth < 1024 && visibleCount < filteredHotels.length && (
+  <button className={styles.loadMoreButton} onClick={loadMore}>
+    Load More
+  </button>
+)}
 
-            {window.innerWidth < 1024 &&
-              visibleCount < filteredHotels.length && (
-                <button
-                  className={styles.loadMoreButton}
-                  onClick={loadMore}
-                >
-                  Load More
-                </button>
-              )}
-
-            {window.innerWidth >= 1024 && pageTotal > 1 && (
-              <div className={styles.pagination}>
-                {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
-                  <button
-                    key={p}
-                    onClick={() => handlePageClick(p)}
-                    className={
-                      p === currentPage ? styles.pageActive : styles.page
-                    }
-                  >
-                    {p}
-                  </button>
-                ))}
-              </div>
-            )}
+{screenWidth >= 1024 && pageTotal > 1 && (
+  <div className={styles.pagination}>
+    {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
+      <button
+        key={p}
+        onClick={() => handlePageClick(p)}
+        className={p === currentPage ? styles.pageActive : styles.page}
+      >
+        {p}
+      </button>
+    ))}
+  </div>
+)}
           </>
         )}
       </div>
