@@ -71,18 +71,23 @@
     gap: 25px;
     width: 100%;
     position: relative;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .filtersLeft {
     display: flex;
     flex-direction: row;
     gap: 25px;
-    width: 77%;
+    width: 65%;
 }
 
-.filterDestination, .filterCalender {
+.filterDestination {
     width: 100%;
-    z-index: 996;
+}
+
+.filterCalender {
+  width: 75%;
 }
 
 .filterDestination, .filterCalender, .filterPeople {
@@ -135,7 +140,7 @@
     width: 20%;
     left: 10%;
     border-radius: 0px 15px 15px 0px;
-    padding-left: 35px;
+    padding-left: 25px;
     padding-right: 5px;
     margin-left: -25px;
     border: none;
@@ -160,26 +165,9 @@
 
 .filterPeople {
     position: relative;
-    width: 20%;
+    width: 25%;
     height: 100%;
     margin-right: 10px;
-}
-
-.filterSearch {
-    background-color: #B88A44;
-    color: #F3F0EB;
-    border: none;
-    height: 35px;
-    width: 90px;
-    font-size: 1.125rem;
-    border-radius: 999px;
-    transition: 0.15s;
-}
-
-.filterSearch:hover {
-    cursor: pointer;
-    transition: 0.25s;
-    background-color: #6B7A3A;
 }
 
 .suggestionsList {
@@ -259,8 +247,8 @@
     display: none;
     flex-direction: column;
     position: absolute;
-    top: 110%;
-    left: 0;
+    top: -350%;
+    left: -10%;
     width: 100%;
     background-color: white;
     border-radius: 10px;
@@ -313,6 +301,23 @@
     min-width: 20px;
     text-align: center;
   }
+
+  .filterSearchButton {
+    background-color: #B88A44;
+    color: #F3F0EB;
+    border: none;
+    height: 35px;
+    width: 90px;
+    font-size: 1.125rem;
+    border-radius: 25px;
+    transition: 0.15s;
+}
+
+.filterSearchButton:hover {
+    cursor: pointer;
+    transition: 0.25s;
+    background-color: #6B7A3A;
+}
 
   .scrollIcon {
     display: flex;

@@ -163,7 +163,14 @@ const Hotels = () => {
       );
 
     return (
-        <div className={styles.pageContent}>
+        <motion.div
+  className={styles.pageContent}
+  initial="initial"
+  animate="animate"
+  exit="exit"
+  variants={pageVariants}
+  transition={{ duration: 0.5, ease: "easeInOut" }}
+>
             <section className={styles.leftSection}>
                 <div className={styles.leftBorder}>
                     <h2>Filters</h2>
@@ -305,7 +312,7 @@ const Hotels = () => {
         )}
       </div>
             </section>
-        </div>
+        </motion.div>
     );
 };
 

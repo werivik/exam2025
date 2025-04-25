@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, React } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion, useInView } from "framer-motion"
+import { motion } from "framer-motion";
 import debounce from 'lodash.debounce';
 import styles from './Home.module.css';
 import { isLoggedIn } from "../../auth/auth";
@@ -17,6 +17,12 @@ import { headers } from '../../headers';
 import HotelCardFirstType from '../../components/HotelCardFirstType/HotelCardFirstType';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
 import BannerSlideshow from '../../components/BannerSlideshow/BannerSlideshow';
+
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+};
 
 const Home = () => {
   const [hotels, setHotels] = useState([]);
@@ -141,7 +147,7 @@ const Home = () => {
   const renderGuestInfo = () => {
     let guestInfo = `${filters.adults} Adult${filters.adults !== 1 ? "s" : ""}`;
     if (filters.children > 0) guestInfo += `, ${filters.children} Child${filters.children !== 1 ? "ren" : ""}`;
-    if (filters.disabled > 0) guestInfo += `, ${filters.disabled} Disabled${filters.disabled !== 1 ? "s" : ""}`;
+    if (filters.disabled > 0) guestInfo += `, ${filters.disabled} Assisted${filters.disabled !== 1 ? " Guests" : ""}`;
     return guestInfo;
   };
 
@@ -237,7 +243,14 @@ const Home = () => {
 
   return (
     <>
-    <div className={styles.pageContent}>
+<motion.div
+  className={styles.pageContent}
+  initial="initial"
+  animate="animate"
+  exit="exit"
+  variants={pageVariants}
+  transition={{ duration: 0.5, ease: "easeInOut" }}
+>
       <section className={styles.firstSection}>
         <div className={styles.heroSection}>
         <BannerSlideshow />
@@ -322,7 +335,7 @@ const Home = () => {
                     {["adults", "children", "disabled"].map((type) => (
                       <div key={type} className={styles.dropdownRow}>
                         <span className={styles.label}>
-                          {type === "adults" ? "Adults" : type === "children" ? "Children" : "Assisted Guests"}
+                        {type === "adults" ? "Adults" : type === "children" ? "Children" : "Assisted Guests"}
                         </span>
                         <div className={styles.counterControls}>
                           {filters[type] > 0 && (
@@ -343,7 +356,7 @@ const Home = () => {
                 </div>
               </div>
               <button
-        className={styles.filterSearch}
+        className={styles.filterSearchButton}
         onClick={checkConditionsForSearch}
         disabled={false}
       >
@@ -456,7 +469,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-    </div>
+    </motion.div>
     </>
   );
 };

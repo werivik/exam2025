@@ -74,7 +74,14 @@ const LoginCostumer = () => {
   };
 
   return (
-    <div className={styles.pageContent}>
+    <motion.div
+  className={styles.pageContent}
+  initial="initial"
+  animate="animate"
+  exit="exit"
+  variants={pageVariants}
+  transition={{ duration: 0.5, ease: "easeInOut" }}
+>
       <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
         <div className={styles.loginStyle}>
           <div className={`${styles.loginContent} ${shake ? styles.shake : ''}`}>
@@ -129,7 +136,7 @@ const LoginCostumer = () => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );  
 };
 

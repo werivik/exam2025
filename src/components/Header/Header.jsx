@@ -185,7 +185,7 @@ function Header() {
         <ul className={styles.menuLeftLinks}>
   {isUserLoggedIn ? (
     <>
-      <Link to="/profile-costumer">Profile</Link>
+      <Link to="/costumer-profile">Profile</Link>
       <div
                 className={`${styles.divideLine} ${
                   isSearchOpen ? styles.divideLineActive : ""

@@ -63,7 +63,9 @@ const HotelDetails = () => {
             });
             const ownerJson = await ownerRes.json();
             setOwner(ownerJson.data);
-          } catch (ownerErr) {
+          } 
+          
+          catch (ownerErr) {
             console.error("Failed to fetch owner profile:", ownerErr);
           }
         }
@@ -76,9 +78,13 @@ const HotelDetails = () => {
             }
           });
         }
-      } catch (error) {
+      } 
+      
+      catch (error) {
         console.error("Error fetching hotel:", error);
-      } finally {
+      } 
+      
+      finally {
         setLoading(false);
       }
     };
@@ -155,7 +161,9 @@ const HotelDetails = () => {
   const handleDateChange = (date) => {
     if (selectedDateType === 'start') {
       setCheckInDate(date);
-    } else {
+    } 
+    
+    else {
       setCheckOutDate(date);
     }
     setShowCalendar(false);
@@ -169,7 +177,14 @@ const HotelDetails = () => {
   const currentAlt = mediaArray[currentSlide]?.alt || hotel.name;
 
   return (
-    <section className={styles.pageContent}>
+    <motion.div
+    className={styles.pageContent}
+    initial="initial"
+    animate="animate"
+    exit="exit"
+    variants={pageVariants}
+    transition={{ duration: 0.5, ease: "easeInOut" }}
+  >
       <div className={styles.pageStyle}>
         <div className={styles.hotelInfoTop}>
           <div className={styles.titleLocation}>
@@ -419,7 +434,7 @@ const HotelDetails = () => {
           </div>
         </div>
       </div>
-    </section>
+    </motion.div>
   );
 };
 

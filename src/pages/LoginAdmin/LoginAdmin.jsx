@@ -82,7 +82,14 @@ const LoginAdmin = () => {
   };
 
   return (
-    <div className={styles.pageContent}>
+    <motion.div
+  className={styles.pageContent}
+  initial="initial"
+  animate="animate"
+  exit="exit"
+  variants={pageVariants}
+  transition={{ duration: 0.5, ease: "easeInOut" }}
+>
       <div className={styles.loginStyle}>
         <div className={`${styles.loginContent} ${shake ? styles.shake : ''}`}>
           <h2>Holidaze</h2>
@@ -125,7 +132,7 @@ const LoginAdmin = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

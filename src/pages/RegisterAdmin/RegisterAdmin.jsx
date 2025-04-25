@@ -74,7 +74,14 @@ const RegisterAdmin = () => {
   };
 
   return (
-    <div className={styles.pageContent}>
+    <motion.div
+  className={styles.pageContent}
+  initial="initial"
+  animate="animate"
+  exit="exit"
+  variants={pageVariants}
+  transition={{ duration: 0.5, ease: "easeInOut" }}
+>
       <div className={styles.registerStyle}>
         <div className={`${styles.registerContent} ${shake ? styles.shake : ''}`}>
           <h2>Holidaze</h2>
@@ -120,7 +127,7 @@ const RegisterAdmin = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
