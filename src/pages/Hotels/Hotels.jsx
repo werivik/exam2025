@@ -3,14 +3,14 @@ import { VENUES } from '../../constants';
 import { headers } from '../../headers';
 import { motion } from "framer-motion";
 import styles from './Hotels.module.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import HotelCardSecondType from '../../components/HotelCardSecondType/HotelCardSecondType.jsx';
 
 const pageVariants = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
     exit: { opacity: 0 },
-  };
+};
 
 const Hotels = () => {
     const [hotels, setHotels] = useState([]);
@@ -28,9 +28,60 @@ const Hotels = () => {
     });
     const [metaFilters, setMetaFilters] = useState([]);
     const [availableRatings, setAvailableRatings] = useState([1, 2, 3, 4, 5]);
+    const [filtersVisible, setFiltersVisible] = useState(true);
     const [loading, setLoading] = useState(true);
     const [visibleCount, setVisibleCount] = useState(18);
     const [noMatches, setNoMatches] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const PAGE_SIZE = 18;
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        const parsedFilters = {
+            continent: searchParams.get("continent") || '',
+            country: searchParams.get("country") || '',
+            city: searchParams.get("city") || '',
+            adults: parseInt(searchParams.get("adults")) || 1,
+            children: parseInt(searchParams.get("children")) || 0,
+            assisted: parseInt(searchParams.get("assisted")) || 0,
+            ratings: searchParams.getAll("ratings").map(Number),
+            meta: {}
+        };
+
+        metaFilters.forEach((metaKey) => {
+            if (searchParams.get(metaKey) === "true") {
+                parsedFilters.meta[metaKey] = true;
+            }
+        });
+
+        setFilters(prev => ({ ...prev, ...parsedFilters }));
+        const initialPage = parseInt(searchParams.get("page")) || 1;
+        setCurrentPage(initialPage);
+    }, [metaFilters.length]);
+
+    useEffect(() => {
+        const params = new URLSearchParams();
+
+        if (filters.continent) params.set("continent", filters.continent);
+        if (filters.country) params.set("country", filters.country);
+        if (filters.city) params.set("city", filters.city);
+        if (filters.adults > 0) params.set("adults", filters.adults);
+        if (filters.children > 0) params.set("children", filters.children);
+        if (filters.assisted > 0) params.set("assisted", filters.assisted);
+
+        filters.ratings.forEach(r => params.append("ratings", r));
+
+        Object.keys(filters.meta).forEach(key => {
+            if (filters.meta[key]) {
+                params.set(key, "true");
+            }
+        });
+
+        params.set("page", currentPage);
+
+        setSearchParams(params);
+    }, [filters, currentPage]);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -74,19 +125,6 @@ const Hotels = () => {
 
         fetchHotels();
     }, []);
-
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-useEffect(() => {
-  const handleResize = () => setScreenWidth(window.innerWidth);
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
-
-const handlePageClick = (pageNum) => {
-    setCurrentPage(pageNum);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };  
 
     useEffect(() => {
         const filtered = hotels.filter(hotel => {
@@ -154,44 +192,55 @@ const handlePageClick = (pageNum) => {
         }
     };
 
+    const toggleFilters = () => {
+        setFiltersVisible(prev => !prev);
+    };
+
+    const pageTotal = Math.max(1, Math.ceil(filteredHotels.length / PAGE_SIZE));
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     const loadMore = () => {
         setVisibleCount((prev) => Math.min(prev + 10, filteredHotels.length));
     };
 
-    const location = useLocation();
+    const handlePageClick = (pageNum) => {
+        setCurrentPage(pageNum);
+        scrollToTop();
+    };
 
-    useEffect(() => {
-        if (location.state?.filters) {
-            setFilters(prev => ({
-                ...prev,
-                ...location.state.filters,
-                meta: {
-                    ...prev.meta,
-                    ...location.state.filters.meta
-                }
-            }));
+    const goToNextPage = () => {
+        if (currentPage < pageTotal) {
+            setCurrentPage(currentPage + 1);
         }
-    }, [location.state]);
+        scrollToTop();
+    };
 
-    const PAGE_SIZE = 18;
-
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const pageTotal = Math.max(
-        1,
-        Math.ceil(filteredHotels.length / PAGE_SIZE)
-      );
+    const goToPrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+        scrollToTop();
+    };
 
     return (
         <motion.div
-  className={styles.pageContent}
-  initial="initial"
-  animate="animate"
-  exit="exit"
-  variants={pageVariants}
-  transition={{ duration: 0.5, ease: "easeInOut" }}
->
-            <section className={styles.leftSection}>
+            className={styles.pageContent}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            variants={pageVariants}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+        >
+            <button className={styles.toggleFilterButton} onClick={toggleFilters}>
+                {filtersVisible ? 'Hide Filters' : 'Show Filters'}
+            </button>
+
+            <section
+                className={`${styles.leftSection} ${filtersVisible ? styles.visible : styles.hidden}`}
+            >
                 <div className={styles.leftBorder}>
                     <h2>Filters</h2>
                     <div className={styles.allFilters}>
@@ -266,60 +315,83 @@ const handlePageClick = (pageNum) => {
                     </div>
                 </div>
             </section>
-            <section className={styles.rightSection}>
-      <div className={styles.rightBorder}>
-        <div className={styles.rightTitles}>
-          <h1>Find your Dream Stay</h1>
-          <p>...with Holidaze</p>
-        </div>
 
-        {loading ? (
-          <div className={styles.allHotels}>
-            {Array.from({ length: 6 }).map((_, i) => (
-              <HotelCardSecondType key={i} hotel={null} />
-            ))}
-          </div>
-        ) : (
-          <>
-            {noMatches ? (
-              <p>
-                Could not find a match. Please try again with different
-                credentials or try again later.
-              </p>
-            ) : (
-              <div className={styles.allHotels}>
-{filteredHotels
-  .slice(
-    screenWidth >= 1024 ? (currentPage - 1) * PAGE_SIZE : 0,
-    screenWidth >= 1024 ? currentPage * PAGE_SIZE : visibleCount
-  )
-  .map(hotel => (
-    <HotelCardSecondType key={hotel.id} hotel={hotel} />
-  ))}
-              </div>
-            )}
-{screenWidth < 1024 && visibleCount < filteredHotels.length && (
-  <button className={styles.loadMoreButton} onClick={loadMore}>
-    Load More
-  </button>
-)}
+            <section
+                className={`${styles.rightSection} ${filtersVisible ? '' : styles.expandedRightSection}`}
+            >
+                <div className={styles.rightBorder}>
+                    <div className={styles.rightTitles}>
+                        <h1>Find your Dream Stay</h1>
+                        <p>...with Holidaze</p>
+                    </div>
 
-{screenWidth >= 1024 && pageTotal > 1 && (
-  <div className={styles.pagination}>
-    {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
-      <button
-        key={p}
-        onClick={() => handlePageClick(p)}
-        className={p === currentPage ? styles.pageActive : styles.page}
-      >
-        {p}
-      </button>
-    ))}
-  </div>
-)}
-          </>
+                    {loading ? (
+                        <div className={styles.allHotels}>
+                            {Array.from({ length: 6 }).map((_, i) => (
+                                <HotelCardSecondType key={i} hotel={null} />
+                            ))}
+                        </div>
+                    ) : (
+                        <>
+                            {noMatches ? (
+                                <p>
+                                    Could not find a match. Please try again with different
+                                    credentials or try again later.
+                                </p>
+                            ) : (
+                                <div className={styles.allHotels}>
+                                    {filteredHotels
+                                        .slice(
+                                            (currentPage - 1) * PAGE_SIZE,
+                                            currentPage * PAGE_SIZE
+                                        )
+                                        .map(hotel => (
+                                            <HotelCardSecondType key={hotel.id} hotel={hotel} />
+                                        ))}
+                                </div>
+                            )}
+
+                            {window.innerWidth < 1024 && visibleCount < filteredHotels.length && (
+                                <button
+                                    className={styles.loadMoreButton}
+                                    onClick={loadMore}
+                                >
+                                    Load More
+                                </button>
+                            )}
+
+{window.innerWidth >= 1024 && pageTotal > 1 && (
+    <div className={styles.pagination}>
+        {currentPage > 1 && (
+            <button
+                onClick={goToPrevPage}
+                className={styles.page}
+            >
+                Prev
+            </button>
         )}
-      </div>
+        {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
+            <button
+                key={p}
+                onClick={() => handlePageClick(p)}
+                className={p === currentPage ? styles.pageActive : styles.page}
+            >
+                {p}
+            </button>
+        ))}
+        {currentPage < pageTotal && (
+            <button
+                onClick={goToNextPage}
+                className={styles.page}
+            >
+                Next
+            </button>
+        )}
+    </div>
+)}
+                        </>
+                    )}
+                </div>
             </section>
         </motion.div>
     );

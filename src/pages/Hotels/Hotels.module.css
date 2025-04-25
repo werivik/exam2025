@@ -20,6 +20,35 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    transition: transform 0.5s ease, width 0.5s ease;
+    transform: translateX(0); 
+    z-index: 9;
+}
+
+.leftSection.hidden {
+  transform: translateX(-100%);
+  width: 0%;
+}
+
+.leftSection.visible {
+  transform: translateX(0);
+}
+
+.toggleFilterButton {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 999;
+}
+
+.toggleFilterButton:hover {
+  background-color: #0056b3;
 }
 
 .leftBorder {
@@ -116,6 +145,13 @@
     height: 100%;
     display: flex;
     justify-content: center;
+    transition: width 0.5s ease, transform 0.5s ease; 
+    transition: transform 0.5s ease;
+}
+
+.rightSection.expandedRightSection {
+  width: 85%;
+  margin-left: 2.5%;
 }
 
 .rightBorder {
@@ -287,3 +323,10 @@
       display: none;
     }
   }
+
+
+
+
+
+
+
