@@ -109,7 +109,7 @@ const HotelDetails = () => {
     ];
     setLeftImages(nextLeftImages);
   };
-
+  
   const handlePrev = () => {
     if (!hotel?.media?.length) return;
     const mediaArray = getValidMedia(hotel.media);
@@ -209,18 +209,17 @@ const HotelDetails = () => {
         <div className={styles.slideshowLeftContent}>
           <div className={styles.currentlyViewing}>Currently Viewing</div>
           {leftImages.map((item, index) => {
-            const dynamicHeight = leftImages.length === 2 ? '50%' : '32.4%';
-            return (
-              <img
-                key={`${item.url}-${index}`}
-                src={item.url}
-                alt={item.alt || `Preview ${index}`}
-                style={{ height: dynamicHeight }}
-                className={`${styles.previewImage} ${index === 0 ? styles.activePreview : ''}`}
-                onClick={() => setCurrentSlide(index)}
-              />
-            );
-          })}
+  const dynamicHeight = leftImages.length === 2 ? '50%' : '32.4%';
+  return (
+    <img
+      key={`${item.url}-${index}`}
+      src={item.url}
+      alt={item.alt || `Preview ${index}`}
+      style={{ height: dynamicHeight }}
+      className={styles.previewImage}
+    />
+  );
+})}
         </div>
       </div>
       <div className={styles.slideshowRight}>
@@ -243,7 +242,7 @@ const HotelDetails = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
           >
             <img
               src={currentImage}

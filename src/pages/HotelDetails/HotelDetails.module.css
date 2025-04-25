@@ -146,6 +146,7 @@
 .slideshowLeft {
     transition: transform 0.3s ease-in-out;
     overflow: hidden;
+    pointer-events: none;
 }
 
 .currentlyViewing {
@@ -174,6 +175,9 @@
     margin: 10px;
     border-radius: 5px;
     overflow: hidden;
+    background-image: url(/media/logo/loadingScreen.png);
+    background-size: cover;
+    background-position: 50%;
 }
 
 .slideshowRight img {
