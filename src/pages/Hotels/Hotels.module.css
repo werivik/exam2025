@@ -218,16 +218,14 @@
   background-color: white;
   display: flex;
   flex-direction: column;
-  background-color: white;
   padding-left: 5px;
-  margin-left: -5px;
   border-radius: 15px;
   color: #1F1B17;
   width: 100%;
   font-size: 1rem;
   cursor: pointer;
   position: relative;
-  height: 35px;
+  height: 40px;
   display: flex;
   justify-content: center;
 }
@@ -242,10 +240,10 @@
   width: 100%;
   padding-left: 5px;
   margin-left: -5px;
-  top: 50%;
+  top: 110%;
   padding-top: 30px;
   position: absolute;
-  z-index: 5;
+  z-index: 11;
   background-color: white;
   border-radius: 0px 0px 15px 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
