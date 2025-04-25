@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useRef, useEffect, useState } from 'react';
 import styles from './HotelDetails.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
+import Buttons from '../../components/Buttons/Buttons';
 
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
@@ -415,18 +416,18 @@ const HotelDetails = () => {
                           >
                             +
                           </button>
+
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-              <button 
-                className={styles.searchRoom} 
-                disabled={!isGuestSelectionValid}
-              >
+
+              <Buttons size='small' version='v2' disabled={!isGuestSelectionValid}>
                 Search
-              </button>
+              </Buttons>
+
               {!isGuestSelectionValid && (
                 <p className={styles.warningText}>
                   At least one adult or assisted guest must be present.
@@ -436,12 +437,11 @@ const HotelDetails = () => {
             <div className={styles.dividerLine}></div>
           <div className={styles.bookPrice}>
             <p>Total Price: <strong>$ {totalPrice.toFixed(2)}</strong> <span>/ $ {hotel.price} per night</span></p>
-            <button 
-              className={styles.bookButton} 
-              disabled={!isGuestSelectionValid}
-            >
+
+            <Buttons size='large' version='v2' disabled={!isGuestSelectionValid}>
               Book Room
-            </button>
+            </Buttons>
+
           </div>
           <div className={styles.dividerLine}></div>
           <p><strong>Max Guests</strong> {hotel.maxGuests}</p>

@@ -4,6 +4,7 @@ import styles from './RegisterCostumer.module.css';
 import { AUTH_REGISTER } from '../../constants';
 import { headers } from '../../headers';
 import { motion } from "framer-motion";
+import Buttons from '../../components/Buttons/Buttons';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -121,7 +122,7 @@ const RegisterCostumer = () => {
   };
 
   return (
-       <motion.div
+    <motion.div
       className={styles.pageContent}
       initial="initial"
       animate="animate"
@@ -135,7 +136,8 @@ const RegisterCostumer = () => {
           <h1>Welcome to Holidaze</h1>
           <p>Register as a Costumer</p>
           <form onSubmit={handleRegister} className={styles.inputForm}>
-          <input
+            <div className={styles.inputFormInputs}>
+            <input
                 type="text"
                 name="name"
                 placeholder="username"
@@ -162,14 +164,11 @@ const RegisterCostumer = () => {
               required
               className={styles.input}
             />
+            </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={styles.registerButton}
-            >
+            <Buttons size='medium' version='v1' type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Registering...' : 'Register'}
-            </button>
+            </Buttons>
 
             {error && <p className={styles.error}>{error}</p>}
           </form>

@@ -302,23 +302,6 @@
     text-align: center;
   }
 
-  .filterSearchButton {
-    background-color: #B88A44;
-    color: #F3F0EB;
-    border: none;
-    height: 40px;
-    width: 95px;
-    font-size: 18px;
-    border-radius: 15px;
-    transition: 0.15s;
-}
-
-.filterSearchButton:hover {
-    cursor: pointer;
-    transition: 0.25s;
-    background-color: #6B7A3A;
-}
-
   .scrollIcon {
     display: flex;
     flex-direction: column;
@@ -599,29 +582,11 @@
 }
 
 .registerButton {
-    background-color: #F3F0EB;
-    color: #1F1B17;
-    border: none;
-    font-size: 22px;
-    border-radius: 25px;
-    width: 170px;
-    height: 55px;
-    transition: 0.15s;
     position: absolute;
     top: 75%;
     left: 45%;
     transform: translate(-50%);
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.registerButton:hover {
-    transition: 0.35s;
-    cursor: pointer;
-    background-color: #1F1B17;
-    color: #F3F0EB;
 }
 
 .fourthSection {

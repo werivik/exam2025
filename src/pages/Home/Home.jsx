@@ -1,9 +1,10 @@
 import { useEffect, useState, useCallback, useRef, React } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, redirect } from 'react-router-dom';
 import { motion } from "framer-motion";
 import debounce from 'lodash.debounce';
 import styles from './Home.module.css';
 import { isLoggedIn } from "../../auth/auth";
+import Buttons from '../../components/Buttons/Buttons';
 
 import Edge from "/media/images/beige-edge.png";
 import registerImage from "/media/hotelTypes/hotelReseption.jpeg";
@@ -355,13 +356,11 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <button
-        className={styles.filterSearchButton}
-        onClick={checkConditionsForSearch}
-        disabled={false}
-      >
-        Search
-      </button>
+
+              <Buttons size='small' version='v1'onClick={checkConditionsForSearch}>
+                Search
+              </Buttons>
+
             </div>
             {showWarning && (
         <div className={styles.warningPopup}>
@@ -445,7 +444,11 @@ const Home = () => {
             <div className={styles.thirdInfo}>
               <h2>Join Us and Start Your<br />Next Adventure today...</h2>
               <p>Unlock Booking, Reservations and Discounts by Creating an Account with us today.</p>
-              <Link to="/register-costumer" className={styles.registerButton}>Register</Link>
+              <Link to="/register-costumer" className={styles.registerButton}>
+              <Buttons size='large' version='v1'>
+                Register
+              </Buttons>
+              </Link>
             </div>
           </div>
         </>

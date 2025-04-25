@@ -4,6 +4,7 @@ import styles from './LoginAdmin.module.css';
 import { AUTH_LOGIN } from '../../constants';
 import { headers } from '../../headers';
 import { motion } from "framer-motion";
+import Buttons from '../../components/Buttons/Buttons';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -103,6 +104,7 @@ const LoginAdmin = () => {
           <h1>Welcome to Holidaze</h1>
           <p>Login as a Venue Manager</p>
           <form onSubmit={handleLogin} className={styles.inputForm}>
+            <div className={styles.inputFormInputs}>
             <input
               type="email"
               placeholder="Email"
@@ -119,14 +121,12 @@ const LoginAdmin = () => {
               required
               className={styles.input}
             />
-            <button
-              type="submit"
-              disabled={!isFormValid || isSubmitting}
-              className={styles.loginButton}
-              style={{ opacity: isFormValid ? 1 : 0.5 }}
-            >
+            </div>
+
+            <Buttons size='medium' version='v2' type="submit" disabled={!isFormValid || isSubmitting}>
               {isSubmitting ? 'Logging in...' : 'Login'}
-            </button>
+            </Buttons>
+            
             {error && <p className={styles.error}>{error}</p>}
           </form>
           <div className={styles.BottomOptions}>

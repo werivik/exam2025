@@ -4,6 +4,7 @@ import styles from './RegisterAdmin.module.css';
 import { AUTH_REGISTER } from '../../constants';
 import { headers } from '../../headers';
 import { motion } from "framer-motion";
+import Buttons from '../../components/Buttons/Buttons';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -95,6 +96,7 @@ const RegisterAdmin = () => {
           <h1>Welcome to Holidaze</h1>
           <p>Register as a Venue Manager</p>
           <form onSubmit={handleRegister} className={styles.inputForm}>
+            <div className={styles.inputFormInputs}>
             <input
               type="text"
               placeholder="Venue Name"
@@ -119,18 +121,16 @@ const RegisterAdmin = () => {
               required
               className={styles.input}
             />
-            <button
-              type="submit"
-              disabled={!isFormValid || isSubmitting}
-              className={styles.registerButton}
-              style={{ opacity: isFormValid ? 1 : 0.5 }}
-            >
+            </div>
+
+            <Buttons size='medium' version='v2'type="submit" disabled={!isFormValid || isSubmitting}>
               {isSubmitting ? 'Registering...' : 'Register'}
-            </button>
+            </Buttons>
             {error && <p className={styles.error}>{error}</p>}
           </form>
           <div className={styles.BottomOptions}>
             <p>Already have an account? <Link to="/login-admin">Login here</Link></p>
+            <p>Are you a Costumer? <Link to="/login-costumer">Login here</Link></p>
           </div>
         </div>
       </div>
