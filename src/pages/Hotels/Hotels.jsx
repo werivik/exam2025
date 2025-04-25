@@ -241,7 +241,7 @@ const Hotels = () => {
             <section
                 className={`${styles.leftSection} ${filtersVisible ? styles.visible : styles.hidden}`}
             >
-                <div className={styles.leftBorder}>
+                <div className={`${styles.leftBorder} ${filtersVisible ? styles.visible : styles.hidden}`}>
                     <h2>Filters</h2>
                     <div className={styles.allFilters}>
                         <div className={styles.filterPeople}>

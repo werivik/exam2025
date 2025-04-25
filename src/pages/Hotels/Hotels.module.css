@@ -35,6 +35,14 @@
   transform: translateX(0);
 }
 
+.leftBorder.hidden {
+  display: none;
+}
+
+.leftBorder.visible {
+  display: flex;
+}
+
 .toggleFilterButton {
   position: fixed;
   top: 20px;
@@ -52,6 +60,7 @@
 }
 
 .leftBorder {
+  flex-direction: column;
     color: white;
     width: 90%;
     height: 95%;
