@@ -33,7 +33,7 @@ const Hotels = () => {
     const [visibleCount, setVisibleCount] = useState(18);
     const [noMatches, setNoMatches] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const PAGE_SIZE = 18;
+    const PAGE_SIZE = filtersVisible ? 18 : 20;
 
     const [searchParams, setSearchParams] = useSearchParams();
 
