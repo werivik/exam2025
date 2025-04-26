@@ -92,80 +92,131 @@ import img2 from "/media/images/beachBanner2.jpg";
 import img3 from "/media/images/londonBanner2.jpg";
 import img4 from "/media/images/parisBanner2.jpg";
 
-const slides = [img1, img2, img3, img4];
+const slides = [
+  {
+    img: img1,
+    h1: "Holidaze",
+    span: "Elegance meets Comfort"
+  },
+  {
+    img: img2,
+    h2: "Spain",
+    h3: "Travel to",
+    p: "...with Holidaze"
+  },
+  {
+    img: img3,
+    h2: "England",
+    h3: "Travel to",
+    p: "...with Holidaze"
+  },
+  {
+    img: img4,
+    h2: "Paris",
+    h3: "Travel to",
+    p: "...with Holidaze"
+  }
+];
 
-export default function bannerSlideshow() {
+export default function BannerSlideshow() {
   const [index, setIndex] = useState(0);
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
-    slides.forEach((src) => {
+    slides.forEach((slide) => {
       const img = new Image();
-      img.src = src;
+      img.src = slide.img;
     });
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % slides.length);
-    }, 7500);
+    }, 10000);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     setShowContent(false);
     const timer = setTimeout(() => {
-      if (index === 0) {
-        setShowContent(true);
-      }
-    },1);
-
+      setShowContent(true);
+    }, 1000);
     return () => clearTimeout(timer);
   }, [index]);
 
   return (
     <section className={styles.slideshowWrapper}>
-          <div className={styles.splitSlideshow}>
-      <div className={styles.lane}>
-        <div
-          className={styles.stack}
-          style={{ transform: `translateY(-${index * 100}vh)` }}
-        >
-          {slides.map((img, i) => (
-            <div className={styles.slice} key={`left-${i}`}>
-              <div className={styles.leftWrapper}>
-                <img src={img} alt={`Slide ${i}`} className={styles.fullImage} />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className={`${styles.lane} ${styles.right}`}>
-        <div
-          className={styles.stack}
-          style={{ transform: `translateY(-${(slides.length - 1 - index) * 100}vh)` }}
-        >
-          {slides
-            .slice()
-            .reverse()
-            .map((img, i) => (
-              <div className={styles.slice} key={`right-${i}`}>
-                <div className={styles.rightWrapper}>
-                  <img src={img} alt={`Slide ${i}`} className={styles.fullImage} />
+      <div className={styles.splitSlideshow}>
+        {/* Left Lane */}
+        <div className={styles.lane}>
+          <div
+            className={styles.stack}
+            style={{ transform: `translateY(-${index * 100}vh)` }}
+          >
+            {slides.map((slide, i) => (
+              <div className={styles.slice} key={`left-${i}`}>
+                <div className={styles.leftWrapper}>
+                  <img src={slide.img} alt={`Slide ${i}`} className={styles.fullImage} />
                 </div>
               </div>
             ))}
+          </div>
         </div>
-      </div>
 
-      {index === 0 && showContent && (
-        <div className={styles.bannerText}>
-          <h1>Holidaze</h1>
-          <span>Elegance meets Comfort</span>
+        {/* Right Lane */}
+        <div className={`${styles.lane} ${styles.right}`}>
+          <div
+            className={styles.stack}
+            style={{ transform: `translateY(-${(slides.length - 1 - index) * 100}vh)` }}
+          >
+            {slides
+              .slice()
+              .reverse()
+              .map((slide, i) => (
+                <div className={styles.slice} key={`right-${i}`}>
+                  <div className={styles.rightWrapper}>
+                    <img src={slide.img} alt={`Slide ${i}`} className={styles.fullImage} />
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
-      )}
-    </div>
+
+        {showContent && (
+          <div className={styles.bannerText}>
+            {index === 0 && (
+              <>
+                <h1>{slides[0].h1}</h1>
+                <span>{slides[0].span}</span>
+              </>
+            )}
+
+            {index === 1 && (
+              <>
+                <h3>{slides[1].h3}</h3>
+                <h2>{slides[1].h2}</h2>
+                <p>{slides[1].p}</p>
+              </>
+            )}
+
+            {index === 2 && (
+              <>
+                <h3>{slides[2].h3}</h3>
+                <h2>{slides[2].h2}</h2>
+                <p>{slides[2].p}</p>
+              </>
+            )}
+
+            {index === 3 && (
+              <>
+                <h3>{slides[3].h3}</h3>
+                <h2>{slides[3].h2}</h2>
+                <p>{slides[3].p}</p>
+              </>
+            )}
+          </div>
+        )}
+      </div>
     </section>
   );
 }
