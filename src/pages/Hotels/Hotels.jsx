@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
-import { VENUES } from '../../constants';
+import { useEffect, useState, useCallback } from 'react';
+import { VENUES, VENUES_SEARCH } from '../../constants';
 import { headers } from '../../headers';
 import { motion } from "framer-motion";
 import styles from './Hotels.module.css';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import HotelCardSecondType from '../../components/HotelCardSecondType/HotelCardSecondType.jsx';
+
+import debounce from 'lodash.debounce';
 
 const pageVariants = {
     initial: { opacity: 0 },
@@ -36,6 +38,40 @@ const Hotels = () => {
     const PAGE_SIZE = filtersVisible ? 18 : 20;
 
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+
+const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+  
+    if (value.trim()) {
+      const searchTerm = value.trim().toLowerCase();
+  
+      const filtered = hotels.filter((hotel) => {
+        const nameMatch = hotel.name.toLowerCase().startsWith(searchTerm);
+        const cityMatch = hotel.location?.city?.toLowerCase().startsWith(searchTerm);
+        const countryMatch = hotel.location?.country?.toLowerCase().startsWith(searchTerm);
+        const ownerMatch = hotel.owner?.name?.toLowerCase().startsWith(searchTerm);
+  
+        return nameMatch || cityMatch || countryMatch || ownerMatch;
+      });
+  
+      setFilteredHotels(filtered);
+      setNoMatches(filtered.length === 0);
+    } 
+    
+    else {
+      setFilteredHotels(hotels);
+      setNoMatches(false);
+    }
+  };
+  
+const handleSuggestionClick = (result) => {
+  setSearchQuery(result.name);
+  setSearchResults([]);
+};
 
     useEffect(() => {
         const parsedFilters = {
@@ -237,185 +273,107 @@ const Hotels = () => {
 
     return (
         <motion.div
-            className={styles.pageContent}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            variants={pageVariants}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+          className={styles.pageContent}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={pageVariants}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
         >
-            <section
-                className={`${styles.leftSection} ${filtersVisible ? styles.visible : styles.hidden}`}
-            >
-                <div className={styles.leftContent}>
-                <button
-                    className={`${styles.toggleFilterButton} ${filtersVisible ? styles.filtersVisible : ''}`}
-                    onClick={toggleFilters}
-                >
-                    {filtersVisible ? 'Hide Filters' : 'Show Filters'}
-                </button>
+          <section className={styles.rightSection}>
+            <div className={styles.rightBorder}>
+              <div className={styles.rightTitles}>
+                <h1>Find your Dream Stay</h1>
+                <p>...with Holidaze</p>
+              </div>
+      
+              <div className={styles.filterTopSection}>
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input
+  type="text"
+  placeholder="Search venues..."
+  value={searchQuery}
+  onChange={handleSearchInputChange}
+  autoComplete="off"
+  className={styles.searchbarFilter}
+/>
 
-                    <div className={`${styles.leftBorder} ${filtersVisible ? styles.visible : styles.hidden}`}>
-                    <div className={styles.leftBorderContent}>
-                <h2>Filters</h2>
-                    <div className={styles.allFilters}>
-                        <div className={styles.filterPeople}>
-                            <h3>Occupancy</h3>
-                            <div className={styles.guestSelector}>
-                                <p className={styles.totalGuests}>
-                                    {`${filters.adults} Adults, ${filters.children} Children, ${filters.assisted} Assisted`}
-                                </p>
-                            </div>
-                        </div>
-                        <div className={styles.destinationFilter}>
-                            <h3>Destination</h3>
-                            <label>
-                                <span>Continent</span>
-                                <select name="continent" onChange={handleFilterChange} value={filters.continent}>
-                                    <option value="">All Continents</option>
-                                    {Array.from(new Set(hotels.map(hotel => hotel.location.continent))).map((continent, index) => (
-                                        <option key={index} value={continent}>{continent}</option>
-                                    ))}
-                                </select>
-                            </label>
-                            <label>
-                                <span>Country</span>
-                                <select name="country" onChange={handleFilterChange} value={filters.country}>
-                                    <option value="">All Countries</option>
-                                    {Array.from(new Set(hotels.map(hotel => hotel.location.country))).map((country, index) => (
-                                        <option key={index} value={country}>{country}</option>
-                                    ))}
-                                </select>
-                            </label>
-                            <label>
-                                <span>City</span>
-                                <select name="city" onChange={handleFilterChange} value={filters.city}>
-                                    <option value="">All Cities</option>
-                                    {Array.from(new Set(hotels.map(hotel => hotel.location.city))).map((city, index) => (
-                                        <option key={index} value={city}>{city}</option>
-                                    ))}
-                                </select>
-                            </label>
-                        </div>
-                        <div className={styles.ratingFilter}>
-    <h3>Rating</h3>
-    <div className={styles.chooseRating}>
-        {availableRatings.map((rating) => (
-            <label key={rating}>
-                <input
-                    type="checkbox"
-                    name="ratings"
-                    value={rating}
-                    checked={filters.ratings.includes(rating)}
-                    onChange={handleFilterChange}
-                />
-                {rating} Star{rating > 1 ? 's' : ''}
-            </label>
-        ))}
-    </div>
-</div>
-                        <div className={styles.metaFilter}>
-                            <h3>Meta Filters</h3>
-                            {metaFilters.length > 0 && metaFilters.map((metaKey) => (
-                                <div key={metaKey} className={styles.metaCheckbox}>
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            name={metaKey}
-                                            checked={filters.meta[metaKey] || false}
-                                            onChange={handleFilterChange}
-                                        />
-                                        {metaKey}
-                                    </label>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+  <button className={styles.filterTopButton}>
+    Filters
+  </button>
+
+  {searchResults.length > 0 && (
+    <ul className={styles.suggestionsList}>
+      {searchResults.map((result, index) => (
+        <li key={index} onClick={() => handleSuggestionClick(result)}>
+          {result.name}
+        </li>
+      ))}
+    </ul>
+  )}
+</div>      
+              {loading ? (
+                <div className={styles.allHotels}>
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <HotelCardSecondType key={i} hotel={null} />
+                  ))}
                 </div>
+              ) : (
+                <>
+                  {noMatches ? (
+                    <p>
+                      Could not find a match. Please try again with different
+                      credentials or try again later.
+                    </p>
+                  ) : (
+                    <div className={styles.allHotels}>
+                      {filteredHotels
+                        .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+                        .map(hotel => (
+                          <HotelCardSecondType key={hotel.id} hotel={hotel} />
+                        ))}
                     </div>
-                </div>
-
-            </section>
-
-            <section
-                className={`${styles.rightSection} ${filtersVisible ? '' : styles.expandedRightSection}`}
-            >
-                <div className={styles.rightBorder}>
-                    <div className={styles.rightTitles}>
-                        <h1>Find your Dream Stay</h1>
-                        <p>...with Holidaze</p>
+                  )}
+      
+                  {window.innerWidth < 1024 && visibleCount < filteredHotels.length && (
+                    <button
+                      className={styles.loadMoreButton}
+                      onClick={loadMore}
+                    >
+                      Load More
+                    </button>
+                  )}
+      
+                  {window.innerWidth >= 1024 && pageTotal > 1 && (
+                    <div className={styles.pagination}>
+                      {currentPage > 1 && (
+                        <button onClick={goToPrevPage} className={styles.page}>
+                          Prev
+                        </button>
+                      )}
+                      {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
+                        <button
+                          key={p}
+                          onClick={() => handlePageClick(p)}
+                          className={p === currentPage ? styles.pageActive : styles.page}
+                        >
+                          {p}
+                        </button>
+                      ))}
+                      {currentPage < pageTotal && (
+                        <button onClick={goToNextPage} className={styles.page}>
+                          Next
+                        </button>
+                      )}
                     </div>
-
-                    {loading ? (
-                        <div className={styles.allHotels}>
-                            {Array.from({ length: 6 }).map((_, i) => (
-                                <HotelCardSecondType key={i} hotel={null} />
-                            ))}
-                        </div>
-                    ) : (
-                        <>
-                            {noMatches ? (
-                                <p>
-                                    Could not find a match. Please try again with different
-                                    credentials or try again later.
-                                </p>
-                            ) : (
-                                <div className={styles.allHotels}>
-                                    {filteredHotels
-                                        .slice(
-                                            (currentPage - 1) * PAGE_SIZE,
-                                            currentPage * PAGE_SIZE
-                                        )
-                                        .map(hotel => (
-                                            <HotelCardSecondType key={hotel.id} hotel={hotel} />
-                                        ))}
-                                </div>
-                            )}
-
-                            {window.innerWidth < 1024 && visibleCount < filteredHotels.length && (
-                                <button
-                                    className={styles.loadMoreButton}
-                                    onClick={loadMore}
-                                >
-                                    Load More
-                                </button>
-                            )}
-
-{window.innerWidth >= 1024 && pageTotal > 1 && (
-    <div className={styles.pagination}>
-        {currentPage > 1 && (
-            <button
-                onClick={goToPrevPage}
-                className={styles.page}
-            >
-                Prev
-            </button>
-        )}
-        {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
-            <button
-                key={p}
-                onClick={() => handlePageClick(p)}
-                className={p === currentPage ? styles.pageActive : styles.page}
-            >
-                {p}
-            </button>
-        ))}
-        {currentPage < pageTotal && (
-            <button
-                onClick={goToNextPage}
-                className={styles.page}
-            >
-                Next
-            </button>
-        )}
-    </div>
-)}
-                        </>
-                    )}
-                </div>
-            </section>
+                  )}
+                </>
+              )}
+            </div>
+          </section>
         </motion.div>
-    );
+      );
+      
 };
 
 export default Hotels;
