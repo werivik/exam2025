@@ -1,3 +1,4 @@
+/*
 import { useState, useEffect, useRef } from "react";
 import styles from "./BannerSlideshow.module.css";
 import homeBanner from "/media/images/banner2.png";
@@ -78,6 +79,84 @@ export default function BannerSlideshow() {
           />
         ))}
       </div>
+    </div>
+  );
+}
+*/
+
+import { useState, useEffect } from "react";
+import styles from "./bannerSlideshow.module.css";
+
+import img1 from "/media/images/banner2.png";
+import img2 from "/media/images/beachBanner2.jpg";
+import img3 from "/media/images/londonBanner2.jpg";
+import img4 from "/media/images/parisBanner2.jpg";
+
+const slides = [img1, img2, img3, img4];
+
+export default function bannerSlideshow() {
+  const [index, setIndex] = useState(0);
+  const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    setShowContent(false);
+    const timer = setTimeout(() => {
+      if (index === 0) {
+        setShowContent(true);
+      }
+    },1);
+
+    return () => clearTimeout(timer);
+  }, [index]);
+
+  return (
+    <div className={styles.splitSlideshow}>
+      <div className={styles.lane}>
+        <div
+          className={styles.stack}
+          style={{ transform: `translateY(-${index * 100}vh)` }}
+        >
+          {slides.map((img, i) => (
+            <div className={styles.slice} key={`left-${i}`}>
+              <div className={styles.leftWrapper}>
+                <img src={img} alt={`Slide ${i}`} className={styles.fullImage} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className={`${styles.lane} ${styles.right}`}>
+        <div
+          className={styles.stack}
+          style={{ transform: `translateY(-${(slides.length - 1 - index) * 100}vh)` }}
+        >
+          {slides
+            .slice()
+            .reverse()
+            .map((img, i) => (
+              <div className={styles.slice} key={`right-${i}`}>
+                <div className={styles.rightWrapper}>
+                  <img src={img} alt={`Slide ${i}`} className={styles.fullImage} />
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+
+      {index === 0 && showContent && (
+        <div className={styles.bannerText}>
+          <h1>Holidaze</h1>
+          <span>Elegance meets Comfort</span>
+        </div>
+      )}
     </div>
   );
 }
