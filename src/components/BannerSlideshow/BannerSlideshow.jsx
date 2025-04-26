@@ -99,9 +99,16 @@ export default function bannerSlideshow() {
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
+    slides.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 7500);
     return () => clearInterval(interval);
   }, []);
 
@@ -117,7 +124,8 @@ export default function bannerSlideshow() {
   }, [index]);
 
   return (
-    <div className={styles.splitSlideshow}>
+    <section className={styles.slideshowWrapper}>
+          <div className={styles.splitSlideshow}>
       <div className={styles.lane}>
         <div
           className={styles.stack}
@@ -158,5 +166,6 @@ export default function bannerSlideshow() {
         </div>
       )}
     </div>
+    </section>
   );
 }
