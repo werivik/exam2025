@@ -36,12 +36,15 @@ const Hotels = () => {
     const [noMatches, setNoMatches] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const PAGE_SIZE = filtersVisible ? 18 : 20;
-
     const [searchParams, setSearchParams] = useSearchParams();
-
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
+    const [showSidebar, setShowSidebar] = useState(false);
 
+    const toggleSidebar = () => {
+      setShowSidebar(prev => !prev);
+    };
+    
 const handleSearchInputChange = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
@@ -280,6 +283,42 @@ const handleSuggestionClick = (result) => {
           variants={pageVariants}
           transition={{ duration: 0.5, ease: "easeInOut" }}
         >
+{showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
+
+<div className={`${styles.filterSidebar} ${showSidebar ? styles.showSidebar : ''}`}>
+  <div className={styles.filterSidebarContent}>
+    <h2>Filter Your Search</h2>
+
+    <div className={styles.filterGroup}>
+      <h3>Destination</h3>
+      <input type="text" placeholder="Continent" />
+      <input type="text" placeholder="Country" />
+      <input type="text" placeholder="City" />
+    </div>
+
+    <div className={styles.filterGroup}>
+      <h3>Price Range</h3>
+      <input type="number" placeholder="Min Price" />
+      <input type="number" placeholder="Max Price" />
+    </div>
+
+    <div className={styles.filterGroup}>
+      <h3>Date</h3>
+      <input type="date" />
+      <input type="date" />
+    </div>
+
+    <div className={styles.filterGroup}>
+      <h3>Guests</h3>
+      <input type="number" placeholder="Adults" min="0" />
+      <input type="number" placeholder="Children" min="0" />
+      <input type="number" placeholder="Assisted" min="0" />
+    </div>
+
+    <button onClick={toggleSidebar} className={styles.closeSidebarButton}>Close</button>
+  </div>
+</div>
+ 
           <section className={styles.rightSection}>
             <div className={styles.rightBorder}>
               <div className={styles.rightTitles}>
@@ -298,9 +337,12 @@ const handleSuggestionClick = (result) => {
   className={styles.searchbarFilter}
 />
 
-  <button className={styles.filterTopButton}>
-    Filters
-  </button>
+<button 
+  className={styles.filterSidebarButton} 
+  onClick={toggleSidebar}
+>
+  Filters
+</button>
 
   {searchResults.length > 0 && (
     <ul className={styles.suggestionsList}>
