@@ -29,6 +29,8 @@ const Hotels = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [metaFilters, setMetaFilters] = useState([]);
   const [availableRatings, setAvailableRatings] = useState([1, 2, 3, 4, 5]);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
 
   const PAGE_SIZE = filtersVisible ? 18 : 20;
 
@@ -43,6 +45,8 @@ const Hotels = () => {
     minRating: 0,
     meta: {},
     ratings: [],
+    priceMin: minPrice,
+    priceMax: maxPrice
   });
 
   // Toggle sidebar
@@ -92,6 +96,10 @@ const Hotels = () => {
         const hotelsData = Array.isArray(data.data) ? data.data : [];
         setHotels(hotelsData);
         setFilteredHotels(hotelsData);
+
+        const prices = hotelsData.map(hotel => hotel.price || 0);
+        setMinPrice(Math.min(...prices));
+        setMaxPrice(Math.max(...prices));
 
         const metaKeys = new Set();
         hotelsData.forEach(hotel => {
@@ -215,6 +223,7 @@ const Hotels = () => {
   };
 
   const toggleFilters = () => setFiltersVisible(prev => !prev);
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const loadMore = () => {
@@ -262,6 +271,29 @@ const Hotels = () => {
             <input type="text" name="city" placeholder="City" onChange={handleFilterChange} />
           </div>
 
+          {/* Price Range */}
+          <div className={styles.filterGroup}>
+            <h3>Price Range</h3>
+            <input
+              type="number"
+              name="priceMin"
+              value={filters.priceMin || minPrice}
+              min={minPrice}
+              max={maxPrice}
+              onChange={handleFilterChange}
+              placeholder={`Min Price ($${minPrice})`}
+            />
+            <input
+              type="number"
+              name="priceMax"
+              value={filters.priceMax || maxPrice}
+              min={minPrice}
+              max={maxPrice}
+              onChange={handleFilterChange}
+              placeholder={`Max Price ($${maxPrice})`}
+            />
+          </div>
+
           {/* Guests */}
           <div className={styles.filterGroup}>
             <h3>Guests</h3>
@@ -285,6 +317,12 @@ const Hotels = () => {
               </div>
             ))}
           </div>
+
+          {filteredHotels.length > 0 && (
+            <div className={styles.resultsPopup}>
+                <p>Found {filteredHotels.length} Results</p>
+            </div>
+          )}
 
           <button onClick={toggleSidebar} className={styles.closeSidebarButton}>Close</button>
         </div>

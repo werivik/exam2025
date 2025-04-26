@@ -247,3 +247,20 @@
     left: 0;
   }
   
+  .resultsPopup {
+    background-color: #6B7A3A;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 35px;
+    width: 200px;
+    height: 40px;
+    margin-left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
