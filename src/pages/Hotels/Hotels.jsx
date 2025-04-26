@@ -1,66 +1,68 @@
 import { useEffect, useState, useCallback } from 'react';
-import { VENUES, VENUES_SEARCH } from '../../constants';
+import { VENUES } from '../../constants';
 import { headers } from '../../headers';
 import { motion } from "framer-motion";
 import styles from './Hotels.module.css';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import HotelCardSecondType from '../../components/HotelCardSecondType/HotelCardSecondType.jsx';
-
 import debounce from 'lodash.debounce';
 
+// Animations
 const pageVariants = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    exit: { opacity: 0 },
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
 };
 
 const Hotels = () => {
-    const [hotels, setHotels] = useState([]);
-    const [filteredHotels, setFilteredHotels] = useState([]);
-    const [filters, setFilters] = useState({
-        continent: '',
-        country: '',
-        city: '',
-        adults: 1,
-        children: 0,
-        assisted: 0,
-        minRating: 0,
-        meta: {},
-        ratings: [],
-    });
-    const [metaFilters, setMetaFilters] = useState([]);
-    const [availableRatings, setAvailableRatings] = useState([1, 2, 3, 4, 5]);
-    const [filtersVisible, setFiltersVisible] = useState(true);
-    const [loading, setLoading] = useState(true);
-    const [visibleCount, setVisibleCount] = useState(18);
-    const [noMatches, setNoMatches] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const PAGE_SIZE = filtersVisible ? 18 : 20;
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [searchQuery, setSearchQuery] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
-    const [showSidebar, setShowSidebar] = useState(false);
+  // State
+  const [hotels, setHotels] = useState([]);
+  const [filteredHotels, setFilteredHotels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filtersVisible, setFiltersVisible] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(18);
+  const [noMatches, setNoMatches] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [metaFilters, setMetaFilters] = useState([]);
+  const [availableRatings, setAvailableRatings] = useState([1, 2, 3, 4, 5]);
 
-    const toggleSidebar = () => {
-      setShowSidebar(prev => !prev);
-    };
-    
-const handleSearchInputChange = (e) => {
+  const PAGE_SIZE = filtersVisible ? 18 : 20;
+
+  // Filters
+  const [filters, setFilters] = useState({
+    continent: '',
+    country: '',
+    city: '',
+    adults: 1,
+    children: 0,
+    assisted: 0,
+    minRating: 0,
+    meta: {},
+    ratings: [],
+  });
+
+  // Toggle sidebar
+  const toggleSidebar = () => setShowSidebar(prev => !prev);
+
+  // Search
+  const handleSearchInputChange = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
-  
+
     if (value.trim()) {
-      const searchTerm = value.trim().toLowerCase();
-  
-      const filtered = hotels.filter((hotel) => {
-        const nameMatch = hotel.name.toLowerCase().startsWith(searchTerm);
+      const searchTerm = value.toLowerCase();
+      const filtered = hotels.filter(hotel => {
+        const nameMatch = hotel.name?.toLowerCase().startsWith(searchTerm);
         const cityMatch = hotel.location?.city?.toLowerCase().startsWith(searchTerm);
         const countryMatch = hotel.location?.country?.toLowerCase().startsWith(searchTerm);
         const ownerMatch = hotel.owner?.name?.toLowerCase().startsWith(searchTerm);
-  
+
         return nameMatch || cityMatch || countryMatch || ownerMatch;
       });
-  
       setFilteredHotels(filtered);
       setNoMatches(filtered.length === 0);
     } 
@@ -70,352 +72,299 @@ const handleSearchInputChange = (e) => {
       setNoMatches(false);
     }
   };
-  
-const handleSuggestionClick = (result) => {
-  setSearchQuery(result.name);
-  setSearchResults([]);
-};
 
-    useEffect(() => {
-        const parsedFilters = {
-            continent: searchParams.get("continent") || '',
-            country: searchParams.get("country") || '',
-            city: searchParams.get("city") || '',
-            adults: parseInt(searchParams.get("adults")) || 1,
-            children: parseInt(searchParams.get("children")) || 0,
-            assisted: parseInt(searchParams.get("assisted")) || 0,
-            ratings: searchParams.getAll("ratings").map(Number),
-            meta: {}
-        };
+  const handleSuggestionClick = (result) => {
+    setSearchQuery(result.name);
+    setSearchResults([]);
+  };
 
-        metaFilters.forEach((metaKey) => {
-            if (searchParams.get(metaKey) === "true") {
-                parsedFilters.meta[metaKey] = true;
-            }
+  // Fetch hotels
+  useEffect(() => {
+    const fetchHotels = async () => {
+      try {
+        const response = await fetch(`${VENUES}?sort=rating&sortOrder=desc`, {
+          method: 'GET',
+          headers: headers(),
+        });
+        if (!response.ok) throw new Error("Failed to fetch hotels");
+
+        const data = await response.json();
+        const hotelsData = Array.isArray(data.data) ? data.data : [];
+        setHotels(hotelsData);
+        setFilteredHotels(hotelsData);
+
+        const metaKeys = new Set();
+        hotelsData.forEach(hotel => {
+          if (hotel.meta) {
+            Object.keys(hotel.meta).forEach(key => metaKeys.add(key));
+          }
         });
 
-        setFilters(prev => ({ ...prev, ...parsedFilters }));
-        const initialPage = parseInt(searchParams.get("page")) || 1;
-        setCurrentPage(initialPage);
-    }, [metaFilters.length]);
+        setMetaFilters(Array.from(metaKeys));
 
-    useEffect(() => {
-        const params = new URLSearchParams();
-
-        if (filters.continent) params.set("continent", filters.continent);
-        if (filters.country) params.set("country", filters.country);
-        if (filters.city) params.set("city", filters.city);
-        if (filters.adults > 0) params.set("adults", filters.adults);
-        if (filters.children > 0) params.set("children", filters.children);
-        if (filters.assisted > 0) params.set("assisted", filters.assisted);
-
-        filters.ratings.forEach(r => params.append("ratings", r));
-
-        Object.keys(filters.meta).forEach(key => {
-            if (filters.meta[key]) {
-                params.set(key, "true");
-            }
+        const ratingsSet = new Set();
+        hotelsData.forEach(hotel => {
+          if (hotel.rating) ratingsSet.add(Math.floor(hotel.rating));
         });
 
-        params.set("page", currentPage);
+        setAvailableRatings(Array.from(ratingsSet).sort((a, b) => a - b));
+      } 
+      
+      catch (error) {
+        console.error("Error fetching hotels:", error);
+      } 
+      
+      finally {
+        setLoading(false);
+      }
+    };
 
-        setSearchParams(params);
-    }, [filters, currentPage]);
+    fetchHotels();
+  }, []);
 
-    useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, []);
+  // Sync URL params -> filters
+  useEffect(() => {
+    const parsedFilters = {
+      continent: searchParams.get("continent") || '',
+      country: searchParams.get("country") || '',
+      city: searchParams.get("city") || '',
+      adults: parseInt(searchParams.get("adults")) || 1,
+      children: parseInt(searchParams.get("children")) || 0,
+      assisted: parseInt(searchParams.get("assisted")) || 0,
+      ratings: searchParams.getAll("ratings").map(Number),
+      meta: {}
+    };
 
-    useEffect(() => {
-        const fetchHotels = async () => {
-            try {
-                const response = await fetch(`${VENUES}?sort=rating&sortOrder=desc`, {
-                    method: 'GET',
-                    headers: headers(),
-                });
+    metaFilters.forEach(metaKey => {
+      if (searchParams.get(metaKey) === "true") {
+        parsedFilters.meta[metaKey] = true;
+      }
+    });
 
-                if (!response.ok) {
-                    throw new Error("Failed to fetch hotels");
-                }
+    setFilters(prev => ({ ...prev, ...parsedFilters }));
+    setCurrentPage(parseInt(searchParams.get("page")) || 1);
+  }, [metaFilters.length]);
 
-                const data = await response.json();
-                const hotelsData = Array.isArray(data.data) ? data.data : [];
-                setHotels(hotelsData);
-                setFilteredHotels(hotelsData);
+  // Sync filters -> URL params
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (filters.continent) params.set("continent", filters.continent);
+    if (filters.country) params.set("country", filters.country);
+    if (filters.city) params.set("city", filters.city);
+    if (filters.adults > 0) params.set("adults", filters.adults);
+    if (filters.children > 0) params.set("children", filters.children);
+    if (filters.assisted > 0) params.set("assisted", filters.assisted);
+    filters.ratings.forEach(r => params.append("ratings", r));
+    Object.keys(filters.meta).forEach(key => {
+      if (filters.meta[key]) params.set(key, "true");
+    });
+    params.set("page", currentPage);
 
-                const metaKeys = new Set();
-                hotelsData.forEach(hotel => {
-                    if (hotel.meta) {
-                        Object.keys(hotel.meta).forEach(key => {
-                            metaKeys.add(key);
-                        });
-                    }
-                });
+    setSearchParams(params);
+  }, [filters, currentPage]);
 
-                setMetaFilters(Array.from(metaKeys));
-                setLoading(false);
+  // Filtering
+  useEffect(() => {
+    const filtered = hotels.filter(hotel => {
+      const matchesContinent = filters.continent ? hotel.location?.continent === filters.continent : true;
+      const matchesCountry = filters.country ? hotel.location?.country === filters.country : true;
+      const matchesCity = filters.city ? hotel.location?.city === filters.city : true;
+      const totalGuests = (filters.adults || 0) + (filters.children || 0) + (filters.assisted || 0);
+      const matchesGuests = hotel.maxGuests >= totalGuests;
+      const matchesRating = filters.ratings.length > 0 ? filters.ratings.includes(Math.floor(hotel.rating)) : true;
+      const matchesMeta = Object.keys(filters.meta).every(metaKey => {
+        return filters.meta[metaKey] === false || hotel.meta?.[metaKey] === true;
+      });
 
-                const ratingsSet = new Set();
-                hotelsData.forEach(hotel => {
-                    if (hotel.rating) {
-                        ratingsSet.add(Math.floor(hotel.rating));
-                    }
-                });
+      return matchesContinent && matchesCountry && matchesCity && matchesGuests && matchesRating && matchesMeta;
+    });
 
-                setAvailableRatings(Array.from(ratingsSet).sort((a, b) => a - b));
-                setLoading(false);
-            } 
-            
-            catch (error) {
-                console.error("Error fetching hotels:", error);
-                setLoading(false);
-            }
-        };
+    setFilteredHotels(filtered);
+    setNoMatches(filtered.length === 0);
+  }, [filters, hotels]);
 
-        fetchHotels();
-    }, []);
+  // Handlers
+  const handleFilterChange = (e) => {
+    const { name, value, type, checked } = e.target;
 
-    useEffect(() => {
-        const filtered = hotels.filter(hotel => {
-            const matchesContinent = filters.continent ? hotel.location.continent === filters.continent : true;
-            const matchesCountry = filters.country ? hotel.location.country === filters.country : true;
-            const matchesCity = filters.city ? hotel.location.city === filters.city : true;
-
-            const totalGuests =
-                parseInt(filters.adults || 0) +
-                parseInt(filters.children || 0) +
-                parseInt(filters.assisted || 0);
-
-            const matchesGuests = hotel.maxGuests >= totalGuests;
-
-            const matchesRating = filters.ratings.length > 0
-                ? filters.ratings.includes(Math.floor(hotel.rating))
-                : true;
-
-            const matchesMeta = Object.keys(filters.meta).every(metaKey => {
-                return filters.meta[metaKey] === false || hotel.meta[metaKey] === true;
-            });
-
-            return matchesContinent && matchesCountry && matchesCity && matchesGuests && matchesRating && matchesMeta;
-        });
-
-        setFilteredHotels(filtered);
-
-        if (filtered.length === 0) {
-            setNoMatches(true);
-        } 
-        
-        else {
-            setNoMatches(false);
+    if (name === 'ratings') {
+      setFilters(prev => {
+        const newRatings = checked
+          ? [...prev.ratings, parseInt(value)]
+          : prev.ratings.filter(rating => rating !== parseInt(value));
+        return { ...prev, ratings: newRatings };
+      });
+    } 
+    
+    else if (type === 'checkbox') {
+      setFilters(prev => ({
+        ...prev,
+        meta: {
+          ...prev.meta,
+          [name]: checked,
         }
-    }, [filters, hotels]);
+      }));
+    } 
+    
+    else {
+      setFilters(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  };
 
-    const handleFilterChange = (e) => {
-        const { name, value, type, checked } = e.target;
+  const toggleFilters = () => setFiltersVisible(prev => !prev);
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        if (name === 'ratings') {
-            setFilters(prev => {
-                const newRatings = checked
-                    ? [...prev.ratings, parseInt(value)]
-                    : prev.ratings.filter(rating => rating !== parseInt(value));
+  const loadMore = () => {
+    setVisibleCount(prev => Math.min(prev + 10, filteredHotels.length));
+  };
 
-                return { ...prev, ratings: newRatings };
-            });
-        } 
-        
-        else if (type === 'checkbox') {
-            setFilters(prev => ({
-                ...prev,
-                meta: {
-                    ...prev.meta,
-                    [name]: checked,
-                }
-            }));
-        } 
-        
-        else {
-            setFilters(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        }
-    };
+  const handlePageClick = (pageNum) => {
+    setCurrentPage(pageNum);
+    scrollToTop();
+  };
 
-    const toggleFilters = () => {
-        setFiltersVisible(prev => !prev);
-    };
+  const goToNextPage = () => {
+    if (currentPage < pageTotal) setCurrentPage(prev => prev + 1);
+    scrollToTop();
+  };
 
-    const pageTotal = Math.max(1, Math.ceil(filteredHotels.length / PAGE_SIZE));
+  const goToPrevPage = () => {
+    if (currentPage > 1) setCurrentPage(prev => prev - 1);
+    scrollToTop();
+  };
 
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+  const pageTotal = Math.max(1, Math.ceil(filteredHotels.length / PAGE_SIZE));
 
-    const loadMore = () => {
-        setVisibleCount((prev) => Math.min(prev + 10, filteredHotels.length));
-    };
+  return (
+    <motion.div
+      className={styles.pageContent}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={pageVariants}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+    >
 
-    const handlePageClick = (pageNum) => {
-        setCurrentPage(pageNum);
-        scrollToTop();
-    };
+      {/* Sidebar NOT COMPLETE */}
+      {showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
+      <div className={`${styles.filterSidebar} ${showSidebar ? styles.showSidebar : ''}`}>
+        <div className={styles.filterSidebarContent}>
+          <h2>Filter Your Search</h2>
 
-    const goToNextPage = () => {
-        if (currentPage < pageTotal) {
-            setCurrentPage(currentPage + 1);
-        }
-        scrollToTop();
-    };
+          {/* Destination */}
+          <div className={styles.filterGroup}>
+            <h3>Destination</h3>
+            <input type="text" name="continent" placeholder="Continent" onChange={handleFilterChange} />
+            <input type="text" name="country" placeholder="Country" onChange={handleFilterChange} />
+            <input type="text" name="city" placeholder="City" onChange={handleFilterChange} />
+          </div>
 
-    const goToPrevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-        scrollToTop();
-    };
+          {/* Guests */}
+          <div className={styles.filterGroup}>
+            <h3>Guests</h3>
+            <input type="number" name="adults" placeholder="Adults" min="0" onChange={handleFilterChange} />
+            <input type="number" name="children" placeholder="Children" min="0" onChange={handleFilterChange} />
+            <input type="number" name="assisted" placeholder="Assisted" min="0" onChange={handleFilterChange} />
+          </div>
 
-    return (
-        <motion.div
-          className={styles.pageContent}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          variants={pageVariants}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-        >
-{showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
-
-<div className={`${styles.filterSidebar} ${showSidebar ? styles.showSidebar : ''}`}>
-  <div className={styles.filterSidebarContent}>
-    <h2>Filter Your Search</h2>
-
-    <div className={styles.filterGroup}>
-      <h3>Destination</h3>
-      <input type="text" placeholder="Continent" />
-      <input type="text" placeholder="Country" />
-      <input type="text" placeholder="City" />
-    </div>
-
-    <div className={styles.filterGroup}>
-      <h3>Price Range</h3>
-      <input type="number" placeholder="Min Price" />
-      <input type="number" placeholder="Max Price" />
-    </div>
-
-    <div className={styles.filterGroup}>
-      <h3>Date</h3>
-      <input type="date" />
-      <input type="date" />
-    </div>
-
-    <div className={styles.filterGroup}>
-      <h3>Guests</h3>
-      <input type="number" placeholder="Adults" min="0" />
-      <input type="number" placeholder="Children" min="0" />
-      <input type="number" placeholder="Assisted" min="0" />
-    </div>
-
-    <button onClick={toggleSidebar} className={styles.closeSidebarButton}>Close</button>
-  </div>
-</div>
- 
-          <section className={styles.rightSection}>
-            <div className={styles.rightBorder}>
-              <div className={styles.rightTitles}>
-                <h1>Find your Dream Stay</h1>
-                <p>...with Holidaze</p>
+          {/* Meta filters */}
+          <div className={styles.filterGroup}>
+            <h3>Facilities</h3>
+            {metaFilters.map(metaKey => (
+              <div key={metaKey}>
+                <input
+                  type="checkbox"
+                  name={metaKey}
+                  checked={filters.meta[metaKey] || false}
+                  onChange={handleFilterChange}
+                />
+                <label>{metaKey}</label>
               </div>
-      
-              <div className={styles.filterTopSection}>
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <input
-  type="text"
-  placeholder="Search venues..."
-  value={searchQuery}
-  onChange={handleSearchInputChange}
-  autoComplete="off"
-  className={styles.searchbarFilter}
-/>
+            ))}
+          </div>
 
-<button 
-  className={styles.filterSidebarButton} 
-  onClick={toggleSidebar}
->
-  Filters
-</button>
+          <button onClick={toggleSidebar} className={styles.closeSidebarButton}>Close</button>
+        </div>
+      </div>
 
-  {searchResults.length > 0 && (
-    <ul className={styles.suggestionsList}>
-      {searchResults.map((result, index) => (
-        <li key={index} onClick={() => handleSuggestionClick(result)}>
-          {result.name}
-        </li>
-      ))}
-    </ul>
-  )}
-</div>      
-              {loading ? (
-                <div className={styles.allHotels}>
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <HotelCardSecondType key={i} hotel={null} />
-                  ))}
-                </div>
-              ) : (
-                <>
-                  {noMatches ? (
-                    <p>
-                      Could not find a match. Please try again with different
-                      credentials or try again later.
-                    </p>
-                  ) : (
-                    <div className={styles.allHotels}>
-                      {filteredHotels
-                        .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
-                        .map(hotel => (
-                          <HotelCardSecondType key={hotel.id} hotel={hotel} />
-                        ))}
-                    </div>
-                  )}
-      
-                  {window.innerWidth < 1024 && visibleCount < filteredHotels.length && (
-                    <button
-                      className={styles.loadMoreButton}
-                      onClick={loadMore}
-                    >
-                      Load More
-                    </button>
-                  )}
-      
-                  {window.innerWidth >= 1024 && pageTotal > 1 && (
-                    <div className={styles.pagination}>
-                      {currentPage > 1 && (
-                        <button onClick={goToPrevPage} className={styles.page}>
-                          Prev
-                        </button>
-                      )}
-                      {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
-                        <button
-                          key={p}
-                          onClick={() => handlePageClick(p)}
-                          className={p === currentPage ? styles.pageActive : styles.page}
-                        >
-                          {p}
-                        </button>
-                      ))}
-                      {currentPage < pageTotal && (
-                        <button onClick={goToNextPage} className={styles.page}>
-                          Next
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </>
-              )}
+      {/* Main Section */}
+      <section className={styles.rightSection}>
+        <div className={styles.rightBorder}>
+          <div className={styles.rightTitles}>
+            <h1>Find your Dream Stay</h1>
+            <p>...with Holidaze</p>
+          </div>
+
+          {/* Top Search & Filters */}
+          <div className={styles.filterTopSection}>
+            <i className="fa-solid fa-magnifying-glass"></i>
+            <input
+              type="text"
+              placeholder="Search venues..."
+              value={searchQuery}
+              onChange={handleSearchInputChange}
+              autoComplete="off"
+              className={styles.searchbarFilter}
+            />
+            <button className={styles.filterSidebarButton} onClick={toggleSidebar}>
+              Filters
+            </button>
+          </div>
+
+          {/* Hotels List */}
+          {loading ? (
+            <div className={styles.allHotels}>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <HotelCardSecondType key={i} hotel={null} />
+              ))}
             </div>
-          </section>
-        </motion.div>
-      );
-      
+          ) : noMatches ? (
+            <p>Could not find a match. Please try again with different criteria.</p>
+          ) : (
+            <>
+              <div className={styles.allHotels}>
+                {filteredHotels
+                  .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+                  .map(hotel => (
+                    <HotelCardSecondType key={hotel.id} hotel={hotel} />
+                  ))}
+              </div>
+
+              {/* Pagination */}
+              {window.innerWidth >= 1024 && pageTotal > 1 && (
+                <div className={styles.pagination}>
+                  {currentPage > 1 && (
+                    <button onClick={goToPrevPage} className={styles.page}>Prev</button>
+                  )}
+                  {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
+                    <button
+                      key={p}
+                      onClick={() => handlePageClick(p)}
+                      className={p === currentPage ? styles.pageActive : styles.page}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                  {currentPage < pageTotal && (
+                    <button onClick={goToNextPage} className={styles.page}>Next</button>
+                  )}
+                </div>
+              )}
+
+              {window.innerWidth < 1024 && visibleCount < filteredHotels.length && (
+  <button className={styles.loadMoreButton} onClick={loadMore}>
+    Load More
+  </button>
+)}
+            </>
+          )}
+        </div>
+      </section>
+    </motion.div>
+  );
 };
 
 export default Hotels;
