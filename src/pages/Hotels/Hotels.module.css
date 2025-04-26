@@ -313,12 +313,20 @@
 }
 
 .allHotels {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
-    grid-auto-rows: 1fr;
-    max-width: 100%;
-    gap: 35px;
-    position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-auto-rows: 1fr;
+  max-width: 100%;
+  gap: 35px;
+  position: relative;
+  align-items: start
+}
+
+.allHotels > * {
+  aspect-ratio: 3 / 4;
+  max-width: 400px;
+  width: 100%;
+  justify-self: center;
 }
 
 .loadMoreButton {
@@ -385,16 +393,6 @@
       display: none;
     }
   }
-
-
-
-
-
-
-
-
-
-
 
   .filterTopSection {
     height: 100px;
