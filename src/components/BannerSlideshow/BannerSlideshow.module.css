@@ -143,10 +143,20 @@
   height: 12px;
   border: solid 2px white;
   transition: 0.25s;
+  cursor: pointer;
 }
 
-.slideDot:hover {
-  cursor: pointer;
-  transition: 0.25s;
+.slideDot:not(.active):hover {
   background-color: white;
+  transition: 0.25s;
+}
+
+.active {
+  background-color: white;
+  transition: 0.25s;
+}
+.active:hover {
+  background-color: #6B7A3A;
+  border-color: #6B7A3A;
+  transition: 0.25s;
 }

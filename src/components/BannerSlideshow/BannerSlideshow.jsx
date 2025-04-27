@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./bannerSlideshow.module.css";
 
 import img1 from "/media/images/banner2.png";
@@ -35,6 +35,7 @@ const slides = [
 export default function BannerSlideshow() {
   const [index, setIndex] = useState(0);
   const [showContent, setShowContent] = useState(false);
+  const timerRef = useRef(null);
 
   useEffect(() => {
     slides.forEach((slide) => {
@@ -42,6 +43,23 @@ export default function BannerSlideshow() {
       img.src = slide.img;
     });
   }, []);
+
+  useEffect(() => {
+    startTimer();
+    return () => clearInterval(timerRef.current);
+  }, [index]);
+
+  const startTimer = () => {
+    clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setIndex((prev) => (prev + 1) % slides.length);
+    }, 10000);
+  };
+
+  const handleDotClick = (i) => {
+    if (i === index) return;
+    setIndex(i);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -97,19 +115,14 @@ export default function BannerSlideshow() {
         </div>
 
         <div className={styles.paginationDots}>
-        {slides.map((_, i) => (
-          <div
-            key={`dot-${i}`}
-            onClick={() => setIndex(i)}
-            className={styles.slideDot}
-            style={{
-             backgroundColor: index === i ? "white" : "transparent",
-             cursor: "pointer",
-             transition: "background-color 0.3s"
-            }}
-          ></div>
-        ))}
-        </div>
+  {slides.map((_, i) => (
+    <div
+      key={`dot-${i}`}
+      onClick={() => handleDotClick(i)}
+      className={`${styles.slideDot} ${index === i ? styles.active : ""}`}
+    />
+  ))}
+</div>
 
         {showContent && (
           <div className={styles.bannerText}>
