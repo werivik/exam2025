@@ -13,6 +13,12 @@ const slides = [
     span: "Elegance meets Comfort"
   },
   {
+    img: img4,
+    h2: "Paris",
+    h3: "Travel to",
+    p: "...with Holidaze"
+  },
+  {
     img: img2,
     h2: "Spain",
     h3: "Travel to",
@@ -21,12 +27,6 @@ const slides = [
   {
     img: img3,
     h2: "England",
-    h3: "Travel to",
-    p: "...with Holidaze"
-  },
-  {
-    img: img4,
-    h2: "Paris",
     h3: "Travel to",
     p: "...with Holidaze"
   }
