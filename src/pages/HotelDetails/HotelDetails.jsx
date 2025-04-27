@@ -3,12 +3,11 @@ import { useRef, useEffect, useState } from 'react';
 import styles from './HotelDetails.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import Buttons from '../../components/Buttons/Buttons';
+import { isLoggedIn } from '../../auth/auth';
 
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
 import stars from "/media/rating/christmas-stars.png";
-import emptyHeart from "/media/icons/emptyHeart.png";
-import fullHeart from "/media/icons/fullHeart.png";
 
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
@@ -44,6 +43,14 @@ const HotelDetails = () => {
   });
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDateType, setSelectedDateType] = useState(null);
+
+  const [userLoggedIn, setUserLoggedIn] = useState(isLoggedIn());
+
+  useEffect(() => {
+    const handleAuthChange = () => setUserLoggedIn(isLoggedIn());
+    window.addEventListener("authchange", handleAuthChange);
+    return () => window.removeEventListener("authchange", handleAuthChange);
+  }, []);  
 
   const toggleCalendar = (type) => {
     setSelectedDateType(type);
@@ -384,6 +391,8 @@ const HotelDetails = () => {
             )}
           </div>
           <div className={styles.hotelInfoRight}>
+          {userLoggedIn ? (
+    <>
             <div className={styles.bookDateContent}>
               <h3>Find the Perfect Date</h3>
               <div className={styles.bookDate}>
@@ -502,8 +511,24 @@ const HotelDetails = () => {
       />
       </div>
       <p>{isFavorite ? "Added to Favorites" : "Add to Favorites"}</p>
-          </div>
-
+      </div>
+    </>
+  ) : (
+    <div className={styles.loginReminder}>
+      <p className={styles.loginMessage}>
+        Sign in to view booking options and availability.
+      </p>
+      <Buttons
+        size="medium"
+        version="v1"
+        onClick={() => {
+          window.location.href = "/login-costumer";
+        }}
+      >
+        Login
+      </Buttons>
+    </div>
+  )}
           </div>
         </div>
       </div>

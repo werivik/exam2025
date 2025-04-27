@@ -561,7 +561,7 @@
     opacity: 0.9;
   }
   
-\  .favorited {
+  .favorited {
     position: relative;
     width: 44px;
     height: 40px;
@@ -622,3 +622,16 @@
     }
   }
   
+
+  .loginReminder {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .loginMessage {
+    text-align: right;
+  }
