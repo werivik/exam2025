@@ -3,15 +3,12 @@ import { useRef, useEffect, useState } from 'react';
 import styles from './HotelDetails.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import Buttons from '../../components/Buttons/Buttons';
-import { isLoggedIn } from '../../auth/auth';
-
+import { isLoggedIn, updateUserProfile } from '../../auth/auth';
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
 import stars from "/media/rating/christmas-stars.png";
-
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
-import { updateUserProfile } from '../../auth/updateUserPofile';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
 
 const pageVariants = {
@@ -36,6 +33,9 @@ const HotelDetails = () => {
   const [leftImages, setLeftImages] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [owner, setOwner] = useState(null);
+
+  const [totalGuests, setTotalGuests] = useState(0);
+
   const [filters, setFilters] = useState({
     adults: 1,
     children: 0,
@@ -60,6 +60,8 @@ const HotelDetails = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  const [bookingError, setBookingError] = useState('');
 
   useEffect(() => {
     const fetchHotel = async () => {
@@ -90,7 +92,6 @@ const HotelDetails = () => {
           catch (ownerErr) {
             console.error("Failed to fetch owner profile:", ownerErr);
           }
-
         }
 
         if (!owner) {
@@ -101,7 +102,6 @@ const HotelDetails = () => {
               alt: "Placeholder"
             }
           });
-
         }
       } 
       
@@ -147,7 +147,47 @@ const HotelDetails = () => {
       calculateTotalPrice();
     }
   }, [checkInDate, checkOutDate, hotel?.price]);
+  /* */
 
+  const handleBookingSubmit = async () => {
+    if (!checkInDate || !checkOutDate || totalGuests <= 0) {
+      setBookingError('Please provide valid check-in/out dates and number of guests.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/holidaze/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        },
+        body: JSON.stringify({
+          dateFrom: checkInDate,
+          dateTo: checkOutDate,
+          guests: totalGuests,
+          venueId: id, // Venue ID
+        }),
+      });
+
+      if (!response.ok) throw new Error('Booking failed. Please try again.');
+
+      const result = await response.json();
+      alert('Booking successful!');
+      console.log('Booking created:', result);
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      setBookingError('Failed to create booking. Please try again.');
+    }
+  };
+
+  useEffect(() => {
+    if (checkInDate && checkOutDate) {
+      calculateTotalPrice();
+    }
+  }, [checkInDate, checkOutDate, hotel?.price]);
+
+  /* */
   const calculateTotalPrice = () => {
     if (!checkInDate || !checkOutDate || !hotel?.price) return;
     const checkIn = new Date(checkInDate);
@@ -201,6 +241,7 @@ const HotelDetails = () => {
   const currentImage = mediaArray[currentSlide]?.url;
   const currentAlt = mediaArray[currentSlide]?.alt || hotel.name;
 
+  /*
   const toggleFavorite = async () => {
     try {
       setIsFavorite(prevState => !prevState);
@@ -225,17 +266,7 @@ const HotelDetails = () => {
       console.error("Error updating favorites:", error);
     }
   };
-
-  const updateProfileDetails = async (newProfileData) => {
-    try {
-      const updatedProfile = await updateUserProfile(userProfile.name, newProfileData);
-      setUserProfile(updatedProfile.data);
-    } 
-    
-    catch (error) {
-      console.error("Error updating profile:", error);
-    }
-  };
+  */
 
   return (
     <motion.div
@@ -316,7 +347,7 @@ const HotelDetails = () => {
       />
     </div>
   )}
-</div>
+        </div>
         <div className={styles.hotelInfoBottom}>
           <div className={styles.hotelInfoLeft}>
             <p className={styles.description}><strong>Description</strong><br />{hotel.description}</p>
@@ -391,126 +422,105 @@ const HotelDetails = () => {
             )}
           </div>
           <div className={styles.hotelInfoRight}>
-          {userLoggedIn ? (
+  {userLoggedIn ? (
     <>
-            <div className={styles.bookDateContent}>
-              <h3>Find the Perfect Date</h3>
-              <div className={styles.bookDate}>
-                <i className="fa-solid fa-calendar-days" onClick={() => toggleCalendar('start')}></i>
-                <input 
-                  className={styles.bookDateStart}
-                  type="text" 
-                  value={checkInDate} 
-                  placeholder="Check-in Date"
-                  onClick={() => toggleCalendar('start')} 
-                  readOnly
-                />
-                <i className="fa-solid fa-calendar-days" onClick={() => toggleCalendar('end')}></i>
-                <input 
-                  className={styles.bookDateEnd}
-                  type="text" 
-                  value={checkOutDate} 
-                  placeholder="Check-out Date"
-                  onClick={() => toggleCalendar('end')} 
-                  readOnly
-                />
-              </div>
-              {showCalendar && (
-                <CustomCalender 
-                  value={selectedDateType === 'start' ? checkInDate : checkOutDate}
-                  onDateChange={handleDateChange}
-                />
-              )}
-            </div>
-            <div className={styles.bookGuests}>
-              <h3></h3>
-              <div className={styles.filterPeople}>
-                <i className="fa-solid fa-person"></i>
-                <div
-                  className={styles.guestSelector}
-                  onClick={() => setShowGuestDropdown((prev) => !prev)}
-                  ref={dropdownRef}
-                >
-                  <p>{renderGuestInfo()}</p>
-                  <div
-                    className={`${styles.dropdownMenu} ${
-                      showGuestDropdown ? styles.open : ""
-                    }`}
-                  >
-                    {["adults", "children", "disabled"].map((type) => (
-                      <div key={type} className={styles.dropdownRow}>
-                        <span className={styles.label}>
-                          {type === "adults"
-                            ? "Adults"
-                            : type === "children"
-                            ? "Children"
-                            : `Assisted Guest${filters.disabled !== 1 ? "s" : ""}`}
-                        </span>
-                        <div className={styles.counterControls}>
-                          {filters[type] > 0 && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setFilters((prev) => ({
-                                  ...prev,
-                                  [type]: Math.max(0, prev[type] - 1),
-                                }));
-                              }}
-                            >
-                              -
-                            </button>
-                          )}
-                          <span>{filters[type]}</span>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setFilters((prev) => ({
-                                ...prev,
-                                [type]: prev[type] + 1,
-                              }));
-                            }}
-                          >
-                            +
-                          </button>
+      <div className={styles.bookDateContent}>
+        <h3>Find the Perfect Date</h3>
+        <div className={styles.bookDate}>
+          <i className="fa-solid fa-calendar-days" onClick={() => toggleCalendar('start')}></i>
+          <input
+            className={styles.bookDateStart}
+            type="text"
+            value={checkInDate}
+            placeholder="Check-in Date"
+            onClick={() => toggleCalendar('start')}
+            readOnly
+          />
+          <i className="fa-solid fa-calendar-days" onClick={() => toggleCalendar('end')}></i>
+          <input
+            className={styles.bookDateEnd}
+            type="text"
+            value={checkOutDate}
+            placeholder="Check-out Date"
+            onClick={() => toggleCalendar('end')}
+            readOnly
+          />
+        </div>
+        {showCalendar && (
+          <CustomCalender
+            value={selectedDateType === 'start' ? checkInDate : checkOutDate}
+            onDateChange={handleDateChange}
+          />
+        )}
+      </div>
 
-                        </div>
-                      </div>
-                    ))}
+      <div className={styles.bookGuests}>
+        <h3></h3>
+        <div className={styles.filterPeople}>
+          <i className="fa-solid fa-person"></i>
+          <div
+            className={styles.guestSelector}
+            onClick={() => setShowGuestDropdown((prev) => !prev)}
+            ref={dropdownRef}
+          >
+            <p>{`${totalGuests} Guests`}</p>
+            <div
+              className={`${styles.dropdownMenu} ${showGuestDropdown ? styles.open : ''}`}
+            >
+              {["adults", "children", "disabled"].map((type) => (
+                <div key={type} className={styles.dropdownRow}>
+                  <span className={styles.label}>
+                    {type === "adults"
+                      ? "Adults"
+                      : type === "children"
+                      ? "Children"
+                      : `Assisted Guest${totalGuests !== 1 ? "s" : ""}`}
+                  </span>
+                  <div className={styles.counterControls}>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setTotalGuests(Math.max(1, totalGuests - 1));
+                      }}
+                    >
+                      -
+                    </button>
+                    <span>{totalGuests}</span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setTotalGuests(totalGuests + 1);
+                      }}
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
-              </div>
-
-              {!isGuestSelectionValid && (
-                <p className={styles.warningText}>
-                  At least one adult or assisted guest must be present.
-                </p>
-              )}
+              ))}
             </div>
-
-            <div className={styles.dividerLine}></div>
-
-          <div className={styles.bookPrice}>
-            <p>Total Price: <strong>$ {totalPrice.toFixed(2)}</strong> <span>/ $ {hotel.price} per night</span></p>
-
-            <Buttons size='large' version='v2' disabled={!isGuestSelectionValid}>
-              Book Room
-            </Buttons>
-
           </div>
-          <div className={styles.dividerLine}></div>
-
-          <p><strong>Max Guests</strong> {hotel.maxGuests}</p>
-
-          <div className={styles.dividerLine}></div>
-
-          <div className={styles.favoriteVenue}>
-          <div className={styles.heartContainer}>
-          <div 
-        className={`${styles.heart} ${isFavorite ? styles.favorited : ''}`} 
-        onClick={toggleFavorite}
-      />
+        </div>
       </div>
-      <p>{isFavorite ? "Added to Favorites" : "Add to Favorites"}</p>
+
+      {bookingError && <p className={styles.errorText}>{bookingError}</p>}
+
+      <div className={styles.bookPrice}>
+        <p>Total Price: <strong>${totalPrice.toFixed(2)}</strong> <span>/ ${hotel.price} per night</span></p>
+
+        <Buttons size='large' version='v2' onClick={handleBookingSubmit}>
+          Book Room
+        </Buttons>
+      </div>
+
+      <div className={styles.dividerLine}></div>
+
+      <p><strong>Max Guests</strong> {hotel.maxGuests}</p>
+
+      <div className={styles.favoriteVenue}>
+        <div className={styles.heartContainer}>
+          <div className={`${styles.heart}`} />
+        </div>
+        <p>Add to Favorites</p>
       </div>
     </>
   ) : (
@@ -529,7 +539,8 @@ const HotelDetails = () => {
       </Buttons>
     </div>
   )}
-          </div>
+</div>
+
         </div>
       </div>
     </motion.div>
