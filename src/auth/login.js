@@ -22,7 +22,7 @@ export async function loginCostumer({ email, password }) {
 }
 
 // Venue Manager
-export async function loginAdmin({ email, password }) {
+export const loginAdmin = async ({ email, password }) => {
   const response = await fetch(AUTH_LOGIN, {
     method: 'POST',
     headers: headers(),
@@ -35,16 +35,21 @@ export async function loginAdmin({ email, password }) {
   }
 
   const data = await response.json();
+  const token = data?.data?.accessToken;
 
-  console.log('Login Admin Data:', data);
+  console.log("Token received:", token);
 
-  const userData = data.data || data;
+  if (token) {
+    console.log("Saving token to localStorage:", token);
+    localStorage.setItem('accessToken', token);
+    localStorage.setItem('username', data.data.name);
+  }
 
   return {
-    name: userData.name,
-    token: userData.accessToken,
+    name: data.data.name,
+    token: token,
     venueManager: true,
   };
-}
+};
 
   
