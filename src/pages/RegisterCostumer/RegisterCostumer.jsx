@@ -23,6 +23,7 @@ const RegisterCostumer = () => {
   const [error, setError] = useState('');
   const [shake, setShake] = useState(false);
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -77,9 +78,15 @@ const RegisterCostumer = () => {
     setIsSubmitting(true);
   
     try {
-      await registerCostumer(formData);
-      alert('Registration successful! Redirecting to login...');
-      navigate('/login-costumer');
+      await registerCostumer({ 
+        username: formData.name,
+        email: formData.email,
+        password: formData.password
+      });      
+      setShowPopup(true);
+      setTimeout(() => {
+        navigate('/login-costumer');
+      }, 2000);
     } 
     catch (err) {
       console.error('Registration error:', err);
@@ -113,6 +120,7 @@ const RegisterCostumer = () => {
       variants={pageVariants}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
+    <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
       <div className={styles.registerStyle}>
         <div className={`${styles.registerContent} ${shake ? styles.shake : ''}`}>
           <h2>Holidaze</h2>
@@ -167,6 +175,17 @@ const RegisterCostumer = () => {
           </div>
         </div>
       </div>
+      </div>
+
+      {showPopup && (
+              <div className={styles.popupOverlay}>
+                <div className={styles.popup}>
+                <h2>Welcome, {formData.name}!</h2>
+                <p>Redirecting to Login page...</p>
+                </div>
+              </div>
+      )}
+
     </motion.div>
   );
 };

@@ -52,7 +52,7 @@ const LoginCostumer = () => {
       setShowPopup(true);
       setTimeout(() => {
         navigate('/costumer-profile');
-      }, 3000);
+      }, 2000);
   
     } 
     

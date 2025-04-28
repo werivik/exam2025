@@ -311,7 +311,7 @@
     position: absolute;
     width: 100%;
     z-index: 997;
-    top: 96.5%;
+    top: 97%;
   }
   
   .hidden {
@@ -321,7 +321,7 @@
   }
   
   .bounceIcon {
-    animation: bounce 1.5s infinite;
+    animation: bounce 1s infinite;
     font-size: 1.25rem;
     color: #1F1B17;
     margin-top: -10px;
@@ -333,7 +333,7 @@
     }
   
     50% {
-      transform: translateY(10px);
+      transform: translateY(5px);
     }
   } 
 

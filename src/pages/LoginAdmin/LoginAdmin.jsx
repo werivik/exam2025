@@ -14,11 +14,13 @@ const pageVariants = {
 
 const LoginAdmin = () => {
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [shake, setShake] = useState(false);
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -55,17 +57,14 @@ const LoginAdmin = () => {
   
       localStorage.setItem('token', token);
       localStorage.setItem('username', name);
+      setUsername(name);
   
       if (venueManager) {
-        console.log('Redirecting to Venue Manager Dashboard');
-        navigate('/venue-manager-dashboard');
+        setShowPopup(true);
+        setTimeout(() => {
+          navigate('/admin-profile');
+        }, 2000);
       } 
-      
-      else {
-        console.log('Redirecting to Admin Profile');
-        navigate('/admin-profile');
-      }
-  
     } 
     
     catch (err) {
@@ -88,6 +87,7 @@ const LoginAdmin = () => {
   variants={pageVariants}
   transition={{ duration: 0.5, ease: "easeInOut" }}
 >
+    <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
       <div className={styles.loginStyle}>
         <div className={`${styles.loginContent} ${shake ? styles.shake : ''}`}>
           <h2>Holidaze</h2>
@@ -129,6 +129,17 @@ const LoginAdmin = () => {
           </div>
         </div>
       </div>
+    </div>
+
+    {showPopup && (
+  <div className={styles.popupOverlay}>
+    <div className={styles.popup}>
+      <h2>Welcome back, {username}!</h2>
+      <p>Redirecting to your profile...</p>
+    </div>
+  </div>
+)}
+
     </motion.div>
   );
 };

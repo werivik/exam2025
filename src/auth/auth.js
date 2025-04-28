@@ -18,6 +18,7 @@ export function logout() {
   localStorage.removeItem("accessToken");
   sessionStorage.removeItem("accessToken");
   window.dispatchEvent(new Event("authchange"));
+  window.location.href = "/";
 }
 
 export const updateUserProfile = async (userId, { bio, avatar, banner, venueManager }) => {
