@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 import styles from './HotelDetails.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import Buttons from '../../components/Buttons/Buttons';
-import { isLoggedIn, updateUserProfile } from '../../auth/auth';
+import { isLoggedIn, getToken, handleBookingSubmit } from '../../auth/auth';
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
 import stars from "/media/rating/christmas-stars.png";
@@ -18,7 +18,9 @@ const pageVariants = {
 };
 
 const getValidMedia = (mediaArray) => {
-  return Array.isArray(mediaArray) ? mediaArray.filter(item => typeof item.url === 'string' && item.url.trim() !== '') : [];
+  return Array.isArray(mediaArray)
+    ? mediaArray.filter((item) => typeof item.url === 'string' && item.url.trim() !== '')
+    : [];
 };
 
 const HotelDetails = () => {
@@ -33,35 +35,31 @@ const HotelDetails = () => {
   const [leftImages, setLeftImages] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [owner, setOwner] = useState(null);
-
-  const [totalGuests, setTotalGuests] = useState(0);
-
   const [filters, setFilters] = useState({
     adults: 1,
     children: 0,
-    disabled: 0
+    disabled: 0,
   });
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDateType, setSelectedDateType] = useState(null);
-
   const [userLoggedIn, setUserLoggedIn] = useState(isLoggedIn());
+  const [bookingError, setBookingError] = useState('');
+
+  const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
+  const [disabled, setDisabled] = useState(0);
+
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const handleAuthChange = () => setUserLoggedIn(isLoggedIn());
     window.addEventListener("authchange", handleAuthChange);
     return () => window.removeEventListener("authchange", handleAuthChange);
-  }, []);  
-
-  const toggleCalendar = (type) => {
-    setSelectedDateType(type);
-    setShowCalendar(!showCalendar);
-  };
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
-
-  const [bookingError, setBookingError] = useState('');
 
   useEffect(() => {
     const fetchHotel = async () => {
@@ -70,9 +68,12 @@ const HotelDetails = () => {
           method: 'GET',
           headers: headers(),
         });
+
         if (!response.ok) throw new Error("Failed to fetch hotel details");
+
         const result = await response.json();
         setHotel(result.data);
+
         const mediaArray = getValidMedia(result.data.media);
         setLeftImages(mediaArray.slice(0, 3));
 
@@ -99,8 +100,8 @@ const HotelDetails = () => {
             name: "Test Owner",
             avatar: {
               url: "/media/images/mdefault.jpg",
-              alt: "Placeholder"
-            }
+              alt: "Placeholder",
+            },
           });
         }
       } 
@@ -116,6 +117,11 @@ const HotelDetails = () => {
     fetchHotel();
   }, [id]);
 
+  const toggleCalendar = (type) => {
+    setSelectedDateType(type);
+    setShowCalendar(!showCalendar);
+  };
+
   const handleNext = () => {
     if (!hotel?.media?.length) return;
     const mediaArray = getValidMedia(hotel.media);
@@ -123,11 +129,11 @@ const HotelDetails = () => {
     setCurrentSlide(newIndex);
     const nextLeftImages = [
       ...leftImages.slice(1),
-      mediaArray[(currentSlide + 3) % mediaArray.length]
+      mediaArray[(currentSlide + 3) % mediaArray.length],
     ];
     setLeftImages(nextLeftImages);
   };
-  
+
   const handlePrev = () => {
     if (!hotel?.media?.length) return;
     const mediaArray = getValidMedia(hotel.media);
@@ -135,59 +141,11 @@ const HotelDetails = () => {
     setCurrentSlide(newIndex);
     const nextLeftImages = [
       mediaArray[(currentSlide - 1 + mediaArray.length) % mediaArray.length],
-      ...leftImages.slice(0, 2)
+      ...leftImages.slice(0, 2),
     ];
     setLeftImages(nextLeftImages);
   };
 
-  const isGuestSelectionValid = filters.adults + filters.disabled >= 1;
-
-  useEffect(() => {
-    if (hotel?.price && checkInDate && checkOutDate) {
-      calculateTotalPrice();
-    }
-  }, [checkInDate, checkOutDate, hotel?.price]);
-  /* */
-
-  const handleBookingSubmit = async () => {
-    if (!checkInDate || !checkOutDate || totalGuests <= 0) {
-      setBookingError('Please provide valid check-in/out dates and number of guests.');
-      return;
-    }
-
-    try {
-      const response = await fetch('/holidaze/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-        },
-        body: JSON.stringify({
-          dateFrom: checkInDate,
-          dateTo: checkOutDate,
-          guests: totalGuests,
-          venueId: id, // Venue ID
-        }),
-      });
-
-      if (!response.ok) throw new Error('Booking failed. Please try again.');
-
-      const result = await response.json();
-      alert('Booking successful!');
-      console.log('Booking created:', result);
-    } catch (error) {
-      console.error('Error creating booking:', error);
-      setBookingError('Failed to create booking. Please try again.');
-    }
-  };
-
-  useEffect(() => {
-    if (checkInDate && checkOutDate) {
-      calculateTotalPrice();
-    }
-  }, [checkInDate, checkOutDate, hotel?.price]);
-
-  /* */
   const calculateTotalPrice = () => {
     if (!checkInDate || !checkOutDate || !hotel?.price) return;
     const checkIn = new Date(checkInDate);
@@ -209,19 +167,14 @@ const HotelDetails = () => {
     return guestInfo;
   };
 
-  const dropdownRef = useRef(null);
+  const totalGuests = adults + children + disabled;
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowGuestDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+    if (hotel?.price && checkInDate && checkOutDate) {
+      calculateTotalPrice();
+    }
+  }, [checkInDate, checkOutDate, hotel?.price]);
+    
 
   const handleDateChange = (date) => {
     if (selectedDateType === 'start') {
@@ -234,39 +187,24 @@ const HotelDetails = () => {
     setShowCalendar(false);
   };
 
+  const handleBookingSubmit = () => {
+    if (!checkInDate || !checkOutDate) {
+        setBookingError("Please select both check-in and check-out dates.");
+        return;
+    }
+
+    const formattedCheckInDate = new Date(checkInDate).toISOString().split('T')[0];
+    const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0];
+
+    handleBookingSubmit(formattedCheckInDate, formattedCheckOutDate);
+  };
+
   if (loading) return <div className={styles.pageStyle}><p>Loading...</p></div>;
   if (!hotel) return <div className={styles.pageStyle}><p>Venue not found.</p></div>;
 
   const mediaArray = getValidMedia(hotel.media);
   const currentImage = mediaArray[currentSlide]?.url;
   const currentAlt = mediaArray[currentSlide]?.alt || hotel.name;
-
-  /*
-  const toggleFavorite = async () => {
-    try {
-      setIsFavorite(prevState => !prevState);
-
-      const userResponse = await fetch('/user/profile', { method: 'GET', headers: headers() });
-      const userData = await userResponse.json();
-      const favorites = [...userData.data.favorites];
-
-      if (isFavorite) {
-        const index = favorites.indexOf(id);
-        if (index > -1) favorites.splice(index, 1);
-      } 
-      
-      else {
-        favorites.push(id);
-      }
-
-      await updateUserProfile(userData.data.id, { favorites });
-    } 
-    
-    catch (error) {
-      console.error("Error updating favorites:", error);
-    }
-  };
-  */
 
   return (
     <motion.div
@@ -457,49 +395,69 @@ const HotelDetails = () => {
       <div className={styles.bookGuests}>
         <h3></h3>
         <div className={styles.filterPeople}>
-          <i className="fa-solid fa-person"></i>
-          <div
-            className={styles.guestSelector}
-            onClick={() => setShowGuestDropdown((prev) => !prev)}
-            ref={dropdownRef}
-          >
-            <p>{`${totalGuests} Guests`}</p>
-            <div
-              className={`${styles.dropdownMenu} ${showGuestDropdown ? styles.open : ''}`}
+  <i className="fa-solid fa-person"></i>
+  <div
+    className={styles.guestSelector}
+    onClick={() => setShowGuestDropdown((prev) => !prev)}
+    ref={dropdownRef}
+  >
+    <p>{`${adults + children + disabled} Guests`}</p>
+    <div
+      className={`${styles.dropdownMenu} ${showGuestDropdown ? styles.open : ''}`}
+    >
+      {["adults", "children", "disabled"].map((type) => (
+        <div key={type} className={styles.dropdownRow}>
+          <span className={styles.label}>
+            {type === "adults"
+              ? "Adults"
+              : type === "children"
+              ? "Children"
+              : `Assisted Guest${disabled !== 1 ? "s" : ""}`}
+          </span>
+          <div className={styles.counterControls}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (type === "adults") {
+                  setAdults(Math.max(1, adults - 1));
+                } 
+                
+                else if (type === "children") {
+                  setChildren(Math.max(0, children - 1));
+                } 
+                
+                else {
+                  setDisabled(Math.max(0, disabled - 1));
+                }
+              }}
             >
-              {["adults", "children", "disabled"].map((type) => (
-                <div key={type} className={styles.dropdownRow}>
-                  <span className={styles.label}>
-                    {type === "adults"
-                      ? "Adults"
-                      : type === "children"
-                      ? "Children"
-                      : `Assisted Guest${totalGuests !== 1 ? "s" : ""}`}
-                  </span>
-                  <div className={styles.counterControls}>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setTotalGuests(Math.max(1, totalGuests - 1));
-                      }}
-                    >
-                      -
-                    </button>
-                    <span>{totalGuests}</span>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setTotalGuests(totalGuests + 1);
-                      }}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+              -
+            </button>
+            <span>{type === "adults" ? adults : type === "children" ? children : disabled}</span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (type === "adults") {
+                  setAdults(adults + 1);
+                } 
+                
+                else if (type === "children") {
+                  setChildren(children + 1);
+                } 
+                
+                else {
+                  setDisabled(disabled + 1);
+                }
+              }}
+            >
+              +
+            </button>
           </div>
         </div>
+      ))}
+    </div>
+  </div>
+</div>
       </div>
 
       {bookingError && <p className={styles.errorText}>{bookingError}</p>}
@@ -507,7 +465,8 @@ const HotelDetails = () => {
       <div className={styles.bookPrice}>
         <p>Total Price: <strong>${totalPrice.toFixed(2)}</strong> <span>/ ${hotel.price} per night</span></p>
 
-        <Buttons size='large' version='v2' onClick={handleBookingSubmit}>
+        <Buttons size='large' version='v2' 
+         onClick={() => handleBookingSubmit()}>
           Book Room
         </Buttons>
       </div>
