@@ -28,7 +28,7 @@ const CreateVenue = () => {
           country: '',
           continent: ''
         }
-      });      
+      });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -103,12 +103,10 @@ const CreateVenue = () => {
       if (response.ok) {
         console.log('Venue created successfully:', data);
       } 
-      
       else {
         console.error('Error creating venue:', data);
       }
     } 
-    
     catch (error) {
       console.error('Error creating venue:', error);
     }

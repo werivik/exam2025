@@ -6,6 +6,8 @@ import { PROFILES_SINGLE, PROFILES_SINGLE_BY_VENUES } from '../../constants';
 import { headers } from '../../headers';
 import defaultAvatar from '/media/images/mdefault.jpg';
 
+import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType.jsx';
+
 const pageVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
@@ -19,7 +21,7 @@ const AdminProfile = () => {
   const [newName, setNewName] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
   const [showPopup, setShowPopup] = useState(false);
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -50,19 +52,22 @@ const AdminProfile = () => {
         setUserData(data.data || {});
         setNewName(data.data.name);
         setNewAvatar(data.data.avatar?.url || '');
-
+    
         const venuesResponse = await fetch(PROFILES_SINGLE_BY_VENUES.replace('<name>', username), {
           method: 'GET',
           headers: headers(token),
         });
+    
         const venuesData = await venuesResponse.json();
         if (venuesResponse.ok) {
           setAssignedVenues(venuesData.data || []);
+          console.log('Venues data:', venuesData);
         } 
         
         else {
           console.error('Failed to fetch venues');
         }
+    
       } 
       
       catch (error) {
@@ -121,10 +126,10 @@ const AdminProfile = () => {
       console.error('Error updating profile:', error);
     }
   };
-  
-    const handleRedirect = () => {
-      navigate('/create-venue');
-    };
+
+  const handleRedirect = () => {
+    navigate('/create-venue');
+  };
 
   return (
     <motion.div
@@ -136,6 +141,8 @@ const AdminProfile = () => {
       transition={{ duration: 0.5, ease: "easeInOut" }} 
     >
       <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
+
+        <div className={styles.adminPageContent}>
         <section className={styles.leftSection}>
           <div className={styles.leftBorder}>
             <div className={styles.profileLeftTop}>
@@ -159,17 +166,16 @@ const AdminProfile = () => {
               <div className={styles.venuesTitle}>
                 <h2>All Venues</h2>
               </div>
-              <div className={styles.allFavorites}>
-              {assignedVenues.length > 0 ? (
-  assignedVenues.map((venue, index) => (
-    <div key={index} className={styles.venues}>
-      <h3>{venue.name}</h3>
-      <p>{venue.location?.city}, {venue.location?.country}</p>
-    </div>
-  ))
-) : (
-  <p>No venues made yet.</p>
-)}
+              <div className={styles.allVenues}>
+                {assignedVenues && assignedVenues.length > 0 ? (
+                  <div className={styles.venuesList}>
+                    {assignedVenues.map(venue => (
+                      <VenueCardSecondType key={venue.id} venue={venue} />
+                    ))}
+                  </div>
+                ) : (
+                  <p>No venues assigned yet.</p>
+                )}
               </div>
             </div>
 
@@ -201,6 +207,7 @@ const AdminProfile = () => {
             )}
           </div>
         </section>
+        </div>
 
         {showPopup && (
           <div className={styles.popupOverlay}>
