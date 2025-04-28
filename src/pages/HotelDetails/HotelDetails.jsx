@@ -187,7 +187,7 @@ const HotelDetails = () => {
     setShowCalendar(false);
   };
 
-  const handleBookingSubmit = () => {
+  const handleSubmit = () => {
     if (!checkInDate || !checkOutDate) {
         setBookingError("Please select both check-in and check-out dates.");
         return;
@@ -197,7 +197,7 @@ const HotelDetails = () => {
     const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0];
 
     handleBookingSubmit(formattedCheckInDate, formattedCheckOutDate);
-  };
+};
 
   if (loading) return <div className={styles.pageStyle}><p>Loading...</p></div>;
   if (!hotel) return <div className={styles.pageStyle}><p>Venue not found.</p></div>;
@@ -465,8 +465,7 @@ const HotelDetails = () => {
       <div className={styles.bookPrice}>
         <p>Total Price: <strong>${totalPrice.toFixed(2)}</strong> <span>/ ${hotel.price} per night</span></p>
 
-        <Buttons size='large' version='v2' 
-         onClick={() => handleBookingSubmit()}>
+        <Buttons size="large" version="v2" onClick={handleSubmit}>
           Book Room
         </Buttons>
       </div>

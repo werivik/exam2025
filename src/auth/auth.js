@@ -1,6 +1,10 @@
 import { headers } from "../headers";
 import { PROFILES_UPDATE, BOOKINGS_CREATE } from "../constants";
 
+export function getToken() {
+  return localStorage.getItem('accessToken');
+}
+
 export function isLoggedIn() {
   return Boolean(localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken"));
 }
@@ -14,10 +18,6 @@ export function logout() {
   localStorage.removeItem("accessToken");
   sessionStorage.removeItem("accessToken");
   window.dispatchEvent(new Event("authchange"));
-}
-
-export function getToken() {
-  return localStorage.getItem('accessToken');
 }
 
 export const updateUserProfile = async (userId, { bio, avatar, banner, venueManager }) => {
@@ -48,52 +48,38 @@ export const updateUserProfile = async (userId, { bio, avatar, banner, venueMana
   }
 };
 
-export const handleBookingSubmit = async (checkInDate, checkOutDate, totalGuests, id, setBookingError) => {
+export const handleBookingSubmit = async (checkInDate, checkOutDate) => {
   try {
-    if (!checkInDate || !checkOutDate) {
-      throw new Error("Invalid dates. Please check the date format.");
-    }
+    const token = localStorage.getItem('accessToken');
 
-    const checkIn = new Date(checkInDate);
-    const checkOut = new Date(checkOutDate);
-    
-    if (isNaN(checkIn) || isNaN(checkOut)) {
-      throw new Error("Invalid dates. Please check the date format.");
+    if (!token) {
+      console.warn('No access token found in localStorage');
+      alert('You need to log in first.');
+      return;
     }
-
-    if (isNaN(checkIn.getTime()) || isNaN(checkOut.getTime())) {
-      throw new Error('Invalid dates. Please check the date format.');
-    }
-
-    const authToken = getToken();
-    if (!authToken) {
-      throw new Error('You must be logged in to make a booking.');
-    }
-
-    const bookingData = {
-      dateFrom: checkIn.toISOString(),
-      dateTo: checkOut.toISOString(),
-      guests: totalGuests,
-      venueId: id,
-    };
 
     const response = await fetch(BOOKINGS_CREATE, {
       method: 'POST',
-      headers: headers(authToken),
-      body: JSON.stringify(bookingData),
+      headers: headers(token),
+      body: JSON.stringify({
+        checkInDate,
+        checkOutDate,
+      }),
     });
 
     if (!response.ok) {
-      throw new Error('Booking failed. Please try again.');
+      const errorResponse = await response.text();
+      console.error("Booking submission failed with response:", errorResponse);
+      throw new Error(`Booking submission failed: ${response.status}`);
     }
 
-    const result = await response.json();
-    console.log('Booking successful', result);
+    const data = await response.json();
+    console.log("Booking submitted successfully:", data);
+    alert('Booking successful!');
   } 
   
   catch (error) {
-    console.error('Error creating booking:', error);
-    setBookingError(error.message);
+    console.error("Booking API error:", error);
+    alert('Booking submission failed. Please try again.');
   }
 };
-
