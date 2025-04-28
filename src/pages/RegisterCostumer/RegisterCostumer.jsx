@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './RegisterCostumer.module.css';
-import { AUTH_REGISTER } from '../../constants';
-import { headers } from '../../headers';
 import { motion } from "framer-motion";
 import Buttons from '../../components/Buttons/Buttons';
+
+import { registerCostumer } from '../../auth/register';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -65,7 +65,7 @@ const RegisterCostumer = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
-
+  
     if (!isFormValid()) {
       setError(
         'Please make sure your email is stud.noroff.no, and password has at least 8 characters including a number.'
@@ -73,53 +73,36 @@ const RegisterCostumer = () => {
       triggerShake();
       return;
     }
-
+  
     setIsSubmitting(true);
-
+  
     try {
-      const payload = {
-        ...formData,
-        credits: 1000,
-        venueManager: false,
-      };
-
-      const response = await fetch(AUTH_REGISTER, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-
-        const profileExists = errorData.errors?.some(
-          (err) => err.message === 'Profile already exists'
-        );
-
-        if (profileExists) {
-          setError('Username or email is already in use.');
-        } 
-        
-        else {
-          setError(errorData.message || 'Registration failed.');
-        }
-
-        triggerShake();
-        return;
-      }
-
+      await registerCostumer(formData);
       alert('Registration successful! Redirecting to login...');
       navigate('/login-costumer');
     } 
     catch (err) {
       console.error('Registration error:', err);
-      setError('An unexpected error occurred. Please try again.');
+  
+      const profileExists = err.errors?.some(
+        (error) => error.message === 'Profile already exists'
+      );
+  
+      if (profileExists) {
+        setError('Username or email is already in use.');
+      } 
+      
+      else {
+        setError(err.message || 'Registration failed.');
+      }
+  
       triggerShake();
     } 
     finally {
       setIsSubmitting(false);
     }
   };
+  
 
   return (
     <motion.div

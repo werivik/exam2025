@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './RegisterAdmin.module.css';
-import { AUTH_REGISTER } from '../../constants';
-import { headers } from '../../headers';
 import { motion } from "framer-motion";
 import Buttons from '../../components/Buttons/Buttons';
+
+import { registerAdmin } from '../../auth/register';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -39,47 +39,30 @@ const RegisterAdmin = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
-
+  
     if (!isFormValid) {
       setError('All fields are required.');
       triggerShake();
       return;
     }
-
+  
     setIsSubmitting(true);
-
+  
     try {
-      const response = await fetch(AUTH_REGISTER, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          venueManager: true,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData?.errors?.[0]?.message || 'Registration failed');
-      }
-
-      const data = await response.json();
-      console.log('Register Response:', data);
-
+      await registerAdmin({ name, email, password });
+      console.log('Register successful');
       navigate('/login-admin');
     } 
-    
+
     catch (err) {
       setError(err.message || 'Something went wrong');
       triggerShake();
     } 
-    
+
     finally {
       setIsSubmitting(false);
     }
-  };
+  };  
 
   return (
     <motion.div

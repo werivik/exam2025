@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './LoginAdmin.module.css';
-import { AUTH_LOGIN } from '../../constants';
-import { headers } from '../../headers';
 import { motion } from "framer-motion";
 import Buttons from '../../components/Buttons/Buttons';
+
+import { loginAdmin } from '../../auth/login';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -38,36 +38,25 @@ const LoginAdmin = () => {
     e.preventDefault();
     console.log('Form submitted');
     setError('');
-
+  
     if (!isFormValid) {
       setError('Email and Password are required.');
       triggerShake();
       return;
     }
-
+  
     setIsSubmitting(true);
-
+  
     try {
-      const response = await fetch(AUTH_LOGIN, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Login Error Response:', errorData);
-        throw new Error(errorData?.errors?.[0]?.message || 'Login failed');
-      }
-
-      const data = await response.json();
-      console.log('Login Success:', data);
-      console.log('Is Venue Manager:', data.data.venueManager);
-
-      localStorage.setItem('token', data.data.accessToken);
-      localStorage.setItem('username', data.data.name);
-
-      if (data.data.venueManager) {
+      const { name, token, venueManager } = await loginAdmin({ email, password });
+  
+      console.log('Login Success');
+      console.log('Is Venue Manager:', venueManager);
+  
+      localStorage.setItem('token', token);
+      localStorage.setItem('username', name);
+  
+      if (venueManager) {
         console.log('Redirecting to Venue Manager Dashboard');
         navigate('/venue-manager-dashboard');
       } 
@@ -76,6 +65,7 @@ const LoginAdmin = () => {
         console.log('Redirecting to Admin Profile');
         navigate('/admin-profile');
       }
+  
     } 
     
     catch (err) {
