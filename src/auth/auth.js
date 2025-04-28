@@ -62,8 +62,10 @@ export const handleBookingSubmit = async (checkInDate, checkOutDate) => {
       method: 'POST',
       headers: headers(token),
       body: JSON.stringify({
-        checkInDate,
-        checkOutDate,
+        dateFrom: checkInDate,
+        dateTo: checkOutDate,
+        guests,
+        venueId,
       }),
     });
 

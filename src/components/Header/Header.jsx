@@ -103,11 +103,11 @@ function Header() {
       const selectedVenue = venues.find(v => v.name === item.value);
 
       if (selectedVenue?.id) {
-        navigate(`/hotel-details/${selectedVenue.id}`);
+        navigate(`/venue-details/${selectedVenue.id}`);
       }
     } 
     else {
-      navigate("/hotels");
+      navigate("/venues");
     }
   
     setSearchTerm("");
@@ -225,7 +225,7 @@ function Header() {
               </button>
               <li className={styles.menuLinks}>
                 <Link to="/">Home</Link>
-                <Link to="/hotels">Venues</Link>
+                <Link to="/venues">Venues</Link>
                 {isUserLoggedIn && (
                   <Link to="/costumer-profile">My Bookings</Link>
                 )}
@@ -312,7 +312,7 @@ function Header() {
                 }`}
               ></div>
               <li>
-                <Link to="/hotels">Venues</Link>
+                <Link to="/venues">Venues</Link>
               </li>
             </ul>
           </div>

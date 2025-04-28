@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useRef, useEffect, useState } from 'react';
-import styles from './HotelDetails.module.css';
+import styles from './VenueDetails.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import Buttons from '../../components/Buttons/Buttons';
 import { isLoggedIn, getToken, handleBookingSubmit } from '../../auth/auth';
@@ -23,9 +23,9 @@ const getValidMedia = (mediaArray) => {
     : [];
 };
 
-const HotelDetails = () => {
+const VenueDetails = () => {
   const { id } = useParams();
-  const [hotel, setHotel] = useState(null);
+  const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
@@ -62,17 +62,17 @@ const HotelDetails = () => {
   }, []);
 
   useEffect(() => {
-    const fetchHotel = async () => {
+    const fetchVenue = async () => {
       try {
         const response = await fetch(`${VENUES}/${id}`, {
           method: 'GET',
           headers: headers(),
         });
 
-        if (!response.ok) throw new Error("Failed to fetch hotel details");
+        if (!response.ok) throw new Error("Failed to fetch Venue details");
 
         const result = await response.json();
-        setHotel(result.data);
+        setVenue(result.data);
 
         const mediaArray = getValidMedia(result.data.media);
         setLeftImages(mediaArray.slice(0, 3));
@@ -114,7 +114,7 @@ const HotelDetails = () => {
         setLoading(false);
       }
     };
-    fetchHotel();
+    fetchVenue();
   }, [id]);
 
   const toggleCalendar = (type) => {
@@ -123,8 +123,8 @@ const HotelDetails = () => {
   };
 
   const handleNext = () => {
-    if (!hotel?.media?.length) return;
-    const mediaArray = getValidMedia(hotel.media);
+    if (!venue?.media?.length) return;
+    const mediaArray = getValidMedia(venue.media);
     const newIndex = (currentSlide + 1) % mediaArray.length;
     setCurrentSlide(newIndex);
     const nextLeftImages = [
@@ -135,8 +135,8 @@ const HotelDetails = () => {
   };
 
   const handlePrev = () => {
-    if (!hotel?.media?.length) return;
-    const mediaArray = getValidMedia(hotel.media);
+    if (!venue?.media?.length) return;
+    const mediaArray = getValidMedia(venue.media);
     const newIndex = (currentSlide - 1 + mediaArray.length) % mediaArray.length;
     setCurrentSlide(newIndex);
     const nextLeftImages = [
@@ -147,11 +147,11 @@ const HotelDetails = () => {
   };
 
   const calculateTotalPrice = () => {
-    if (!checkInDate || !checkOutDate || !hotel?.price) return;
+    if (!checkInDate || !checkOutDate || !venue?.price) return;
     const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
     const nights = Math.max((checkOut - checkIn) / (1000 * 60 * 60 * 24), 1);
-    const pricePerNight = hotel.price;
+    const pricePerNight = venue.price;
     const total = nights * pricePerNight;
     setTotalPrice(total);
   };
@@ -170,11 +170,10 @@ const HotelDetails = () => {
   const totalGuests = adults + children + disabled;
 
   useEffect(() => {
-    if (hotel?.price && checkInDate && checkOutDate) {
+    if (venue?.price && checkInDate && checkOutDate) {
       calculateTotalPrice();
     }
-  }, [checkInDate, checkOutDate, hotel?.price]);
-    
+  }, [checkInDate, checkOutDate, venue?.price]);
 
   const handleDateChange = (date) => {
     if (selectedDateType === 'start') {
@@ -200,11 +199,11 @@ const HotelDetails = () => {
 };
 
   if (loading) return <div className={styles.pageStyle}><p>Loading...</p></div>;
-  if (!hotel) return <div className={styles.pageStyle}><p>Venue not found.</p></div>;
+  if (!venue) return <div className={styles.pageStyle}><p>Venue not found.</p></div>;
 
-  const mediaArray = getValidMedia(hotel.media);
+  const mediaArray = getValidMedia(venue.media);
   const currentImage = mediaArray[currentSlide]?.url;
-  const currentAlt = mediaArray[currentSlide]?.alt || hotel.name;
+  const currentAlt = mediaArray[currentSlide]?.alt || venue.name;
 
   return (
     <motion.div
@@ -218,11 +217,11 @@ const HotelDetails = () => {
       <div className={styles.pageStyle}>
         <div className={styles.hotelInfoTop}>
           <div className={styles.titleLocation}>
-            <h1>{hotel.name}</h1>
-            <p><i className="fa-solid fa-location-dot"></i>{hotel.location?.address}, {hotel.location?.city}, {hotel.location?.country}</p>
+            <h1>{venue.name}</h1>
+            <p><i className="fa-solid fa-location-dot"></i>{venue.location?.address}, {venue.location?.city}, {venue.location?.country}</p>
           </div>
           <div className={styles.hotelInfoTopRight}>
-            <p className={styles.hotelRating}><strong>Rating:</strong> {hotel.rating} <img src={stars} alt="Star" className={styles.singleStar} /></p>
+            <p className={styles.hotelRating}><strong>Rating:</strong> {venue.rating} <img src={stars} alt="Star" className={styles.singleStar} /></p>
           </div>
         </div>
         <div className={styles.slideshowSection}>
@@ -279,8 +278,8 @@ const HotelDetails = () => {
   ) : (
     <div className={styles.noSlideshow}>
       <img
-        src={hotel.bannerImageUrl || mediaArray[0]?.url || '/default-banner.jpg'}
-        alt={hotel.name}
+        src={venue.bannerImageUrl || mediaArray[0]?.url || '/default-banner.jpg'}
+        alt={venue.name}
         className={styles.detailImage}
       />
     </div>
@@ -288,13 +287,13 @@ const HotelDetails = () => {
         </div>
         <div className={styles.hotelInfoBottom}>
           <div className={styles.hotelInfoLeft}>
-            <p className={styles.description}><strong>Description</strong><br />{hotel.description}</p>
-            {hotel.meta && (
+            <p className={styles.description}><strong>Description</strong><br />{venue.description}</p>
+            {venue.meta && (
               <div className={styles.meta}>
                 <h3>Venue Amenities</h3>
                 <ul>
                   <li>
-                    {hotel.meta.wifi ? (
+                    {venue.meta.wifi ? (
                       <div className={styles.included}>
                         <i className="fa-solid fa-check"></i>
                       </div>
@@ -303,10 +302,10 @@ const HotelDetails = () => {
                         <i className="fa-solid fa-xmark"></i>
                       </div>
                     )}
-                    <i className="fa-solid fa-wifi" style={{ opacity: hotel.meta.wifi ? 1 : 0.5 }}></i> <p style={{ opacity: hotel.meta.wifi ? 1 : 0.5 }}>Wi-Fi</p>
+                    <i className="fa-solid fa-wifi" style={{ opacity: venue.meta.wifi ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.wifi ? 1 : 0.5 }}>Wi-Fi</p>
                   </li>
                   <li>
-                    {hotel.meta.parking ? (
+                    {venue.meta.parking ? (
                       <div className={styles.included}>
                         <i className="fa-solid fa-check"></i>
                       </div>
@@ -315,10 +314,10 @@ const HotelDetails = () => {
                         <i className="fa-solid fa-xmark"></i>
                       </div>
                     )}
-                    <i className="fa-solid fa-car" style={{ opacity: hotel.meta.parking ? 1 : 0.5 }}></i> <p style={{ opacity: hotel.meta.parking ? 1 : 0.5 }}>Free Parking</p>
+                    <i className="fa-solid fa-car" style={{ opacity: venue.meta.parking ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.parking ? 1 : 0.5 }}>Free Parking</p>
                   </li>
                   <li>
-                    {hotel.meta.breakfast ? (
+                    {venue.meta.breakfast ? (
                       <div className={styles.included}>
                         <i className="fa-solid fa-check"></i>
                       </div>
@@ -327,10 +326,10 @@ const HotelDetails = () => {
                         <i className="fa-solid fa-xmark"></i>
                       </div>
                     )}
-                    <i className="fa-solid fa-utensils" style={{ opacity: hotel.meta.breakfast ? 1 : 0.5 }}></i> <p style={{ opacity: hotel.meta.breakfast ? 1 : 0.5 }}>Breakfast Included</p>
+                    <i className="fa-solid fa-utensils" style={{ opacity: venue.meta.breakfast ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.breakfast ? 1 : 0.5 }}>Breakfast Included</p>
                   </li>
                   <li>
-                    {hotel.meta.pets ? (
+                    {venue.meta.pets ? (
                       <div className={styles.included}>
                         <i className="fa-solid fa-check"></i>
                       </div>
@@ -339,7 +338,7 @@ const HotelDetails = () => {
                         <i className="fa-solid fa-xmark"></i>
                       </div>
                     )}
-                    <i className="fa-solid fa-paw" style={{ opacity: hotel.meta.pets ? 1 : 0.5 }}></i> <p style={{ opacity: hotel.meta.pets ? 1 : 0.5 }}>Pets Allowed</p>
+                    <i className="fa-solid fa-paw" style={{ opacity: venue.meta.pets ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.pets ? 1 : 0.5 }}>Pets Allowed</p>
                   </li>
                 </ul>
               </div>
@@ -463,7 +462,7 @@ const HotelDetails = () => {
       {bookingError && <p className={styles.errorText}>{bookingError}</p>}
 
       <div className={styles.bookPrice}>
-        <p>Total Price: <strong>${totalPrice.toFixed(2)}</strong> <span>/ ${hotel.price} per night</span></p>
+        <p>Total Price: <strong>${totalPrice.toFixed(2)}</strong> <span>/ ${venue.price} per night</span></p>
 
         <Buttons size="large" version="v2" onClick={handleSubmit}>
           Book Room
@@ -472,7 +471,7 @@ const HotelDetails = () => {
 
       <div className={styles.dividerLine}></div>
 
-      <p><strong>Max Guests</strong> {hotel.maxGuests}</p>
+      <p><strong>Max Guests</strong> {venue.maxGuests}</p>
 
       <div className={styles.favoriteVenue}>
         <div className={styles.heartContainer}>
@@ -505,4 +504,4 @@ const HotelDetails = () => {
   );
 };
 
-export default HotelDetails;
+export default VenueDetails;

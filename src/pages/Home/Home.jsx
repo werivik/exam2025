@@ -15,7 +15,7 @@ import wifiImage from "/media/metaImages/wifi.jpeg";
 
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
-import HotelCardFirstType from '../../components/HotelCardFirstType/HotelCardFirstType';
+import VenueCardFirstType from '../../components/VenueCardFirstType/VenueCardFirstType';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
 import BannerSlideshow from '../../components/BannerSlideshow/BannerSlideshow';
 
@@ -26,7 +26,7 @@ const pageVariants = {
 };
 
 const Home = () => {
-  const [hotels, setHotels] = useState([]);
+  const [venues, setVenues] = useState([]);
   const [allLocations, setAllLocations] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [showScrollIcon, setShowScrollIcon] = useState(true);
@@ -75,38 +75,37 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const fetchHotels = async () => {
+    const fetchVenues = async () => {
       try {
         const response = await fetch(VENUES, { method: "GET", headers: headers() });
 
-        if (!response.ok) throw new Error("Failed to fetch hotels");
+        if (!response.ok) throw new Error("Failed to fetch venues");
 
         const result = await response.json();
 
-        const getTopRatedHotels = (hotelsArray) =>
-          (hotelsArray || [])
-            .filter(hotel => typeof hotel.rating === "number")
+        const getTopRatedVenues = (venuesArray) =>
+          (venuesArray || [])
+            .filter(venue => typeof venue.rating === "number")
             .sort((a, b) => b.rating - a.rating)
             .slice(0, 5);
 
-        setHotels(getTopRatedHotels(result.data));
+        setVenues(getTopRatedVenues(result.data));
 
         const locationsSet = new Set();
-        (result.data || []).forEach(hotel => {
-          const city = hotel.location?.city;
-          const country = hotel.location?.country;
+        (result.data || []).forEach(venue => {
+          const city = venue.location?.city;
+          const country = venue.location?.country;
           if (city && country) locationsSet.add(`${city}, ${country}`);
         });
 
         setAllLocations(Array.from(locationsSet));
       } 
-      
       catch (error) {
-        console.error("Error fetching hotels:", error);
+        console.error("Error fetching venues:", error);
       }
     };
 
-    fetchHotels();
+    fetchVenues();
   }, []);
 
   useEffect(() => {
@@ -176,15 +175,14 @@ const Home = () => {
           (parseInt(filters.adults) + parseInt(filters.children) + parseInt(filters.disabled))
         );
 
-        setHotels(filtered);
+        setVenues(filtered);
       } 
-      
       catch (error) {
         console.error("Error filtering venues:", error);
       }
     }
 
-    navigate("/hotels", { state: { filters } });
+    navigate("/venues", { state: { filters } });
   };
 
   useEffect(() => {
@@ -201,10 +199,10 @@ const Home = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);  
+  }, []); 
 
-  const HotelTypeSkeleton = () => (
-    <div className={`${styles.hotelType} ${styles.skeleton}`}>
+  const VenueTypeSkeleton = () => (
+    <div className={`${styles.venueType} ${styles.skeleton}`}>
       <div className={styles.skeletonImage}></div>
       <div className={styles.skeletonText}></div>
     </div>
@@ -390,12 +388,12 @@ const Home = () => {
           </div>
 
           <div className={styles.typeContent}>
-            {hotels.length === 0 ? (
+            {venues.length === 0 ? (
               <>
-                <HotelTypeSkeleton />
-                <HotelTypeSkeleton />
-                <HotelTypeSkeleton />
-                <HotelTypeSkeleton />
+                <VenueTypeSkeleton />
+                <VenueTypeSkeleton />
+                <VenueTypeSkeleton />
+                <VenueTypeSkeleton />
               </>
             ) : (
               <>
@@ -461,12 +459,12 @@ const Home = () => {
           <div className={styles.fourthContent}>
             <div className={styles.fourthTitle}>
               <h2>Explore Our Most Popular Hotels<br />for Every Traveler</h2>
-              <Link to="/hotels" className={styles.browseAllLink}>Browse All</Link>
+              <Link to="/venues" className={styles.browseAllLink}>Browse All</Link>
             </div>
 
             <div className={styles.popularHotels}>
-              {hotels.map((hotel) => (
-                <HotelCardFirstType key={hotel.id} hotel={hotel} />
+              {venues.map((venue) => (
+                <VenueCardFirstType key={venue.id} venue={venue} />
               ))}
             </div>
           </div>

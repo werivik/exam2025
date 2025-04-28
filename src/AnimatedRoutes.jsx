@@ -3,8 +3,8 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
 import Home from './pages/Home/Home';
-import Hotels from './pages/Hotels/Hotels';
-import HotelDetails from './pages/HotelDetails/HotelDetails';
+import Venues from './pages/Venues/Venues';
+import VenueDetails from './pages/VenueDetails/VenueDetails';
 import About from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import LoginCostumer from './pages/LoginCostumer/LoginCostumer';
@@ -25,8 +25,8 @@ const AnimatedRoutes = () => {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Home />} />
-        <Route path="/hotels" element={<Hotels />} />
-        <Route path="/hotel-details/:id" element={<HotelDetails />} />
+        <Route path="/venues" element={<Venues />} />
+        <Route path="/venue-details/:id" element={<VenueDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login-costumer" element={<LoginCostumer />} />

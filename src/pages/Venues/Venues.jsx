@@ -1,23 +1,21 @@
 import { useEffect, useState, useCallback } from 'react';
-import { VENUES } from '../../constants';
-import { headers } from '../../headers';
+import { VENUES } from '../../constants.js';
+import { headers } from '../../headers.js';
 import { motion } from "framer-motion";
-import styles from './Hotels.module.css';
+import styles from './Venues.module.css';
 import { useSearchParams } from 'react-router-dom';
-import HotelCardSecondType from '../../components/HotelCardSecondType/HotelCardSecondType.jsx';
+import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType.jsx';
 import debounce from 'lodash.debounce';
 
-// Animations
 const pageVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
 };
 
-const Hotels = () => {
-  // State
-  const [hotels, setHotels] = useState([]);
-  const [filteredHotels, setFilteredHotels] = useState([]);
+const Venues = () => {
+  const [venues, setVenues] = useState([]);
+  const [filteredVenues, setFilteredVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtersVisible, setFiltersVisible] = useState(true);
   const [visibleCount, setVisibleCount] = useState(18);
@@ -34,7 +32,6 @@ const Hotels = () => {
 
   const PAGE_SIZE = filtersVisible ? 18 : 20;
 
-  // Filters
   const [filters, setFilters] = useState({
     continent: '',
     country: '',
@@ -49,30 +46,28 @@ const Hotels = () => {
     priceMax: maxPrice
   });
 
-  // Toggle sidebar
   const toggleSidebar = () => setShowSidebar(prev => !prev);
 
-  // Search
   const handleSearchInputChange = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
 
     if (value.trim()) {
       const searchTerm = value.toLowerCase();
-      const filtered = hotels.filter(hotel => {
-        const nameMatch = hotel.name?.toLowerCase().startsWith(searchTerm);
-        const cityMatch = hotel.location?.city?.toLowerCase().startsWith(searchTerm);
-        const countryMatch = hotel.location?.country?.toLowerCase().startsWith(searchTerm);
-        const ownerMatch = hotel.owner?.name?.toLowerCase().startsWith(searchTerm);
+      const filtered = venues.filter(venue => {
+        const nameMatch = venue.name?.toLowerCase().startsWith(searchTerm);
+        const cityMatch = venue.location?.city?.toLowerCase().startsWith(searchTerm);
+        const countryMatch = venue.location?.country?.toLowerCase().startsWith(searchTerm);
+        const ownerMatch = venue.owner?.name?.toLowerCase().startsWith(searchTerm);
 
         return nameMatch || cityMatch || countryMatch || ownerMatch;
       });
-      setFilteredHotels(filtered);
+      setFilteredVenues(filtered);
       setNoMatches(filtered.length === 0);
     } 
     
     else {
-      setFilteredHotels(hotels);
+      setFilteredVenues(venues);
       setNoMatches(false);
     }
   };
@@ -82,44 +77,43 @@ const Hotels = () => {
     setSearchResults([]);
   };
 
-  // Fetch hotels
   useEffect(() => {
-    const fetchHotels = async () => {
+    const fetchVenues = async () => {
       try {
         const response = await fetch(`${VENUES}?sort=rating&sortOrder=desc`, {
           method: 'GET',
           headers: headers(),
         });
-        if (!response.ok) throw new Error("Failed to fetch hotels");
+        if (!response.ok) throw new Error("Failed to fetch venues");
 
         const data = await response.json();
-        const hotelsData = Array.isArray(data.data) ? data.data : [];
-        setHotels(hotelsData);
-        setFilteredHotels(hotelsData);
+        const venuesData = Array.isArray(data.data) ? data.data : [];
+        setVenues(venuesData);
+        setFilteredVenues(venuesData);
 
-        const prices = hotelsData.map(hotel => hotel.price || 0);
+        const prices = venuesData.map(venue => venue.price || 0);
         setMinPrice(Math.min(...prices));
         setMaxPrice(Math.max(...prices));
 
         const metaKeys = new Set();
-        hotelsData.forEach(hotel => {
-          if (hotel.meta) {
-            Object.keys(hotel.meta).forEach(key => metaKeys.add(key));
+        venuesData.forEach(venue => {
+          if (venue.meta) {
+            Object.keys(venue.meta).forEach(key => metaKeys.add(key));
           }
         });
 
         setMetaFilters(Array.from(metaKeys));
 
         const ratingsSet = new Set();
-        hotelsData.forEach(hotel => {
-          if (hotel.rating) ratingsSet.add(Math.floor(hotel.rating));
+        venuesData.forEach(venue => {
+          if (venue.rating) ratingsSet.add(Math.floor(venue.rating));
         });
 
         setAvailableRatings(Array.from(ratingsSet).sort((a, b) => a - b));
       } 
       
       catch (error) {
-        console.error("Error fetching hotels:", error);
+        console.error("Error fetching venues:", error);
       } 
       
       finally {
@@ -127,10 +121,9 @@ const Hotels = () => {
       }
     };
 
-    fetchHotels();
+    fetchVenues();
   }, []);
 
-  // Sync URL params -> filters
   useEffect(() => {
     const parsedFilters = {
       continent: searchParams.get("continent") || '',
@@ -153,7 +146,6 @@ const Hotels = () => {
     setCurrentPage(parseInt(searchParams.get("page")) || 1);
   }, [metaFilters.length]);
 
-  // Sync filters -> URL params
   useEffect(() => {
     const params = new URLSearchParams();
     if (filters.continent) params.set("continent", filters.continent);
@@ -171,27 +163,25 @@ const Hotels = () => {
     setSearchParams(params);
   }, [filters, currentPage]);
 
-  // Filtering
   useEffect(() => {
-    const filtered = hotels.filter(hotel => {
-      const matchesContinent = filters.continent ? hotel.location?.continent === filters.continent : true;
-      const matchesCountry = filters.country ? hotel.location?.country === filters.country : true;
-      const matchesCity = filters.city ? hotel.location?.city === filters.city : true;
+    const filtered = venues.filter(venue => {
+      const matchesContinent = filters.continent ? venue.location?.continent === filters.continent : true;
+      const matchesCountry = filters.country ? venue.location?.country === filters.country : true;
+      const matchesCity = filters.city ? venue.location?.city === filters.city : true;
       const totalGuests = (filters.adults || 0) + (filters.children || 0) + (filters.assisted || 0);
-      const matchesGuests = hotel.maxGuests >= totalGuests;
-      const matchesRating = filters.ratings.length > 0 ? filters.ratings.includes(Math.floor(hotel.rating)) : true;
+      const matchesGuests = venue.maxGuests >= totalGuests;
+      const matchesRating = filters.ratings.length > 0 ? filters.ratings.includes(Math.floor(venue.rating)) : true;
       const matchesMeta = Object.keys(filters.meta).every(metaKey => {
-        return filters.meta[metaKey] === false || hotel.meta?.[metaKey] === true;
+        return filters.meta[metaKey] === false || venue.meta?.[metaKey] === true;
       });
 
       return matchesContinent && matchesCountry && matchesCity && matchesGuests && matchesRating && matchesMeta;
     });
 
-    setFilteredHotels(filtered);
+    setFilteredVenues(filtered);
     setNoMatches(filtered.length === 0);
-  }, [filters, hotels]);
+  }, [filters, venues]);
 
-  // Handlers
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -227,7 +217,7 @@ const Hotels = () => {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const loadMore = () => {
-    setVisibleCount(prev => Math.min(prev + 10, filteredHotels.length));
+    setVisibleCount(prev => Math.min(prev + 10, filteredVenues.length));
   };
 
   const handlePageClick = (pageNum) => {
@@ -245,7 +235,7 @@ const Hotels = () => {
     scrollToTop();
   };
 
-  const pageTotal = Math.max(1, Math.ceil(filteredHotels.length / PAGE_SIZE));
+  const pageTotal = Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE));
 
   return (
     <motion.div
@@ -318,9 +308,9 @@ const Hotels = () => {
             ))}
           </div>
 
-          {filteredHotels.length > 0 && (
+          {filteredVenues.length > 0 && (
             <div className={styles.resultsPopup}>
-                <p>Found {filteredHotels.length} Results</p>
+                <p>Found {filteredVenues.length} Results</p>
             </div>
           )}
 
@@ -356,7 +346,7 @@ const Hotels = () => {
           {loading ? (
             <div className={styles.allHotels}>
               {Array.from({ length: 6 }).map((_, i) => (
-                <HotelCardSecondType key={i} hotel={null} />
+                <VenueCardSecondType key={i} venue={null} />
               ))}
             </div>
           ) : noMatches ? (
@@ -364,10 +354,10 @@ const Hotels = () => {
           ) : (
             <>
               <div className={styles.allHotels}>
-                {filteredHotels
+                {filteredVenues
                   .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
-                  .map(hotel => (
-                    <HotelCardSecondType key={hotel.id} hotel={hotel} />
+                  .map(venue => (
+                    <VenueCardSecondType key={venue.id} venue={venue} />
                   ))}
               </div>
 
@@ -392,7 +382,7 @@ const Hotels = () => {
                 </div>
               )}
 
-              {window.innerWidth < 1024 && visibleCount < filteredHotels.length && (
+              {window.innerWidth < 1024 && visibleCount < filteredVenues.length && (
   <button className={styles.loadMoreButton} onClick={loadMore}>
     Load More
   </button>
@@ -405,4 +395,4 @@ const Hotels = () => {
   );
 };
 
-export default Hotels;
+export default Venues;
