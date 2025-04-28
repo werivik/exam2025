@@ -263,39 +263,51 @@ function Header() {
             </button>
           )}
   
-          {isSidebarOpen && (
-            <div className={styles.sidebarHeader}>
-              <button
-                className={styles.sidebarClose}
-                onClick={() => setIsSidebarOpen(false)}
-              >
-                <i className="fa-solid fa-angles-left"></i> Hide Menu
-              </button>
-              <li className={styles.menuLinks}>
-                <Link to="/">Home</Link>
-                <Link to="/venues">Venues</Link>
-                {isUserLoggedIn && (
-                  <Link to={userRole === "venueManager" ? "/costumer-admin" : "/costumer-profile"}>My {userRole === "venueManager" ? "Venues" : "Bookings"}</Link>
-                )}
-              </li>
-              <li className={styles.menuLinks}>
-                <Link to="/about">About Us</Link>
-                <Link to="/contact">Contact Us</Link>
-              </li>
-              <li className={styles.menuLinks}>
-  {isUserLoggedIn ? (
-    <>
-      <Link to="/profile-costumer">My Profile</Link>
-    </>
-  ) : (
-    <>
-      <Link to="/login-costumer">Login</Link>
-      <Link to="/register-costumer">Register</Link>
-    </>
-  )}
-</li>
-            </div>
+  {isSidebarOpen && (
+  <div className={styles.sidebarHeader}>
+    <button
+      className={styles.sidebarClose}
+      onClick={() => setIsSidebarOpen(false)}
+    >
+      <i className="fa-solid fa-angles-left"></i> Hide Menu
+    </button>
+    
+    <li className={styles.menuLinks}>
+      <Link to="/">Home</Link>
+      <Link to="/venues">Venues</Link>
+      <div className={styles.divideLine}></div>
+      {isUserLoggedIn && (
+        <>
+          {userData?.venueManager ? (
+            <>
+              <Link to="/admin-profile">My Venues</Link>
+              <Link to="/admin-profile">My Profile</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/costumer-profile">My Bookings</Link>
+              <Link to="/costumer-profile">My Profile</Link>
+            </>
           )}
+        </>
+      )}
+    </li>
+
+    <li className={styles.menuLinks}>
+      <Link to="/about">About Us</Link>
+      <Link to="/contact">Contact Us</Link>
+    </li>
+
+    <li className={styles.menuLinks}>
+      {!isUserLoggedIn && (
+        <>
+          <Link to="/login-costumer">Login</Link>
+          <Link to="/register-costumer">Register</Link>
+        </>
+      )}
+    </li>
+  </div>
+)}
           <div
             className={`${styles.headerContent} ${
               isSidebarOpen ? styles.blurred : ""
