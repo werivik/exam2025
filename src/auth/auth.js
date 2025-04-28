@@ -18,19 +18,23 @@ export function logout() {
   localStorage.removeItem("accessToken");
   sessionStorage.removeItem("accessToken");
   window.dispatchEvent(new Event("authchange"));
+  localStorage.removeItem('username');
+  localStorage.removeItem('venueManager');
+  
   window.location.href = "/";
 }
 
-export const getUserRole = () => {
-  const username = localStorage.getItem('username');
-  
-  if (!username) {
-    console.warn('No username found in localStorage');
-    return null;
+export const getUserRole = async () => {
+  const venueManager = localStorage.getItem('venueManager');
+
+  if (venueManager === 'true') {
+    return 'venueManager';
   }
 
-  return fetchUserRole(username);
+  return 'customer';
 };
+
+
 
 const fetchUserRole = async (username) => {
   try {

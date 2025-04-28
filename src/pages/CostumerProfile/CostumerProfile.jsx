@@ -17,6 +17,8 @@ const CostumerProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
+  
+  const username = localStorage.getItem('username');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -29,7 +31,7 @@ const CostumerProfile = () => {
           return;
         }
 
-        const userProfileUrl = `${PROFILES_SINGLE}/${name}`;
+        const userProfileUrl = PROFILES_SINGLE.replace("<name>", username);
         console.log('Fetching user profile from:', userProfileUrl);
 
         const response = await fetch(userProfileUrl, {

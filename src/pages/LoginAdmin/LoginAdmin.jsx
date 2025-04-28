@@ -57,6 +57,7 @@ const LoginAdmin = () => {
   
       localStorage.setItem('token', token);
       localStorage.setItem('username', name);
+      localStorage.setItem('venueManager', venueManager);
       setUsername(name);
   
       if (venueManager) {

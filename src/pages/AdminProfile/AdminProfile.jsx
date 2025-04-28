@@ -35,7 +35,7 @@ const AdminProfile = () => {
       }
     
       try {
-        const adminProfileUrl = `${PROFILES_SINGLE}/${username}`;
+        const adminProfileUrl = PROFILES_SINGLE.replace("<name>", username);
         const response = await fetch(adminProfileUrl, {
           method: 'GET',
           headers: headers(token),
@@ -160,16 +160,16 @@ const AdminProfile = () => {
                 <h2>All Venues</h2>
               </div>
               <div className={styles.allFavorites}>
-                {assignedVenues.length > 0 ? (
-                  assignedVenues.map((venue, index) => (
-                    <div key={index} className={styles.venues}>
-                      <h3>{venue.name}</h3>
-                      <p>{venue.location}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p>No venues made yet.</p>
-                )}
+              {assignedVenues.length > 0 ? (
+  assignedVenues.map((venue, index) => (
+    <div key={index} className={styles.venues}>
+      <h3>{venue.name}</h3>
+      <p>{venue.location?.city}, {venue.location?.country}</p>
+    </div>
+  ))
+) : (
+  <p>No venues made yet.</p>
+)}
               </div>
             </div>
 

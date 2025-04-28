@@ -4,7 +4,7 @@ import debounce from "lodash.debounce";
 import styles from "./Header.module.css";
 import headerLogo from "/media/logo/logo-default.png";
 import headerLogoHover from "/media/logo/logo-hover.png";
-import { VENUES } from "../../constants";
+import { VENUES, PROFILES_SINGLE } from "../../constants";
 import { headers } from "../../headers";
 import { isLoggedIn, getUserRole } from "../../auth/auth";
 
@@ -22,29 +22,66 @@ function Header() {
   const [userRole, setUserRole] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const token = localStorage.getItem('accessToken');
+      const username = localStorage.getItem('username');
+      
+      if (!token || !username) return;
+
+      try {
+        const response = await fetch(PROFILES_SINGLE.replace('<name>', username), {
+          method: 'GET',
+          headers: headers(token),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setUserData(data.data);
+        }
+        
+        else {
+          console.error('Failed to fetch user profile');
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
   
   useEffect(() => {
     const fetchUserRole = async () => {
       const role = await getUserRole();
-      setUserRole(role)
+      setUserRole(role);
     };
-
-    fetchUserRole();
-
+  
+    if (isUserLoggedIn) {
+      fetchUserRole();
+    } 
+    
+    else {
+      setUserRole(null);
+    }
+  
     if (location.pathname === "/") {
       const handleScroll = () => {
         const scrollThreshold = window.innerHeight * 0.025;
         setScrolled(window.scrollY > scrollThreshold);
       };
-
+  
       window.addEventListener("scroll", handleScroll);
       return () => window.removeEventListener("scroll", handleScroll);
     } 
-
+    
     else {
       setScrolled(true);
     }
-  }, [location.pathname]);
+  }, [location.pathname, isUserLoggedIn]);
+  
 
   useEffect(() => {
     const fetchVenues = async () => {
@@ -192,23 +229,23 @@ function Header() {
         <nav className={styles.nav}>
 
         <ul className={styles.menuLeftLinks}>
-  {isUserLoggedIn ? (
-    <>
-      {userRole === "venueManager" ? (
-        <>
-          <Link to="/profile-admin">Profile</Link>
-          <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
-          <Link to="/costumer-admin">My Venues</Link>
-        </>
-      ) : (
-        <>
-          <Link to="/costumer-profile">Profile</Link>
-          <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
-          <Link to="/costumer-profile">Bookings</Link>
-        </>
-      )}
-    </>
-  ) : (
+        {isUserLoggedIn ? (
+  <>
+    {userData?.venueManager ? (
+      <>
+        <Link to="/admin-profile">Profile</Link>
+        <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
+        <Link to="/admin-profile">My Venues</Link>
+      </>
+    ) : (
+      <>
+        <Link to="/costumer-profile">Profile</Link>
+        <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
+        <Link to="/costumer-profile">Bookings</Link>
+      </>
+    )}
+  </>
+) : (
     <>
       <Link to="/login-costumer">Login</Link>
       <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
