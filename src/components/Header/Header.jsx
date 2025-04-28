@@ -6,7 +6,7 @@ import headerLogo from "/media/logo/logo-default.png";
 import headerLogoHover from "/media/logo/logo-hover.png";
 import { VENUES } from "../../constants";
 import { headers } from "../../headers";
-import { isLoggedIn } from "../../auth/auth";
+import { isLoggedIn, getUserRole } from "../../auth/auth";
 
 function Header() {
   const loginOrRegisterRoutes = ['/login-costumer', '/register-costumer']
@@ -19,10 +19,18 @@ function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(isLoggedIn());
+  const [userRole, setUserRole] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   
   useEffect(() => {
+    const fetchUserRole = async () => {
+      const role = await getUserRole();
+      setUserRole(role)
+    };
+
+    fetchUserRole();
+
     if (location.pathname === "/") {
       const handleScroll = () => {
         const scrollThreshold = window.innerHeight * 0.025;
@@ -32,6 +40,7 @@ function Header() {
       window.addEventListener("scroll", handleScroll);
       return () => window.removeEventListener("scroll", handleScroll);
     } 
+
     else {
       setScrolled(true);
     }
@@ -185,22 +194,24 @@ function Header() {
         <ul className={styles.menuLeftLinks}>
   {isUserLoggedIn ? (
     <>
-      <Link to="/costumer-profile">Profile</Link>
-      <div
-                className={`${styles.divideLine} ${
-                  isSearchOpen ? styles.divideLineActive : ""
-                }`}
-              ></div>
-      <Link to="/costumer-profile">Bookings</Link>
+      {userRole === "venueManager" ? (
+        <>
+          <Link to="/profile-admin">Profile</Link>
+          <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
+          <Link to="/costumer-admin">My Venues</Link>
+        </>
+      ) : (
+        <>
+          <Link to="/costumer-profile">Profile</Link>
+          <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
+          <Link to="/costumer-profile">Bookings</Link>
+        </>
+      )}
     </>
   ) : (
     <>
       <Link to="/login-costumer">Login</Link>
-      <div
-                className={`${styles.divideLine} ${
-                  isSearchOpen ? styles.divideLineActive : ""
-                }`}
-              ></div>
+      <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
       <Link to="/register-costumer">Register</Link>
     </>
   )}
@@ -227,7 +238,7 @@ function Header() {
                 <Link to="/">Home</Link>
                 <Link to="/venues">Venues</Link>
                 {isUserLoggedIn && (
-                  <Link to="/costumer-profile">My Bookings</Link>
+                  <Link to={userRole === "venueManager" ? "/costumer-admin" : "/costumer-profile"}>My {userRole === "venueManager" ? "Venues" : "Bookings"}</Link>
                 )}
               </li>
               <li className={styles.menuLinks}>
@@ -248,7 +259,6 @@ function Header() {
 </li>
             </div>
           )}
-
           <div
             className={`${styles.headerContent} ${
               isSidebarOpen ? styles.blurred : ""

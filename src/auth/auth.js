@@ -1,5 +1,5 @@
 import { headers } from "../headers";
-import { PROFILES_UPDATE } from "../constants";
+import { PROFILES_UPDATE, PROFILES_SINGLE } from "../constants";
 
 export function getToken() {
   return localStorage.getItem('accessToken');
@@ -20,6 +20,40 @@ export function logout() {
   window.dispatchEvent(new Event("authchange"));
   window.location.href = "/";
 }
+
+export const getUserRole = () => {
+  const username = localStorage.getItem('username');
+  
+  if (!username) {
+    console.warn('No username found in localStorage');
+    return null;
+  }
+
+  return fetchUserRole(username);
+};
+
+const fetchUserRole = async (username) => {
+  try {
+    const userProfileUrl = PROFILES_SINGLE.replace("<name>", username);
+    const response = await fetch(userProfileUrl, {
+      method: 'GET',
+      headers: headers(localStorage.getItem('accessToken')),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.errors?.[0]?.message || 'Failed to fetch user role');
+    }
+
+    return data.data?.role || 'guest';
+  } 
+  
+  catch (error) {
+    console.error('Error fetching user role:', error);
+    return 'guest';
+  }
+};
 
 export const updateUserProfile = async (userId, { bio, avatar, banner, venueManager }) => {
   try {
