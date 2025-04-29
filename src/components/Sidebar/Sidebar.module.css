@@ -13,6 +13,16 @@
     color: #1F1B17;
   }
 
+  .filterSidebarContent {
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .filterSidebarContent::-webkit-scrollbar {
+    display: none;
+  }
+  
   .divideLine {
     height: 2px;
     width: 100%;

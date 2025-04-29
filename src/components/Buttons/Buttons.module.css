@@ -25,6 +25,7 @@
     color: #F3F0EB;
     font-size: 20px;
     transition: 0.25s;
+    z-index: 777;
 }
 
 .closeButtonv2 {
