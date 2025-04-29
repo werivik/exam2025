@@ -203,6 +203,13 @@ const Venues = () => {
         const data = await response.json();
         const venuesData = data.data || [];
 
+        const normalizedVenues = venuesData.map(venue => ({
+          ...venue,
+          city: venue.location?.city || '',
+          country: venue.location?.country || '',
+          continent: venue.location?.continent || ''
+        }));
+
         const continentsSet = new Set();
         const countriesSet = new Set();
         const citiesSet = new Set();
@@ -379,7 +386,6 @@ const Venues = () => {
     setShowLocationSuggestions(prev => ({ ...prev, [type]: false }));
   };
   
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       Object.entries(inputRefs).forEach(([key, ref]) => {

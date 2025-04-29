@@ -8,9 +8,9 @@ const Searchbar = ({ filters, setFilters, venues, setSearchQuery, setFilteredVen
   const suggestionsRef = useRef(null);
 
   const allOptions = useMemo(() => {
-    const cities = [...new Set(venues.map(venue => venue.city).filter(Boolean))];
-    const countries = [...new Set(venues.map(venue => venue.country).filter(Boolean))];
-    const continents = [...new Set(venues.map(venue => venue.continent).filter(Boolean))];
+    const cities = [...new Set(venues.map(venue => venue.location?.city).filter(Boolean))];
+    const countries = [...new Set(venues.map(venue => venue.location?.country).filter(Boolean))];
+    const continents = [...new Set(venues.map(venue => venue.location?.continent).filter(Boolean))];
     const venueNames = [...new Set(venues.map(venue => venue.name).filter(Boolean))];
     return [...cities, ...countries, ...continents, ...venueNames];
   }, [venues]);
@@ -53,9 +53,9 @@ const Searchbar = ({ filters, setFilters, venues, setSearchQuery, setFilteredVen
 
     const filtered = venues.filter(venue => {
       const nameMatch = venue.name?.toLowerCase().includes(query.toLowerCase());
-      const cityMatch = venue.city?.toLowerCase().includes(query.toLowerCase());
-      const countryMatch = venue.country?.toLowerCase().includes(query.toLowerCase());
-      const continentMatch = venue.continent?.toLowerCase().includes(query.toLowerCase());
+      const cityMatch = venue.location?.city?.toLowerCase().includes(query.toLowerCase());
+      const countryMatch = venue.location?.country?.toLowerCase().includes(query.toLowerCase());
+      const continentMatch = venue.location?.continent?.toLowerCase().includes(query.toLowerCase());
       return nameMatch || cityMatch || countryMatch || continentMatch;
     });
 
@@ -91,8 +91,7 @@ const Searchbar = ({ filters, setFilters, venues, setSearchQuery, setFilteredVen
         onKeyDown={handleKeyDown}
       />
       {showSearchbarSuggestions && searchbarSuggestions.length > 0 && (
-        <div className={styles.SearchbarSuggestionsWrapper} 
-        style={{ display: 'none', backgroundColor: 'red' }}>
+        <div className={styles.SearchbarSuggestionsWrapper}>
           <ul className={styles.SearchbarSuggestionsList}>
             {searchbarSuggestions.map((suggestion, index) => (
               <li
