@@ -215,14 +215,18 @@ const Sidebar = ({
       </div>
     ))}
   </div>
-</div>
-
+            </div>
 
           </div>
 
-          <Buttons size='medium' version='v1' onClick={clearFilters} className={styles.clearFilterButton}>
+          <div className={styles.divideLine}></div>
+
+          <Buttons size='medium' version='v1' 
+          onClick={clearFilters} 
+          className={styles.clearFilterButton}>
             Clear Filters
           </Buttons>
+          
         </div>
       </div>
     </>
