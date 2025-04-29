@@ -165,44 +165,29 @@
     width: 60%;
     font-size: 1.125rem;
   }
-  
+
   .filterSidebarContent {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow-y: auto;
+    justify-content: space-around;
+    height: 95%;
+  }
+
+  .filterSidebarContent h2 {
+    margin: 0;
+    padding: 0;
+  }
+
+  .allFilters {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
   }
   
   .filterGroup {
     display: flex;
     flex-direction: column;
     gap: 10px;
-  }
-  
-  .closeSidebarButton {
-    margin-top: auto;
-    background-color: #1F1B17;
-    color: white;
-    border: none;
-    padding: 0.8rem 1.2rem;
-    border-radius: 10px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-bottom: 50px;
-  }
-  
-  .filterSidebarButton {
-    width: 100px;
-    height: 40px;
-    background-color: #1F1B17;
-    border: none;
-    color: white;
-    border-radius: 17.5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    cursor: pointer;
   }
   
   .backdrop {
@@ -231,8 +216,8 @@
     left: -475px;
     width: 375px;
     height: 100vh;
-    background: #B88A44;
-    color: white;
+    background-color: white;
+    color: #1F1B17;
     box-shadow: 2px 0 10px rgba(0,0,0,0.2);
     padding: 2rem 1.5rem;
     display: flex;
@@ -246,21 +231,71 @@
   .showSidebar {
     left: 0;
   }
-  
+
   .resultsPopup {
     background-color: #6B7A3A;
     color: white;
     font-size: 14px;
     font-weight: bold;
-    border-radius: 5px;
+    border-radius: 15px;
     text-align: center;
     margin-top: 35px;
     width: 200px;
-    height: 40px;
+    height: 35px;
     margin-left: 50%;
     transform: translate(-50%);
     display: flex;
     align-items: center;
     justify-content: center;
   }
+
+  .closeIconButton {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 20px;
+    top: 25px;
+    border: none;
+    border-radius: 15px;
+    background-color: #1F1B17;
+    color: #F3F0EB;
+    font-size: 20px;
+    transition: 0.25s;
+  }
+
+  .closeIconButton:hover {
+    cursor: pointer;
+    transition: 0.25s;
+    background-color: #6B7A3A;
+  }
   
+
+  .inputWithSuggestions {
+    position: relative;
+    width: 100%;
+    text-align: left;
+  }
+
+  .inputWithSuggestions input {
+    width: 100%;
+    position: relative;
+  }
+
+  .suggestionList {
+    background-color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    text-align: left;
+    list-style-type: none;
+    font-size: 1.125rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: absolute;
+    width: 90%;
+    top: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    z-index: 777;
+    pointer-events: all;
+    border-radius: 0px 0px 15px 15px;
+  }
