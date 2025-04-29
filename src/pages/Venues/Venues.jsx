@@ -341,17 +341,20 @@ setFilters(prev => ({
 
   useEffect(() => {
     const filtered = venues.filter(venue => {
+      const normalizeString = (str) =>
+        str.toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
+      
       const matchesContinent = filters.continent
-        ? venue.location?.continent?.toLowerCase() === filters.continent.toLowerCase()
+        ? normalizeString(venue.location?.continent || '').startsWith(normalizeString(filters.continent))
         : true;
-  
+      
       const matchesCountry = filters.country
-        ? venue.location?.country?.toLowerCase() === filters.country.toLowerCase()
+        ? normalizeString(venue.location?.country || '').startsWith(normalizeString(filters.country))
         : true;
-  
+      
       const matchesCity = filters.city
-        ? venue.location?.city?.toLowerCase() === filters.city.toLowerCase()
-        : true;
+        ? normalizeString(venue.location?.city || '').startsWith(normalizeString(filters.city))
+        : true;       
   
       const totalGuests = (filters.adults || 0) + (filters.children || 0) + (filters.assisted || 0);
       const matchesGuests = venue.maxGuests >= totalGuests;
