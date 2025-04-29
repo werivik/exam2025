@@ -27,6 +27,17 @@
     transition: 0.25s;
 }
 
+.closeButtonv2 {
+    width: 25px;
+    height: 25px;
+    border: none;
+    border-radius: 15px;
+    background-color: #1F1B17;
+    color: #F3F0EB;
+    font-size: 20px;
+    transition: 0.25s;
+}
+
 .closeButton:hover {
     cursor: pointer;
     transition: 0.25s;
