@@ -60,8 +60,17 @@ const Sidebar = ({
       console.error("Venues data is not available or not an array.");
     }
   };
-  
 
+  const filterVenuesByPrice = () => {
+    const selectedPrice = filters.price || minPrice;
+  
+    const filtered = venues.filter((venue) => venue.price <= selectedPrice);
+  
+    setFilteredVenues(filtered);
+  
+    setNoMatches(filtered.length === 0);
+  };
+  
   return (
     <>
       {showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
@@ -108,17 +117,31 @@ const Sidebar = ({
     <span>Max: ${maxPrice}</span>
   </div>
   <div className={styles.priceInputSingle}>
-    <input
-      type="number"
-      value={filters.price || minPrice}
-      min={minPrice}
-      max={maxPrice}
-      onChange={(e) => {
-        const val = Math.max(minPrice, Math.min(maxPrice, parseInt(e.target.value) || minPrice));
-        handleFilterChange({ target: { name: 'price', value: val } });
-      }}
-    />
-  </div>
+  <input
+    type="number"
+    value={filters.price || ""}
+    placeholder={`The Minimum price is ${minPrice}`}
+    min={minPrice}
+    max={maxPrice}
+    onChange={(e) => {
+      const value = e.target.value;
+
+      if (value === "") {
+        handleFilterChange({ target: { name: "price", value: "" } });
+      } 
+      
+      else {
+        if (value[0] === "0" && value.length === 1) {
+          return;
+        }
+        const numericValue = Math.max(minPrice, Math.min(maxPrice, parseInt(value)));
+        handleFilterChange({ target: { name: "price", value: numericValue } });
+      }
+      
+      filterVenuesByPrice();
+    }}
+  />
+</div>
   <div className={styles.sliderSingle}>
     <input
       type="range"
@@ -127,6 +150,7 @@ const Sidebar = ({
       value={filters.price || minPrice}
       onChange={(e) => {
         handleFilterChange({ target: { name: 'price', value: parseInt(e.target.value) } });
+        filterVenuesByPrice();
       }}
       style={{
         background: `linear-gradient(to right, #1F1B17 ${(filters.price - minPrice) / (maxPrice - minPrice) * 100}%, #ddd ${(filters.price - minPrice) / (maxPrice - minPrice) * 100}%)`
@@ -134,7 +158,8 @@ const Sidebar = ({
     />
   </div>
 </div>
-<div className={styles.filterGroup}>
+
+            <div className={styles.filterGroup}>
               <h3>Guests</h3>
               <div className={styles.guestInputs}>
                 <input
