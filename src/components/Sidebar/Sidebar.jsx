@@ -35,9 +35,13 @@ const Sidebar = ({
   };  
 
   const calculateTotalGuests = () => {
-    return adults + children + assistedGuests;
+    return (
+      parseInt(adults || 0) +
+      parseInt(children || 0) +
+      parseInt(assistedGuests || 0)
+    );
   };
-
+  
   const filterVenuesByGuests = () => {
     const totalGuests = calculateTotalGuests();
   
