@@ -56,6 +56,18 @@ const Searchbar = ({ filters, setFilters, venues, setSearchQuery, setFilteredVen
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <div className={styles.searchbarContainer} ref={suggestionsRef}>
       <i class="fa-solid fa-magnifying-glass"></i>
