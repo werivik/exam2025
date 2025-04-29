@@ -467,8 +467,6 @@ setFilters(prev => ({
   venues={venues}
   setFilteredVenues={setFilteredVenues}
   setNoMatches={setNoMatches}
-  minPrice={minPrice}
-  maxPrice={maxPrice}
 />
       <section className={styles.rightSection}>
         <div className={styles.rightBorder}>
