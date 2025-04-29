@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Sidebar.module.css';
 import Buttons from '../Buttons/Buttons';
 
@@ -15,7 +15,48 @@ const Sidebar = ({
   metaFilters,
   clearFilters,
   setShowSuggestions,
+  venues,
+  setFilteredVenues,
+  setNoMatches
+
 }) => {
+
+  const [adults, setAdults] = useState('');
+  const [children, setChildren] = useState('');
+  const [assistedGuests, setAssistedGuests] = useState('');  
+
+  const handleGuestChange = (e, type) => {
+    const rawValue = e.target.value;
+    const value = rawValue === '' ? '' : Math.max(0, parseInt(rawValue));
+  
+    if (type === 'adults') setAdults(value);
+    else if (type === 'children') setChildren(value);
+    else if (type === 'assistedGuests') setAssistedGuests(value);
+  };  
+
+  const calculateTotalGuests = () => {
+    return adults + children + assistedGuests;
+  };
+
+  const filterVenuesByGuests = () => {
+    const totalGuests = calculateTotalGuests();
+  
+    console.log(venues);
+  
+    if (Array.isArray(venues)) {
+      const filtered = venues.filter(venue => {
+        return venue.maxGuests >= totalGuests;
+      });
+  
+      setFilteredVenues(filtered);
+      setNoMatches(filtered.length === 0);
+    } 
+    
+    else {
+      console.error("Venues data is not available or not an array.");
+    }
+  };
+
   return (
     <>
       {showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
@@ -79,9 +120,35 @@ const Sidebar = ({
 
             <div className={styles.filterGroup}>
               <h3>Guests</h3>
-              <input type="number" name="adults" placeholder="Adults" min="0" onChange={handleFilterChange} />
-              <input type="number" name="children" placeholder="Children" min="0" onChange={handleFilterChange} />
-              <input type="number" name="assisted" placeholder="Assisted" min="0" onChange={handleFilterChange} />
+              <div className={styles.guestInputs}>
+                <input
+                  type="number"
+                  name="adults"
+                  placeholder="Adults"
+                  min="0"
+                  value={adults}
+                  onChange={(e) => handleGuestChange(e, 'adults')}
+                />
+                <input
+                  type="number"
+                  name="children"
+                  placeholder="Children"
+                  min="0"
+                  value={children}
+                  onChange={(e) => handleGuestChange(e, 'children')}
+                />
+                <input
+                  type="number"
+                  name="assistedGuests"
+                  placeholder="Assisted"
+                  min="0"
+                  value={assistedGuests}
+                  onChange={(e) => handleGuestChange(e, 'assistedGuests')}
+                />
+              </div>
+              <button onClick={filterVenuesByGuests} className={styles.filterButton}>
+                Apply Guest Filter
+              </button>
             </div>
 
             <div className={styles.filterGroup}>

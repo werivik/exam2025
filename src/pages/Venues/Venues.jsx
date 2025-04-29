@@ -424,6 +424,7 @@ const Venues = () => {
   metaFilters={metaFilters}
   clearFilters={clearFilters}
   setShowSuggestions={setShowSuggestions}
+  venues={venues}
 />
       <section className={styles.rightSection}>
         <div className={styles.rightBorder}>
