@@ -59,6 +59,7 @@ export default function BannerSlideshow() {
   const handleDotClick = (i) => {
     if (i === index) return;
     setIndex(i);
+    resetTimer();
   };
 
   useEffect(() => {
