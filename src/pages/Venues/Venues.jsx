@@ -16,6 +16,25 @@ const pageVariants = {
   exit: { opacity: 0 },
 };
 
+const normalizeString = (str) => {
+  return str
+    .toLowerCase()
+    .replace(/[-_]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
+const formatSuggestion = (str) => {
+  return str
+    .toLowerCase()
+    .replace(/[-_]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 const Venues = () => {
   const [venues, setVenues] = useState([]);
   const [filteredVenues, setFilteredVenues] = useState([]);
@@ -92,22 +111,29 @@ const Venues = () => {
   });
 
   useEffect(() => {
-    const continents = new Set();
-    const countries = new Set();
-    const cities = new Set();
+    const normalizeAndCollect = (key) => {
+      const unique = new Map();
   
-    venues.forEach(venue => {
-      if (venue.location?.continent) continents.add(venue.location.continent);
-      if (venue.location?.country) countries.add(venue.location.country);
-      if (venue.location?.city) cities.add(venue.location.city);
-    });
+      venues.forEach(venue => {
+        const raw = venue.location?.[key];
+        if (raw) {
+          const normalized = normalizeString(raw);
+          const formatted = formatSuggestion(raw);
+          if (!unique.has(normalized)) {
+            unique.set(normalized, formatted);
+          }
+        }
+      });
+  
+      return Array.from(unique.values());
+    };
   
     setLocationSuggestionList({
-      continent: Array.from(continents),
-      country: Array.from(countries),
-      city: Array.from(cities),
-    });    
-  }, [venues]);  
+      continent: normalizeAndCollect('continent'),
+      country: normalizeAndCollect('country'),
+      city: normalizeAndCollect('city'),
+    });
+  }, [venues]);    
 
   const clearFilters = () => {
     setFilters({
@@ -355,7 +381,7 @@ setFilters(prev => ({
   
     setFilteredVenues(filtered);
     setNoMatches(filtered.length === 0);
-  }, [filters, venues]);  
+  }, [filters, venues]);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -385,12 +411,13 @@ setFilters(prev => ({
   });  
 
   const getSuggestions = (type) => {
-    const input = inputValues[type]?.toLowerCase();
+    const input = inputValues[type]?.toLowerCase().replace(/[-_]/g, ' ').trim();
     if (!input) return [];
   
-    return locationSuggestionList[type].filter(item =>
-      item.toLowerCase().includes(input)
-    );
+    return locationSuggestionList[type].filter(item => {
+      const normalizedItem = normalizeString(item);
+      return normalizedItem.includes(input);
+    });
   };
   
   const handleLocationSuggestionClick = (type, value) => {
