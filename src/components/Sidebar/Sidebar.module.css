@@ -84,10 +84,6 @@
     font-size: 1.125rem;
   }
   
-
-
-
-  
   .metaLabel {
     display: flex;
     align-items: center;
@@ -139,13 +135,6 @@
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
-  
-
-
-
-
-
-
 
   .backdrop {
     position: fixed;
@@ -239,31 +228,21 @@
     border-radius: 0px 0px 15px 15px;
   }
   
-  .price-field input {
-    height: 35px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    text-align: center;
-  }
-  
-  .range-input {
-    position: relative;
-    height: 20px;
-  }
-  
   .priceLimits {
     display: flex;
     justify-content: space-between;
     font-size: 14px;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
+    font-size: 1rem;
   }
   
   .priceInputSingle input {
-    width: 100%;
+    width: calc(100% - 5px);
     height: 35px;
-    border-radius: 8px;
+    border-radius: 5px;
     border: 1px solid #ccc;
-    text-align: center;
+    text-align: left;
+    padding-left: 5px;
     margin-bottom: 10px;
   }
   
