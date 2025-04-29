@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./bannerSlideshow.module.css";
 
 import img1 from "/media/images/homeBanner.png";
-import img2 from "/media/images/spainBanner.png";
+import img2 from "/media/images/spainBanner2.png";
 import img3 from "/media/images/irelandBanner2.png";
 import img4 from "/media/images/parisBanner.jpg";
 
