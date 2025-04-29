@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { VENUES } from '../../constants.js';
 import { headers } from '../../headers.js';
 import { motion } from "framer-motion";
@@ -37,6 +37,25 @@ const Venues = () => {
   const [cities, setCities] = useState([]);
 
   const PAGE_SIZE = filtersVisible ? 18 : 20;
+
+  const inputRefs = {
+    continent: useRef(null),
+    country: useRef(null),
+    city: useRef(null),
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      Object.entries(inputRefs).forEach(([key, ref]) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setShowSuggestions(prev => ({ ...prev, [key]: false }));
+        }
+      });
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const [filters, setFilters] = useState({
     continent: '',
