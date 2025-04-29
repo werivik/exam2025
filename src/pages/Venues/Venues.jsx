@@ -419,9 +419,6 @@ const Venues = () => {
   clearFilters={clearFilters}
   setShowSuggestions={setShowSuggestions}
 />
-
-
-      {/* Main Section */}
       <section className={styles.rightSection}>
         <div className={styles.rightBorder}>
           <div className={styles.rightTitles}>
@@ -429,16 +426,22 @@ const Venues = () => {
             <p>...with Holidaze</p>
           </div>
 
-          {/* Top Search & Filters */}
           <div className={styles.filterTopSection}>
           <div className={styles.topSearchbar}>
+          <Searchbar
+    filters={filters}
+    setFilters={setFilters}
+    venues={venues}
+    setSearchQuery={setSearchQuery}
+    setFilteredVenues={setFilteredVenues}
+    setNoMatches={setNoMatches}
+  />
           </div>
             <Buttons size='medium' version='v1' onClick={toggleSidebar}>
               Filters
             </Buttons>
           </div>
 
-          {/* Hotels List */}
           {loading ? (
             <div className={styles.allHotels}>
               {Array.from({ length: 6 }).map((_, i) => (
@@ -457,7 +460,6 @@ const Venues = () => {
                   ))}
               </div>
 
-              {/* Pagination */}
               {window.innerWidth >= 1024 && pageTotal > 1 && (
                 <div className={styles.pagination}>
                   {currentPage > 1 && (
