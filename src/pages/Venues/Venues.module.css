@@ -5,8 +5,7 @@
   padding-bottom: 100px;
   margin-bottom: 100px;
   color: #1F1B17;
-  width: 85%;
-  margin-left: 7.5%;
+  width: 100%;
   position: relative;
 }
 
@@ -16,11 +15,13 @@
     height: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .rightBorder {
-    width: 100%;
+    width: 85%;
     color: #1F1B17;
+    position: relative;
 }
 
 .rightTitles {
@@ -127,8 +128,8 @@
 
   .filterTopSection {
     height: 100px;
-    margin-top: -50px;
-    margin-bottom: 50px;
+    margin-top: -75px;
+    margin-bottom: 75px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
