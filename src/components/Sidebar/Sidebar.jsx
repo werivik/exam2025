@@ -74,7 +74,11 @@ const Sidebar = ({
       {showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
       <div className={`${styles.filterSidebar} ${showSidebar ? styles.showSidebar : ''}`}>
         <div className={styles.filterSidebarContent}>
-          <button onClick={toggleSidebar} className={styles.closeIconButton}>&times;</button>
+          <Buttons size='closeButton'
+          onClick={toggleSidebar}
+          >
+          &times;
+          </Buttons>
 
           <div className={styles.allFilters}>
             <div className={styles.filterGroup}>

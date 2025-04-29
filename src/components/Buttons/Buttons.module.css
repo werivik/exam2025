@@ -13,6 +13,26 @@
     background-color: #6B7A3A;
 }
 
+.closeButton {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    border: none;
+    border-radius: 15px;
+    background-color: #1F1B17;
+    color: #F3F0EB;
+    font-size: 20px;
+    transition: 0.25s;
+}
+
+.closeButton:hover {
+    cursor: pointer;
+    transition: 0.25s;
+    background-color: #6B7A3A;
+}
+
 .small {
     font-size: 18px;
     width: 95px;

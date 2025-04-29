@@ -177,26 +177,6 @@
   .showSidebar {
     left: 0;
   }
-
-  .closeIconButton {
-    width: 25px;
-    height: 25px;
-    position: absolute;
-    right: 20px;
-    top: 25px;
-    border: none;
-    border-radius: 15px;
-    background-color: #1F1B17;
-    color: #F3F0EB;
-    font-size: 20px;
-    transition: 0.25s;
-  }
-
-  .closeIconButton:hover {
-    cursor: pointer;
-    transition: 0.25s;
-    background-color: #6B7A3A;
-  }
   
   .inputWithSuggestions {
     position: relative;
@@ -263,4 +243,3 @@
     background: #1F1B17;
     cursor: pointer;
   }
-  
