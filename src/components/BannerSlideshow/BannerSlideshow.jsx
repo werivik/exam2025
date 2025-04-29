@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./bannerSlideshow.module.css";
 
-import img1 from "/media/images/banner2.png";
-import img2 from "/media/images/beachBanner2.jpg";
-import img3 from "/media/images/londonBanner2.jpg";
-import img4 from "/media/images/parisBanner2.jpg";
+import img1 from "/media/images/homeBanner.png";
+import img2 from "/media/images/spainBanner.png";
+import img3 from "/media/images/irelandBanner.jpg";
+import img4 from "/media/images/parisBanner.jpg";
 
 const slides = [
   {
@@ -26,7 +26,7 @@ const slides = [
   },
   {
     img: img3,
-    h2: "England",
+    h2: "Ireland",
     h3: "Travel to",
     p: "...with Holidaze"
   }
