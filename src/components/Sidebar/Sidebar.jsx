@@ -60,6 +60,7 @@ const Sidebar = ({
       console.error("Venues data is not available or not an array.");
     }
   };
+  
 
   return (
     <>
@@ -101,28 +102,39 @@ const Sidebar = ({
             </div>
 
             <div className={styles.filterGroup}>
-              <h3>Price Range</h3>
-              <input
-                type="number"
-                name="priceMin"
-                value={filters.priceMin || minPrice}
-                min={minPrice}
-                max={maxPrice}
-                onChange={handleFilterChange}
-                placeholder={`Min Price ($${minPrice})`}
-              />
-              <input
-                type="number"
-                name="priceMax"
-                value={filters.priceMax || maxPrice}
-                min={minPrice}
-                max={maxPrice}
-                onChange={handleFilterChange}
-                placeholder={`Max Price ($${maxPrice})`}
-              />
-            </div>
-
-            <div className={styles.filterGroup}>
+  <h3>Price Range</h3>
+  <div className={styles.priceLimits}>
+    <span>Min: ${minPrice}</span>
+    <span>Max: ${maxPrice}</span>
+  </div>
+  <div className={styles.priceInputSingle}>
+    <input
+      type="number"
+      value={filters.price || minPrice}
+      min={minPrice}
+      max={maxPrice}
+      onChange={(e) => {
+        const val = Math.max(minPrice, Math.min(maxPrice, parseInt(e.target.value) || minPrice));
+        handleFilterChange({ target: { name: 'price', value: val } });
+      }}
+    />
+  </div>
+  <div className={styles.sliderSingle}>
+    <input
+      type="range"
+      min={minPrice}
+      max={maxPrice}
+      value={filters.price || minPrice}
+      onChange={(e) => {
+        handleFilterChange({ target: { name: 'price', value: parseInt(e.target.value) } });
+      }}
+      style={{
+        background: `linear-gradient(to right, #1F1B17 ${(filters.price - minPrice) / (maxPrice - minPrice) * 100}%, #ddd ${(filters.price - minPrice) / (maxPrice - minPrice) * 100}%)`
+      }}
+    />
+  </div>
+</div>
+<div className={styles.filterGroup}>
               <h3>Guests</h3>
               <div className={styles.guestInputs}>
                 <input
@@ -169,13 +181,13 @@ const Sidebar = ({
                 </div>
               ))}
             </div>
+            </div>
           </div>
 
           <Buttons size='medium' version='v1' onClick={clearFilters} className={styles.clearFilterButton}>
             Clear Filters
           </Buttons>
         </div>
-      </div>
     </>
   );
 };

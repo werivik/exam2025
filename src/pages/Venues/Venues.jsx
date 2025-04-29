@@ -221,6 +221,19 @@ const Venues = () => {
         setMinPrice(Math.min(...prices));
         setMaxPrice(Math.max(...prices));
 
+        const min = Math.min(...prices);
+
+const max = Math.max(...prices);
+
+setMinPrice(min);
+setMaxPrice(max);
+
+setFilters(prev => ({
+  ...prev,
+  priceMin: min,
+  priceMax: max
+}));
+
         const metaKeys = new Set();
         venuesData.forEach(venue => {
           if (venue.meta) {
@@ -427,6 +440,8 @@ const Venues = () => {
   venues={venues}
   setFilteredVenues={setFilteredVenues}
   setNoMatches={setNoMatches}
+  minPrice={minPrice}
+  maxPrice={maxPrice}
 />
       <section className={styles.rightSection}>
         <div className={styles.rightBorder}>
