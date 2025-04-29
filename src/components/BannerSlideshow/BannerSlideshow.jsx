@@ -35,6 +35,7 @@ const slides = [
 export default function BannerSlideshow() {
   const [index, setIndex] = useState(0);
   const [showContent, setShowContent] = useState(false);
+  const [isDotClicked, setIsDotClicked] = useState(false);
   const timerRef = useRef(null);
 
   useEffect(() => {
@@ -60,6 +61,12 @@ export default function BannerSlideshow() {
     if (i === index) return;
     setIndex(i);
     resetTimer();
+    setIsDotClicked(true);
+  };
+
+  const resetTimer = () => {
+    clearInterval(timerRef.current);
+    startTimer();
   };
 
   useEffect(() => {
@@ -69,6 +76,14 @@ export default function BannerSlideshow() {
     }, 1000);
     return () => clearTimeout(timer);
   }, [index]);
+
+  useEffect(() => {
+    if (isDotClicked) {
+      setTimeout(() => {
+        setIsDotClicked(false);
+      }, 1000);
+    }
+  }, [isDotClicked]);
 
   return (
     <section className={styles.slideshowWrapper}>
