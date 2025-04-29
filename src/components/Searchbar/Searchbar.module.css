@@ -2,6 +2,7 @@
     width: 100%;
     display: flex;
     flex-direction: row;
+    position: relative;
   }
   
   .searchbarContainer i {
@@ -31,4 +32,16 @@
     width: 100%;
     font-size: 1.125rem;
     z-index: 1;
+  }
+
+  .SearchbarSuggestionsWrapper {
+    display: none;
+  }
+  
+  .SearchbarSuggestionsList {
+    display: none;
+  }
+  
+  .suggestionItem {
+    display: none;
   }

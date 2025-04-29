@@ -8,6 +8,7 @@ import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardS
 import debounce from 'lodash.debounce';
 import Buttons from '../../components/Buttons/Buttons.jsx';
 import Searchbar from '../../components/Searchbar/Searchbar.jsx';
+import Sidebar from '../../components/Sidebar/Sidebar.jsx';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -24,7 +25,6 @@ const Venues = () => {
   const [noMatches, setNoMatches] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
   const [metaFilters, setMetaFilters] = useState([]);
@@ -35,6 +35,8 @@ const Venues = () => {
   const [continents, setContinents] = useState([]);
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
+
+  const [searchQuery, setSearchQuery] = useState('');
 
   const PAGE_SIZE = filtersVisible ? 18 : 20;
 
@@ -71,11 +73,17 @@ const Venues = () => {
     priceMax: maxPrice
   });
 
-  const [locationSuggestions, setLocationSuggestions] = useState({
+  const [locationSuggestionList, setLocationSuggestionList] = useState({
     continent: [],
     country: [],
     city: [],
   });
+  
+  const [showLocationSuggestions, setShowLocationSuggestions] = useState({
+    continent: false,
+    country: false,
+    city: false,
+  });  
   
   const [inputValues, setInputValues] = useState({
     continent: '',
@@ -94,11 +102,11 @@ const Venues = () => {
       if (venue.location?.city) cities.add(venue.location.city);
     });
   
-    setLocationSuggestions({
+    setLocationSuggestionList({
       continent: Array.from(continents),
       country: Array.from(countries),
       city: Array.from(cities),
-    });
+    });    
   }, [venues]);  
 
   const clearFilters = () => {
@@ -116,6 +124,40 @@ const Venues = () => {
       priceMax: maxPrice
     });
     setSearchQuery('');
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    if (['continent', 'country', 'city'].includes(name)) {
+      setInputValues(prev => ({ ...prev, [name]: value }));
+    }
+
+    if (name === 'ratings') {
+      setFilters(prev => {
+        const newRatings = checked
+          ? [...prev.ratings, parseInt(value)]
+          : prev.ratings.filter(r => r !== parseInt(value));
+        return { ...prev, ratings: newRatings };
+      });
+    } 
+    
+    else if (type === 'checkbox') {
+      setFilters(prev => ({
+        ...prev,
+        meta: {
+          ...prev.meta,
+          [name]: checked,
+        }
+      }));
+    } 
+    
+    else {
+      setFilters(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
   
   const toggleSidebar = () => setShowSidebar(prev => !prev);
@@ -295,57 +337,6 @@ const Venues = () => {
     setNoMatches(filtered.length === 0);
   }, [filters, venues]);  
 
-  const handleFilterChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    if (['continent', 'country', 'city'].includes(name)) {
-      setInputValues(prev => ({ ...prev, [name]: value }));
-    }
-
-    if (name === 'ratings') {
-      setFilters(prev => {
-        const newRatings = checked
-          ? [...prev.ratings, parseInt(value)]
-          : prev.ratings.filter(r => r !== parseInt(value));
-        return { ...prev, ratings: newRatings };
-      });
-    } 
-    
-    else if (type === 'checkbox') {
-      setFilters(prev => ({
-        ...prev,
-        meta: {
-          ...prev.meta,
-          [name]: checked,
-        }
-      }));
-    } 
-    
-    else {
-      setFilters(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
-  };
-
-  const getSuggestions = (type) => {
-    const input = inputValues[type]?.toLowerCase();
-    if (!input) return [];
-  
-    return locationSuggestions[type].filter(item =>
-      item.toLowerCase().includes(input)
-    );
-  };
-  
-  const handleSuggestionClickSecond = (type, value) => {
-    setFilters(prev => ({ ...prev, [type]: value }));
-    setInputValues(prev => ({ ...prev, [type]: value }));
-    setShowSuggestions(prev => ({ ...prev, [type]: false }));
-  };  
-
-  const toggleFilters = () => setFiltersVisible(prev => !prev);
-
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const loadMore = () => {
@@ -373,18 +364,34 @@ const Venues = () => {
     city: false,
   });  
 
+  const getSuggestions = (type) => {
+    const input = inputValues[type]?.toLowerCase();
+    if (!input) return [];
+  
+    return locationSuggestionList[type].filter(item =>
+      item.toLowerCase().includes(input)
+    );
+  };
+  
+  const handleLocationSuggestionClick = (type, value) => {
+    setFilters(prev => ({ ...prev, [type]: value }));
+    setInputValues(prev => ({ ...prev, [type]: value }));
+    setShowLocationSuggestions(prev => ({ ...prev, [type]: false }));
+  };
+  
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       Object.entries(inputRefs).forEach(([key, ref]) => {
         if (ref.current && !ref.current.contains(event.target)) {
-          setShowSuggestions(prev => ({ ...prev, [key]: false }));
+          setShowLocationSuggestions(prev => ({ ...prev, [key]: false }));
         }
       });
     };
   
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);  
+  }, []);    
 
   const pageTotal = Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE));
 
@@ -397,156 +404,22 @@ const Venues = () => {
       variants={pageVariants}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-
-      {/* Sidebar NOT COMPLETE */}
       {showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
-      <div className={`${styles.filterSidebar} ${showSidebar ? styles.showSidebar : ''}`}>
-        <div className={styles.filterSidebarContent}>
+      <Sidebar
+  showSidebar={showSidebar}
+  toggleSidebar={toggleSidebar}
+  inputValues={inputValues}
+  handleFilterChange={handleFilterChange}
+  getSuggestions={getSuggestions}
+  handleSuggestionClickSecond={handleLocationSuggestionClick}
+  filters={filters}
+  minPrice={minPrice}
+  maxPrice={maxPrice}
+  metaFilters={metaFilters}
+  clearFilters={clearFilters}
+  setShowSuggestions={setShowSuggestions}
+/>
 
-          <button onClick={toggleSidebar} 
-            className={styles.closeIconButton}>
-            &times;
-          </button>
-
-          <h2>Filter Your Search</h2>
-
-          <div className={styles.allFilters}>
-          <div className={styles.filterGroup}>
-            <h3>Destination</h3>
-            <div className={styles.inputWithSuggestions}>
-    <input
-      type="text"
-      name="continent"
-      placeholder="Continent"
-      value={inputValues.continent}
-      onChange={handleFilterChange}
-      onFocus={() => setShowSuggestions(prev => ({ ...prev, city: true }))}
-      autoComplete="off"
-    />
-    {getSuggestions('continent').length > 0 && (
-      <ul className={styles.suggestionList}>
-        {getSuggestions('continent').map((suggestion, idx) => (
-          <li
-            key={idx}
-            onClick={() => handleSuggestionClickSecond('continent', suggestion)}
-          >
-            {suggestion}
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-
-  <div className={styles.inputWithSuggestions}>
-    <input
-      type="text"
-      name="country"
-      placeholder="Country"
-      value={inputValues.country}
-      onChange={handleFilterChange}
-      onFocus={() => setShowSuggestions(prev => ({ ...prev, city: true }))}
-      autoComplete="off"
-    />
-    {getSuggestions('country').length > 0 && (
-      <ul className={styles.suggestionList}>
-        {getSuggestions('country').map((suggestion, idx) => (
-          <li
-            key={idx}
-            onClick={() => handleSuggestionClickSecond('country', suggestion)}
-          >
-            {suggestion}
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-
-  <div className={styles.inputWithSuggestions}>
-    <input
-      type="text"
-      name="city"
-      placeholder="City"
-      value={inputValues.city}
-      onChange={handleFilterChange}
-      onFocus={() => setShowSuggestions(prev => ({ ...prev, city: true }))}
-      autoComplete="off"
-    />
-    {getSuggestions('city').length > 0 && (
-      <ul className={styles.suggestionList}>
-        {getSuggestions('city').map((suggestion, idx) => (
-          <li
-            key={idx}
-            onClick={() => handleSuggestionClickSecond('city', suggestion)}
-          >
-            {suggestion}
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-          </div>
-
-          {/* Price Range */}
-          <div className={styles.filterGroup}>
-            <h3>Price Range</h3>
-            <input
-              type="number"
-              name="priceMin"
-              value={filters.priceMin || minPrice}
-              min={minPrice}
-              max={maxPrice}
-              onChange={handleFilterChange}
-              placeholder={`Min Price ($${minPrice})`}
-            />
-            <input
-              type="number"
-              name="priceMax"
-              value={filters.priceMax || maxPrice}
-              min={minPrice}
-              max={maxPrice}
-              onChange={handleFilterChange}
-              placeholder={`Max Price ($${maxPrice})`}
-            />
-          </div>
-
-          {/* Guests */}
-          <div className={styles.filterGroup}>
-            <h3>Guests</h3>
-            <input type="number" name="adults" placeholder="Adults" min="0" onChange={handleFilterChange} />
-            <input type="number" name="children" placeholder="Children" min="0" onChange={handleFilterChange} />
-            <input type="number" name="assisted" placeholder="Assisted" min="0" onChange={handleFilterChange} />
-          </div>
-
-          {/* Meta filters */}
-          <div className={styles.filterGroup}>
-            <h3>Facilities</h3>
-            {metaFilters.map(metaKey => (
-              <div key={metaKey}>
-                <input
-                  type="checkbox"
-                  name={metaKey}
-                  checked={filters.meta[metaKey] || false}
-                  onChange={handleFilterChange}
-                />
-                <label>{metaKey}</label>
-              </div>
-            ))}
-          </div>
-          </div>
-
- {/*
-          {filteredVenues.length > 0 && (
-            <div className={styles.resultsPopup}>
-                <p>Found {filteredVenues.length} Results</p>
-            </div>
-          )}
-*/}
-
-          <Buttons size='medium' version='v1' onClick={clearFilters} className={styles.clearFilterButton}>
-            Clear Filters
-          </Buttons>
-        </div>
-      </div>
 
       {/* Main Section */}
       <section className={styles.rightSection}>
@@ -559,15 +432,7 @@ const Venues = () => {
           {/* Top Search & Filters */}
           <div className={styles.filterTopSection}>
           <div className={styles.topSearchbar}>
-          <Searchbar
-  filters={filters}
-  setFilters={setFilters}
-  venues={venues}
-  setSearchQuery={setSearchQuery}
-  setFilteredVenues={setFilteredVenues}
-  setNoMatches={setNoMatches}
-/>
-  </div>
+          </div>
             <Buttons size='medium' version='v1' onClick={toggleSidebar}>
               Filters
             </Buttons>

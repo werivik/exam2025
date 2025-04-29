@@ -1,76 +1,88 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import styles from './Searchbar.module.css';
 
 const Searchbar = ({ filters, setFilters, venues, setSearchQuery, setFilteredVenues, setNoMatches }) => {
   const [inputValue, setInputValue] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searchbarSuggestions, setSearchbarSuggestions] = useState([]);
+  const [showSearchbarSuggestions, setShowSearchbarSuggestions] = useState(false);
   const suggestionsRef = useRef(null);
 
-  const allCities = [...new Set(venues.map(venue => venue.city).filter(Boolean))];
-  const allCountries = [...new Set(venues.map(venue => venue.country).filter(Boolean))];
-  const allContinents = [...new Set(venues.map(venue => venue.continent).filter(Boolean))];
-  const allVenueNames = [...new Set(venues.map(venue => venue.name).filter(Boolean))];
-  
-  const allOptions = [...allCities, ...allCountries, ...allContinents, ...allVenueNames];  
+  const allOptions = useMemo(() => {
+    const cities = [...new Set(venues.map(venue => venue.city).filter(Boolean))];
+    const countries = [...new Set(venues.map(venue => venue.country).filter(Boolean))];
+    const continents = [...new Set(venues.map(venue => venue.continent).filter(Boolean))];
+    const venueNames = [...new Set(venues.map(venue => venue.name).filter(Boolean))];
+    return [...cities, ...countries, ...continents, ...venueNames];
+  }, [venues]);
 
   useEffect(() => {
     if (!inputValue) {
-      setSuggestions([]);
+      setSearchbarSuggestions([]);
       return;
     }
 
     const input = inputValue.toLowerCase();
-    const filtered = allOptions.filter(opt => 
+    const filtered = allOptions.filter(opt =>
       typeof opt === 'string' && opt.toLowerCase().startsWith(input)
-    );    
-    setShowSuggestions(true);
-    
-  }, [inputValue]);
+    );
+
+    setSearchbarSuggestions(filtered);
+    setShowSearchbarSuggestions(true);
+  }, [inputValue, allOptions]);
 
   const handleSelectSuggestion = (value) => {
-    setInputValue('');
-    setShowSuggestions(false);
-
-    if (allContinents.includes(value)) {
-      setFilters(prev => ({ ...prev, continent: value }));
-    } 
-    else if (allCountries.includes(value)) {
-      setFilters(prev => ({ ...prev, country: value }));
-    } 
-    else if (allCities.includes(value)) {
-      setFilters(prev => ({ ...prev, city: value }));
-    } 
-    else if (allVenueNames.includes(value)) {
-      setFilters(prev => ({ ...prev, venue: value }));
-    }
+    setInputValue(value);
+    setShowSearchbarSuggestions(false);
+    setSearchQuery(value);
+    filterVenues(value);
   };
 
   const handleChange = (e) => {
-    setInputValue(e.target.value);
+    const value = e.target.value;
+    setInputValue(value);
+    setSearchQuery(value);
+    filterVenues(value);
+  };
+
+  const filterVenues = (query) => {
+    if (!query.trim()) {
+      setFilteredVenues(venues);
+      setNoMatches(false);
+      return;
+    }
+
+    const filtered = venues.filter(venue => {
+      const nameMatch = venue.name?.toLowerCase().includes(query.toLowerCase());
+      const cityMatch = venue.city?.toLowerCase().includes(query.toLowerCase());
+      const countryMatch = venue.country?.toLowerCase().includes(query.toLowerCase());
+      const continentMatch = venue.continent?.toLowerCase().includes(query.toLowerCase());
+      return nameMatch || cityMatch || countryMatch || continentMatch;
+    });
+
+    setFilteredVenues(filtered);
+    setNoMatches(filtered.length === 0);
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && suggestions.length > 0) {
-      handleSelectSuggestion(suggestions[0]);
+    if (e.key === 'Enter' && searchbarSuggestions.length > 0) {
+      handleSelectSuggestion(searchbarSuggestions[0]);
     }
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
-        setShowSuggestions(false);
+        setShowSearchbarSuggestions(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
     <div className={styles.searchbarContainer} ref={suggestionsRef}>
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <i className="fa-solid fa-magnifying-glass"></i>
       <input
         type="text"
         placeholder="Search venues, cities, countries..."
@@ -78,14 +90,21 @@ const Searchbar = ({ filters, setFilters, venues, setSearchQuery, setFilteredVen
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
-      {showSuggestions && (
-        <ul className={styles.suggestionsList}>
-          {suggestions.map((suggestion, index) => (
-            <li key={index} onClick={() => handleSelectSuggestion(suggestion)}>
-              {suggestion}
-            </li>
-          ))}
-        </ul>
+      {showSearchbarSuggestions && searchbarSuggestions.length > 0 && (
+        <div className={styles.SearchbarSuggestionsWrapper} 
+        style={{ display: 'none', backgroundColor: 'red' }}>
+          <ul className={styles.SearchbarSuggestionsList}>
+            {searchbarSuggestions.map((suggestion, index) => (
+              <li
+                key={index}
+                className={styles.suggestionItem}
+                onClick={() => handleSelectSuggestion(suggestion)}
+              >
+                {suggestion}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );
