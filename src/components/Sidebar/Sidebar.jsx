@@ -185,7 +185,7 @@ const Sidebar = ({
                 <input
                   type="number"
                   name="assistedGuests"
-                  placeholder="Assisted"
+                  placeholder="Assisted Guests"
                   min="0"
                   value={assistedGuests}
                   onChange={(e) => handleGuestChange(e, 'assistedGuests')}
@@ -226,7 +226,7 @@ const Sidebar = ({
           className={styles.clearFilterButton}>
             Clear Filters
           </Buttons>
-          
+
         </div>
       </div>
     </>
