@@ -1,15 +1,30 @@
-
 .filterSidebarContent {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    gap: 10px;
-    height: 85%;
+    gap: 25px;
+    height: 100%;
+    padding-bottom: 50px;
+    margin-bottom: 50px;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    color: #1F1B17;
   }
 
-  .filterSidebarContent h2 {
-    margin: 0;
-    padding: 0;
+  .divideLine {
+    height: 2px;
+    width: 100%;
+    border: 99px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    background-color: #1F1B17;
+  }
+
+  .filterSidebarContent h3 {
+    margin-top: 10px;
+    font-size: 1.5rem;
   }
 
   .allFilters {
@@ -23,7 +38,34 @@
   .filterGroup {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
+  }
+
+  .filterGroup input {
+    color: #1F1B17;
+    font-size: 1rem;
+  }
+
+  .inputWithSuggestions input {
+    height: 35px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #1F1B17;
+    padding-left: 5px;
+    width: calc(100% - 5px);
+    font-size: 1rem;
+  }
+
+  .guestInputs input {
+    height: 35px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #1F1B17;
+    padding-left: 5px;
+    width: calc(100% - 5px);
+    font-size: 1rem;
   }
   
   .backdrop {
@@ -49,7 +91,7 @@
   .filterSidebar {
     position: fixed;
     top: 0;
-    left: -475px;
+    left: -500px;
     width: 375px;
     height: 100vh;
     background-color: white;
@@ -66,23 +108,6 @@
   
   .showSidebar {
     left: 0;
-  }
-
-  .resultsPopup {
-    background-color: #6B7A3A;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 15px;
-    text-align: center;
-    margin-top: 35px;
-    width: 200px;
-    height: 35px;
-    margin-left: 50%;
-    transform: translate(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   .closeIconButton {
@@ -105,7 +130,6 @@
     background-color: #6B7A3A;
   }
   
-
   .inputWithSuggestions {
     position: relative;
     width: 100%;

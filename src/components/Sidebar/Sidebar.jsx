@@ -75,12 +75,10 @@ const Sidebar = ({
       <div className={`${styles.filterSidebar} ${showSidebar ? styles.showSidebar : ''}`}>
         <div className={styles.filterSidebarContent}>
           <button onClick={toggleSidebar} className={styles.closeIconButton}>&times;</button>
-          <h2>Filter Your Search</h2>
 
           <div className={styles.allFilters}>
             <div className={styles.filterGroup}>
               <h3>Destination</h3>
-
               {['continent', 'country', 'city'].map((locationType) => (
                 <div className={styles.inputWithSuggestions} key={locationType}>
                   <input
@@ -107,6 +105,8 @@ const Sidebar = ({
                 </div>
               ))}
             </div>
+
+            <div className={styles.divideLine}></div>
 
             <div className={styles.filterGroup}>
               <h3>Price Range</h3>
@@ -157,6 +157,8 @@ const Sidebar = ({
               </div>
             </div>
 
+            <div className={styles.divideLine}></div>
+
             <div className={styles.filterGroup}>
               <h3>Guests</h3>
               <div className={styles.guestInputs}>
@@ -186,6 +188,8 @@ const Sidebar = ({
                 />
               </div>
             </div>
+
+            <div className={styles.divideLine}></div>
 
             <div className={styles.filterGroup}>
               <h3>Facilities</h3>
