@@ -138,7 +138,11 @@
     gap: 50px;
   }
 
-  .filterTopSection i {
+  .topSearchbar {
+    width: 100%;
+  }
+
+  .topSearchbar i {
     position: absolute;
     left: 0;
     margin-left: -2px;
@@ -155,14 +159,14 @@
     background-color: white;
   }
 
-  .searchbarFilter {
+  .topSearchbar input {
     border: none;
-    height: 40px;
+    height: 45px;
     border-radius: 15px;
-    min-width: 325px;
+    min-width: 225px;
     padding-left: 50px;
     margin-left: 2.5px;
-    width: 60%;
+    width: 70%;
     font-size: 1.125rem;
   }
 
