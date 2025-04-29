@@ -192,19 +192,28 @@ const Sidebar = ({
             <div className={styles.divideLine}></div>
 
             <div className={styles.filterGroup}>
-              <h3>Facilities</h3>
-              {metaFilters.map(metaKey => (
-                <div key={metaKey}>
-                  <input
-                    type="checkbox"
-                    name={metaKey}
-                    checked={filters.meta[metaKey] || false}
-                    onChange={handleFilterChange}
-                  />
-                  <label>{metaKey}</label>
-                </div>
-              ))}
-            </div>
+  <h3>Facilities</h3>
+
+  <div className={styles.metaFilters}>
+    {metaFilters.map(metaKey => (
+      <div key={metaKey} className={styles.metaCheckboxWrapper}>
+        <label className={styles.metaLabel}>
+          <input
+            type="checkbox"
+            name={metaKey}
+            checked={filters.meta[metaKey] || false}
+            onChange={handleFilterChange}
+            className={styles.metaCheckbox}
+          />
+          <span className={styles.customCheckbox}></span>
+          {metaKey.charAt(0).toUpperCase() + metaKey.slice(1)}
+        </label>
+      </div>
+    ))}
+  </div>
+</div>
+
+
           </div>
 
           <Buttons size='medium' version='v1' onClick={clearFilters} className={styles.clearFilterButton}>
