@@ -3,7 +3,7 @@ import styles from "./bannerSlideshow.module.css";
 
 import img1 from "/media/images/homeBanner.png";
 import img2 from "/media/images/spainBanner.png";
-import img3 from "/media/images/irelandBanner.jpg";
+import img3 from "/media/images/irelandBanner2.png";
 import img4 from "/media/images/parisBanner.jpg";
 
 const slides = [
@@ -47,7 +47,7 @@ export default function BannerSlideshow() {
   useEffect(() => {
     startTimer();
     return () => clearInterval(timerRef.current);
-  }, [index]);
+  }, []);
 
   const startTimer = () => {
     clearInterval(timerRef.current);
@@ -60,13 +60,6 @@ export default function BannerSlideshow() {
     if (i === index) return;
     setIndex(i);
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % slides.length);
-    }, 10000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     setShowContent(false);
