@@ -147,7 +147,7 @@ const Home = () => {
   const renderGuestInfo = () => {
     let guestInfo = `${filters.adults} Adult${filters.adults !== 1 ? "s" : ""}`;
     if (filters.children > 0) guestInfo += `, ${filters.children} Child${filters.children !== 1 ? "ren" : ""}`;
-    if (filters.disabled > 0) guestInfo += `, ${filters.disabled} Assisted${filters.disabled !== 1 ? " Guests" : ""}`;
+    if (filters.disabled > 0) guestInfo += `, ${filters.disabled} Assisted${filters.disabled !== 1 ? " " : ""}`;
     return guestInfo;
   };
 
@@ -294,7 +294,7 @@ const Home = () => {
           className={styles.startDateFilter}
           type="text"
           value={checkInDate}
-          placeholder="Start Date"
+          placeholder="Start"
           onClick={() => toggleCalendar('start')}
           readOnly
         />
@@ -307,7 +307,7 @@ const Home = () => {
           className={styles.endDateFilter}
           type="text"
           value={checkOutDate}
-          placeholder="End Date"
+          placeholder="End"
           onClick={() => toggleCalendar('end')}
           readOnly
         />
@@ -355,10 +355,12 @@ const Home = () => {
                 </div>
               </div>
 
+              <div className={styles.searchButtonFirst}>
               <Buttons size='small' version='v1'onClick={checkConditionsForSearch}>
                 Search
               </Buttons>
-
+              </div>
+            
             </div>
             {showWarning && (
         <div className={styles.warningPopup}>
@@ -368,8 +370,136 @@ const Home = () => {
             <button onClick={() => setShowWarning(false)} className={styles.closeWarningPopup}>X</button>
           </div>
         </div>
-      )}
+            )}
           </div>
+
+
+
+
+          <div className={styles.filterContentSecond}>
+            <div className={styles.allFilters}>
+              <div className={styles.filtersColumns}>
+                <div className={styles.filterDestination}>
+                  <i className="fa-solid fa-location-dot"></i>
+                  <input
+                    name="destination"
+                    placeholder="Search destination..."
+                    value={filters.destination}
+                    onChange={handleInputChange}
+                    autoComplete="off"
+                  />
+                  {filters.destination && suggestions.length > 0 && (
+                    <ul className={styles.suggestionsList}>
+                      {suggestions.map((suggestion, index) => (
+                        <li
+                          key={index}
+                          onClick={() => {
+                            if (suggestion !== "No matching results...") {
+                              setFilters(prev => ({ ...prev, destination: suggestion }));
+                              setSuggestions([]);
+                            }
+                          }}
+                        >
+                          {suggestion}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <div className={styles.filterCalender}>
+        <i
+          className="fa-solid fa-calendar-days"
+          onClick={() => toggleCalendar('start')}
+        ></i>
+        <input
+          className={styles.startDateFilter}
+          type="text"
+          value={checkInDate}
+          placeholder="Start"
+          onClick={() => toggleCalendar('start')}
+          readOnly
+        />
+
+        <i
+          className="fa-solid fa-calendar-days"
+          onClick={() => toggleCalendar('end')}
+        ></i>
+        <input
+          className={styles.endDateFilter}
+          type="text"
+          value={checkOutDate}
+          placeholder="End"
+          onClick={() => toggleCalendar('end')}
+          readOnly
+        />
+        <div className={styles.costumCalenderPosition}>
+        {showCalendar && (
+  <CustomCalender
+    key={selectedDateType + checkInDate + checkOutDate}
+    value={selectedDateType === 'start' ? checkInDate : checkOutDate}
+    onDateChange={handleDateChange}
+  />
+)}
+        </div>
+                </div>
+                <div className={styles.filtersColumnsBottom}>
+                <div className={styles.filterPeople}>
+                <i className="fa-solid fa-person"></i>
+                <div
+  className={styles.guestSelector}
+  onClick={() => setShowGuestDropdown(prev => !prev)}
+  ref={guestDropdownRef}
+>
+                  <p>{renderGuestInfo()}</p>
+                  <div className={`${styles.dropdownMenu} ${showGuestDropdown ? styles.open : ""}`}>
+                    {["adults", "children", "disabled"].map((type) => (
+                      <div key={type} className={styles.dropdownRow}>
+                        <span className={styles.label}>
+                        {type === "adults" ? "Adults" : type === "children" ? "Children" : "Assisted Guests"}
+                        </span>
+                        <div className={styles.counterControls}>
+                          {filters[type] > 0 && (
+                            <button onClick={(e) => {
+                              e.stopPropagation();
+                              setFilters(prev => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
+                            }}>-</button>
+                          )}
+                          <span>{filters[type]}</span>
+                          <button onClick={(e) => {
+                            e.stopPropagation();
+                            setFilters(prev => ({ ...prev, [type]: prev[type] + 1 }));
+                          }}>+</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.searchButtonSecond}>
+              <Buttons size='small' version='v1'onClick={checkConditionsForSearch}>
+                Search
+              </Buttons>
+              </div>
+                </div>
+              </div>
+            
+            </div>
+
+            {showWarning && (
+        <div className={styles.warningPopup}>
+          <div className={styles.popupContent}>
+            <h2>Warning</h2>
+            <p>Please enter at least one adult or assisted guest, and select a start date to use the filter.</p>
+            <button onClick={() => setShowWarning(false)} className={styles.closeWarningPopup}>X</button>
+          </div>
+        </div>
+            )}
+            
+          </div>
+
+
+
+
           <img src={Edge} className={styles.edgeRight} alt="" />
         </div>
         </div>
@@ -385,6 +515,10 @@ const Home = () => {
           <div className={styles.typeTitle}>
             <h2>Choose your perfect Stay</h2>
             <p>“A journey of a thousand miles begins<br />with a single step.”</p>
+          </div>
+
+          <div className={styles.scrollSideIcon}>
+          <i className={`fa-solid fa-chevron-down ${styles.bounceIcon}`}></i>
           </div>
 
           <div className={styles.typeContent}>
@@ -419,7 +553,6 @@ const Home = () => {
       </section>
       <section className={styles.thirdSection}>
         <div className={styles.thirdBorder}>
-
         {isUserLoggedIn ? (
         <>
 <div className={styles.thirdContentLogin}>
@@ -467,6 +600,9 @@ const Home = () => {
                 <VenueCardFirstType key={venue.id} venue={venue} />
               ))}
             </div>
+
+            <Link to="/venues" className={styles.browseAllLinkSecond}>Browse All</Link>
+
           </div>
         </div>
       </section>

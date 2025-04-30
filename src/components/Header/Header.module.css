@@ -219,7 +219,6 @@ header {
   flex-direction: row;
   justify-content: end;
   transition: 0.25s;
-  background-color: pink;
 }
 
 .searchContainer.searchOpen {
