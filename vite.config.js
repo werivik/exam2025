@@ -9,7 +9,6 @@ export default defineConfig({
     open: true
   },
   build: {
-    outDir: 'dist',
     sourcemap: true
   }
 });
