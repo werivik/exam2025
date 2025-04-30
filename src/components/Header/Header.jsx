@@ -4,9 +4,9 @@ import debounce from "lodash.debounce";
 import styles from "./Header.module.css";
 import headerLogo from "/media/logo/logo-default.png";
 import headerLogoHover from "/media/logo/logo-hover.png";
-import { VENUES } from "../../constants";
+import { VENUES, PROFILES_SINGLE } from "../../constants";
 import { headers } from "../../headers";
-import { isLoggedIn } from "../../auth/auth";
+import { isLoggedIn, getUserRole } from "../../auth/auth";
 
 function Header() {
   const loginOrRegisterRoutes = ['/login-costumer', '/register-costumer']
@@ -19,23 +19,69 @@ function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(isLoggedIn());
+  const [userRole, setUserRole] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const token = localStorage.getItem('accessToken');
+      const username = localStorage.getItem('username');
+      
+      if (!token || !username) return;
+
+      try {
+        const response = await fetch(PROFILES_SINGLE.replace('<name>', username), {
+          method: 'GET',
+          headers: headers(token),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setUserData(data.data);
+        }
+        
+        else {
+          console.error('Failed to fetch user profile');
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
   
   useEffect(() => {
+    const fetchUserRole = async () => {
+      const role = await getUserRole();
+      setUserRole(role);
+    };
+  
+    if (isUserLoggedIn) {
+      fetchUserRole();
+    } 
+    
+    else {
+      setUserRole(null);
+    }
+  
     if (location.pathname === "/") {
       const handleScroll = () => {
         const scrollThreshold = window.innerHeight * 0.025;
         setScrolled(window.scrollY > scrollThreshold);
       };
-
+  
       window.addEventListener("scroll", handleScroll);
       return () => window.removeEventListener("scroll", handleScroll);
     } 
+    
     else {
       setScrolled(true);
     }
-  }, [location.pathname]);
+  }, [location.pathname, isUserLoggedIn]);
+  
 
   useEffect(() => {
     const fetchVenues = async () => {
@@ -103,11 +149,11 @@ function Header() {
       const selectedVenue = venues.find(v => v.name === item.value);
 
       if (selectedVenue?.id) {
-        navigate(`/hotel-details/${selectedVenue.id}`);
+        navigate(`/venue-details/${selectedVenue.id}`);
       }
     } 
     else {
-      navigate("/hotels");
+      navigate("/venues");
     }
   
     setSearchTerm("");
@@ -183,24 +229,26 @@ function Header() {
         <nav className={styles.nav}>
 
         <ul className={styles.menuLeftLinks}>
-  {isUserLoggedIn ? (
-    <>
-      <Link to="/costumer-profile">Profile</Link>
-      <div
-                className={`${styles.divideLine} ${
-                  isSearchOpen ? styles.divideLineActive : ""
-                }`}
-              ></div>
-      <Link to="/costumer-profile">Bookings</Link>
-    </>
-  ) : (
+        {isUserLoggedIn ? (
+  <>
+    {userData?.venueManager ? (
+      <>
+        <Link to="/admin-profile">Profile</Link>
+        <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
+        <Link to="/admin-profile">My Venues</Link>
+      </>
+    ) : (
+      <>
+        <Link to="/costumer-profile">Profile</Link>
+        <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
+        <Link to="/costumer-profile">Bookings</Link>
+      </>
+    )}
+  </>
+) : (
     <>
       <Link to="/login-costumer">Login</Link>
-      <div
-                className={`${styles.divideLine} ${
-                  isSearchOpen ? styles.divideLineActive : ""
-                }`}
-              ></div>
+      <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
       <Link to="/register-costumer">Register</Link>
     </>
   )}
@@ -215,40 +263,51 @@ function Header() {
             </button>
           )}
   
-          {isSidebarOpen && (
-            <div className={styles.sidebarHeader}>
-              <button
-                className={styles.sidebarClose}
-                onClick={() => setIsSidebarOpen(false)}
-              >
-                <i className="fa-solid fa-angles-left"></i> Hide Menu
-              </button>
-              <li className={styles.menuLinks}>
-                <Link to="/">Home</Link>
-                <Link to="/hotels">Venues</Link>
-                {isUserLoggedIn && (
-                  <Link to="/costumer-profile">My Bookings</Link>
-                )}
-              </li>
-              <li className={styles.menuLinks}>
-                <Link to="/about">About Us</Link>
-                <Link to="/contact">Contact Us</Link>
-              </li>
-              <li className={styles.menuLinks}>
-  {isUserLoggedIn ? (
-    <>
-      <Link to="/profile-costumer">My Profile</Link>
-    </>
-  ) : (
-    <>
-      <Link to="/login-costumer">Login</Link>
-      <Link to="/register-costumer">Register</Link>
-    </>
-  )}
-</li>
-            </div>
+  {isSidebarOpen && (
+  <div className={styles.sidebarHeader}>
+    <button
+      className={styles.sidebarClose}
+      onClick={() => setIsSidebarOpen(false)}
+    >
+      <i className="fa-solid fa-angles-left"></i> Hide Menu
+    </button>
+    
+    <li className={styles.menuLinks}>
+      <Link to="/">Home</Link>
+      <Link to="/venues">Venues</Link>
+      <div className={styles.divideLine}></div>
+      {isUserLoggedIn && (
+        <>
+          {userData?.venueManager ? (
+            <>
+              <Link to="/admin-profile">My Venues</Link>
+              <Link to="/admin-profile">My Profile</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/costumer-profile">My Bookings</Link>
+              <Link to="/costumer-profile">My Profile</Link>
+            </>
           )}
+        </>
+      )}
+    </li>
 
+    <li className={styles.menuLinks}>
+      <Link to="/about">About Us</Link>
+      <Link to="/contact">Contact Us</Link>
+    </li>
+
+    <li className={styles.menuLinks}>
+      {!isUserLoggedIn && (
+        <>
+          <Link to="/login-costumer">Login</Link>
+          <Link to="/register-costumer">Register</Link>
+        </>
+      )}
+    </li>
+  </div>
+)}
           <div
             className={`${styles.headerContent} ${
               isSidebarOpen ? styles.blurred : ""
@@ -312,7 +371,7 @@ function Header() {
                 }`}
               ></div>
               <li>
-                <Link to="/hotels">Venues</Link>
+                <Link to="/venues">Venues</Link>
               </li>
             </ul>
           </div>

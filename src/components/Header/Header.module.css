@@ -232,6 +232,7 @@ header {
   border-radius: 10px;
   top: 0;
   margin-top: 15px;
+  padding-left: 7px;
   width: 100%;
   min-width: 400px;
   right: 100%;
@@ -467,9 +468,17 @@ header {
   pointer-events: none;
 }
 
-@media (min-width:1024px) {
+@media (max-width:1375px) {
+  .searchInput {
+    min-width: 300px;
+    overflow: hidden;
+  }
+}
+
+@media (min-width:800px) {
   .menuLeftLinks {
     display: flex;
+    margin-left: 15px;
   }
 
   .menuOpen {
@@ -478,5 +487,17 @@ header {
 
   .sidebarHeader {
     display: none;
+  }
+}
+
+@media (max-width:1100px) {
+  .searchContainer, .searchbarContent, .searchInput, .searchOpen, .searchActive, .searchInactive, .headerRightLinks i, .headerRightLinks .divideLine {
+    display: none;
+  }
+}
+
+@media (max-width:1024px) {
+  nav {
+    width: 90%;
   }
 }

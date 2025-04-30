@@ -1,0 +1,636 @@
+.pageContent {
+    min-height: 110vh;
+    margin-top: 75px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding-bottom: 200px;
+    color: #1F1B17;
+    font-family: "Playfair Display", serif;
+}
+
+.pageStyle {
+    width: 85%;
+    position: relative;
+}
+
+.hotelInfoTop {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 175px;
+    margin-bottom: 15px;
+}
+
+.titleLocation {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    height: 200px;
+    font-family: "Playfair Display", serif;
+}
+
+.titleLocation h1 {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+}
+
+.titleLocation p {
+    font-size: 1.8rem;
+    height: 100px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    margin-top: 0;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+}
+
+.titleLocation i {
+    margin-right: 15px;
+    font-size: 2rem;
+}
+
+.hotelInfoTopRight {
+    width: 30%;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: end;
+    gap: 10px;
+}
+
+.hotelRating {
+    font-size: 2rem;
+    margin-top: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.hotelRating strong {
+    margin-right: 15px;
+    font-size: 2rem;
+}
+
+.hotelRating img {
+    width: 30px;
+    height: 30px;
+    margin-bottom: -10px;
+}
+
+.slideshowSection {
+    background-color: white;
+    border-radius: 10px;
+    width: 100%;
+    height: 80vh;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.slideshowLeft {
+    width: 20%;
+    height: calc(100% - 20px);
+    position: relative;
+    gap: 10px;
+    margin: 10px;
+    margin-right: 0px;
+    overflow: hidden;
+}
+
+.slideshowLeftContent {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.previewImage {
+    width: 100%;
+    object-fit: cover;
+    cursor: pointer; 
+    transition: transform 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.slideshowLeft {
+    transition: transform 0.3s ease-in-out;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.currentlyViewing {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
+    max-width: 150px;
+    padding-bottom: 2.5px;
+    text-align: center;
+    background-color: white;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.slideshowLeftContent img {
+    object-fit: cover;
+    height: calc(33% - 5px);
+    width: 100%;
+    border-radius: 5px;
+}
+
+.slideshowRight {
+    width: 100%;
+    height: calc(100% - 20px);
+    position: relative;
+    margin: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    background-image: url(/media/logo/loadingScreen.png);
+    background-size: cover;
+    background-position: 50%;
+}
+
+.slideshowRight img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.slideshowButtons {
+    position: absolute;
+    width: 100.5%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.slideshowButtons img {
+    width: 45px;
+    height: 99px;
+    object-fit: contain; 
+    cursor: pointer;
+}
+
+.slideshowButtonPrev {
+    transform: scaleX(-1);
+}
+
+.slideshowProgress {
+    position: absolute;
+    height: 30px;
+    background-color: white;
+    top: 94.5%;
+    padding-bottom: 10px;
+    width: 100px;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%);
+    border-radius: 15px 15px 0px 0px;
+    font-size: 1rem;
+}
+
+.noSlideshow {
+    position: relative;
+    width: 100%;
+    height: calc(100%-10px);
+    margin: 10px;
+    position: relative;
+}
+
+.noSlideshow img {
+    object-fit: cover;
+    border-radius: 5px;
+    height: 100%;
+    width: 100%;
+}
+
+.hotelInfoBottom {
+    font-size: 1.5rem;
+    margin-top: 50px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5%;
+    font-family: "Playfair Display", serif;
+}
+
+.hotelInfoLeft {
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.hotelInfoLeft strong, .meta h3 {
+    font-size: 2rem;
+}
+
+.meta ul {
+    margin-left: 0;
+    padding-left: 0;
+    list-style: none;
+    gap: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+}
+
+.meta ul li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 7px;
+    border-radius: 5px;
+    gap: 5px;
+    font-size: 1.25rem;
+}
+
+.notIncluded, .included {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    color: #1F1B17;
+}
+
+.included {
+    color: #6B7A3A;
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    margin: 0;
+    padding: 0;
+}
+
+.venueProfileName {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    font-size: 1.25rem;
+    align-items: center;
+}
+
+.venueProfileName img {
+    width: 35px;
+    height: 35px;
+    border-radius: 999px;
+    border: solid #1F1B17 2px;
+    background-color: white;
+}
+
+.hotelInfoRight {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    position: relative;
+}
+
+.dividerLine {
+    height: 2px;
+    width: 100%;
+    background-color: #1F1B17;
+    border-radius: 99px;
+}
+
+.bookDateContent, .bookPrice, .favoriteVenue {
+    width: 100%;
+}
+
+.bookPrice {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 15px;
+}
+
+.bookPrice p {
+    font-size: 20px;
+}
+
+.bookPrice strong {
+    font-size: 25px;
+}
+
+.bookPrice span {
+    opacity: 75%;
+}
+
+.bookDateContent .bookDate {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 40px;
+}
+
+.bookDateContent h3 {
+    margin-bottom: 50px;
+    font-size: 1.8rem;
+}
+
+.bookDate {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 0;
+}
+
+.bookDate i, .bookGuests i {
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 99px;
+    border: 4px solid #1F1B17;
+    position: absolute;
+    z-index: 3;
+}
+
+.bookDate input {
+    width: 100%;
+    height: 40px;
+    padding-left: 50px;
+    padding-right: 5px;
+    border: none;
+    font-size: 20px;
+    font-family: "Playfair Display", serif;
+    cursor: pointer;
+}
+
+.bookDateStart {
+    border-radius: 15px 0px 0px 15px;
+}
+
+.bookDateEnd {
+    border-radius: 0px 15px 15px 0px;
+}
+
+.bookGuests {
+    height: 40px;
+    display: flex;
+    margin-top: -25px;
+    position: relative;
+}
+
+.filterPeople {
+    position: relative;
+    width: calc(100% - 50px);
+    height: 40px;
+}
+
+.filterPeople i {
+    position: absolute;
+    z-index: 3;
+}  
+  .guestSelector {
+    background-color: white;
+    border-radius: 0px 15px 15px 0px;
+    display: flex;
+    align-items: center;
+    padding-left: 25px;
+    margin-left: 25px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+  .guestSelector p {
+    margin: 0;
+    font-size: 1.125rem;
+    color: #1F1B17;
+  }
+  
+  .dropdownMenu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 110%;
+    left: 5%;
+    width: 90%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    padding: 10px;
+    z-index: 999;
+  }
+  
+  .dropdownMenu.open {
+    display: flex;
+  }
+  
+  .dropdownRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+  }
+  
+  .label {
+    font-size: 1rem;
+    color: #1F1B17;
+  }
+  
+  .counterControls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .counterControls button {
+    width: 28px;
+    height: 28px;
+    background-color: #B88A44;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1rem;
+    transition: 0.25s;
+  }
+
+  .counterControls button:hover {
+    transition: 0.25s;
+    cursor: pointer;
+    background-color: #6B7A3A;
+  }
+  
+  .counterControls span {
+    font-size: 1rem;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .warningText {
+    position: absolute;
+    top: 40%;
+    z-index: 1;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: solid red 2px;
+    transition: 0.25s;
+  }
+
+  .favoriteVenue {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .heartContainer {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .heart {
+    position: relative;
+    width: 44px;
+    height: 40px;
+    transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out;
+  }
+  
+  .heart::before, .heart::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 22px;
+    height: 40px;
+    border-radius: 50px 50px 0 0;
+    background: #B88A44;
+    transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .heart::before {
+    left: 22px;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+  }
+  
+  .heart::after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+  }
+  
+  .heart:active {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+  
+  .heart:active::before {
+    transform: rotate(-45deg) scale(1.1);
+    opacity: 0.9;
+  }
+  
+  .heart:active::after {
+    transform: rotate(45deg) scale(1.1);
+    opacity: 0.9;
+  }
+  
+  .favorited {
+    position: relative;
+    width: 44px;
+    height: 40px;
+    transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out;
+  }
+  
+  .favorited::before, .favorited::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 22px;
+    height: 40px;
+    border-radius: 50px 50px 0 0;
+    background: #6B7A3A;
+    transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .favorited::before {
+    left: 22px;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+  }
+  
+  .favorited::after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+  }
+  
+  .favorited:active {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+  
+  .favorited:active::before {
+    transform: rotate(-45deg) scale(1.2);
+    opacity: 0.9;
+  }
+  
+  .favorited:active::after {
+    transform: rotate(45deg) scale(1.2); 
+    opacity: 0.9;
+  }
+  
+  @keyframes flash {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.4;
+      transform: scale(1.4);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .loginReminder {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .loginMessage {
+    text-align: right;
+  }

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './LoginAdmin.module.css';
-import { AUTH_LOGIN } from '../../constants';
-import { headers } from '../../headers';
 import { motion } from "framer-motion";
 import Buttons from '../../components/Buttons/Buttons';
+
+import { loginAdmin } from '../../auth/login';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -14,11 +14,13 @@ const pageVariants = {
 
 const LoginAdmin = () => {
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [shake, setShake] = useState(false);
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -38,44 +40,32 @@ const LoginAdmin = () => {
     e.preventDefault();
     console.log('Form submitted');
     setError('');
-
+  
     if (!isFormValid) {
       setError('Email and Password are required.');
       triggerShake();
       return;
     }
-
+  
     setIsSubmitting(true);
-
+  
     try {
-      const response = await fetch(AUTH_LOGIN, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Login Error Response:', errorData);
-        throw new Error(errorData?.errors?.[0]?.message || 'Login failed');
-      }
-
-      const data = await response.json();
-      console.log('Login Success:', data);
-      console.log('Is Venue Manager:', data.data.venueManager);
-
-      localStorage.setItem('token', data.data.accessToken);
-      localStorage.setItem('username', data.data.name);
-
-      if (data.data.venueManager) {
-        console.log('Redirecting to Venue Manager Dashboard');
-        navigate('/venue-manager-dashboard');
+      const { name, token, venueManager } = await loginAdmin({ email, password });
+  
+      console.log('Login Success');
+      console.log('Is Venue Manager:', venueManager);
+  
+      localStorage.setItem('token', token);
+      localStorage.setItem('username', name);
+      localStorage.setItem('venueManager', venueManager);
+      setUsername(name);
+  
+      if (venueManager) {
+        setShowPopup(true);
+        setTimeout(() => {
+          navigate('/admin-profile');
+        }, 2000);
       } 
-      
-      else {
-        console.log('Redirecting to Admin Profile');
-        navigate('/admin-profile');
-      }
     } 
     
     catch (err) {
@@ -98,6 +88,7 @@ const LoginAdmin = () => {
   variants={pageVariants}
   transition={{ duration: 0.5, ease: "easeInOut" }}
 >
+    <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
       <div className={styles.loginStyle}>
         <div className={`${styles.loginContent} ${shake ? styles.shake : ''}`}>
           <h2>Holidaze</h2>
@@ -139,6 +130,17 @@ const LoginAdmin = () => {
           </div>
         </div>
       </div>
+    </div>
+
+    {showPopup && (
+  <div className={styles.popupOverlay}>
+    <div className={styles.popup}>
+      <h2>Welcome back, {username}!</h2>
+      <p>Redirecting to your profile...</p>
+    </div>
+  </div>
+)}
+
     </motion.div>
   );
 };

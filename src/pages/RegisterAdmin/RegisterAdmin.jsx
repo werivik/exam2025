@@ -19,6 +19,8 @@ const RegisterAdmin = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [shake, setShake] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [username, setUsername] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,8 +30,7 @@ const RegisterAdmin = () => {
     };
   }, []);
 
-  const isFormValid =
-    name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
+  const isFormValid = name.trim() !== '' && email.trim() !== '' && password.trim() !== '';
 
   const triggerShake = () => {
     setShake(true);
@@ -68,10 +69,14 @@ const RegisterAdmin = () => {
       const data = await response.json();
       console.log('Register Response:', data);
 
-      navigate('/login-admin');
-    } 
-    
-    catch (err) {
+      setUsername(name);
+      setShowPopup(true);
+
+      setTimeout(() => {
+        navigate('/login-admin');
+      }, 2000);
+
+    } catch (err) {
       setError(err.message || 'Something went wrong');
       triggerShake();
     } 
@@ -83,47 +88,47 @@ const RegisterAdmin = () => {
 
   return (
     <motion.div
-  className={styles.pageContent}
-  initial="initial"
-  animate="animate"
-  exit="exit"
-  variants={pageVariants}
-  transition={{ duration: 0.5, ease: "easeInOut" }}
->
-      <div className={styles.registerStyle}>
+      className={styles.pageContent}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={pageVariants}
+      transition={{ duration: 0.5, ease: "easeInOut" }}
+    >
+      <div className={`${styles.registerStyle} ${showPopup ? styles.blurred : ''}`}>
         <div className={`${styles.registerContent} ${shake ? styles.shake : ''}`}>
           <h2>Holidaze</h2>
           <h1>Welcome to Holidaze</h1>
           <p>Register as a Venue Manager</p>
           <form onSubmit={handleRegister} className={styles.inputForm}>
             <div className={styles.inputFormInputs}>
-            <input
-              type="text"
-              placeholder="Venue Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className={styles.input}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className={styles.input}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className={styles.input}
-            />
+              <input
+                type="text"
+                placeholder="Venue Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className={styles.input}
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className={styles.input}
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className={styles.input}
+              />
             </div>
 
-            <Buttons size='medium' version='v2'type="submit" disabled={!isFormValid || isSubmitting}>
+            <Buttons size='medium' version='v2' type="submit" disabled={!isFormValid || isSubmitting}>
               {isSubmitting ? 'Registering...' : 'Register'}
             </Buttons>
             {error && <p className={styles.error}>{error}</p>}
@@ -134,6 +139,15 @@ const RegisterAdmin = () => {
           </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className={styles.popupOverlay}>
+          <div className={styles.popup}>
+            <h2>Welcome, {username}!</h2>
+            <p>Redirecting to login page...</p>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };

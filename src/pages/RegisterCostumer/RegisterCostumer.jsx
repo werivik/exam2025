@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './RegisterCostumer.module.css';
-import { AUTH_REGISTER } from '../../constants';
-import { headers } from '../../headers';
 import { motion } from "framer-motion";
 import Buttons from '../../components/Buttons/Buttons';
+
+import { registerCostumer } from '../../auth/register';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -23,6 +23,7 @@ const RegisterCostumer = () => {
   const [error, setError] = useState('');
   const [shake, setShake] = useState(false);
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -65,7 +66,7 @@ const RegisterCostumer = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
-
+  
     if (!isFormValid()) {
       setError(
         'Please make sure your email is stud.noroff.no, and password has at least 8 characters including a number.'
@@ -73,53 +74,42 @@ const RegisterCostumer = () => {
       triggerShake();
       return;
     }
-
+  
     setIsSubmitting(true);
-
+  
     try {
-      const payload = {
-        ...formData,
-        credits: 1000,
-        venueManager: false,
-      };
-
-      const response = await fetch(AUTH_REGISTER, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-
-        const profileExists = errorData.errors?.some(
-          (err) => err.message === 'Profile already exists'
-        );
-
-        if (profileExists) {
-          setError('Username or email is already in use.');
-        } 
-        
-        else {
-          setError(errorData.message || 'Registration failed.');
-        }
-
-        triggerShake();
-        return;
-      }
-
-      alert('Registration successful! Redirecting to login...');
-      navigate('/login-costumer');
+      await registerCostumer({ 
+        username: formData.name,
+        email: formData.email,
+        password: formData.password
+      });      
+      setShowPopup(true);
+      setTimeout(() => {
+        navigate('/login-costumer');
+      }, 2000);
     } 
     catch (err) {
       console.error('Registration error:', err);
-      setError('An unexpected error occurred. Please try again.');
+  
+      const profileExists = err.errors?.some(
+        (error) => error.message === 'Profile already exists'
+      );
+  
+      if (profileExists) {
+        setError('Username or email is already in use.');
+      } 
+      
+      else {
+        setError(err.message || 'Registration failed.');
+      }
+  
       triggerShake();
     } 
     finally {
       setIsSubmitting(false);
     }
   };
+  
 
   return (
     <motion.div
@@ -130,6 +120,7 @@ const RegisterCostumer = () => {
       variants={pageVariants}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
+    <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
       <div className={styles.registerStyle}>
         <div className={`${styles.registerContent} ${shake ? styles.shake : ''}`}>
           <h2>Holidaze</h2>
@@ -184,6 +175,17 @@ const RegisterCostumer = () => {
           </div>
         </div>
       </div>
+      </div>
+
+      {showPopup && (
+              <div className={styles.popupOverlay}>
+                <div className={styles.popup}>
+                <h2>Welcome, {formData.name}!</h2>
+                <p>Redirecting to Login page...</p>
+                </div>
+              </div>
+      )}
+
     </motion.div>
   );
 };

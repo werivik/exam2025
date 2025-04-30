@@ -119,7 +119,7 @@
   .error {
     font-size: 1rem;
     position: absolute;
-    top: 52%;
+    top: 72%;
     left: 50%;
     transform: translate(-50%);
     color: red;
@@ -136,4 +136,47 @@
   
   .shake {
     animation: shake 0.4s ease-in-out;
+  }
+
+  .blurred {
+    filter: blur(5px);
+    pointer-events: none;
+    user-select: none;
+  }  
+
+  .blurWrapper {
+    width: 100%;
+    height: 100%;
+  }  
+  
+  .popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(31, 27, 23, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  
+  .popup {
+    background: #fffefb;
+    padding: 2rem 3rem;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+    font-family: "Playfair Display", serif;
+    text-align: center;
+    color: #1F1B17;
+  }
+  
+  .popup h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .popup p {
+    font-size: 1.125rem;
   }
