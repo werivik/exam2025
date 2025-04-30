@@ -19,6 +19,7 @@
     "framer-motion": "^12.8.0",
     "lodash.debounce": "^4.0.8",
     "netlify-cli": "^20.1.1",
+    "prop-types": "^15.8.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^7.4.0",
