@@ -819,6 +819,28 @@
   .fourthTitle h2 {
     font-size: 2.5rem;
   }
+  .thirdBorder {
+    width: 95%;
+    height: 50%;
+  }
+  .thirdInfo h2 {
+    font-size: 2.5rem;
+  }
+.thirdInfo {
+  width: 50%;
+}
+.thirdInfo p {
+  font-size: 1.25rem;
+}
+.registerButton {
+  margin-top: 50px;
+}
+.thirdContentRegister {
+  gap: 10px;
+}
+.thirdContentRegister img, .thirdContentLogin img {
+  width: 40%;
+}
 }
 @media (max-width:1300px) {
   .popularHotels {
@@ -836,7 +858,7 @@
     margin-bottom: 0px;
   }
 }
-@media (max-width: 1150px) {
+@media (max-width: 1185px) {
   .typeContent {
     overflow-x: scroll;
     width: 100%;
@@ -859,33 +881,12 @@
   .secondSection {
     padding-bottom: 0px;
   }
-  .thirdInfo h2 {
-    font-size: 3rem;
-  }
-.thirdInfo {
-  width: 50%;
-}
-.thirdInfo p {
-    font-size: 1.25rem;
-}
-.registerButton {
-  margin-top: 50px;
-}
-.thirdContentRegister {
-  gap: 10px;
-}
-.thirdContentRegister img, .thirdContentLogin img {
-  width: 40%;
-}
 }
 @media (max-width:1024px) {
   .heroSection {
     width: 100%;
   }
   .secondBorder {
-    width: 95%;
-  }
-  .thirdBorder {
     width: 95%;
   }
   .fourthBorder {
@@ -909,7 +910,7 @@
     display: block;
   }
 }
-@media (max-width:800px) {
+@media (max-width:1180px) {
   .thirdContentRegister img, .thirdContentLogin img {
     display: none;
     width: 0;
@@ -921,7 +922,7 @@
     text-align: center;
   }
   .thirdSection {
-    height: 60vh;
+    height: 50vh;
   }
   .thirdInfo {
     width: 80%;
