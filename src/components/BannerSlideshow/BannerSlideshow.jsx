@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import styles from "./bannerSlideshow.module.css";
+import styles from "./BannerSlideshow.module.css";
 
 import img1 from "/media/images/homeBanner.png";
 import img2 from "/media/images/spainBanner2.png";
