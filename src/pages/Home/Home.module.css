@@ -14,38 +14,31 @@
 }
 
 .heroSection {
-  width: 90%;
+  width: 85%;
   display: flex;
   justify-content: center;
   position: relative;
 }
 
-  .bannerFilters {
-    width: 95%;
-    height: 90px;
+.bannerFilters {
+    width: 100%;
+    height: 80px;
     bottom: 0;
     margin-bottom: -1px;
     position: absolute;
-    background-color: #F3F0EB;
-    border-radius: 25px 25px 0px 0px;
     z-index: 2;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
 }
 
 .edgeLeft {
-    position: absolute;
-    left: 0;
-    margin-left: -1.6%;
-    bottom: 1;
     width: 25px;
     height: 35px;
     object-fit: fill;
 }
 
 .edgeRight {
-    position: absolute;
-    right: 0;
-    margin-right: -1.6%;
-    bottom: 1;
     width: 25px;
     height: 35px;
     object-fit: fill;
@@ -53,35 +46,84 @@
     transform: scaleX(-1);
 }
 
+.searchButtonFirst {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .filterContent {
-    width: calc(100% - 5%);
-    height: 100px;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
+    width: calc(100% - 3%);
+    height: 80px;
+    padding-left: 1.5%;
+    padding-right: 1.5%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    background-color: #F3F0EB;
+    border-radius: 25px 25px 0px 0px;
+}
+
+.filterContentSecond {
+  width: calc(100% - 3%);
+  height: 200px;
+  padding-left: 1.5%;
+  padding-right: 1.5%;
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #F3F0EB;
+  border-radius: 25px 25px 0px 0px;
+}
+
+.filterContentSecond .allFilters {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.filterContentSecond .allFilters .filtersColumns {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.filtersColumnsBottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  gap: 15px;
+}
+
+.filtersColumns .filterCalender, .filtersColumns .filterPeople {
+  width: 100%;
 }
 
 .allFilters {
-    display: flex;
-    flex-direction: row;
-    gap: 25px;
-    width: 100%;
-    position: relative;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 100%;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .filtersLeft {
     display: flex;
     flex-direction: row;
-    gap: 25px;
+    gap: 10px;
     width: 65%;
 }
 
 .filterDestination {
+    min-width: 300px;
     width: 100%;
 }
 
@@ -145,21 +187,17 @@
     border: none;
     z-index: 1;
     height: 40px;
-    width: 100%;
     font-size: 1.125rem;
     color: #1F1B17;
     z-index: 996;
     cursor: pointer;
 }
 
-.filterCalender .startDateFilter {
+.filterCalender .startDateFilter, .filterCalender .endDateFilter {
     z-index: 3;
     background-color: white;
+    min-width: 140px;
     width: 50%;
-}
-.filterCalender .endDateFilter {
-    width: 50%;
-    z-index: 2;
 }
 
 .filterPeople {
@@ -231,6 +269,7 @@
     padding-left: 25px;
     margin-left: -15px;
     width: 100%;
+    min-width: 225px;
     position: relative;
     cursor: pointer;
     z-index: 995;
@@ -311,7 +350,7 @@
     position: absolute;
     width: 100%;
     z-index: 997;
-    top: 96.5%;
+    top: 97%;
   }
   
   .hidden {
@@ -321,7 +360,7 @@
   }
   
   .bounceIcon {
-    animation: bounce 1.5s infinite;
+    animation: bounce 1s infinite;
     font-size: 1.25rem;
     color: #1F1B17;
     margin-top: -10px;
@@ -333,7 +372,7 @@
     }
   
     50% {
-      transform: translateY(10px);
+      transform: translateY(5px);
     }
   } 
 
@@ -368,6 +407,7 @@
     font-size: 3rem;
     margin: 0;
     padding: 0;
+    pointer-events: none;
 }
 
 .typeTitle p {
@@ -376,6 +416,7 @@
     font-weight: 400;
     margin: 0;
     padding: 0;
+    pointer-events: none;
 }
 
 .typeContent {
@@ -435,9 +476,9 @@
     100% {
       background-position: 1000px 0;
     }
-  }
+}
   
-  .skeleton .hotelTypeImagePlaceholder {
+.skeleton .hotelTypeImagePlaceholder {
     width: 100%;
     height: 250px;
     border-radius: 25px 25px 5px 5px;
@@ -451,9 +492,9 @@
       #e0e0e0 100%
     );
     background-size: 1000px 100%;
-  }
+}
   
-  .skeleton .hotelTypeTextPlaceholder {
+.skeleton .hotelTypeTextPlaceholder {
     width: 100%;
     height: 50px;
     margin-top: 0;
@@ -468,7 +509,7 @@
       #e0e0e0 100%
     );
     background-size: 1000px 100%;
-  }
+}
 
 .thirdSection {
     background-color: #B88A44;
@@ -485,7 +526,7 @@
 .thirdBorder {
   width: 85%;
   height: 70%;
-    position: relative;
+  position: relative;
 }
 
 .thirdContentRegister {
@@ -511,6 +552,7 @@
     height: 100%;
     object-fit: cover;
     border-radius: 25px;
+    pointer-events: none;
 }
 
 .thirdInfo {
@@ -521,26 +563,31 @@
 
 .thirdInfo h2 {
     font-size: 3rem;
+    pointer-events: none;
 }
 
 .thirdInfo p {
     font-size: 1.8rem;
+    pointer-events: none;
 }
 
 .thirdContentLogin .thirdInfo h2 {
   margin-bottom: 0;
   padding-bottom: 0;
+  pointer-events: none;
 }
 
 .thirdContentLogin .thirdInfo h2 span {
   font-size: 3.5rem;
   font-style: italic;
+  pointer-events: none;
 }
 
 .thirdContentLogin .thirdInfo h3 {
   margin-top: 0;
   padding-top: 0;
   font-size: 2.35rem;
+  pointer-events: none;
 }
 
 .thirdInfoLinks {
@@ -583,7 +630,7 @@
 .registerButton {
     position: absolute;
     top: 75%;
-    left: 45%;
+    left: 50%;
     transform: translate(-50%);
     text-decoration: none;
 }
@@ -600,11 +647,11 @@
     border-radius: 25px 25px 0px 0px;
     z-index: 1;
     margin-bottom: 0;
-    padding-bottom: 50px;
 }
 
 .fourthBorder {
     width: 85%;
+    height: 100%;
 }
 
 .fourthTitle {
@@ -621,7 +668,7 @@
     font-size: 3rem;
 }
 
-.fourthTitle a {
+.fourthTitle .browseAllLink {
     font-size: 1.8rem;
     font-style: italic;
     color: #1F1B17;
@@ -630,7 +677,7 @@
     position: relative;
 }
 
-.fourthTitle a::after {
+.fourthTitle .browseAllLink::after {
     content: '';
     position: absolute;
     width: 100%;
@@ -642,10 +689,40 @@
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.25s ease-out;
-  }
+}
 
-.fourthTitle a:hover::after{
+.fourthTitle .browseAllLink:hover::after{
     transform: scaleX(1);
+}
+
+.browseAllLinkSecond {
+  display: none;
+  font-size: 1.8rem;
+  font-style: italic;
+  color: #1F1B17;
+  transition: 0.25s;
+  text-decoration: none;
+  position: absolute;
+  right: 2.5%;
+  margin-top: 25px;
+}
+
+.browseAllLinkSecond::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #1F1B17;
+  bottom: -5px;
+  border-radius: 99px;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease-out;
+}
+
+.browseAllLinkSecond:hover::after{
+  transform: scaleX(1);
 }
 
 .popularHotels {
@@ -695,4 +772,202 @@
   background-color: #1F1B17;
   color: white;
   transition: 0.25s;
+}
+
+.scrollSideIcon {
+  display: none;
+  position: absolute;
+  right: 2.5%;
+  top: 55%;
+  transform: rotate(-90deg);
+}
+
+
+@media (max-width:1450px) {
+  .thirdContentRegister {
+    gap: 2.5%;
+  }
+  .thirdInfo {
+    width: 55%;
+  }
+  .thirdInfo h2 {
+    font-size: 2.7rem;
+  }
+  .thirdInfo p {
+    font-size: 1.45rem;
+  }
+}
+@media (max-width:1375px) {
+  .filterContent {
+    display: none;
+  }
+  .filterContentSecond {
+    display: flex;
+  }
+  .typeTitle {
+    height: 200px;
+  }
+  .typeTitle h2 {
+    font-size: 2.5rem;
+  }
+  .typeTitle p {
+    font-size: 1.45rem;
+  }
+  .fourthTitle {
+    height: 200px;
+  }
+  .fourthTitle h2 {
+    font-size: 2.5rem;
+  }
+  .thirdBorder {
+    width: 95%;
+    height: 50%;
+  }
+  .thirdInfo h2 {
+    font-size: 2.5rem;
+  }
+.thirdInfo {
+  width: 50%;
+}
+.thirdInfo p {
+  font-size: 1.25rem;
+}
+.registerButton {
+  margin-top: 50px;
+}
+.thirdContentRegister {
+  gap: 10px;
+}
+.thirdContentRegister img, .thirdContentLogin img {
+  width: 40%;
+}
+}
+@media (max-width:1300px) {
+  .popularHotels {
+    overflow-x: scroll;
+  }
+  .popularHotels {
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .popularHotels::-webkit-scrollbar {
+    display: none;
+  }
+  .pageContent {
+    margin-bottom: 0px;
+  }
+}
+@media (max-width: 1185px) {
+  .typeContent {
+    overflow-x: scroll;
+    width: 100%;
+    height: 70%;
+  }
+  .typeContent {
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .typeContent::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollSideIcon {
+    display: block;
+  }
+  .hotelType {
+    min-width: 300px;
+  }
+  .secondSection {
+    padding-bottom: 0px;
+  }
+}
+@media (max-width:1024px) {
+  .heroSection {
+    width: 100%;
+  }
+  .secondBorder {
+    width: 95%;
+  }
+  .fourthBorder {
+    width: 95%;
+  }
+  .typeTitle p {
+    display: none;
+  }
+  .scrollSideIcon {
+    right: -0.5%;
+  }
+}
+@media (max-width:900px) {
+  .scrollSideIcon {
+    display: none;
+  }
+  .fourthTitle a {
+    display: none;
+  }
+  .browseAllLinkSecond {
+    display: block;
+  }
+}
+@media (max-width:1180px) {
+  .thirdContentRegister img, .thirdContentLogin img {
+    display: none;
+    width: 0;
+  }
+  .thirdContentRegister, .thirdContentLogin {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
+  .thirdSection {
+    height: 50vh;
+  }
+  .thirdInfo {
+    width: 80%;
+    min-width: 80%;
+    height: 85%;
+    gap: 0;
+  }
+  .thirdInfo p, .thirdInfo h2 {
+    margin: 0;
+    padding: 0;
+  }
+  .thirdInfo h2 {
+    margin-bottom: 10px;
+  }
+}
+@media (max-width: 700px) {
+  .firstSection {
+    height: 70vh;
+  }
+}
+@media (max-width:650px) {
+  .thirdInfo, .thirdContentLogin, .thirdContentRegister {
+    width: 100%;
+    min-width: 100%;
+  }
+  .thirdBorder {
+    width: 100%;
+  }
+  .popularHotels {
+    height: 350px;
+    gap: 10px;
+}
+}
+@media (max-width:600px) {
+  .thirdBorder {
+    height: 90%;
+    margin-top: 10%;
+  }
+  .registerButton {
+    margin-top: 50px;
+  }
+  .filterDestination i, .filterCalender i, .filterPeople i {
+    font-size: 1rem;
+  }
+  .filterDestination input, .filterCalender input, .guestSelector p  {
+    font-size: 1rem;
+  }
 }

@@ -15,7 +15,7 @@ import wifiImage from "/media/metaImages/wifi.jpeg";
 
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
-import HotelCardFirstType from '../../components/HotelCardFirstType/HotelCardFirstType';
+import VenueCardFirstType from '../../components/VenueCardFirstType/VenueCardFirstType';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
 import BannerSlideshow from '../../components/BannerSlideshow/BannerSlideshow';
 
@@ -26,7 +26,7 @@ const pageVariants = {
 };
 
 const Home = () => {
-  const [hotels, setHotels] = useState([]);
+  const [venues, setVenues] = useState([]);
   const [allLocations, setAllLocations] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [showScrollIcon, setShowScrollIcon] = useState(true);
@@ -75,38 +75,37 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const fetchHotels = async () => {
+    const fetchVenues = async () => {
       try {
         const response = await fetch(VENUES, { method: "GET", headers: headers() });
 
-        if (!response.ok) throw new Error("Failed to fetch hotels");
+        if (!response.ok) throw new Error("Failed to fetch venues");
 
         const result = await response.json();
 
-        const getTopRatedHotels = (hotelsArray) =>
-          (hotelsArray || [])
-            .filter(hotel => typeof hotel.rating === "number")
+        const getTopRatedVenues = (venuesArray) =>
+          (venuesArray || [])
+            .filter(venue => typeof venue.rating === "number")
             .sort((a, b) => b.rating - a.rating)
             .slice(0, 5);
 
-        setHotels(getTopRatedHotels(result.data));
+        setVenues(getTopRatedVenues(result.data));
 
         const locationsSet = new Set();
-        (result.data || []).forEach(hotel => {
-          const city = hotel.location?.city;
-          const country = hotel.location?.country;
+        (result.data || []).forEach(venue => {
+          const city = venue.location?.city;
+          const country = venue.location?.country;
           if (city && country) locationsSet.add(`${city}, ${country}`);
         });
 
         setAllLocations(Array.from(locationsSet));
       } 
-      
       catch (error) {
-        console.error("Error fetching hotels:", error);
+        console.error("Error fetching venues:", error);
       }
     };
 
-    fetchHotels();
+    fetchVenues();
   }, []);
 
   useEffect(() => {
@@ -148,7 +147,7 @@ const Home = () => {
   const renderGuestInfo = () => {
     let guestInfo = `${filters.adults} Adult${filters.adults !== 1 ? "s" : ""}`;
     if (filters.children > 0) guestInfo += `, ${filters.children} Child${filters.children !== 1 ? "ren" : ""}`;
-    if (filters.disabled > 0) guestInfo += `, ${filters.disabled} Assisted${filters.disabled !== 1 ? " Guests" : ""}`;
+    if (filters.disabled > 0) guestInfo += `, ${filters.disabled} Assisted${filters.disabled !== 1 ? " " : ""}`;
     return guestInfo;
   };
 
@@ -176,15 +175,14 @@ const Home = () => {
           (parseInt(filters.adults) + parseInt(filters.children) + parseInt(filters.disabled))
         );
 
-        setHotels(filtered);
+        setVenues(filtered);
       } 
-      
       catch (error) {
         console.error("Error filtering venues:", error);
       }
     }
 
-    navigate("/hotels", { state: { filters } });
+    navigate("/venues", { state: { filters } });
   };
 
   useEffect(() => {
@@ -201,10 +199,10 @@ const Home = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);  
+  }, []); 
 
-  const HotelTypeSkeleton = () => (
-    <div className={`${styles.hotelType} ${styles.skeleton}`}>
+  const VenueTypeSkeleton = () => (
+    <div className={`${styles.venueType} ${styles.skeleton}`}>
       <div className={styles.skeletonImage}></div>
       <div className={styles.skeletonText}></div>
     </div>
@@ -296,7 +294,7 @@ const Home = () => {
           className={styles.startDateFilter}
           type="text"
           value={checkInDate}
-          placeholder="Start Date"
+          placeholder="Start"
           onClick={() => toggleCalendar('start')}
           readOnly
         />
@@ -309,7 +307,7 @@ const Home = () => {
           className={styles.endDateFilter}
           type="text"
           value={checkOutDate}
-          placeholder="End Date"
+          placeholder="End"
           onClick={() => toggleCalendar('end')}
           readOnly
         />
@@ -357,10 +355,12 @@ const Home = () => {
                 </div>
               </div>
 
+              <div className={styles.searchButtonFirst}>
               <Buttons size='small' version='v1'onClick={checkConditionsForSearch}>
                 Search
               </Buttons>
-
+              </div>
+            
             </div>
             {showWarning && (
         <div className={styles.warningPopup}>
@@ -370,8 +370,136 @@ const Home = () => {
             <button onClick={() => setShowWarning(false)} className={styles.closeWarningPopup}>X</button>
           </div>
         </div>
-      )}
+            )}
           </div>
+
+
+
+
+          <div className={styles.filterContentSecond}>
+            <div className={styles.allFilters}>
+              <div className={styles.filtersColumns}>
+                <div className={styles.filterDestination}>
+                  <i className="fa-solid fa-location-dot"></i>
+                  <input
+                    name="destination"
+                    placeholder="Search destination..."
+                    value={filters.destination}
+                    onChange={handleInputChange}
+                    autoComplete="off"
+                  />
+                  {filters.destination && suggestions.length > 0 && (
+                    <ul className={styles.suggestionsList}>
+                      {suggestions.map((suggestion, index) => (
+                        <li
+                          key={index}
+                          onClick={() => {
+                            if (suggestion !== "No matching results...") {
+                              setFilters(prev => ({ ...prev, destination: suggestion }));
+                              setSuggestions([]);
+                            }
+                          }}
+                        >
+                          {suggestion}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <div className={styles.filterCalender}>
+        <i
+          className="fa-solid fa-calendar-days"
+          onClick={() => toggleCalendar('start')}
+        ></i>
+        <input
+          className={styles.startDateFilter}
+          type="text"
+          value={checkInDate}
+          placeholder="Start"
+          onClick={() => toggleCalendar('start')}
+          readOnly
+        />
+
+        <i
+          className="fa-solid fa-calendar-days"
+          onClick={() => toggleCalendar('end')}
+        ></i>
+        <input
+          className={styles.endDateFilter}
+          type="text"
+          value={checkOutDate}
+          placeholder="End"
+          onClick={() => toggleCalendar('end')}
+          readOnly
+        />
+        <div className={styles.costumCalenderPosition}>
+        {showCalendar && (
+  <CustomCalender
+    key={selectedDateType + checkInDate + checkOutDate}
+    value={selectedDateType === 'start' ? checkInDate : checkOutDate}
+    onDateChange={handleDateChange}
+  />
+)}
+        </div>
+                </div>
+                <div className={styles.filtersColumnsBottom}>
+                <div className={styles.filterPeople}>
+                <i className="fa-solid fa-person"></i>
+                <div
+  className={styles.guestSelector}
+  onClick={() => setShowGuestDropdown(prev => !prev)}
+  ref={guestDropdownRef}
+>
+                  <p>{renderGuestInfo()}</p>
+                  <div className={`${styles.dropdownMenu} ${showGuestDropdown ? styles.open : ""}`}>
+                    {["adults", "children", "disabled"].map((type) => (
+                      <div key={type} className={styles.dropdownRow}>
+                        <span className={styles.label}>
+                        {type === "adults" ? "Adults" : type === "children" ? "Children" : "Assisted Guests"}
+                        </span>
+                        <div className={styles.counterControls}>
+                          {filters[type] > 0 && (
+                            <button onClick={(e) => {
+                              e.stopPropagation();
+                              setFilters(prev => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
+                            }}>-</button>
+                          )}
+                          <span>{filters[type]}</span>
+                          <button onClick={(e) => {
+                            e.stopPropagation();
+                            setFilters(prev => ({ ...prev, [type]: prev[type] + 1 }));
+                          }}>+</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.searchButtonSecond}>
+              <Buttons size='small' version='v1'onClick={checkConditionsForSearch}>
+                Search
+              </Buttons>
+              </div>
+                </div>
+              </div>
+            
+            </div>
+
+            {showWarning && (
+        <div className={styles.warningPopup}>
+          <div className={styles.popupContent}>
+            <h2>Warning</h2>
+            <p>Please enter at least one adult or assisted guest, and select a start date to use the filter.</p>
+            <button onClick={() => setShowWarning(false)} className={styles.closeWarningPopup}>X</button>
+          </div>
+        </div>
+            )}
+            
+          </div>
+
+
+
+
           <img src={Edge} className={styles.edgeRight} alt="" />
         </div>
         </div>
@@ -389,13 +517,17 @@ const Home = () => {
             <p>“A journey of a thousand miles begins<br />with a single step.”</p>
           </div>
 
+          <div className={styles.scrollSideIcon}>
+          <i className={`fa-solid fa-chevron-down ${styles.bounceIcon}`}></i>
+          </div>
+
           <div className={styles.typeContent}>
-            {hotels.length === 0 ? (
+            {venues.length === 0 ? (
               <>
-                <HotelTypeSkeleton />
-                <HotelTypeSkeleton />
-                <HotelTypeSkeleton />
-                <HotelTypeSkeleton />
+                <VenueTypeSkeleton />
+                <VenueTypeSkeleton />
+                <VenueTypeSkeleton />
+                <VenueTypeSkeleton />
               </>
             ) : (
               <>
@@ -421,7 +553,6 @@ const Home = () => {
       </section>
       <section className={styles.thirdSection}>
         <div className={styles.thirdBorder}>
-
         {isUserLoggedIn ? (
         <>
 <div className={styles.thirdContentLogin}>
@@ -461,14 +592,17 @@ const Home = () => {
           <div className={styles.fourthContent}>
             <div className={styles.fourthTitle}>
               <h2>Explore Our Most Popular Hotels<br />for Every Traveler</h2>
-              <Link to="/hotels" className={styles.browseAllLink}>Browse All</Link>
+              <Link to="/venues" className={styles.browseAllLink}>Browse All</Link>
             </div>
 
             <div className={styles.popularHotels}>
-              {hotels.map((hotel) => (
-                <HotelCardFirstType key={hotel.id} hotel={hotel} />
+              {venues.map((venue) => (
+                <VenueCardFirstType key={venue.id} venue={venue} />
               ))}
             </div>
+
+            <Link to="/venues" className={styles.browseAllLinkSecond}>Browse All</Link>
+
           </div>
         </div>
       </section>

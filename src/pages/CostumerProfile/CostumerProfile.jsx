@@ -17,6 +17,8 @@ const CostumerProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
+  
+  const username = localStorage.getItem('username');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -29,7 +31,7 @@ const CostumerProfile = () => {
           return;
         }
 
-        const userProfileUrl = `${PROFILES_SINGLE}/${name}`;
+        const userProfileUrl = PROFILES_SINGLE.replace("<name>", username);
         console.log('Fetching user profile from:', userProfileUrl);
 
         const response = await fetch(userProfileUrl, {
@@ -57,11 +59,16 @@ const CostumerProfile = () => {
     fetchUserData();
   }, []);
 
+  const [showPopup, setShowPopup] = useState(false);
+
   const handleSignOut = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('username');
-    window.location.reload();
-  };
+    setShowPopup(true);
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 2000);
+  };  
 
   return (
 <motion.div
@@ -70,8 +77,10 @@ const CostumerProfile = () => {
   animate="animate"
   exit="exit"
   variants={pageVariants}
-  transition={{ duration: 0.5, ease: "easeInOut" }}
+  transition={{ duration: 0.5, ease: "easeInOut" }} 
 >
+
+      <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
       <section className={styles.leftSection}>
         <div className={styles.leftBorder}>
           <div className={styles.profileLeftTop}>
@@ -137,6 +146,15 @@ const CostumerProfile = () => {
           </div>
         </div>
       </section>
+
+      {showPopup && (
+  <div className={styles.popupOverlay}>
+    <div className={styles.popup}>
+      <h2>Signing off...</h2>
+    </div>
+  </div>
+)}
+</div>
     </motion.div>
   );
 };

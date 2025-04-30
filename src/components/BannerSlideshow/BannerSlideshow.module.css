@@ -1,186 +1,3 @@
-/*
-.carouselViewport {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 100vh;
-  border-radius: 25px;
-  z-index: 1;
-}
-.lane {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 1;
-}
-.lane.right {
-  right: 0;
-}
-.lane:not(.right) {
-  left: 0;
-}
-.stack {
-  display: flex;
-  flex-direction: column;
-  transition: transform 1.5s ease-in-out;
-}
-.slice {
-  height: 100vh;
-  position: relative;
-}
-.leftHalf {
-  width: 200%;
-  height: 100%;
-  object-fit: cover;
-  object-position: left;
-  transform: translateX(0);
-}
-.rightHalf {
-  width: 200%;
-  height: 100%;
-  object-fit: cover;
-  object-position: right;
-  transform: translateX(-50%);
-}
-.leftWrapper,
-.rightWrapper {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-.fullImage {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 200%;
-  object-fit: cover;
-}
-.leftWrapper .fullImage {
-  left: 0;
-}
-.rightWrapper .fullImage {
-  left: -100%;
-}
-.bannerText {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
-  color: white;
-}
-.bannerText h1 { 
-  font-size: 12.5rem; 
-  margin:0; 
-  padding: 0; 
-  position: absolute;
-  top: 32.5%;
-  transform: translate(-50%);
-  left: 50%;
-  width: 100%;
-  text-align: center;
-}
-.bannerText h2 { 
-  font-size: 4rem;   
-  padding: 0; 
-  top: -10%;
-  margin:0 0 -25px 0;
-  position: absolute;
-  top: 30%;
-  transform: translate(-50%);
-  left: 50%;  
-  width: 100%;
-  text-align: center;
-}
-.bannerText p  { 
-  font-size: 2rem;    
-  font-style: italic; 
-  margin:-25px 0 0 0; 
-  padding: 0; 
-  position: absolute;
-  top: 57.5%;
-  transform: translate(-50%);
-  left: 50%;
-  width: 100%;
-  text-align: center;
-}
-.bannerText span { 
-  font-size: 2.813rem; 
-  margin: 0;
-  padding: 0;
-  top: 54%;
-  position: absolute;
-  transform: translate(-50%);
-  left: 50%;
-  width: 100%;
-  text-align: center;
-}
-.progressDots {
-  position: absolute;
-  right: 2.5%;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 20;
-  transition: 0.25s;
-}
-.dot,
-.dotActive {
-  width: 12px;
-  height: 12px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  transition: 0.25s;
-}
-.dotActive {
-  background: #fff;
-}
-.dot:hover {
-  transition: 0.25s;
-  cursor: pointer;
-  background-color: white;
-}
-.dotActive:hover {
-  transition: 0.25s;
-  cursor: pointer;
-  background-color:#6B7A3A;
-  border-color: #6B7A3A;
-}
-@keyframes laneUp {
-  0%,
-  16.66%  { transform: translateY(0); }
-  20%,
-  36.66%  { transform: translateY(-100vh); }
-  40%,
-  56.66%  { transform: translateY(-200vh); }
-  60%,
-  76.66%  { transform: translateY(-300vh); }
-  80%,
-  96.66%  { transform: translateY(-400vh); }
-  100%     { transform: translateY(-400vh); }
-}
-@keyframes laneDown {
-  0%,
-  16.66%  { transform: translateY(-400vh); }
-  20%,
-  36.66%  { transform: translateY(-300vh); }
-  40%,
-  56.66%  { transform: translateY(-200vh); }
-  60%,
-  76.66%  { transform: translateY(-100vh); }
-  80%,
-  96.66%  { transform: translateY(0); }
-  100%     { transform: translateY(0); }
-}
-*/
-
-
-
 .splitSlideshow {
   position: relative;
   width: 100vw;
@@ -188,18 +5,15 @@
   overflow: hidden;
   display: flex;
 }
-
 .lane {
   width: 50vw;
   height: 100vh;
   overflow: hidden;
   position: relative;
 }
-
 .lane.right {
   right: 0;
 }
-
 .stack {
   position: absolute;
   top: 0;
@@ -207,13 +21,11 @@
   transition: transform 3s cubic-bezier(0.7, 0, 0.3, 1);
   width: 100%;
 }
-
 .slice {
   height: 100vh;
   width: 100%;
   position: relative;
 }
-
 .leftWrapper,
 .rightWrapper {
   position: relative;
@@ -221,7 +33,6 @@
   height: 100%;
   overflow: hidden;
 }
-
 .fullImage {
   position: absolute;
   top: 0;
@@ -229,15 +40,12 @@
   width: 200%;
   object-fit: cover;
 }
-
 .leftWrapper .fullImage {
   left: 0;
 }
-
 .rightWrapper .fullImage {
   left: -100%;
 }
-
 .bannerText {
   position: absolute;
   width: 100%;
@@ -250,28 +58,25 @@
   opacity: 0;
   animation: fadeIn 2s ease-in-out forwards;
   animation-delay: 0s; 
+  pointer-events: none;
 }
-
 .bannerText h1 {
   font-size: 200px;
   margin: 0;
   padding: 0;
 }
-
 .bannerText span {
   margin: 0;
   padding: 0;
   font-size: 40px;
   margin-top: -35px;
 }
-
 .bannerText h2,
 .bannerText h3,
 .bannerText p {
   margin: 0;
   padding: 0;
 }
-
 .bannerText h1,
 .bannerText span,
 .bannerText h2,
@@ -280,24 +85,19 @@
   opacity: 0;
   animation: fadeIn 2s ease-in-out forwards;
 }
-
 .bannerText h3 {
   font-size: 80px;
-  margin-bottom: -35px;
+  margin-bottom: -45px;
 }
-
 .bannerText h2 {
   font-size: 200px;
   margin-top: -15px;
 }
-
 .bannerText p {
   font-style: italic;
   font-size: 35px;
-  margin-top: -15px;
+  margin-top: -25px;
 }
-
-
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -306,5 +106,96 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+.paginationDots {
+  position: absolute;
+  right: 5%;
+  top: 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 888;
+}
+.slideDot {
+  background-color: transparent;
+  border-radius: 99px;
+  width: 12px;
+  height: 12px;
+  border: solid 2px white;
+  transition: 0.25s;
+  cursor: pointer;
+}
+.slideDot:not(.active):hover {
+  background-color: white;
+  transition: 0.25s;
+}
+.active {
+  background-color: white;
+  transition: 0.25s;
+}
+.active:hover {
+  background-color: #6B7A3A;
+  border-color: #6B7A3A;
+  transition: 0.25s;
+}
+
+@media (max-width:1375px) {
+  .paginationDots {
+    top: 37%;
+  }
+}
+@media (max-width: 1024px) {
+  .bannerText h1 {
+    font-size: 145px;
+  }
+  .bannerText span {
+    font-size: 30px;
+    margin-top: -35px;
+  }
+  .bannerText h3 {
+    font-size: 50px;
+    margin-bottom: -20px;
+  }
+  .bannerText h2 {
+    font-size: 140px;
+  }
+  .bannerText p {
+    font-style: italic;
+    font-size: 25px;
+    margin-top: -10px;
+  }
+}
+@media (max-width: 700px) {
+  .splitSlideshow {
+    height: 70vh;
+  }
+  .paginationDots {
+    top: 65%;
+    left: 60%;
+    transform: translate(-50%);
+    flex-direction: row;
+  }
+  .bannerText {
+    height: 80%;
+  }
+  .bannerText h1 {
+    font-size: 110px;
+  }
+  .bannerText span {
+    font-size: 25px;
+    margin-top: -15px;
+  }
+  .bannerText h3 {
+    font-size: 40px;
+    margin-bottom: -10px;
+  }
+  .bannerText h2 {
+    font-size: 100px;
+  }
+  .bannerText p {
+    font-style: italic;
+    font-size: 25px;
+    margin-top: -10px;
   }
 }
