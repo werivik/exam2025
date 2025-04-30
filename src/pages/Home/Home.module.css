@@ -960,6 +960,11 @@
     margin-bottom: 10px;
   }
 }
+@media (max-width: 700px) {
+  .firstSection {
+    height: 70vh;
+  }
+}
 @media (max-width:650px) {
   .thirdInfo, .thirdContentLogin, .thirdContentRegister {
     width: 100%;
