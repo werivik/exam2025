@@ -60,7 +60,7 @@
 
 .filterContentSecond {
   width: calc(100% - 3%);
-  height: 200px;
+  height: 175px;
   padding-left: 1.5%;
   padding-right: 1.5%;
   display: none;
@@ -68,11 +68,12 @@
   align-items: center;
   justify-content: space-between;
   background-color: #F3F0EB;
-  border-radius: 25px 25px 0px 0px;
+  border-radius: 15px 15px 0px 0px;
 }
 
 .filterContentSecond .allFilters {
   width: 100%;
+  margin-top: -5px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -92,10 +93,16 @@
   justify-content: space-between;
   width: 100%;
   gap: 15px;
+  height: 30px;
 }
 
 .filtersColumns .filterCalender, .filtersColumns .filterPeople {
   width: 100%;
+}
+
+.filtersColumns .filterDestination input, .filtersColumns .filterCalender input, .filtersColumns .filterPeople input{
+  width: 100%;
+  height: 30px;
 }
 
 .allFilters {
@@ -776,20 +783,7 @@
 }
 
 
-@media (max-width:1450px) {
-  .thirdContentRegister {
-    gap: 2.5%;
-  }
-  .thirdInfo {
-    width: 55%;
-  }
-  .thirdInfo h2 {
-    font-size: 2.7rem;
-  }
-  .thirdInfo p {
-    font-size: 1.45rem;
-  }
-}
+
 @media (max-width:1375px) {
   .filterContent {
     display: none;
@@ -800,30 +794,15 @@
   .typeTitle {
     height: 200px;
   }
-  .typeTitle h2 {
-    font-size: 2.5rem;
-  }
-  .typeTitle p {
-    font-size: 1.45rem;
-  }
   .fourthTitle {
     height: 200px;
-  }
-  .fourthTitle h2 {
-    font-size: 2.5rem;
   }
   .thirdBorder {
     width: 95%;
     height: 50%;
   }
-  .thirdInfo h2 {
-    font-size: 2.5rem;
-  }
 .thirdInfo {
   width: 50%;
-}
-.thirdInfo p {
-  font-size: 1.25rem;
 }
 .registerButton {
   margin-top: 50px;
@@ -962,5 +941,42 @@
   }
   .filterDestination input, .filterCalender input, .guestSelector p  {
     font-size: 1rem;
+  }
+}
+
+
+
+@media (max-width:425px){
+  .heroSection {
+    width: 100%;
+  }
+  .edgeLeft, .edgeRight {
+    display: none;
+  }
+  .filterContentSecond {
+  width: 100%;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+  border-radius: 0px;
+  }
+  .filtersColumns .filterDestination input, .filtersColumns .filterCalender input, .filtersColumns .filterPeople input, .guestSelector p{
+    font-size: 0.8rem;
+  }
+  .filterDestination i, .filterCalender i, .filterPeople i {
+    font-size: 1rem;
+    border: solid 2px;
+  }
+  .filterDestination {
+    min-width: 150px;
+  }
+  .filterCalender .startDateFilter, .filterCalender .endDateFilter {
+    min-width: 100px;
+  }
+  .guestSelector {
+    min-width: 75px;
+  }
+  .filtersColumnsBottom {
+    gap: 5px;
+    margin: 0;
   }
 }

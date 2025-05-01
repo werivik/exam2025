@@ -11,7 +11,6 @@ header {
     transition: 0.15s;
     font-family: "Playfair Display", serif;
   }
-  
   nav {
     position: relative;
     height: 100%;
@@ -23,16 +22,13 @@ header {
     transition: 0.15s;
     color: #f2f2f2;
   }
-
   nav ul li a, a, li a {
     font-size: 1.25rem;
   }
-
   header.scrolled {
     padding-top: 0%;
     transition: 0.15s;
   }
-
   header.scrolled nav {
     padding-left: 2.5%;
     padding-right: 2.5%;
@@ -43,38 +39,30 @@ header {
     background-color: #f2f2f268;
     color: #1F1B17;
   }
-
   header.scrolled nav .headerRightLinks li a, header.scrolled nav .menuOpen, header.scrolled nav .menuOpen i, header.scrolled nav .headerRightLinks .searchInactive, header.scrolled .menuLeftLinks a {
     color: #1F1B17;
     transition: 0.25s;
   }
-
   header.scrolled .divideLine {
     background-color: #1F1B17;
   }
-
   header.scrolled nav .headerRightLinks li a:hover, header.scrolled nav .menuOpen:hover ,header.scrolled nav .searchInactive:hover, header.scrolled .menuLeftLinks a:hover {
     transition: 0.25s;
     border-color: #1F1B17;
   }
-
   header.scrolled .searchContainer {
     color: #1F1B17;
   }
-
   header.scrolled .sidebarHeader {
     margin-left: -10%;
     padding-left: 10%;
   }
-
   .searchContainer .searchActive {
     color: #1F1B17;
   }
-
   .sidebarHeader {
     display: none;
   }
-
   .divideLine {
     height: 25px;
     width: 2px;
@@ -82,17 +70,14 @@ header {
     background-color: white;
     opacity: 1;
   }
-
   .headerRightLinks .divideLine {
     position: absolute;
     left: 50%;
     transform: translate(-50%);
   }
-
   .headerRightLinks .divideLineActive {
     left: 37.5%;
   }
-
   .menuLeftLinks {
     display: none;
     flex-direction: row;
@@ -104,7 +89,6 @@ header {
     height: 60px;
     padding: 0;
   }
-  
   .menuLeftLinks a {
     border: solid 2px rgba(255, 255, 255, 0);
     border-radius: 5px;
@@ -120,13 +104,11 @@ header {
     color: white;
     position: relative;
   }
-
   .menuLeftLinks a:hover {
     transition: 0.25s;
     border: solid white 2px;
     cursor: pointer;
   }
-  
   .menuOpen {
   position: relative;
   color: inherit;
@@ -151,18 +133,15 @@ header {
   font-family: "Playfair Display", serif;
   cursor: pointer;
  }
-
  .menuOpen i {
   color: white;
   font-size: 1.25rem;
  }
-
  .menuOpen:hover {
   transition: 0.25s;
   border: solid white 2px;
   cursor: pointer;
 }
-
 .headerRightLinks {
   display: flex;
   align-items: center;
@@ -172,14 +151,12 @@ header {
   justify-content: flex-end;
   position: relative;
 }
-
 .headerRightLinks li {
   height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
 }
-
 .headerRightLinks li a {
   border: solid 2px rgba(255, 255, 255, 0);
   border-radius: 5px;
@@ -195,26 +172,22 @@ header {
   color: white;
   position: relative;
 }
-
 .headerRightLinks li a:hover {
   transition: 0.25s;
   border: solid white 2px;
 }
-
 .headerLogoContent {
   position: absolute;
   left: 50%;
   height: 60px;
   transform: translate(-50%);
 }
-
 .headerLogo, .headerLogoHover {
     height: 55px;
     width: auto;
     object-fit: contain;
     transition: all 0.25s ease;
 }
-
 .searchContainer {
   position: relative;
   width: 100%;
@@ -224,12 +197,10 @@ header {
   justify-content: end;
   transition: 0.25s;
 }
-
 .searchContainer.searchOpen {
   justify-content: space-between;
   transition: 0.25s;
 }
-
 .searchInput {
   padding: 0.25rem;
   border: none;
@@ -246,7 +217,6 @@ header {
   transition: 0.25s;
   background-color: white;
 }
-
 .suggestionsList {
   width: calc(100% - 0.25rem);
   position: absolute;
@@ -267,31 +237,26 @@ header {
   box-shadow: inset 0px 1px 67px -53px rgba(0,0,0,0.39);  
   overflow: hidden;
 }
-
 .suggestionItem {
   cursor: pointer;
   margin-bottom: 0.5rem;
   transition: 0.25s;
   color: #1F1B17;
 }
-
 .suggestionItem:hover {
   background-color: #e7e3e3b0;
   transition: 0.25s;
 }
-
 .suggestionLabel {
   opacity: 50%;
   font-size: 0.85rem;
   width: 60px;
   transition: 0.25s;
 }
-
 .searchContainer {
   color: #1F1B17;
   color: #f2f2f2;
 }
-
 .searchContainer i {
   z-index: 999;
   border: solid 2px rgba(255, 255, 255, 0);
@@ -306,31 +271,26 @@ header {
   align-items: center;
   transition: 0.25s;
 }
-
 .searchActive {
   color: #1F1B17;
   cursor: pointer;
 }
-
 .searchInactive {
   color: #f2f2f2;
   position: relative;
   cursor: pointer;
 }
-
 .searchInactive:hover {
   transition: 0.25s;
   border: solid white 2px;
   cursor: pointer;
 }
-
 .searchbarContent {
   display: none;
   right: 100%;
   transition: 0.25s;
   margin-right: -50px;
 }
-
 .sidebarHeader {
   background-color: #1F1B17;
   position: absolute;
@@ -349,7 +309,6 @@ header {
   transition: transform 0.25s ease;
   z-index: 999;
 }
-
 .divideLineLaying {
   height: 2px;
   width: 125px;
@@ -359,14 +318,12 @@ header {
   margin-top: 15px;
   margin-bottom: 15px;
 }
-
 .menuLinks {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-
 .menuLinks a {
   color: white;
   text-decoration: none;
@@ -375,7 +332,6 @@ header {
   width: 100%;
   max-width: 120px;
 }
-
 .menuLinks a::after {
   content: '';
   position: absolute;
@@ -388,15 +344,12 @@ header {
   transform-origin: left;
   transition: transform 0.25s ease-out;
  }
-
  .menuLinks a:hover {
   margin-left: 15px;
  }
-
  .menuLinks a:hover::after{
   transform: scaleX(1);
 }
-
 .sidebarClose {
   color: inherit;
   text-decoration: none;
@@ -420,18 +373,15 @@ header {
   background-color: #f2f2f200;
   font-family: "Playfair Display", serif;
  }
-
  .sidebarClose i {
   color: white;
   font-size: 1.25rem;
  }
-
  .sidebarClose:hover {
   transition: 0.25s;
   border: solid white 2px;
   cursor: pointer;
 }
-
 .simpleHeader {
   background: none;
   padding-top: 0 !important;
@@ -442,13 +392,11 @@ header {
   width: 100%;
   z-index: 999;
 }
-
 .simpleHeader nav {
   background: none !important;
   color: white !important;
   padding: 0;
 }
-
 .simpleHeader nav .headerRightLinks li a,
 .simpleHeader nav .menuOpen,
 .simpleHeader nav .menuOpen i,
@@ -456,17 +404,14 @@ header {
   color: white !important;
   border-color: transparent !important;
 }
-
 .simpleHeader .searchActive {
   color: white !important;
 }
-
 .simpleHeader nav ul li a:hover,
 .simpleHeader nav .menuOpen:hover,
 .simpleHeader nav .searchInactive:hover {
   border-color: white !important;
 }
-
 .closeModal {
   position: absolute;
   top: 10px;
@@ -476,20 +421,19 @@ header {
   font-size: 1.5rem;
   cursor: pointer;
 }
-
 .blurred {
   filter: blur(5px);
   transition: filter 0.3s ease;
   pointer-events: none;
 }
 
-@media (max-width:1375px) {
+@media (max-width:1375px){
   .searchInput {
     min-width: 300px;
     overflow: hidden;
   }
 }
-@media (min-width:800px) {
+@media (min-width:800px){
   .menuLeftLinks {
     display: flex;
     margin-left: 15px;
@@ -501,7 +445,7 @@ header {
     display: none;
   }
 }
-@media (max-width:425px) {
+@media (max-width:425px){
   .headerLogo, .headerLogoHover {
     height: 35px;
     width: auto;
@@ -532,12 +476,12 @@ header {
     font-size: 1rem;
    }
 }
-@media (max-width:1100px) {
+@media (max-width:1100px){
   .searchContainer, .searchbarContent, .searchInput, .searchOpen, .searchActive, .searchInactive, .headerRightLinks i, .headerRightLinks .divideLine {
     display: none;
   }
 }
-@media (max-width:1024px) {
+@media (max-width:1024px){
   nav {
     width: 90%;
   }
