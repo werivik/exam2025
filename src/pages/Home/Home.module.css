@@ -876,8 +876,11 @@ font-size: 1.75rem;
   .fourthBorder {
     width: 95%;
   }
+  .typeTitle h2 {
+    font-size: 1.85rem;
+  }
   .typeTitle p {
-    display: none;
+    font-size: 1.125rem;
   }
   .scrollSideIcon {
     right: -0.5%;
@@ -902,7 +905,14 @@ font-size: 1.75rem;
 @media (max-width:650px) {
   .thirdInfo, .thirdContentLogin, .thirdContentRegister {
     width: 100%;
-    min-width: 100%;
+    height: 110%;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    margin-left: 5%;
+  }
+  .registerButton {
+    margin-top: -20px;
   }
   .thirdBorder {
     width: 100%;
@@ -913,13 +923,6 @@ font-size: 1.75rem;
 }
 }
 @media (max-width:600px) {
-  .thirdBorder {
-    height: 90%;
-    margin-top: 10%;
-  }
-  .registerButton {
-    margin-top: 50px;
-  }
   .filterDestination i, .filterCalender i, .filterPeople i {
     font-size: 1rem;
   }
@@ -1030,9 +1033,14 @@ font-size: 1.75rem;
   margin-top: 25px;
 }
 }
+@media (max-width:350px) {
+  .registerButton {
+    margin-top: -5px;
+  }
+}
 
 
-
+/* Phone Responsive - ALL */
 @media (max-width:725px){
   .heroSection {
     width: 100%;
@@ -1074,7 +1082,7 @@ font-size: 1.75rem;
     font-size: 1.8rem;
   }
   .secondSection {
-    max-height: 400px;
+    max-height: 450px;
     padding-bottom: 0px;
   }
 .secondBorder {
@@ -1102,8 +1110,13 @@ font-size: 1.75rem;
 }
 .thirdBorder {
 width: 95%;
-height: 50%;
-margin-top: -25px;
+height: 60%;
+}
+.thirdInfo {
+  width: 80%;
+  margin-left: 5%;
+  margin-right: 5%;
+  text-align: center;
 }
 .thirdInfo h2 {
   font-size: 1.5rem;
@@ -1116,6 +1129,9 @@ font-size: 1.8rem;
 }
 .thirdContentLogin .thirdInfo h3 {
 font-size: 1.75rem;
+}
+.thirdBorder img {
+  display: none;
 }
 .fourthSection {
   max-height: 600px;
@@ -1135,4 +1151,36 @@ font-size: 1.75rem;
   font-size: 1rem;
   margin-top: 25px;
 }
+/*Hover Effects Disabled*/ 
+.hotelType:hover {
+  img {
+    height: 150px;
+  }
+}
+}
+
+/* Tabel Responsive - Second Section */
+@media (max-width:1400px) {
+  .typeTitle {
+    height: 175px;
+    margin-top: 25px;
+  }
+  .typeTitle h2 {
+    font-size: 2.25rem;
+  }
+  .typeTitle p {
+    font-size: 1.4rem;
+  }
+}
+@media (max-width:875px) {
+  .typeTitle{
+    height: 125px;
+  }
+  .typeTitle p {
+    display: none;
+  }
+  .secondSection{
+    padding-bottom: 0px;
+    height: 550px;
+  }
 }
