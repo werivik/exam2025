@@ -903,14 +903,6 @@ font-size: 1.75rem;
   }
 }
 @media (max-width:650px) {
-  .thirdInfo, .thirdContentLogin, .thirdContentRegister {
-    width: 100%;
-    height: 110%;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-    margin-left: 5%;
-  }
   .registerButton {
     margin-top: -20px;
   }
@@ -995,12 +987,13 @@ font-size: 1.75rem;
 .thirdSection {
   height: 40vh;
   max-height: 650px;
-  margin-top: -50px;
 }
 .thirdBorder {
 width: 95%;
-height: 50%;
-margin-top: -25px;
+height: 70%;
+}
+.registerButton {
+  margin-top: 0;
 }
 .thirdInfo h2 {
   font-size: 1.5rem;
@@ -1033,9 +1026,9 @@ font-size: 1.75rem;
   margin-top: 25px;
 }
 }
-@media (max-width:350px) {
+@media (max-width:360px) {
   .registerButton {
-    margin-top: -5px;
+    margin-top: 15px;
   }
 }
 
@@ -1104,7 +1097,7 @@ font-size: 1.75rem;
   font-size: 1.2rem;
 }
 .thirdSection {
-  height: 40vh;
+  height: 50vh;
   max-height: 650px;
   margin-top: -50px;
 }
@@ -1113,16 +1106,19 @@ width: 95%;
 height: 60%;
 }
 .thirdInfo {
-  width: 80%;
+  width: 100%;
   margin-left: 5%;
   margin-right: 5%;
   text-align: center;
 }
 .thirdInfo h2 {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
+  margin-bottom: 10px;
+  padding: 0;
 }
 .thirdInfo p {
-  font-size: 0.9rem;
+  font-size: 1.125rem;
+  margin: 0;
 }
 .thirdContentLogin .thirdInfo h2 span {
 font-size: 1.8rem;
