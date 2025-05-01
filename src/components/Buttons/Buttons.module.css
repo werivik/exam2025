@@ -105,7 +105,7 @@
     background-color: #B88A44;
 }
 
-@media (max-width:425px) {
+@media (max-width:500px) {
     .small {
         height: 30px;
         font-size: 0.9rem;

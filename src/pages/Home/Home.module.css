@@ -946,7 +946,7 @@
 
 
 
-@media (max-width:425px){
+@media (max-width:500px){
   .heroSection {
     width: 100%;
   }
@@ -989,7 +989,7 @@
   .secondSection {
     max-height: 400px;
     padding-bottom: 0px;
-}
+  }
 .secondBorder {
   width: 95%;
 }
@@ -1007,5 +1007,52 @@
 }
 .hotelType h3 {
   font-size: 1.2rem;
+}
+.thirdSection {
+  height: 40vh;
+  max-height: 650px;
+  margin-top: -50px;
+}
+.thirdBorder {
+width: 95%;
+height: 50%;
+margin-top: -25px;
+}
+.thirdInfo h2 {
+  font-size: 1.5rem;
+}
+.thirdInfo p {
+  font-size: 0.9rem;
+}
+.thirdContentLogin .thirdInfo h2 span {
+font-size: 1.8rem;
+}
+.thirdContentLogin .thirdInfo h3 {
+font-size: 1.75rem;
+}
+
+
+
+
+.fourthSection {
+  max-height: 600px;
+}
+
+.fourthBorder {
+  width: 85%;
+  height: 100%;
+}
+
+.fourthTitle {
+  height: 100px;
+  margin-top: 25px;
+}
+
+.fourthTitle h2 {
+  font-size: 1.5rem;
+}
+.browseAllLinkSecond {
+  font-size: 1rem;
+  margin-top: 25px;
 }
 }
