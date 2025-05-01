@@ -145,7 +145,7 @@ header {
   padding-left: 5px;
   padding-right: 5px;
   height: 2.188rem;
-  margin-left: -5px;
+  margin-left: 0px;
   margin-top: 10px;
   background-color: #f2f2f200;
   font-family: "Playfair Display", serif;
@@ -201,13 +201,17 @@ header {
   border: solid white 2px;
 }
 
+.headerLogoContent {
+  position: absolute;
+  left: 50%;
+  height: 60px;
+  transform: translate(-50%);
+}
+
 .headerLogo, .headerLogoHover {
     height: 55px;
     width: auto;
     object-fit: contain;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
     transition: all 0.25s ease;
 }
 
@@ -330,7 +334,7 @@ header {
 .sidebarHeader {
   background-color: #1F1B17;
   position: absolute;
-  height: 100vh;
+  height: 106vh;
   left: 0;
   width: 250px;
   margin-left: -15%;
@@ -340,9 +344,20 @@ header {
   font-family: "Playfair Display", serif;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  justify-content: flex-start;
+  gap: 0px;
   transition: transform 0.25s ease;
   z-index: 999;
+}
+
+.divideLineLaying {
+  height: 2px;
+  width: 125px;
+  background-color: white;
+  border-radius: 99px;
+  margin-left: 15%;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .menuLinks {
@@ -400,7 +415,7 @@ header {
   padding-left: 5px;
   padding-right: 5px;
   height: 2.188rem;
-  margin-left: -5px;
+  margin-left: 0px;
   margin-top: 10px;
   background-color: #f2f2f200;
   font-family: "Playfair Display", serif;
@@ -474,28 +489,54 @@ header {
     overflow: hidden;
   }
 }
-
 @media (min-width:800px) {
   .menuLeftLinks {
     display: flex;
     margin-left: 15px;
   }
-
   .menuOpen {
     display: none;
   }
-
   .sidebarHeader {
     display: none;
   }
 }
-
+@media (max-width:425px) {
+  .headerLogo, .headerLogoHover {
+    height: 35px;
+    width: auto;
+  }
+  nav {
+    height: 45px;
+    margin-top: -15px;
+  }
+  nav ul li a, a, li a {
+    font-size: 1rem;
+  }
+  .menuLeftLinks {
+    height: 45px;
+  }
+  .menuLeftLinks a {
+    height: 35px;
+    font-size: 1rem;
+  }
+  .menuOpen {
+    font-size: 1rem;
+    height: 45px;
+    margin-top: 0;
+   }
+   .menuOpen i {
+    font-size: 1rem;
+   }
+   .sidebarClose, .sidebarClose i {
+    font-size: 1rem;
+   }
+}
 @media (max-width:1100px) {
   .searchContainer, .searchbarContent, .searchInput, .searchOpen, .searchActive, .searchInactive, .headerRightLinks i, .headerRightLinks .divideLine {
     display: none;
   }
 }
-
 @media (max-width:1024px) {
   nav {
     width: 90%;

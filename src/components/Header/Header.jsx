@@ -271,41 +271,43 @@ function Header() {
     >
       <i className="fa-solid fa-angles-left"></i> Hide Menu
     </button>
-    
-    <li className={styles.menuLinks}>
-      <Link to="/">Home</Link>
-      <Link to="/venues">Venues</Link>
-      <div className={styles.divideLine}></div>
-      {isUserLoggedIn && (
-        <>
-          {userData?.venueManager ? (
-            <>
-              <Link to="/admin-profile">My Venues</Link>
-              <Link to="/admin-profile">My Profile</Link>
-            </>
-          ) : (
-            <>
-              <Link to="/costumer-profile">My Bookings</Link>
-              <Link to="/costumer-profile">My Profile</Link>
-            </>
-          )}
-        </>
-      )}
-    </li>
 
-    <li className={styles.menuLinks}>
-      <Link to="/about">About Us</Link>
-      <Link to="/contact">Contact Us</Link>
-    </li>
+    <ul className={styles.menuLinks}>
+      <li><Link to="/">Home</Link></li>
+      <li><Link to="/venues">Venues</Link></li>
+    </ul>
 
-    <li className={styles.menuLinks}>
-      {!isUserLoggedIn && (
-        <>
-          <Link to="/login-costumer">Login</Link>
-          <Link to="/register-costumer">Register</Link>
-        </>
-      )}
-    </li>
+    <div className={styles.divideLineLaying}></div>
+
+    {isUserLoggedIn && (
+      <ul className={styles.menuLinks}>
+        {userData?.venueManager ? (
+          <>
+            <li><Link to="/admin-profile">My Venues</Link></li>
+            <li><Link to="/admin-profile">My Profile</Link></li>
+          </>
+        ) : (
+          <>
+            <li><Link to="/costumer-profile">My Bookings</Link></li>
+            <li><Link to="/costumer-profile">My Profile</Link></li>
+          </>
+        )}
+      </ul>
+    )}
+
+    <ul className={styles.menuLinks}>
+      <li><Link to="/about">About Us</Link></li>
+      <li><Link to="/contact">Contact Us</Link></li>
+    </ul>
+
+    <div className={styles.divideLineLaying}></div>
+
+    {!isUserLoggedIn && (
+      <ul className={styles.menuLinks}>
+        <li><Link to="/login-costumer">Login</Link></li>
+        <li><Link to="/register-costumer">Register</Link></li>
+      </ul>
+    )}
   </div>
 )}
           <div
@@ -313,7 +315,7 @@ function Header() {
               isSidebarOpen ? styles.blurred : ""
             }`}
           >
-            <Link to="/">
+            <Link to="/" className={styles.headerLogoContent}>
               <img
                 src={isHovered ? headerLogoHover : headerLogo}
                 alt="Logo"
