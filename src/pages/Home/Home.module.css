@@ -979,4 +979,33 @@
     gap: 5px;
     margin: 0;
   }
+  .typeTitle {
+    height: 100px;
+    margin-top: 25px;
+  }
+  .typeTitle h2 {
+    font-size: 1.8rem;
+  }
+  .secondSection {
+    max-height: 400px;
+    padding-bottom: 0px;
+}
+.secondBorder {
+  width: 95%;
+}
+.typeContent {
+  gap: 15px;
+}
+.hotelType {
+  height: 200px;
+  width: 100%;
+  min-width: 200px;
+}
+.hotelType img {
+  height: 150px;
+  width: 100%;
+}
+.hotelType h3 {
+  font-size: 1.2rem;
+}
 }
