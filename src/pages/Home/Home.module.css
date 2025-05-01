@@ -909,10 +909,6 @@ font-size: 1.75rem;
   .thirdBorder {
     width: 100%;
   }
-  .popularHotels {
-    height: 350px;
-    gap: 10px;
-}
 }
 @media (max-width:600px) {
   .filterDestination i, .filterCalender i, .filterPeople i {
@@ -1130,11 +1126,15 @@ font-size: 1.75rem;
   display: none;
 }
 .fourthSection {
-  max-height: 600px;
+  max-height: 650px;
 }
 .fourthBorder {
   width: 85%;
   height: 100%;
+}
+.popularHotels {
+  height: 350px;
+  gap: 10px;
 }
 .fourthTitle {
   height: 100px;
@@ -1144,8 +1144,10 @@ font-size: 1.75rem;
   font-size: 1.5rem;
 }
 .browseAllLinkSecond {
-  font-size: 1rem;
-  margin-top: 25px;
+  display: block;
+  font-size: 1.25rem;
+  margin-top: 5px;
+  margin-right: 5%;
 }
 /*Hover Effects Disabled*/ 
 .hotelType:hover {

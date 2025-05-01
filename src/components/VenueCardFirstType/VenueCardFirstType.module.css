@@ -156,3 +156,17 @@
     opacity: 0.3;
   }
 }
+
+@media (max-width:700px) {
+  .hotelCard {
+    max-height: 325px;
+    background-color: pink;
+  }
+
+  .hotelInfo h3 {
+    font-size: 1rem;
+  }
+  .hotelInfo p {
+    font-size: 0.75rem;
+  }
+}

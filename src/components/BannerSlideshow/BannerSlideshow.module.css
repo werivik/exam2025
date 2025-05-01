@@ -200,3 +200,42 @@
     margin-top: -10px;
   }
 }
+@media (max-width: 405px) {
+  .bannerText h1 {
+    font-size: 75px;
+  }
+  .bannerText span {
+    font-size: 15px;
+  }
+  .bannerText h3 {
+    font-size: 25px;
+  }
+  .bannerText h2 {
+    font-size: 70px;
+  }
+  .bannerText p {
+    font-size: 20px;
+  }
+  .paginationDots {
+    left: 57%;
+  }
+}
+@media (max-width: 320px) {
+  .bannerText h1 {
+    font-size: 60px;
+  }
+  .bannerText span {
+    font-size: 12px;
+  }
+  .bannerText h3 {
+    font-size: 20px;
+    margin-bottom: 0;
+  }
+  .bannerText h2 {
+    font-size: 55px;
+  }
+  .bannerText p {
+    margin-top: 0;
+    font-size: 10px;
+  }
+}
