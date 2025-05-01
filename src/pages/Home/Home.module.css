@@ -7,7 +7,7 @@
 }
 
 .heroSection {
-  width: 85%;
+  width: 83%;
   display: flex;
   justify-content: center;
   position: relative;
@@ -134,14 +134,16 @@
 .filterDestination, .filterCalender, .filterPeople {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    height: 35px;
     z-index: 996;
     position: relative;
 }
 
 .filterDestination i, .filterCalender i, .filterPeople i {
-    width: 32px;
-    min-width: 32px;
-    height: 32px;
+    width: 35px;
+    min-width: 35px;
+    height: 35px;
     object-fit: contain;
     border: 4px solid #1F1B17;
     background-color: white;
@@ -157,12 +159,12 @@
 
 .filterDestination input {
     background-color: white;
-    border-radius: 0px 15px 15px 0px;
+    border-radius: 5px 15px 15px 5px;
+    height: 35px;
     padding-left: 35px;
     margin-left: -25px;
     border: none;
     z-index: 1;
-    height: 40px;
     width: 100%;
     font-size: 1.125rem;
     color: #1F1B17;
@@ -180,13 +182,13 @@
 .filterCalender input {
     width: 20%;
     left: 10%;
-    border-radius: 0px 15px 15px 0px;
+    border-radius: 5px 15px 15px 5px;
+    height: 35px;
     padding-left: 25px;
     padding-right: 5px;
     margin-left: -25px;
     border: none;
     z-index: 1;
-    height: 40px;
     font-size: 1.125rem;
     color: #1F1B17;
     z-index: 996;
@@ -263,11 +265,12 @@
   
   .guestSelector {
     background-color: white;
-    border-radius: 0px 15px 15px 0px;
+    border-radius: 5px 15px 15px 5px;
     display: flex;
     align-items: center;
     padding-left: 25px;
     margin-left: -15px;
+    height: 35px;
     width: 100%;
     min-width: 225px;
     position: relative;
@@ -391,7 +394,7 @@
 }
 
 .secondBorder {
-  width: 85%;
+  width: 80%;
   height: 100%;
 }
 
@@ -524,7 +527,7 @@
 }
 
 .thirdBorder {
-  width: 85%;
+  width: 80%;
   height: 70%;
   position: relative;
 }
@@ -639,7 +642,6 @@
     margin-top: -50px;
     width: 100%;
     height: 100%;
-    max-height: 850px;
     position: relative;
     display: flex;
     justify-content: center;
@@ -650,7 +652,7 @@
 }
 
 .fourthBorder {
-    width: 85%;
+    width: 80%;
     height: 100%;
 }
 
@@ -797,22 +799,32 @@
   .fourthTitle {
     height: 200px;
   }
+  .thirdSection {
+    height: 70vh;
+  }
   .thirdBorder {
     width: 95%;
-    height: 50%;
+    height: 70%;
   }
-.thirdInfo {
-  width: 50%;
-}
-.registerButton {
-  margin-top: 50px;
-}
 .thirdContentRegister {
   gap: 10px;
 }
 .thirdContentRegister img, .thirdContentLogin img {
-  width: 40%;
+  width: 50%;
 }
+.thirdInfo h2 {
+  font-size: 2rem;
+}
+.thirdInfo p {
+  font-size: 1.2rem;
+}
+.thirdContentLogin .thirdInfo h2 span {
+font-size: 2rem;
+}
+.thirdContentLogin .thirdInfo h3 {
+font-size: 1.75rem;
+}
+
 }
 @media (max-width:1300px) {
   .popularHotels {
@@ -882,34 +894,6 @@
     display: block;
   }
 }
-@media (max-width:1180px) {
-  .thirdContentRegister img, .thirdContentLogin img {
-    display: none;
-    width: 0;
-  }
-  .thirdContentRegister, .thirdContentLogin {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-  }
-  .thirdSection {
-    height: 50vh;
-  }
-  .thirdInfo {
-    width: 80%;
-    min-width: 80%;
-    height: 85%;
-    gap: 0;
-  }
-  .thirdInfo p, .thirdInfo h2 {
-    margin: 0;
-    padding: 0;
-  }
-  .thirdInfo h2 {
-    margin-bottom: 10px;
-  }
-}
 @media (max-width: 700px) {
   .firstSection {
     height: 70vh;
@@ -943,9 +927,6 @@
     font-size: 1rem;
   }
 }
-
-
-
 @media (max-width:500px){
   .heroSection {
     width: 100%;
@@ -1030,24 +1011,123 @@ font-size: 1.8rem;
 .thirdContentLogin .thirdInfo h3 {
 font-size: 1.75rem;
 }
-
-
-
-
 .fourthSection {
   max-height: 600px;
 }
-
 .fourthBorder {
   width: 85%;
   height: 100%;
 }
-
 .fourthTitle {
   height: 100px;
   margin-top: 25px;
 }
+.fourthTitle h2 {
+  font-size: 1.5rem;
+}
+.browseAllLinkSecond {
+  font-size: 1rem;
+  margin-top: 25px;
+}
+}
 
+
+
+@media (max-width:725px){
+  .heroSection {
+    width: 100%;
+  }
+  .edgeLeft, .edgeRight {
+    display: none;
+  }
+  .filterContentSecond {
+  width: 100%;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+  border-radius: 0px;
+  }
+  .filtersColumns .filterDestination input, .filtersColumns .filterCalender input, .filtersColumns .filterPeople input, .guestSelector p{
+    font-size: 0.8rem;
+  }
+  .filterDestination i, .filterCalender i, .filterPeople i {
+    font-size: 1rem;
+    border: solid 2px;
+  }
+  .filterDestination {
+    min-width: 150px;
+  }
+  .filterCalender .startDateFilter, .filterCalender .endDateFilter {
+    min-width: 100px;
+  }
+  .guestSelector {
+    min-width: 75px;
+  }
+  .filtersColumnsBottom {
+    gap: 5px;
+    margin: 0;
+  }
+  .typeTitle {
+    height: 100px;
+    margin-top: 25px;
+  }
+  .typeTitle h2 {
+    font-size: 1.8rem;
+  }
+  .secondSection {
+    max-height: 400px;
+    padding-bottom: 0px;
+  }
+.secondBorder {
+  width: 95%;
+}
+.typeContent {
+  gap: 15px;
+}
+.hotelType {
+  height: 200px;
+  width: 100%;
+  min-width: 200px;
+}
+.hotelType img {
+  height: 150px;
+  width: 100%;
+}
+.hotelType h3 {
+  font-size: 1.2rem;
+}
+.thirdSection {
+  height: 40vh;
+  max-height: 650px;
+  margin-top: -50px;
+}
+.thirdBorder {
+width: 95%;
+height: 50%;
+margin-top: -25px;
+}
+.thirdInfo h2 {
+  font-size: 1.5rem;
+}
+.thirdInfo p {
+  font-size: 0.9rem;
+}
+.thirdContentLogin .thirdInfo h2 span {
+font-size: 1.8rem;
+}
+.thirdContentLogin .thirdInfo h3 {
+font-size: 1.75rem;
+}
+.fourthSection {
+  max-height: 600px;
+}
+.fourthBorder {
+  width: 85%;
+  height: 100%;
+}
+.fourthTitle {
+  height: 100px;
+  margin-top: 25px;
+}
 .fourthTitle h2 {
   font-size: 1.5rem;
 }
