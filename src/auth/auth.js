@@ -34,8 +34,6 @@ export const getUserRole = async () => {
   return 'customer';
 };
 
-
-
 const fetchUserRole = async (username) => {
   try {
     const userProfileUrl = PROFILES_SINGLE.replace("<name>", username);
@@ -59,30 +57,35 @@ const fetchUserRole = async (username) => {
   }
 };
 
-export const updateUserProfile = async (userId, { bio, avatar, banner, venueManager }) => {
-  try {
-    const response = await fetch(`${PROFILES_UPDATE.replace("<name>", userId)}`, {
-      method: 'PUT',
-      headers: headers(localStorage.getItem('accessToken')),
-      body: JSON.stringify({
-        bio,
-        avatar: avatar ? { url: avatar.url, alt: avatar.alt } : undefined,
-        banner: banner ? { url: banner.url, alt: banner.alt } : undefined,
-        venueManager,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to update profile');
-    }
-
-    const data = await response.json();
-    console.log('Profile updated:', data);
-    return data;
-  } 
+export const updateProfile = async ({ username, newName, newAvatar, newBio }) => {
+  const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
   
-  catch (error) {
-    console.error('Error updating profile:', error);
-    throw error;
+  if (!token) {
+    throw new Error("Authentication token is missing.");
   }
+
+  const updatedData = {
+    name: newName.trim() || username,
+    bio: newBio.trim() || undefined,
+    avatar: newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName}'s avatar` } : undefined,
+  };
+
+  if (!updatedData.name && !updatedData.bio && !updatedData.avatar) {
+    throw new Error("At least one property (username, bio, avatar) must be provided.");
+  }
+
+  const endpoint = PROFILES_UPDATE.replace("<name>", username);
+  const response = await fetch(endpoint, {
+    method: 'PUT',
+    headers: headers(token),
+    body: JSON.stringify(updatedData),
+  });
+
+  if (!response.ok) {
+    const responseText = await response.text();
+    throw new Error(`Failed to update profile: ${responseText}`);
+  }
+
+  return await response.json();
 };
+

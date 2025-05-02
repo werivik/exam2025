@@ -1027,8 +1027,6 @@ font-size: 1.75rem;
     margin-top: 15px;
   }
 }
-
-
 /* Phone Responsive - ALL */
 @media (max-width:725px){
   .heroSection {
@@ -1156,7 +1154,6 @@ font-size: 1.75rem;
   }
 }
 }
-
 /* Tabel Responsive - Second Section */
 @media (max-width:1400px) {
   .typeTitle {
