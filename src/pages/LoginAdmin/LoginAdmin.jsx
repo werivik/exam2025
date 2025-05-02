@@ -64,7 +64,7 @@ const LoginAdmin = () => {
         setShowPopup(true);
         setTimeout(() => {
           navigate('/admin-profile');
-        }, 2000);
+        }, 1500);
       } 
     } 
     

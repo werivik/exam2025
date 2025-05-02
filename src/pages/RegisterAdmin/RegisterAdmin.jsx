@@ -74,9 +74,11 @@ const RegisterAdmin = () => {
 
       setTimeout(() => {
         navigate('/login-admin');
-      }, 2000);
+      }, 1500);
 
-    } catch (err) {
+    } 
+    
+    catch (err) {
       setError(err.message || 'Something went wrong');
       triggerShake();
     } 

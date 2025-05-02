@@ -5,7 +5,7 @@
     padding-top: 0;
     margin-top: 0;
     margin-top: -25px;
-    background-image: url(/media/images/banner2.png);
+    background-image: url(/media/images/homeBanner.png);
     background-position: center;
     background-size: cover;
     position: relative;
@@ -24,9 +24,7 @@
     position: relative;
 }
 
-.loginContent {
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);    
+.loginContent {   
     background-color: #f3f0eb;
     height: 75%;
     margin-top: 2.5%;
@@ -85,12 +83,12 @@
     border: none;
     border-radius: 5px;
     padding-left: 0.5rem;
+    font-size: 1.125rem;
 }
 
 .BottomOptions {
     position: absolute;
-    padding-bottom: 2rem;
-    bottom: 0;
+    bottom: 2.5%;
     text-align: center;
     font-size: 1.125rem;
     width: calc(100% - 2.25rem);
@@ -102,27 +100,11 @@
     font-family: "Playfair Display", serif;
 }
 
-.active {
-    opacity: 1;
-    cursor: pointer;
-}
-
-.active:hover{
-    cursor: pointer;
-    transition: 0.25s;
-    background-color: #6B7A3A;
-}
-
-.inactive {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
   .error {
     font-size: 1rem;
     position: absolute;
-    top: 72%;
     left: 50%;
+    bottom: 16.5%;
     transform: translate(-50%);
     color: #D8000C;
   }
@@ -183,3 +165,81 @@
     font-size: 1.125rem;
   }
   
+  @media (max-width:700px) {
+    .loginContent {
+      width: 27rem;
+      height: 70%;
+    }
+    .loginContent h1 {
+      font-size: 2rem;
+      margin-top: 0;
+    }
+    .loginContent h2 {
+      font-size: 1.45rem;
+      margin-bottom: 5px;
+      padding-bottom: 0;
+    }
+    .loginContent p {
+      font-size: 1.125rem;
+      margin-top: 10px;
+    }
+    .inputForm input {
+      font-size: 1rem;
+    }
+    .BottomOptions a, .BottomOptions p{
+      font-size: 1rem;
+    }
+    .popup {
+      padding: 1.5rem 2.5rem;
+    }
+    .popup h2 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    .popup p {
+      font-size: 1rem;
+    }
+  }
+  @media (max-width:575px) {
+    .loginContent {
+      height: 65%;
+    }
+    .error {
+      font-size: 0.75rem;
+    }
+  }
+  @media (max-width:500px) {
+    .loginContent {
+      width: 90%;
+    }
+  }
+  @media (max-width:385px) {
+    .loginContent h1 {
+      font-size: 1.45rem;
+    }
+    .loginContent h2 {
+      font-size: 1.125rem;
+    }
+    .loginContent p {
+      font-size: 1rem;
+    }
+    .BottomOptions a, .BottomOptions p{
+      font-size: 0.9rem;
+    }
+    .inputForm {
+      margin-top: 50px;
+    }
+    .inputFormInputs {
+      gap: 15px;
+    }
+    .popup {
+      width: 85%;
+      padding: 1.2rem 2rem;
+    }
+    .popup h2 {
+      font-size: 1.125rem;
+    }
+    .popup p {
+      font-size: 0.9rem;
+    }
+  }

@@ -1,12 +1,10 @@
 import { AUTH_REGISTER } from '../constants';
 import { headers } from '../headers';
 
-
 // Costumer
 export async function registerCostumer(formData) {
     const payload = {
       ...formData,
-      credits: 1000,
       venueManager: false,
     };
   

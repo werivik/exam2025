@@ -58,4 +58,3 @@ export const PROFILES_UPDATE = `${API_BASE}/holidaze/profiles/<name>`;
 /* Search */
 export const PROFILES_SEARCH = `${API_BASE}/holidaze/profiles/search?q=<query>`;
 export const VENUES_SEARCH = `${API_BASE}/holidaze/venues/search?q=<query>`;
-

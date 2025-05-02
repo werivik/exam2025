@@ -79,14 +79,14 @@ const RegisterCostumer = () => {
   
     try {
       await registerCostumer({ 
-        username: formData.name,
+        name: formData.name,
         email: formData.email,
         password: formData.password
       });      
       setShowPopup(true);
       setTimeout(() => {
         navigate('/login-costumer');
-      }, 2000);
+      }, 1500);
     } 
     catch (err) {
       console.error('Registration error:', err);
