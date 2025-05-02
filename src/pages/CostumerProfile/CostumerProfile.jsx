@@ -81,21 +81,21 @@ const CostumerProfile = () => {
 >
 
       <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
-      <section className={styles.leftSection}>
+        <div className={styles.profilePage}>
+        <section className={styles.leftSection}>
         <div className={styles.leftBorder}>
           <div className={styles.profileLeftTop}>
             <img
               src={userData.avatar?.url || defaultAvatar }
               alt={userData.name || 'User Avatar'}
             />
-            <h3>Welcome back, {userData.name || 'Guest'}</h3>
+            <h3>{userData.name || 'Guest'}</h3>
           </div>
           <div className={styles.profileShortcut}>
             <button onClick={scrollTo.profileBookings} className={styles.shortcutLink}>My Bookings</button>
             <button onClick={scrollTo.profileBookings} className={styles.shortcutLink}>Favorite Venues</button>
             <button onClick={scrollTo.profileBookings} className={styles.shortcutLink}>Edit Profile</button>
           </div>
-          <button className={styles.signOutButton} onClick={handleSignOut}>Sign out</button>
           <div className={styles.dividerLine}></div>
           <div className={styles.profileFutureBooking}>
               <h3>Future Booking</h3>
@@ -104,7 +104,10 @@ const CostumerProfile = () => {
                 <p>Hotel Floralize</p>
                 <p>1 Adult</p>
               </div>
-            </div>
+          </div>
+
+          <button className={styles.signOutButton} onClick={handleSignOut}>Sign out</button>
+
         </div>
       </section>
       <section className={styles.rightSection}>
@@ -146,6 +149,7 @@ const CostumerProfile = () => {
           </div>
         </div>
       </section>
+        </div>
 
       {showPopup && (
   <div className={styles.popupOverlay}>
