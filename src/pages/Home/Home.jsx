@@ -372,10 +372,6 @@ const Home = () => {
         </div>
             )}
           </div>
-
-
-
-
           <div className={styles.filterContentSecond}>
             <div className={styles.allFilters}>
               <div className={styles.filtersColumns}>

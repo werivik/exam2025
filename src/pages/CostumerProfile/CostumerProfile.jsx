@@ -6,6 +6,9 @@ import { headers } from '../../headers';
 import defaultAvatar from '/media/images/mdefault.jpg';
 import Buttons from '../../components/Buttons/Buttons';
 import { updateProfile } from '../../auth/auth';
+import { PROFILES_SINGLE_BY_BOOKINGS } from '../../constants';
+import { VENUE_SINGLE } from '../../constants';
+import VenueBooked from '../../components/VenueBooked/VenueBooked';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -22,55 +25,131 @@ const CostumerProfile = () => {
   const [userData, setUserData] = useState({});
   const [bookedVenues, setBookedVenues] = useState([]);  
   const [favoriteVenues, setFavoriteVenues] = useState([]);  
-  const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [successPopupMessage, setSuccessPopupMessage] = useState('');  
   
   const username = localStorage.getItem('username');
 
+  const [isVenuesLoading, setIsVenuesLoading] = useState(true);   
+  const [hasError, setHasError] = useState(false);
+  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        const name = localStorage.getItem('username');
-
-        if (!token || !name) {
-          console.warn('Missing token or name in localStorage');
+        if (!token) {
+          setHasError(true);
           return;
         }
-
-        const userProfileUrl = PROFILES_SINGLE.replace("<name>", username);
-        console.log('Fetching user profile from:', userProfileUrl);
-
+  
+        const userProfileUrl = `${PROFILES_SINGLE.replace("<name>", username)}?_bookings=true`;
         const response = await fetch(userProfileUrl, {
           method: 'GET',
           headers: headers(token),
         });
-
+  
+        if (!response.ok) throw new Error('Failed to fetch user profile');
         const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.errors?.[0]?.message || 'Failed to fetch user data');
-        }
-
-        console.log('Fetched user data:', data);
-
-        setUserData(data.data || {});
-        setNewName(data.data?.name || '');
-        setNewAvatar(data.data?.avatar?.url || '');
-
-        const venues = data.data?._count?.venues || [];
-        setFavoriteVenues(venues);
+        const profile = data.data;
+  
+        setUserData(profile);
+        setNewName(profile?.name || '');
+        setNewAvatar(profile?.avatar?.url || '');
+  
+        const venuesFromBookings = profile.bookings.map((booking) => {
+          if (!booking.venue) return null;
+  
+          return {
+            ...booking.venue,
+            dateFrom: booking.dateFrom,
+            dateTo: booking.dateTo,
+            guests: booking.guests,
+          };
+        }).filter(Boolean);
+  
+        setBookedVenues(venuesFromBookings);
+        setIsVenuesLoading(false);
       } 
+      
       catch (error) {
-        console.error('Error fetching user data:', error);
+        setHasError(true);
+        console.error('Error fetching data:', error);
       }
     };
-
+  
     fetchUserData();
-  }, []);
+  }, [username]);
+    
+  const fetchVenueDetails = async (venueId) => {
+    try {
+      const response = await fetch(`${VENUE_SINGLE}${venueId}`);
+      const venueData = await venueResponse.json();
+      
+      console.log("Venue Response:", venueData);
+  
+      if (venueResponse.ok) {
+        return venueData.data;
+      } 
+      
+      else {
+        throw new Error(venueData.errors?.[0]?.message || 'Failed to fetch venue');
+      }
+    } 
+    
+    catch (error) {
+      console.error('Error fetching venue details:', error);
+      return null;
+    }
+  };  
 
-  const [showPopup, setShowPopup] = useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const sanitizedNewName = newName || '';
+    const sanitizedNewAvatar = newAvatar || '';
+
+    const token = localStorage.getItem('accessToken');
+    console.log('Access Token:', token);
+
+    console.log('Submitting profile update with:', {
+      username,
+      newName: sanitizedNewName,
+      newAvatar: sanitizedNewAvatar
+    });
+  
+    if (!sanitizedNewName.trim() && !sanitizedNewAvatar.trim()) {
+      alert('At least one of the fields (Name or Avatar URL) must be provided.');
+      return;
+    }
+
+    try {
+      const result = await updateProfile({
+        username,
+        newName: sanitizedNewName,
+        newAvatar: sanitizedNewAvatar,
+      });
+      console.log('Profile updated successfully:', result);
+      setUserData((prev) => ({
+        ...prev,
+        name: sanitizedNewName,
+        avatar: { url: sanitizedNewAvatar, alt: `${sanitizedNewName}'s avatar` },
+      }));
+
+      setSuccessPopupMessage('Profile updated successfully!');
+      setShowSuccessPopup(true);
+      setTimeout(() => {
+        setShowSuccessPopup(false);
+      }, 1000);      
+    } 
+    
+    catch (err) {
+      console.error('Profile update error:', err);
+      alert(`Failed to update profile: ${err.message}`);
+    }
+  };
 
   const handleSignOut = () => {
     localStorage.removeItem('accessToken');
@@ -102,13 +181,13 @@ const CostumerProfile = () => {
                 <h3>{capitalizeFirstLetter(userData.name) || 'Guest'}</h3>
               </div>
               <div className={styles.profileShortcuts}>
-                <button onClick={scrollTo.profileBookings} className={styles.shortcutLink}>
+                <button className={styles.shortcutLink}>
                   My Bookings
                 </button>
-                <button onClick={scrollTo.profileBookings} className={styles.shortcutLink}>
+                <button className={styles.shortcutLink}>
                   Favorite Venues
                 </button>
-                <button onClick={scrollTo.profileBookings} className={styles.shortcutLink}>
+                <button className={styles.shortcutLink}>
                   Edit Profile
                 </button>
               </div>
@@ -117,24 +196,40 @@ const CostumerProfile = () => {
           </section>
           <section className={styles.rightSection}>
             <div className={styles.rightBorder}>
-              <div className={styles.bookings}>
-                <div className={styles.bookingsTitle}>
-                  <h2>My Bookings</h2>
-                  <div className={styles.bookingsFilter}>
-                    <Buttons size='medium' version='v1'>Future</Buttons>
-                    <Buttons size='medium' version='v2'>Previous</Buttons>
-                  </div>
-                </div>
-                <div className={styles.allBookings}>
-                  {bookedVenues.length > 0 ? (
-                    bookedVenues.map((venue, index) => (
-                      <div key={index} className={styles.favoriteVenue}></div>
-                    ))
-                  ) : (
-                    <p>No Venues Booked yet.</p>
-                  )}
-                </div>
-              </div>
+<div className={styles.bookings}>
+  <div className={styles.bookingsTitle}>
+    <h2>My Bookings</h2>
+    <div className={styles.bookingsFilter}>
+      <Buttons size="medium" version="v1">Future</Buttons>
+      <Buttons size="medium" version="v2">Previous</Buttons>
+    </div>
+  </div>
+  <div className={styles.allBookings}>
+    {isVenuesLoading ? (
+      <div>Loading booked venues...</div>
+    ) : bookedVenues.length > 0 ? (
+      <div className={styles.costumerBookings}>
+        {bookedVenues.map((venue) => (
+          <div key={venue.id} className={styles.bookedVenueCard}>
+            <img
+              src={venue.media?.[0]?.url || defaultAvatar}
+              alt={venue.name || 'Venue Image'}
+              className={styles.venueImage}
+            />
+            <div className={styles.venueDetails}>
+              <h4>{venue.name}</h4>
+              <p>{venue.location?.city || "Unknown City"}, {venue.location?.country || "Unknown Country"}</p>
+              <p>{venue.price ? `Price: $${venue.price}` : "Price not available"}</p>
+              <p>{`Booking Dates: ${venue.dateFrom} to ${venue.dateTo}`}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p>No Venues Booked yet.</p>
+    )}
+  </div>
+</div>
               <div className={styles.favorites}>
                 <div className={styles.favoriteTitle}>
                   <h2>Favorite Venues</h2>
@@ -154,30 +249,7 @@ const CostumerProfile = () => {
                   <h2>Edit Profile</h2>
                 </div>
                 <div className={styles.allEdits}>
-                  <form
-                    onSubmit={async (e) => {
-                      e.preventDefault();
-                      try {
-                        const result = await updateProfile({
-                          username, 
-                          newName, 
-                          newAvatar
-                        });
-
-                        setUserData((prev) => ({
-                          ...prev,
-                          name: newName,
-                          avatar: { url: newAvatar, alt: `${newName}'s avatar` },
-                        }));
-                        alert("Profile updated successfully.");
-                      } 
-                      
-                      catch (err) {
-                        alert("Failed to update profile.");
-                      }
-                    }}
-                    className={styles.editForm}
-                  >
+                  <form onSubmit={handleSubmit} className={styles.editForm}>
                     <label>
                       Name:
                       <input
@@ -204,6 +276,14 @@ const CostumerProfile = () => {
             </div>
           </section>
         </div>
+
+        {showSuccessPopup && (
+  <div className={styles.popupOverlay}>
+    <div className={styles.popup}>
+      <h2>{successPopupMessage}</h2>
+    </div>
+  </div>
+)}
 
         {showPopup && (
           <div className={styles.popupOverlay}>

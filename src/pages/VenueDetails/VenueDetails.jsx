@@ -49,6 +49,7 @@ const VenueDetails = () => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [disabled, setDisabled] = useState(0);
+  const [showBookingPopup, setShowBookingPopup] = useState(false);
 
   const dropdownRef = useRef(null);
 
@@ -187,17 +188,29 @@ const VenueDetails = () => {
     setShowCalendar(false);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!checkInDate || !checkOutDate) {
-        setBookingError("Please select both check-in and check-out dates.");
-        return;
+      setBookingError("Please select both check-in and check-out dates.");
+      return;
     }
-
+  
     const formattedCheckInDate = new Date(checkInDate).toISOString().split('T')[0];
     const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0];
-
-    handleBookingSubmit(formattedCheckInDate, formattedCheckOutDate);
-};
+    const guests = adults + children + disabled;
+  
+    if (guests > venue.maxGuests) {
+      setBookingError(`This venue only allows up to ${venue.maxGuests} guests.`);
+      return;
+    }
+  
+    setBookingError("");
+  
+    await handleBookingSubmit(formattedCheckInDate, formattedCheckOutDate, guests, venue.id);
+    setShowBookingPopup(true);
+    setTimeout(() => {
+    setShowBookingPopup(false);
+    }, 1500);
+  };  
 
   if (loading) return <div className={styles.pageStyle}><p>Loading...</p></div>;
   if (!venue) return <div className={styles.pageStyle}><p>Venue not found.</p></div>;
@@ -501,6 +514,16 @@ const VenueDetails = () => {
 
         </div>
       </div>
+      
+      {showBookingPopup && (
+  <div className={styles.popupOverlay}>
+    <div className={styles.popup}>
+      <h2>Booking Confirmed!</h2>
+      <p>Your stay is now reserved.</p>
+    </div>
+  </div>
+)}
+
     </motion.div>
   );
 };

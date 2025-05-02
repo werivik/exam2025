@@ -9,7 +9,7 @@
     margin-left: 10%;
     margin-right: 10%;
 }
-.pageContent button {
+.pageContent button, .pageContent input, .pageContent label{
     font-family: "Playfair Display", serif;
 }
 .profilePage {
@@ -163,25 +163,70 @@
 .allBookings, .allFavorites, .allEdits {
     margin-top: 50px;
 }
-
 .allEdits {
     height: 100%;
     position: relative;
+    padding-bottom: 100px;
 }
-
 .allEdits .editForm {
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
-
 .editForm input {
     width: 100%;
     display: flex;
     flex-direction: column;
-    font-size: 1rem;
+    font-size: 1.125rem;
+    padding-left: 10px;
+    height: 35px;
+    border-radius: 15px;
+    border: none;
+}
+.editForm label {
+    font-size: 1.125rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.editForm label {
-    font-size: 1rem;
-}
+
+
+
+.blurred {
+    filter: blur(5px);
+    pointer-events: none;
+    user-select: none;
+  }  
+  .blurWrapper {
+    width: 100%;
+    height: 100%;
+  }  
+  .popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(31, 27, 23, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  .popup {
+    background: #fffefb;
+    padding: 2rem 3rem;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+    font-family: "Playfair Display", serif;
+    text-align: center;
+    color: #1F1B17;
+  }
+  .popup h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .popup p {
+    font-size: 1.125rem;
+  }

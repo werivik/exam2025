@@ -57,35 +57,57 @@ const fetchUserRole = async (username) => {
   }
 };
 
-export const updateProfile = async ({ username, newName, newAvatar, newBio }) => {
-  const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+/* Profile Update */
+export const updateProfile = async ({ username, newName, newAvatar }) => {
+  try {
+    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('Authentication token is missing.');
+    }
+
+    if (!username) {
+      throw new Error('Username is required to update profile.');
+    }
+
+    const endpoint = PROFILES_UPDATE.replace('<name>', username);
+
+    const updatedData = {
+      name: newName.trim() || username,
+      avatar: newAvatar.trim()
+        ? { url: newAvatar.trim(), alt: `${newName || username}'s avatar` }
+        : undefined,
+    };
+
+    if (!updatedData.name && !updatedData.avatar) {
+      throw new Error('At least one field (name or avatar) must be provided.');
+    }
+
+    const response = await fetch(endpoint, {
+      method: 'PUT',
+      headers: headers(token),
+      body: JSON.stringify(updatedData),
+    });
+
+    console.log('Profile update request sent with:', updatedData);
+    console.log('Response status:', response.status);
+
+    const result = await response.json();
+    console.log('Response body:', result);
+
+    if (!response.ok) {
+      throw new Error(result.errors?.[0]?.message || 'Failed to update profile.');
+    }
+
+    if (updatedData.name && updatedData.name !== username) {
+      localStorage.setItem('username', updatedData.name);
+      sessionStorage.setItem('username', updatedData.name);
+    }
+
+    return result;
+  } 
   
-  if (!token) {
-    throw new Error("Authentication token is missing.");
+  catch (error) {
+    console.error('Error in updateProfile:', error);
+    throw error;
   }
-
-  const updatedData = {
-    name: newName.trim() || username,
-    bio: newBio.trim() || undefined,
-    avatar: newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName}'s avatar` } : undefined,
-  };
-
-  if (!updatedData.name && !updatedData.bio && !updatedData.avatar) {
-    throw new Error("At least one property (username, bio, avatar) must be provided.");
-  }
-
-  const endpoint = PROFILES_UPDATE.replace("<name>", username);
-  const response = await fetch(endpoint, {
-    method: 'PUT',
-    headers: headers(token),
-    body: JSON.stringify(updatedData),
-  });
-
-  if (!response.ok) {
-    const responseText = await response.text();
-    throw new Error(`Failed to update profile: ${responseText}`);
-  }
-
-  return await response.json();
 };
-
