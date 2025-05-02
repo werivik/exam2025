@@ -54,14 +54,14 @@
 }
 .profileLeftTop img {
     width: 200px;
-    height: 200px;
+    height: 175px;
     object-fit: cover;
     border-radius: 99px 99px 0px 0px;
     z-index: 2;
 }
 .profileLeftTop h3 {
     position: absolute;
-    bottom: -65px;
+    bottom: -45px;
     font-size: 1rem;
     background-color: #1F1B17;
     width: 200px;
