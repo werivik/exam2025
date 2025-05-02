@@ -209,21 +209,9 @@ const CostumerProfile = () => {
       <div>Loading booked venues...</div>
     ) : bookedVenues.length > 0 ? (
       <div className={styles.costumerBookings}>
-        {bookedVenues.map((venue) => (
-          <div key={venue.id} className={styles.bookedVenueCard}>
-            <img
-              src={venue.media?.[0]?.url || defaultAvatar}
-              alt={venue.name || 'Venue Image'}
-              className={styles.venueImage}
-            />
-            <div className={styles.venueDetails}>
-              <h4>{venue.name}</h4>
-              <p>{venue.location?.city || "Unknown City"}, {venue.location?.country || "Unknown Country"}</p>
-              <p>{venue.price ? `Price: $${venue.price}` : "Price not available"}</p>
-              <p>{`Booking Dates: ${venue.dateFrom} to ${venue.dateTo}`}</p>
-            </div>
-          </div>
-        ))}
+{bookedVenues.map((venue) => (
+  <VenueBooked key={venue.id} venue={venue} />
+))}
       </div>
     ) : (
       <p>No Venues Booked yet.</p>
