@@ -1,5 +1,5 @@
 .pageContent {
-    min-height: 150vh;
+    min-height: 175vh;
     height: 100%;
     margin-top: 75px;
     padding-bottom: 100px;
@@ -146,16 +146,20 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 75px;
+    gap: 150px;
 }
 .rightBorder h2 {
-    font-size: 2.25rem;
+    font-size: 3rem;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
 }
-.bookingsTitle {
+.bookingsTitle, .favoriteTitle, .editTitle {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    height: 100px;
 }
 .bookingsFilter {
     display: flex;
