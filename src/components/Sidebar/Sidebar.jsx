@@ -221,7 +221,7 @@ const Sidebar = ({
 
           <div className={styles.divideLine}></div>
 
-          <Buttons size='medium' version='v1' 
+          <Buttons size='clearFilter' 
           onClick={clearFilters} 
           className={styles.clearFilterButton}>
             Clear Filters

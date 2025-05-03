@@ -250,3 +250,10 @@
     background: #1F1B17;
     cursor: pointer;
   }
+
+  @media (max-width:500px) {
+    .filterSidebar {
+      width: 100%;
+      border-radius: 0px;
+    }
+  }

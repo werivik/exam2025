@@ -110,6 +110,23 @@
     background-color: #B88A44;
 }
 
+.clearFilter {
+    background-color: #1F1B17;
+    color: #F3F0EB;
+    font-size: 17px;
+    padding-top: 7.5px;
+    padding-bottom: 7.5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 17.5px;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.clearFilter:hover {
+    background-color: #6B7A3A;
+}
+
 @media (max-width:575px) {
     .small {
         height: 30px;
@@ -147,5 +164,11 @@
         height: 40px;
         width: 105px;
         font-size: 0.9rem;
+    }
+
+    .clearFilter {
+        font-size: 1rem;
+        margin-left: 0;
+        margin-right: 0;
     }
 }
