@@ -11,8 +11,8 @@
     margin-left: -2px;
     z-index: 2;
     border: solid 4px #1F1B17;
-    height: 36px;
-    width: 37px;
+    height: 40px;
+    width: 40px;
     border-radius: 99px;
 
     display: flex;
@@ -24,7 +24,7 @@
 
   .searchbarContainer input {
     border: none;
-    height: 42.5px;
+    height: 40px;
     border-radius: 15px;
     min-width: 225px;
     padding-left: 50px;

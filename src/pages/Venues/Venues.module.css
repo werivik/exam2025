@@ -114,6 +114,7 @@
   }
   .topSearchbar {
     width: 62.5%;
+    height: 40px;
   }
 
   @media (min-width: 350px) {
