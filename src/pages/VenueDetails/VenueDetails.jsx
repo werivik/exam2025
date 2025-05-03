@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Buttons from '../../components/Buttons/Buttons';
 import { isLoggedIn } from '../../auth/auth';
 import { handleBookingSubmit } from '../../auth/booking';
+import { handleFavoriteToggle } from '../../auth/favorite';
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
 import stars from "/media/rating/christmas-stars.png";
@@ -49,7 +50,9 @@ const VenueDetails = () => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [disabled, setDisabled] = useState(0);
-  const [showBookingPopup, setShowBookingPopup] = useState(false);
+  const [showBookingPopup, setShowBookingPopup] = useState(() => {
+    return sessionStorage.getItem('showBookingPopup') === 'true';
+  });
 
   const dropdownRef = useRef(null);
 
@@ -82,6 +85,10 @@ const VenueDetails = () => {
         const userResponse = await fetch('/user/profile', { method: 'GET', headers: headers() });
         const userData = await userResponse.json();
         setUserProfile(userData.data);
+        
+        if (userData?.data?.favorites?.includes(result.data.id)) {
+          setIsFavorite(true);
+        }        
 
         if (result.data?.owner?.name) {
           try {
@@ -206,10 +213,14 @@ const VenueDetails = () => {
     setBookingError("");
   
     await handleBookingSubmit(formattedCheckInDate, formattedCheckOutDate, guests, venue.id);
+
+    sessionStorage.setItem('showBookingPopup', 'true');
     setShowBookingPopup(true);
+
     setTimeout(() => {
-    setShowBookingPopup(false);
-    }, 1500);
+      setShowBookingPopup(false);
+      sessionStorage.removeItem('showBookingPopup');
+    }, 2000);
   };  
 
   if (loading) return <div className={styles.pageStyle}><p>Loading...</p></div>;
@@ -228,7 +239,7 @@ const VenueDetails = () => {
     variants={pageVariants}
     transition={{ duration: 0.5, ease: "easeInOut" }}
   >
-      <div className={styles.pageStyle}>
+      <div className={`${styles.pageStyle} ${showBookingPopup ? styles.blurred : ''}`}>
         <div className={styles.hotelInfoTop}>
           <div className={styles.titleLocation}>
             <h1>{venue.name}</h1>
@@ -488,9 +499,16 @@ const VenueDetails = () => {
       <p><strong>Max Guests</strong> {venue.maxGuests}</p>
 
       <div className={styles.favoriteVenue}>
-        <div className={styles.heartContainer}>
-          <div className={`${styles.heart}`} />
-        </div>
+      <div
+  className={styles.heartContainer}
+  onClick={async () => {
+    const newFavoriteStatus = !isFavorite;
+    setIsFavorite(newFavoriteStatus);
+    await handleFavoriteToggle(venue.id, newFavoriteStatus);
+  }}
+>
+  <div className={`${styles.heart} ${isFavorite ? styles.active : ''}`} />
+</div>
         <p>Add to Favorites</p>
       </div>
     </>
