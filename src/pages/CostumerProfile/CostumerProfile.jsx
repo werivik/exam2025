@@ -2,13 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CostumerProfile.module.css';
 import { motion } from "framer-motion";
-import { PROFILES_SINGLE } from '../../constants';
+import { PROFILES_SINGLE, VENUE_SINGLE } from '../../constants';
 import { headers } from '../../headers';
 import defaultAvatar from '/media/images/mdefault.jpg';
 import Buttons from '../../components/Buttons/Buttons';
 import { updateProfile } from '../../auth/auth';
-import { PROFILES_SINGLE_BY_BOOKINGS } from '../../constants';
-import { VENUE_SINGLE } from '../../constants';
 import VenueBooked from '../../components/VenueBooked/VenueBooked';
 
 const pageVariants = {
@@ -41,6 +39,23 @@ const CostumerProfile = () => {
   const [isVenuesLoading, setIsVenuesLoading] = useState(true);   
   const [hasError, setHasError] = useState(false);
   const [filter, setFilter] = useState('All');
+
+  const [selectedVenue, setSelectedVenue] = useState(null);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+const nextImage = () => {
+  setCurrentImageIndex((prevIndex) => (prevIndex + 1) % selectedVenue.media.length);
+};
+
+const prevImage = () => {
+  setCurrentImageIndex((prevIndex) => 
+    prevIndex === 0 ? selectedVenue.media.length - 1 : prevIndex - 1
+  );
+};
 
   const navigate = useNavigate();
 
@@ -90,13 +105,25 @@ const CostumerProfile = () => {
       setBookedVenues(uniqueVenues);
       setIsVenuesLoading(false);
     };
-
     fetchUserData();
   }, [username]);
+  
 
   const handleVenueClick = (venueId) => {
-    navigate(`/venue-booked/${venueId}`);
-  };
+    const venue = bookedVenues.find((v) => v.id === venueId);
+  
+    if (venue) {
+      setSelectedVenue(venue); 
+      setSelectedBooking({
+        guests: venue.guests,
+        dateFrom: venue.dateFrom,
+        dateTo: venue.dateTo,
+        created: venue.created,
+        updated: venue.updated,
+      });
+      setIsModalVisible(true);
+    }
+  };  
     
   const fetchVenueDetails = async (venueId) => {
     try {
@@ -206,8 +233,8 @@ const CostumerProfile = () => {
       variants={pageVariants}
       transition={{ duration: 0.5, ease: "easeInOut" }} 
     >
-      <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
-        <div className={styles.profilePage}>
+    <div className={`${styles.blurWrapper} ${isModalVisible ? styles.blurred : ''}`}>
+      <div className={styles.profilePage}>
           <section className={styles.leftSection}>
             <div className={styles.leftBorder}>
               <div className={styles.profileLeftTop}>
@@ -243,19 +270,21 @@ const CostumerProfile = () => {
                   </div>
                 </div>
                 <div className={styles.allBookings}>
-              {isVenuesLoading ? (
-                <div>Loading...</div>
-              ) : filteredVenues.length > 0 ? (
-                <div className={styles.costumerBookings}>
+                {isVenuesLoading ? (
+            <div>Loading...</div>
+          ) : filteredVenues.length > 0 ? (
+            <div className={styles.costumerBookings}>
 {filteredVenues.map((venue) => (
-  <div key={venue.id} onClick={() => handleVenueClick(venue.id)}>
-    <VenueBooked venue={venue} />
-  </div>
+  <VenueBooked
+    key={`${venue.id}-${venue.dateFrom.getTime()}`}
+    venue={venue}
+    onClick={() => handleVenueClick(venue.id, venue.bookingId)}
+  />
 ))}
-                </div>
-              ) : (
-                <p>No Venues Booked yet.</p>
-              )}
+            </div>
+          ) : (
+            <p>No Venues Booked yet.</p>
+          )}
             </div>
               </div>
 <div className={styles.favorites} ref={favoritesRef}>
@@ -319,7 +348,66 @@ const CostumerProfile = () => {
             </div>
           </div>
         )}
-      </div>
+      </div>   
+      {isModalVisible && (
+  <div className={styles.modalOverlay}>
+    <div className={styles.modalContent}>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <div className={styles.bookedVenueDetails}>
+          <button className={styles.closeVenueButton} onClick={() => setIsModalVisible(false)}>
+            X
+          </button>
+
+          <div className={styles.bookedVenueImageSlideshow}>
+            {selectedVenue?.media && selectedVenue.media.length > 0 ? (
+              <div className={styles.imageSlider}>
+                <img
+                  src={selectedVenue.media[0].url}
+                  alt={selectedVenue.media[0].alt || "Venue Image"}
+                  className={styles.slideshowImage}
+                />
+                <button className={styles.prevButton} onClick={prevImage}>
+                  Previous
+                </button>
+                <button className={styles.nextButton} onClick={nextImage}>
+                  Next
+                </button>
+              </div>
+            ) : (
+              <p>No images available for this venue.</p>
+            )}
+          </div>
+          <div className={styles.bookedVenueRight}>
+            <div className={styles.bookedVenueVenueInfo}>
+              <h2>{selectedVenue.name}</h2>
+              <p><strong>Description:</strong> {selectedVenue.description}</p>
+              <p><strong>Location:</strong> {selectedVenue.location.city}, {selectedVenue.location.country} {selectedVenue.location.zip}</p>
+              <p><strong>Price:</strong> ${selectedVenue.price}</p>
+              <p><strong>Max Guests:</strong> {selectedVenue.maxGuests}</p>
+              <p><strong>Rating:</strong> {selectedVenue.rating}</p>
+              <p><strong>Amenities:</strong> {selectedVenue.meta.wifi ? 'WiFi, ' : ''}{selectedVenue.meta.parking ? 'Parking, ' : ''}{selectedVenue.meta.breakfast ? 'Breakfast, ' : ''}{selectedVenue.meta.pets ? 'Pets Allowed' : ''}</p>
+              <p><a href={`/venue-details/${selectedVenue?.id}`} target="_blank" rel="noopener noreferrer">View Venue</a></p>
+            </div>
+            <div className={styles.bookedVenueBookingInfo}>
+              <h3>Booking Information</h3>
+              <p><strong>Guests:</strong> {selectedBooking.guests}</p>
+              <p><strong>Booking From:</strong> {new Date(selectedBooking.dateFrom).toLocaleDateString()}</p>
+              <p><strong>Booking To:</strong> {new Date(selectedBooking.dateTo).toLocaleDateString()}</p>
+              <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
+              <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
+            </div>
+            <div className={styles.bookedVenueEditButtons}>
+              <button>Edit</button>
+              <button>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+)}
     </motion.div>
   );
 };

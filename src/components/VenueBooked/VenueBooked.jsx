@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styles from './VenueBooked.module.css';
 
-const VenueBooked = ({ venue }) => {
+const VenueBooked = ({ venue, onClick }) => {
   if (!venue) return null;
 
   const startDate = new Date(venue.dateFrom);
@@ -16,11 +15,11 @@ const VenueBooked = ({ venue }) => {
   const guests = venue.guests || 'N/A';
 
   return (
-    <Link to={`/venue-booked/${venue.id}`} className={styles.hotelCard}>
+    <div className={styles.hotelCard} onClick={onClick}>
       <div className={styles.bookedDate}>
-        <p><span>From</span> {new Date(venue.dateFrom).toLocaleDateString()}</p>
+        <p><span>From</span> {startDate.toLocaleDateString()}</p>
         <div className={styles.divideLine}></div>
-        <p><span>To</span> {new Date(venue.dateTo).toLocaleDateString()}</p>
+        <p><span>To</span> {endDate.toLocaleDateString()}</p>
       </div>
       <img
         src={venue.media?.[0]?.url || '/media/logo/loadingScreen.png'}
@@ -32,12 +31,14 @@ const VenueBooked = ({ venue }) => {
         <div className={styles.hotelLocation}>
           {venue.location?.city || "Unknown City"}, {venue.location?.country || "Unknown Country"}
         </div>
-        <p className={styles.totalPrice}><strong>$ {totalPrice}</strong><span> / Total price</span></p>
+        <p className={styles.totalPrice}>
+          <strong>$ {totalPrice}</strong><span> / Total price</span>
+        </p>
         <p className={styles.totalGuests}>
           <strong>{guests}</strong> {guests === 1 ? 'Guest' : 'Guests'}
         </p>
       </div>
-    </Link>
+    </div>
   );
 };
 
