@@ -57,7 +57,7 @@ const Venues = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const PAGE_SIZE = filtersVisible ? 18 : 20;
+  const PAGE_SIZE = filtersVisible ? 20 : 20;
 
   const inputRefs = {
     continent: useRef(null),
@@ -443,6 +443,19 @@ setFilters(prev => ({
   }, []);    
 
   const pageTotal = Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE));
+
+  useEffect(() => {
+    if (showSidebar) {
+      document.body.style.overflow = 'hidden';
+    } 
+    
+    else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showSidebar]);  
 
   return (
     <motion.div

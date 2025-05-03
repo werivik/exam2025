@@ -179,6 +179,7 @@
     transition: all 0.4s ease;
     z-index: 1100;
     border-radius: 0px 25px 25px 0px;
+    font-size: 1rem;
   }
   
   .showSidebar {
@@ -194,6 +195,7 @@
   .inputWithSuggestions input {
     width: 100%;
     position: relative;
+    font-size: 1rem;
   }
 
   .suggestionList {
@@ -231,6 +233,7 @@
     text-align: left;
     padding-left: 5px;
     margin-bottom: 10px;
+    font-size: 1rem;
   }
   
   .sliderSingle input[type="range"] {
@@ -255,5 +258,20 @@
     .filterSidebar {
       width: 100%;
       border-radius: 0px;
+    }
+  }
+
+  @media (max-width:350px){
+    .filterGroup input {
+      font-size: 0.9rem;
+    }
+    .inputWithSuggestions input {
+      font-size: 0.9rem;
+    }
+    .guestInputs input {
+      font-size: 0.9rem;
+    }
+    .filterSidebarContent h3 {
+      font-size: 1.25rem;
     }
   }
