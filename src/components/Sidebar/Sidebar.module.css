@@ -5,11 +5,8 @@
     gap: 25px;
     height: 100%;
     padding-bottom: 50px;
-    margin-bottom: 50px;
-
     overflow-y: scroll;
     overflow-x: hidden;
-
     color: #1F1B17;
   }
 

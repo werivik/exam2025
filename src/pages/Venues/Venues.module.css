@@ -50,6 +50,7 @@
   aspect-ratio: 3 / 4;
   max-width: 400px;
   width: 100%;
+  height: 100%;
   justify-self: center;
 }
 .loadMoreButton {
@@ -115,12 +116,12 @@
     width: 62.5%;
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 350px) {
     .loadMoreButton {
       display: none;
     }
   }
-  @media (max-width: 1023px) {
+  @media (max-width: 350px) {
     .pagination {
       display: none;
     }
@@ -154,5 +155,14 @@
     .rightTitles h1 {
       margin: 0;
       padding: 0;
+    }
+
+    .pagination {
+      margin-top: 50px;
+      font-size: 0.9rem;
+    }
+    .page,
+    .pageActive {
+      font-size: 0.9rem;
     }
   }

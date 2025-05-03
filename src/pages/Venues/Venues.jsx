@@ -505,38 +505,43 @@ setFilters(prev => ({
           ) : (
             <>
               <div className={styles.allHotels}>
-                {filteredVenues
-                  .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
-                  .map(venue => (
-                    <VenueCardSecondType key={venue.id} venue={venue} />
-                  ))}
+              {(window.innerWidth >= 1024
+  ? filteredVenues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+  : filteredVenues.slice(0, visibleCount)
+).map(venue => (
+  <VenueCardSecondType key={venue.id} venue={venue} />
+))}
               </div>
 
-              {window.innerWidth >= 1024 && pageTotal > 1 && (
-                <div className={styles.pagination}>
-                  {currentPage > 1 && (
-                    <button onClick={goToPrevPage} className={styles.page}>Prev</button>
-                  )}
-                  {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
-                    <button
-                      key={p}
-                      onClick={() => handlePageClick(p)}
-                      className={p === currentPage ? styles.pageActive : styles.page}
-                    >
-                      {p}
-                    </button>
-                  ))}
-                  {currentPage < pageTotal && (
-                    <button onClick={goToNextPage} className={styles.page}>Next</button>
-                  )}
-                </div>
-              )}
+<div className={styles.paginationWrapper}>
+  {pageTotal > 1 && (
+    <div className={styles.pagination}>
+      {currentPage > 1 && (
+        <button onClick={goToPrevPage} className={styles.page}>Prev</button>
+      )}
+      {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
+        <button
+          key={p}
+          onClick={() => handlePageClick(p)}
+          className={p === currentPage ? styles.pageActive : styles.page}
+        >
+          {p}
+        </button>
+      ))}
+      {currentPage < pageTotal && (
+        <button onClick={goToNextPage} className={styles.page}>Next</button>
+      )}
+    </div>
+  )}
+</div>
 
-              {window.innerWidth < 1024 && visibleCount < filteredVenues.length && (
-  <button className={styles.loadMoreButton} onClick={loadMore}>
-    Load More
-  </button>
-)}
+<div className={styles.loadMoreWrapper}>
+  {visibleCount < filteredVenues.length && (
+    <button className={styles.loadMoreButton} onClick={loadMore}>
+      Load More
+    </button>
+  )}
+</div>
             </>
           )}
         </div>

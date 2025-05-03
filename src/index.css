@@ -1,12 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Judson:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 /*
-
 Brown: #1F1B17
 Gold: #B88A44
 Green: #6B7A3A
 Cream: #F3F0EB
-
 */
 
 *, *::before, *::after {
@@ -14,11 +12,14 @@ Cream: #F3F0EB
 }
 
 body {
-  background-color: #F3F0EB;
+    background-color: #F3F0EB;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
 }
 
 h2, h3, p, span, input, a {
