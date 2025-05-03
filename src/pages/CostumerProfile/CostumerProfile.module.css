@@ -321,10 +321,28 @@
 
 .bookedVenueRight {
     width: 50%;
+    margin-right: 35px;
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 35px;
     overflow-y: auto;
+}
+.bookedVenueRight h2 {
+    font-size: 2.5rem;
+}
+.bookedVenueRight h3 {
+    font-size: 1.75rem;
+    padding: 0;
+    margin-bottom: 5px;
+}
+.bookedVenueRight p {
+    font-size: 1.125rem;
+    width: 95%;
+}
+
+.bookedVenueRight span {
+    opacity: 75%;
+    font-size: 1rem;
 }
 .modalContent {
   background: white;

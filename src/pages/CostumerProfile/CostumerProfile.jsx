@@ -384,9 +384,9 @@ const prevImage = () => {
               <h2>{selectedVenue.name}</h2>
               <p><strong>Description:</strong> {selectedVenue.description}</p>
               <p><strong>Location:</strong> {selectedVenue.location.city}, {selectedVenue.location.country} {selectedVenue.location.zip}</p>
-              <p><strong>Price:</strong> ${selectedVenue.price}</p>
+              <p><strong>Price:</strong> ${selectedVenue.price} <span>/ per night</span></p>
               <p><strong>Max Guests:</strong> {selectedVenue.maxGuests}</p>
-              <p><strong>Rating:</strong> {selectedVenue.rating}</p>
+              <p><strong>Rating:</strong> {selectedVenue.rating} Stars</p>
               <p><strong>Amenities:</strong> {selectedVenue.meta.wifi ? 'WiFi, ' : ''}{selectedVenue.meta.parking ? 'Parking, ' : ''}{selectedVenue.meta.breakfast ? 'Breakfast, ' : ''}{selectedVenue.meta.pets ? 'Pets Allowed' : ''}</p>
               <p><a href={`/venue-details/${selectedVenue?.id}`} target="_blank" rel="noopener noreferrer">View Venue</a></p>
             </div>
