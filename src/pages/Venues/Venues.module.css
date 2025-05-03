@@ -136,8 +136,7 @@
   }
   @media (max-width:1024px){
     .rightBorder {
-      width: 93.5%;
-      margin-left: -1.5%;
+      width: 90%;
   }
   .rightTitles {
     height: 150px;
