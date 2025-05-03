@@ -224,6 +224,29 @@ const prevImage = () => {
 
   const filteredVenues = filterVenues(bookedVenues);
 
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleOverlayClick = (e) => {
+    if (e.target.classList.contains(styles.modalOverlay)) {
+      closeModal();
+    }
+  };
+
+  useEffect(() => {
+    if (isModalVisible) {
+      document.body.style.overflow = 'hidden';
+    } 
+    else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalVisible]);
+  
+
   return (
     <motion.div
       className={styles.pageContent}
@@ -350,7 +373,10 @@ const prevImage = () => {
         )}
       </div>   
       {isModalVisible && (
-  <div className={styles.modalOverlay}>
+      <div
+      className={styles.modalOverlay}
+      onClick={handleOverlayClick} 
+      >
     <div className={styles.modalContent}>
       {isLoading ? (
         <div>Loading...</div>
