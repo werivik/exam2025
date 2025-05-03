@@ -111,7 +111,7 @@
 }
 .paginationDots {
   position: absolute;
-  right: 5%;
+  left: 95%;
   top: 45%;
   display: flex;
   flex-direction: column;
@@ -122,8 +122,8 @@
 .slideDot {
   background-color: transparent;
   border-radius: 99px;
-  width: 12px;
-  height: 12px;
+  width: 17px;
+  height: 17px;
   border: solid 2px white;
   transition: 0.25s;
   cursor: pointer;
