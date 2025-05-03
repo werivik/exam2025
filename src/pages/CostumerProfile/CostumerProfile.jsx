@@ -47,6 +47,19 @@ const CostumerProfile = () => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValues, setEditValues] = useState({
+    dateFrom: selectedBooking?.dateFrom || '',
+    dateTo: selectedBooking?.dateTo || '',
+    guests: selectedBooking?.guests || 0,
+  });
+  const [isCancelPopupVisible, setIsCancelPopupVisible] = useState(false);
+  const [bookingToCancel, setBookingToCancel] = useState(null);
+  
+  const handleEditClick = () => {
+    setIsEditing(true);
+  }
+
 const nextImage = () => {
   setCurrentImageIndex((prevIndex) => (prevIndex + 1) % selectedVenue.media.length);
 };
@@ -147,6 +160,46 @@ const prevImage = () => {
     }
   };  
 
+  const handleSaveChanges = async () => {
+    const { dateForm, dateTo, guests } = editValues;
+
+    if (guests > selectedVenue.maxGuests) {
+      alert('Guests cannot exceed the maximum allowed for this venue.')
+      return;
+    }
+
+    try {
+      const updatedBooking = await updateBooking(selectedBooking.id, {
+        dateForm,
+        dateTo,
+        guests,
+      });
+      setSelectedBooking(updatedBooking);
+      setIsEditing(false);
+    }
+    catch(error) {
+      console.error('Error updating booking:', error);
+      alert('Failed to update Booking.')
+    }
+  };
+
+  const handleConfirmCancelBooking = async () => {
+    try {
+      await deleteBooking(bookingToCancel);
+      setIsCancelPopupVisible(false);
+      setIsModalVisible(false);
+    } 
+    
+    catch (error) {
+      console.error('Error canceling booking:', error);
+      alert('Failed to cancel booking.');
+    }
+  };
+
+  const handleCloseCancelPopup = () => {
+    setIsCancelPopupVisible(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -245,7 +298,63 @@ const prevImage = () => {
       document.body.style.overflow = '';
     };
   }, [isModalVisible]);
-  
+
+
+  const renderBookingInfoOrForm = () => {
+    if (isEditing) {
+      return (
+        <div className={styles.editFormContainer}>
+          <form onSubmit={handleSaveChanges} className={styles.editForm}>
+            <label>
+              Guests:
+              <input
+                type="number"
+                value={editValues.guests}
+                onChange={(e) => setEditValues({ ...editValues, guests: e.target.value })}
+                required
+              />
+            </label>
+            <label>
+              From:
+              <input
+                type="date"
+                value={editValues.dateFrom}
+                onChange={(e) => setEditValues({ ...editValues, dateFrom: e.target.value })}
+                required
+              />
+            </label>
+            <label>
+              To:
+              <input
+                type="date"
+                value={editValues.dateTo}
+                onChange={(e) => setEditValues({ ...editValues, dateTo: e.target.value })}
+                required
+              />
+            </label>
+            <div className={styles.editActions}>
+              <Buttons type="submit" size="small" version="v2">Save Changes</Buttons>
+            </div>
+          </form>
+        </div>
+      );
+    }
+
+    return (
+      <div className={styles.bookedVenueBookingInfo}>
+        <h3>Booking Information</h3>
+        <p><strong>Guests:</strong> {selectedBooking.guests}</p>
+        <p><strong>Booking From:</strong> {new Date(selectedBooking.dateFrom).toLocaleDateString()}</p>
+        <p><strong>Booking To:</strong> {new Date(selectedBooking.dateTo).toLocaleDateString()}</p>
+        <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
+        <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
+        <div className={styles.bookedVenueEditButtons}>
+          <button onClick={handleEditClick}>Edit</button>
+          <button>Cancel</button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <motion.div
@@ -358,12 +467,12 @@ const prevImage = () => {
         </div>
 
         {showSuccessPopup && (
-  <div className={styles.popupOverlay}>
-    <div className={styles.popup}>
-      <h2>{successPopupMessage}</h2>
-    </div>
-  </div>
-)}
+          <div className={styles.popupOverlay}>
+            <div className={styles.popup}>
+              <h2>{successPopupMessage}</h2>
+            </div>
+          </div>
+        )}
         {showPopup && (
           <div className={styles.popupOverlay}>
             <div className={styles.popup}>
@@ -371,6 +480,16 @@ const prevImage = () => {
             </div>
           </div>
         )}
+
+        {isCancelPopupVisible && (
+          <CustomPopup
+            message="Are you sure you want to cancel your stay?"
+            onConfirm={handleConfirmCancelBooking}
+            onCancel={handleCloseCancelPopup}
+            showButtons={true}
+          />
+        )}
+
       </div>   
       {isModalVisible && (
       <motion.div
