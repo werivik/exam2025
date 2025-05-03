@@ -18,9 +18,9 @@ const VenueBooked = ({ venue }) => {
   return (
     <Link to={`/venue-booked/${venue.id}`} className={styles.hotelCard}>
       <div className={styles.bookedDate}>
-        <p><strong>From:</strong> {new Date(venue.dateFrom).toLocaleDateString()}</p>
+        <p><span>From</span> {new Date(venue.dateFrom).toLocaleDateString()}</p>
         <div className={styles.divideLine}></div>
-        <p><strong>To:</strong> {new Date(venue.dateTo).toLocaleDateString()}</p>
+        <p><span>To</span> {new Date(venue.dateTo).toLocaleDateString()}</p>
       </div>
       <img
         src={venue.media?.[0]?.url || '/media/logo/loadingScreen.png'}
