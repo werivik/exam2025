@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './CostumerProfile.module.css';
 import { motion } from "framer-motion";
 import { PROFILES_SINGLE } from '../../constants';
@@ -29,7 +29,11 @@ const CostumerProfile = () => {
   const [newAvatar, setNewAvatar] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const [successPopupMessage, setSuccessPopupMessage] = useState('');  
+  const [successPopupMessage, setSuccessPopupMessage] = useState(''); 
+  
+  const bookingsRef = useRef(null);
+  const favoritesRef = useRef(null);
+  const editRef = useRef(null);
   
   const username = localStorage.getItem('username');
 
@@ -160,6 +164,13 @@ const CostumerProfile = () => {
     }, 1500);
   };
 
+  const scrollToSection = (ref) => {
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
+
   return (
     <motion.div
       className={styles.pageContent}
@@ -181,13 +192,13 @@ const CostumerProfile = () => {
                 <h3>{capitalizeFirstLetter(userData.name) || 'Guest'}</h3>
               </div>
               <div className={styles.profileShortcuts}>
-                <button className={styles.shortcutLink}>
+                <button className={styles.shortcutLink} onClick={() => scrollToSection(bookingsRef)}>
                   My Bookings
                 </button>
-                <button className={styles.shortcutLink}>
+                <button className={styles.shortcutLink} onClick={() => scrollToSection(favoritesRef)}>
                   Favorite Venues
                 </button>
-                <button className={styles.shortcutLink}>
+                <button className={styles.shortcutLink} onClick={() => scrollToSection(editRef)}>
                   Edit Profile
                 </button>
               </div>
@@ -196,8 +207,8 @@ const CostumerProfile = () => {
           </section>
           <section className={styles.rightSection}>
             <div className={styles.rightBorder}>
-<div className={styles.bookings}>
-  <div className={styles.bookingsTitle}>
+            <div className={styles.bookings} ref={bookingsRef}>
+            <div className={styles.bookingsTitle}>
     <h2>My Bookings</h2>
     <div className={styles.bookingsFilter}>
       <Buttons size="medium" version="v1">Future</Buttons>
@@ -218,7 +229,7 @@ const CostumerProfile = () => {
     )}
   </div>
 </div>
-              <div className={styles.favorites}>
+<div className={styles.favorites} ref={favoritesRef}>
                 <div className={styles.favoriteTitle}>
                   <h2>Favorite Venues</h2>
                 </div>
@@ -232,8 +243,8 @@ const CostumerProfile = () => {
                   )}
                 </div>
               </div>
-              <div className={styles.edit}>
-                <div className={styles.editTitle}>
+              <div className={styles.edit} ref={editRef}>
+              <div className={styles.editTitle}>
                   <h2>Edit Profile</h2>
                 </div>
                 <div className={styles.allEdits}>
