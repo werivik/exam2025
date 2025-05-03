@@ -66,17 +66,28 @@ const CostumerProfile = () => {
       setNewName(profile?.name || '');
       setNewAvatar(profile?.avatar?.url || '');
 
-      const venuesFromBookings = profile.bookings.map((booking) => {
+      const venuesFromBookings = profile.bookings
+      .map((booking) => {
         if (!booking.venue) return null;
         return {
           ...booking.venue,
           dateFrom: new Date(booking.dateFrom),
           dateTo: new Date(booking.dateTo),
+          guests: booking.guests,
         };
-      }).filter(Boolean);
+      })
+      .filter(Boolean);   
 
-      venuesFromBookings.sort((a, b) => a.dateFrom - b.dateFrom);
-      setBookedVenues(venuesFromBookings);
+      const uniqueVenues = venuesFromBookings.filter((value, index, self) => {
+        return index === self.findIndex((t) => (
+          t.id === value.id && 
+          t.dateFrom.getTime() === value.dateFrom.getTime() && 
+          t.dateTo.getTime() === value.dateTo.getTime()
+        ));
+      });
+
+      uniqueVenues.sort((a, b) => a.dateFrom - b.dateFrom);
+      setBookedVenues(uniqueVenues);
       setIsVenuesLoading(false);
     };
 
@@ -236,11 +247,11 @@ const CostumerProfile = () => {
                 <div>Loading...</div>
               ) : filteredVenues.length > 0 ? (
                 <div className={styles.costumerBookings}>
-                  {filteredVenues.map((venue) => (
-                    <div key={venue.id} onClick={() => handleVenueClick(venue.id)}>
-                      <VenueBooked venue={venue} />
-                    </div>
-                  ))}
+{filteredVenues.map((venue) => (
+  <div key={venue.id} onClick={() => handleVenueClick(venue.id)}>
+    <VenueBooked venue={venue} />
+  </div>
+))}
                 </div>
               ) : (
                 <p>No Venues Booked yet.</p>
@@ -301,7 +312,6 @@ const CostumerProfile = () => {
     </div>
   </div>
 )}
-
         {showPopup && (
           <div className={styles.popupOverlay}>
             <div className={styles.popup}>

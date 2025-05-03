@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { VENUE_SINGLE } from '../../constants';
 import { headers } from '../../headers';
-import styles from './VenueBooked.module.css';
+import styles from './BookedVenue.module.css';
 
-const VenueBooked = () => {
+const BookedVenue = () => {
   const { venueId } = useParams();
   const [venueDetails, setVenueDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -69,4 +69,4 @@ const VenueBooked = () => {
   );
 };
 
-export default VenueBooked;
+export default BookedVenue;

@@ -5,9 +5,15 @@ import styles from './VenueBooked.module.css';
 const VenueBooked = ({ venue }) => {
   if (!venue) return null;
 
-  const totalPrice = venue.price && venue.guests
-    ? venue.price * venue.guests
+  const startDate = new Date(venue.dateFrom);
+  const endDate = new Date(venue.dateTo);
+  const durationInDays = Math.ceil((endDate - startDate) / (1000 * 3600 * 24));
+
+  const totalPrice = venue.price && durationInDays > 0
+    ? venue.price * durationInDays
     : 'N/A';
+
+  const guests = venue.guests || 'N/A';
 
   return (
     <Link to={`/venue-booked/${venue.id}`} className={styles.hotelCard}>
@@ -28,7 +34,7 @@ const VenueBooked = ({ venue }) => {
         </div>
         <p className={styles.totalPrice}><strong>$ {totalPrice}</strong><span> / Total price</span></p>
         <p className={styles.totalGuests}>
-          <strong>{venue.guests}</strong> {venue.guests === 1 ? 'Guest' : 'Guests'}
+          <strong>{guests}</strong> {guests === 1 ? 'Guest' : 'Guests'}
         </p>
       </div>
     </Link>
