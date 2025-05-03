@@ -39,6 +39,7 @@ const CostumerProfile = () => {
 
   const [isVenuesLoading, setIsVenuesLoading] = useState(true);   
   const [hasError, setHasError] = useState(false);
+  const [filter, setFilter] = useState('All');
   
   useEffect(() => {
     const fetchUserData = async () => {
@@ -68,11 +69,13 @@ const CostumerProfile = () => {
   
           return {
             ...booking.venue,
-            dateFrom: booking.dateFrom,
-            dateTo: booking.dateTo,
+            dateFrom: new Date(booking.dateFrom),
+            dateTo: new Date(booking.dateTo),
             guests: booking.guests,
           };
         }).filter(Boolean);
+
+        venuesFromBookings.sort((a, b) => a.dateFrom - b.dateFrom);
   
         setBookedVenues(venuesFromBookings);
         setIsVenuesLoading(false);
@@ -170,6 +173,21 @@ const CostumerProfile = () => {
     }
   };
   
+  const today = new Date();
+
+  const filterVenues = (venues) => {
+    switch (filter) {
+      case 'Future':
+        return venues.filter((venue) => venue.dateFrom >= today);
+      case 'Previous':
+        return venues.filter((venue) => venue.dateFrom < today);
+      case 'All':
+      default:
+        return venues;
+    }
+  };
+
+  const filteredVenues = filterVenues(bookedVenues);
 
   return (
     <motion.div
@@ -208,27 +226,38 @@ const CostumerProfile = () => {
           <section className={styles.rightSection}>
             <div className={styles.rightBorder}>
             <div className={styles.bookings} ref={bookingsRef}>
-            <div className={styles.bookingsTitle}>
-    <h2>My Bookings</h2>
-    <div className={styles.bookingsFilter}>
-      <Buttons size="medium" version="v1">Future</Buttons>
-      <Buttons size="medium" version="v2">Previous</Buttons>
-    </div>
-  </div>
-  <div className={styles.allBookings}>
-    {isVenuesLoading ? (
-      <div>Loading booked venues...</div>
-    ) : bookedVenues.length > 0 ? (
-      <div className={styles.costumerBookings}>
-{bookedVenues.map((venue) => (
-  <VenueBooked key={venue.id} venue={venue} />
-))}
-      </div>
-    ) : (
-      <p>No Venues Booked yet.</p>
-    )}
-  </div>
-</div>
+                <div className={styles.bookingsTitle}>
+                  <h2>My Bookings</h2>
+                  <div className={styles.bookingsFilter}>
+                    <Buttons size="medium" version="v3" onClick={() => setFilter('All')}>All</Buttons>
+                    <Buttons size="medium" version="v1" onClick={() => setFilter('Future')}>Future</Buttons>
+                    <Buttons size="medium" version="v2" onClick={() => setFilter('Previous')}>Previous</Buttons>
+                  </div>
+                </div>
+                <div className={styles.allBookings}>
+                  {isVenuesLoading ? (
+                    <div>Loading booked venues...</div>
+                  ) : filteredVenues.length > 0 ? (
+                    <div className={styles.costumerBookings}>
+                      {filteredVenues.map((venue) => {
+                        const isPastVenue = venue.dateFrom < today;
+                        return (
+                          <div
+                            key={venue.id}
+                            style={{
+                              opacity: isPastVenue ? 0.5 : 1,
+                            }}
+                          >
+                            <VenueBooked venue={venue} />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p>No Venues Booked yet.</p>
+                  )}
+                </div>
+              </div>
 <div className={styles.favorites} ref={favoritesRef}>
                 <div className={styles.favoriteTitle}>
                   <h2>Favorite Venues</h2>

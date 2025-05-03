@@ -37,6 +37,12 @@ const VenueDetails = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [leftImages, setLeftImages] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
+
+  const [existingBookings, setExistingBookings] = useState([]);
+  const [newStartDate, setNewStartDate] = useState('');
+  const [newEndDate, setNewEndDate] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [owner, setOwner] = useState(null);
   const [filters, setFilters] = useState({
     adults: 1,
@@ -107,6 +113,14 @@ const VenueDetails = () => {
           }
         }
 
+                
+        if (data?.data) {
+          setExistingBookings(data.data.map((booking) => ({
+            startDate: new Date(booking.dateFrom),
+            endDate: new Date(booking.dateTo),
+          })));
+        }
+
         if (!owner) {
           setOwner({
             name: "Test Owner",
@@ -132,6 +146,15 @@ const VenueDetails = () => {
   const toggleCalendar = (type) => {
     setSelectedDateType(type);
     setShowCalendar(!showCalendar);
+  };
+
+  const checkForDoubleBooking = (newStart, newEnd) => {
+    for (let booking of existingBookings) {
+      if (!(newEnd < booking.startDate || newStart > booking.endDate)) {
+        return true;
+      }
+    }
+    return false;
   };
 
   const handleNext = () => {
@@ -202,6 +225,20 @@ const VenueDetails = () => {
     const formattedCheckInDate = new Date(checkInDate).toISOString().split('T')[0];
     const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0];
     const guests = adults + children + disabled;
+
+    const newStart = new Date(newStartDate);
+    const newEnd = new Date(newEndDate);
+
+    if (newStart >= newEnd) {
+      setErrorMessage('End date must be after start date.');
+      return;
+    }
+
+    const isDoubleBooked = checkForDoubleBooking(newStart, newEnd);
+
+    if (isDoubleBooked) {
+      setErrorMessage('You have an existing booking during these dates.');
+    } 
 
     if (guests > venue.maxGuests) {
       setPopupMessage(`This venue only allows up to ${venue.maxGuests} guests.`);

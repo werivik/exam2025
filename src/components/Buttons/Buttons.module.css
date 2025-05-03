@@ -96,6 +96,10 @@
     color: #1F1B17;
 }
 
+.mediumv3:hover {
+    color: white;
+}
+
 .largev1 {
     background-color: #F3F0EB;
     color: #1F1B17;
