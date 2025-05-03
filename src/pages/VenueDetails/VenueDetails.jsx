@@ -12,6 +12,7 @@ import stars from "/media/rating/christmas-stars.png";
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
+import CostumPopup from '../../components/CostumPopup/CostumPopup';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -53,6 +54,8 @@ const VenueDetails = () => {
   const [showBookingPopup, setShowBookingPopup] = useState(() => {
     return sessionStorage.getItem('showBookingPopup') === 'true';
   });
+  
+  const [popupMessage, setPopupMessage] = useState('');
 
   const dropdownRef = useRef(null);
 
@@ -196,32 +199,18 @@ const VenueDetails = () => {
   };
 
   const handleSubmit = async () => {
-    if (!checkInDate || !checkOutDate) {
-      setBookingError("Please select both check-in and check-out dates.");
-      return;
-    }
-  
     const formattedCheckInDate = new Date(checkInDate).toISOString().split('T')[0];
     const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0];
     const guests = adults + children + disabled;
-  
+
     if (guests > venue.maxGuests) {
-      setBookingError(`This venue only allows up to ${venue.maxGuests} guests.`);
+      setPopupMessage(`This venue only allows up to ${venue.maxGuests} guests.`);
+      setShowBookingPopup(true);
       return;
     }
-  
-    setBookingError("");
-  
-    await handleBookingSubmit(formattedCheckInDate, formattedCheckOutDate, guests, venue.id);
 
-    sessionStorage.setItem('showBookingPopup', 'true');
-    setShowBookingPopup(true);
-
-    setTimeout(() => {
-      setShowBookingPopup(false);
-      sessionStorage.removeItem('showBookingPopup');
-    }, 2000);
-  };  
+    await handleBookingSubmit(formattedCheckInDate, formattedCheckOutDate, guests, venue.id, setShowBookingPopup, setPopupMessage);
+  };
 
   if (loading) return <div className={styles.pageStyle}><p>Loading...</p></div>;
   if (!venue) return <div className={styles.pageStyle}><p>Venue not found.</p></div>;
