@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './VenueBooked.module.css';
-import placeholderImage from '/media/hotelTypes/hotelReseption.jpeg';
-import stars from '/media/rating/christmas-stars.png';
 
 const VenueBooked = ({ venue }) => {
   if (!venue) return null;
@@ -12,7 +10,7 @@ const VenueBooked = ({ venue }) => {
     : 'N/A';
 
   return (
-    <Link to={`/venue-details/${venue.id}`} className={styles.hotelCard}>
+    <Link to={`/venue-booked/${venue.id}`} className={styles.hotelCard}>
       <div className={styles.bookedDate}>
         <p><strong>From:</strong> {new Date(venue.dateFrom).toLocaleDateString()}</p>
         <div className={styles.divideLine}></div>

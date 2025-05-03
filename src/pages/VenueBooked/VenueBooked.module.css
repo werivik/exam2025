@@ -1,7 +1,6 @@
 .pageContent {
     min-height: 110vh;
     margin-top: 75px;
-
     display: flex;
     flex-direction: column;
     align-items: center;

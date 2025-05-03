@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './CostumerProfile.module.css';
 import { motion } from "framer-motion";
 import { PROFILES_SINGLE } from '../../constants';
@@ -40,55 +41,51 @@ const CostumerProfile = () => {
   const [isVenuesLoading, setIsVenuesLoading] = useState(true);   
   const [hasError, setHasError] = useState(false);
   const [filter, setFilter] = useState('All');
-  
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-          setHasError(true);
-          return;
-        }
-  
-        const userProfileUrl = `${PROFILES_SINGLE.replace("<name>", username)}?_bookings=true`;
-        const response = await fetch(userProfileUrl, {
-          method: 'GET',
-          headers: headers(token),
-        });
-  
-        if (!response.ok) throw new Error('Failed to fetch user profile');
-        const data = await response.json();
-        const profile = data.data;
-  
-        setUserData(profile);
-        setNewName(profile?.name || '');
-        setNewAvatar(profile?.avatar?.url || '');
-  
-        const venuesFromBookings = profile.bookings.map((booking) => {
-          if (!booking.venue) return null;
-  
-          return {
-            ...booking.venue,
-            dateFrom: new Date(booking.dateFrom),
-            dateTo: new Date(booking.dateTo),
-            guests: booking.guests,
-          };
-        }).filter(Boolean);
-
-        venuesFromBookings.sort((a, b) => a.dateFrom - b.dateFrom);
-  
-        setBookedVenues(venuesFromBookings);
-        setIsVenuesLoading(false);
-      } 
-      
-      catch (error) {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
         setHasError(true);
-        console.error('Error fetching data:', error);
+        return;
       }
+
+      const userProfileUrl = `${PROFILES_SINGLE.replace("<name>", username)}?_bookings=true`;
+      const response = await fetch(userProfileUrl, {
+        method: 'GET',
+        headers: headers(token),
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch user profile');
+      const data = await response.json();
+      const profile = data.data;
+
+      setUserData(profile);
+      setNewName(profile?.name || '');
+      setNewAvatar(profile?.avatar?.url || '');
+
+      const venuesFromBookings = profile.bookings.map((booking) => {
+        if (!booking.venue) return null;
+        return {
+          ...booking.venue,
+          dateFrom: new Date(booking.dateFrom),
+          dateTo: new Date(booking.dateTo),
+        };
+      }).filter(Boolean);
+
+      venuesFromBookings.sort((a, b) => a.dateFrom - b.dateFrom);
+      setBookedVenues(venuesFromBookings);
+      setIsVenuesLoading(false);
     };
-  
+
     fetchUserData();
   }, [username]);
+
+  const handleVenueClick = (venueId) => {
+    navigate(`/venue-booked/${venueId}`);
+  };
     
   const fetchVenueDetails = async (venueId) => {
     try {
@@ -235,28 +232,20 @@ const CostumerProfile = () => {
                   </div>
                 </div>
                 <div className={styles.allBookings}>
-                  {isVenuesLoading ? (
-                    <div>Loading booked venues...</div>
-                  ) : filteredVenues.length > 0 ? (
-                    <div className={styles.costumerBookings}>
-                      {filteredVenues.map((venue) => {
-                        const isPastVenue = venue.dateFrom < today;
-                        return (
-                          <div
-                            key={venue.id}
-                            style={{
-                              opacity: isPastVenue ? 0.5 : 1,
-                            }}
-                          >
-                            <VenueBooked venue={venue} />
-                          </div>
-                        );
-                      })}
+              {isVenuesLoading ? (
+                <div>Loading...</div>
+              ) : filteredVenues.length > 0 ? (
+                <div className={styles.costumerBookings}>
+                  {filteredVenues.map((venue) => (
+                    <div key={venue.id} onClick={() => handleVenueClick(venue.id)}>
+                      <VenueBooked venue={venue} />
                     </div>
-                  ) : (
-                    <p>No Venues Booked yet.</p>
-                  )}
+                  ))}
                 </div>
+              ) : (
+                <p>No Venues Booked yet.</p>
+              )}
+            </div>
               </div>
 <div className={styles.favorites} ref={favoritesRef}>
                 <div className={styles.favoriteTitle}>
