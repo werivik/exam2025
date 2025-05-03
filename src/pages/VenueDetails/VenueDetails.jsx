@@ -209,6 +209,8 @@ const VenueDetails = () => {
       return;
     }
 
+    setPopupMessage('Booking Confirmed!');
+    setShowBookingPopup(true);
     await handleBookingSubmit(formattedCheckInDate, formattedCheckOutDate, guests, venue.id, setShowBookingPopup, setPopupMessage);
   };
 
@@ -520,17 +522,13 @@ const VenueDetails = () => {
 </div>
 
         </div>
-      </div>
-      
+      </div>    
       {showBookingPopup && (
-  <div className={styles.popupOverlay}>
-    <div className={styles.popup}>
-      <h2>Booking Confirmed!</h2>
-      <p>Your stay is now reserved.</p>
-    </div>
-  </div>
+  <CostumPopup 
+    message={popupMessage} 
+    onClose={() => setShowBookingPopup(false)} 
+  />
 )}
-
     </motion.div>
   );
 };
