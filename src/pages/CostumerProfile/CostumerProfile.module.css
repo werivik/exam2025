@@ -326,6 +326,7 @@
     flex-direction: column;
     gap: 25px;
     overflow-y: auto;
+    color: #1F1B17;
 }
 .bookedVenueRight h2 {
     font-size: 2.5rem;
@@ -342,10 +343,13 @@
     width: 95%;
     pointer-events: none;
 }
-
 .bookedVenueRight span {
     opacity: 75%;
     font-size: 1rem;
+}
+.bookedVenueRight a {
+    color: #B88A44;
+    cursor: pointer;
 }
 .modalContent {
   background: white;
