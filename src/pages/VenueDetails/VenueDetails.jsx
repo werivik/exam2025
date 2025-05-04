@@ -417,24 +417,26 @@ const VenueDetails = () => {
       <div className={styles.bookDateContent}>
         <h3>Find the Perfect Date</h3>
         <div className={styles.bookDate}>
+          <div className={styles.bookDateStart}>
           <i className="fa-solid fa-calendar-days" onClick={() => toggleCalendar('start')}></i>
           <input
-            className={styles.bookDateStart}
             type="text"
             value={checkInDate}
             placeholder="Check-in Date"
             onClick={() => toggleCalendar('start')}
             readOnly
           />
+          </div>
+          <div className={styles.bookDateEnd}>
           <i className="fa-solid fa-calendar-days" onClick={() => toggleCalendar('end')}></i>
           <input
-            className={styles.bookDateEnd}
             type="text"
             value={checkOutDate}
             placeholder="Check-out Date"
             onClick={() => toggleCalendar('end')}
             readOnly
           />
+          </div>
         </div>
         {showCalendar && (
           <CustomCalender
@@ -516,7 +518,7 @@ const VenueDetails = () => {
       <div className={styles.maxGuestsPrice}>
       <p className={styles.maxGuestsSecond}><strong>Max Guests</strong> {venue.maxGuests}</p>
       <div className={styles.bookPrice}>
-        <p>Total Price:<strong> ${totalPrice.toFixed(2)}</strong> <span>/ ${venue.price} per night</span></p>
+        <p><span className={styles.totalPriceSpan}>Total Price</span><strong> ${totalPrice.toFixed(2)}</strong> <span>/ ${venue.price} per night</span></p>
 
         <Buttons size="large" version="v2" onClick={handleSubmit}>
           Book Room
