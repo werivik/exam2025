@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import styles from './VenueDetailsPopup.module.css';
+import Buttons from '../../components/Buttons/Buttons';
 
 const VenueDetailsPopup = ({
   selectedVenue,
@@ -77,8 +78,8 @@ const VenueDetailsPopup = ({
               </div>
 
               <div className={styles.bookedVenueEditButtons}>
-                <button>Edit</button>
-                <button>Cancel</button>
+                <Buttons size="small">Edit</Buttons>
+                <Buttons size="small" version="v2">Cancel</Buttons>
               </div>
             </div>
           </div>
