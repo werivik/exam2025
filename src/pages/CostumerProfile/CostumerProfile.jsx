@@ -8,6 +8,7 @@ import defaultAvatar from '/media/images/mdefault.jpg';
 import Buttons from '../../components/Buttons/Buttons';
 import { updateProfile } from '../../auth/auth';
 import VenueBooked from '../../components/VenueBooked/VenueBooked';
+import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -492,80 +493,16 @@ const prevImage = () => {
 
       </div>   
       {isModalVisible && (
-      <motion.div
-      className={styles.modalOverlay}
-      onClick={handleOverlayClick}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.15 }}
-      >
-        <motion.div
-          className={styles.modalContent}
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{
-            duration: 0.15,
-            ease: 'easeInOut',
-          }}
-        >
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <div className={styles.bookedVenueDetails}>
-          <button className={styles.closeVenueButton} onClick={() => setIsModalVisible(false)}>
-            X
-          </button>
-
-          <div className={styles.bookedVenueImageSlideshow}>
-            {selectedVenue?.media && selectedVenue.media.length > 0 ? (
-              <div className={styles.imageSlider}>
-                <img
-                  src={selectedVenue.media[0].url}
-                  alt={selectedVenue.media[0].alt || "Venue Image"}
-                  className={styles.slideshowImage}
-                />
-                <button className={styles.prevButton} onClick={prevImage}>
-                  Previous
-                </button>
-                <button className={styles.nextButton} onClick={nextImage}>
-                  Next
-                </button>
-              </div>
-            ) : (
-              <p>No images available for this venue.</p>
-            )}
-          </div>
-          <div className={styles.bookedVenueRight}>
-            <div className={styles.bookedVenueVenueInfo}>
-              <h2>{selectedVenue.name}</h2>
-              <p><strong>Description:</strong> {selectedVenue.description}</p>
-              <p><strong>Location:</strong> {selectedVenue.location.city}, {selectedVenue.location.country} {selectedVenue.location.zip}</p>
-              <p><strong>Price:</strong> ${selectedVenue.price} <span>/ per night</span></p>
-              <p><strong>Max Guests:</strong> {selectedVenue.maxGuests}</p>
-              <p><strong>Rating:</strong> {selectedVenue.rating} Stars</p>
-              <p><strong>Amenities:</strong> {selectedVenue.meta.wifi ? 'WiFi, ' : ''}{selectedVenue.meta.parking ? 'Parking, ' : ''}{selectedVenue.meta.breakfast ? 'Breakfast, ' : ''}{selectedVenue.meta.pets ? 'Pets Allowed' : ''}</p>
-              <p><a href={`/venue-details/${selectedVenue?.id}`} target="_blank" rel="noopener noreferrer">View Venue</a></p>
-            </div>
-            <div className={styles.bookedVenueBookingInfo}>
-              <h3>Booking Information</h3>
-              <p><strong>Guests:</strong> {selectedBooking.guests}</p>
-              <p><strong>Booking From:</strong> {new Date(selectedBooking.dateFrom).toLocaleDateString()}</p>
-              <p><strong>Booking To:</strong> {new Date(selectedBooking.dateTo).toLocaleDateString()}</p>
-              <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
-              <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
-            </div>
-            <div className={styles.bookedVenueEditButtons}>
-              <button>Edit</button>
-              <button>Cancel</button>
-            </div>
-          </div>
-        </div>
+        <VenueDetailsPopup
+          selectedVenue={selectedVenue}
+          selectedBooking={selectedBooking}
+          isLoading={false}
+          isModalVisible={isModalVisible}
+          closeModal={closeModal}
+          prevImage={prevImage}
+          nextImage={nextImage}
+        />
       )}
-    </motion.div>
-  </motion.div>
-)}
     </motion.div>
   );
 };
