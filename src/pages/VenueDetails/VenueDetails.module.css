@@ -600,3 +600,133 @@
 .blurred {
   filter: blur(5px);
 }
+.maxGuestsSecond {
+  display: none;
+}
+
+@media (max-width:1250px) {
+  .hotelInfoBottom {
+    flex-direction: column;
+    gap: 50px;
+  }
+  .hotelInfoLeft, .hotelInfoRight {
+    width: 100%;
+  }
+  .maxGuestsPrice {
+    display: flex;
+    flex-direction: row;
+  }
+  .maxGuestsPrice .bookPrice, .maxGuestsPrice .maxGuestsSecond {
+    display: flex;
+  }
+  .maxGuestsPrice .maxGuestsSecond {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+  }
+  .bookPrice, .maxGuestsFirst {
+    display: none;
+  }
+}
+@media (max-width:1155px) {
+  .currentlyViewing {
+    max-width: 100%;
+    border-radius: 0px;
+}
+}
+@media (max-width:1024px){
+  .pageStyle {
+    width: 90%;
+  } 
+.titleLocation {
+  height: 150px;
+  }
+.titleLocation h1 {
+    font-size: 2rem;
+}
+.titleLocation p {
+    font-size: 1.25rem;
+}
+.titleLocation i {
+    font-size: 1.25rem;
+}
+.hotelInfoTopRight {
+    height: 150px;
+}
+.hotelRating {
+    font-size: 1.25rem;
+    padding: 0.75rem;
+}
+.hotelRating strong {
+    margin-right: 5px;
+    font-size: 1.25rem;
+}
+.hotelRating img {
+    width: 20px;
+    height: 20px;
+    margin-bottom: -5px;
+}
+.hotelInfoBottom {
+  font-size: 1.125rem;
+}
+.hotelInfoBottom h3 {
+  font-size: 1.75rem;
+}
+.hotelInfoBottom p {
+  font-size: 1rem;
+}
+.hotelInfoBottom .maxGuestsSecond {
+  font-size: 1.25rem;
+}
+.heartContainer p {
+  font-size: 1.25rem;
+}
+}
+@media (max-width:905px) {
+
+
+.slideshowSection {
+  flex-direction: column-reverse;
+}
+.slideshowLeft {
+  width: calc(100% - 15px);
+  height: 20%;
+  position: relative;
+}
+.slideshowLeftContent {
+    flex-direction: row;
+    height: 100%;
+    position: relative;
+}
+.previewImage {
+    width: 100%;
+    height: 100%;
+}
+.currentlyViewing {
+    left: 17%;
+    max-width: 150px;
+    border-radius: 0px 0px 5px 5px;
+}
+.slideshowLeftContent img {
+    height: 100%;
+    width: calc(33% - 5px);
+}
+.slideshowRight {
+    height: 100%;
+    width: calc(100% - 20px);
+}
+.slideshowButtons img {
+    width: 35px;
+    height: 79px;
+}
+.slideshowProgress {
+  top: 95%;
+}
+}
+
+@media (max-width:619px) {
+  .maxGuestsPrice .maxGuestsSecond {
+    width: 175px;
+  }
+}

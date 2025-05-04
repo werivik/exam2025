@@ -340,7 +340,7 @@ const VenueDetails = () => {
         </div>
         <div className={styles.hotelInfoBottom}>
           <div className={styles.hotelInfoLeft}>
-            <p className={styles.description}><strong>Description</strong><br />{venue.description}</p>
+            <p className={styles.description}><h3>Description</h3><br />{venue.description}</p>
             {venue.meta && (
               <div className={styles.meta}>
                 <h3>Venue Amenities</h3>
@@ -445,7 +445,6 @@ const VenueDetails = () => {
       </div>
 
       <div className={styles.bookGuests}>
-        <h3></h3>
         <div className={styles.filterPeople}>
   <i className="fa-solid fa-person"></i>
   <div
@@ -509,13 +508,24 @@ const VenueDetails = () => {
       ))}
     </div>
   </div>
-</div>
+        </div>
       </div>
 
       {bookingError && <p className={styles.errorText}>{bookingError}</p>}
 
+      <div className={styles.maxGuestsPrice}>
+      <p className={styles.maxGuestsSecond}><strong>Max Guests</strong> {venue.maxGuests}</p>
       <div className={styles.bookPrice}>
-        <p>Total Price: <strong>${totalPrice.toFixed(2)}</strong> <span>/ ${venue.price} per night</span></p>
+        <p>Total Price:<strong> ${totalPrice.toFixed(2)}</strong> <span>/ ${venue.price} per night</span></p>
+
+        <Buttons size="large" version="v2" onClick={handleSubmit}>
+          Book Room
+        </Buttons>
+      </div>  
+      </div>
+
+      <div className={styles.bookPrice}>
+        <p>Total Price:<strong> ${totalPrice.toFixed(2)}</strong> <span>/ ${venue.price} per night</span></p>
 
         <Buttons size="large" version="v2" onClick={handleSubmit}>
           Book Room
@@ -524,7 +534,7 @@ const VenueDetails = () => {
 
       <div className={styles.dividerLine}></div>
 
-      <p><strong>Max Guests</strong> {venue.maxGuests}</p>
+      <p className={styles.maxGuestsFirst}><strong>Max Guests</strong> {venue.maxGuests}</p>
 
       <div className={styles.favoriteVenue}>
       <div
