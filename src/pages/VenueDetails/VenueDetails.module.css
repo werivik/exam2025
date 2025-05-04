@@ -684,8 +684,6 @@
 }
 }
 @media (max-width:905px) {
-
-
 .slideshowSection {
   flex-direction: column-reverse;
   height: 100%;
@@ -734,10 +732,93 @@
 .slideshowProgress {
   top: 93%;
 }
+.guestSelector p {
+  font-size: 1rem;
 }
-
+.bookDate input {
+  font-size: 1rem;
+}
+}
 @media (max-width:619px) {
   .maxGuestsPrice .maxGuestsSecond {
     width: 175px;
+    min-width: 175px;
   }
+  .heartContainer {
+    width: 30px;
+    height: 30px;
+  }
+  .heart {
+    width: 34px;
+    height: 30px;
+  }
+  .heart::before, .heart::after {
+    width: 15px;
+    height: 30px;
+  }
+  .heart::before {
+    left: 15px;
+    transform: rotate(-45deg);
+  }
+  .heart::after {
+    transform: rotate(45deg);
+  }
+  .heart:active {
+    transform: scale(1.1);
+  }
+  .heart:active::before {
+    transform: rotate(-45deg) scale(1.1);
+  }
+  .heart:active::after {
+    transform: rotate(45deg) scale(1.1);
+  }
+  .favorited {
+    width: 34px;
+    height: 30px;
+  }
+  .favorited::before, .favorited::after {
+    width: 12px;
+    height: 30px;
+  }
+  .favorited::before {
+    left: 15px;
+    transform: rotate(-45deg);
+  }
+  .hotelInfoBottom h3 {
+    font-size: 1.25rem;
+  }
+  .hotelInfoBottom p {
+    font-size: 0.9rem;
+  }
+  .hotelInfoBottom {
+    gap: 25px;
+  }
+}
+@media (max-width:510px) {
+  .maxGuestsPrice {
+    display: flex;
+    flex-direction: column;
+  }
+  .maxGuestsPrice .bookPrice, .maxGuestsPrice .maxGuestsSecond {
+    display: flex;
+  }
+  .maxGuestsPrice .maxGuestsSecond {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 15px;
+  }
+
+  .meta ul {
+    gap: 5px;
+  }
+.meta ul li {
+  font-size: 1rem;
+}
+.notIncluded, .included {
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
 }

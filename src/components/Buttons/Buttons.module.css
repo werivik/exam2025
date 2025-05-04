@@ -131,6 +131,12 @@
     background-color: #6B7A3A;
 }
 
+@media (max-width:650px) {
+    .large {
+        font-size: 18px;
+    }
+}
+
 @media (max-width:575px) {
     .small {
         font-size: 0.9rem;
