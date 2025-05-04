@@ -33,7 +33,7 @@ const VenueDetailsPopup = ({
         ) : (
           <div className={styles.bookedVenueDetails}>
             <button className={styles.closeVenueButton} onClick={closeModal}>
-              X
+                <i class="fa-solid fa-xmark"></i>
             </button>
 
             <div className={styles.bookedVenueImageSlideshow}>
