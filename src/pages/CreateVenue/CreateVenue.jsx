@@ -3,6 +3,7 @@ import styles from './CreateVenue.module.css';
 import { headers } from '../../headers';
 import { motion } from "framer-motion";
 import { VENUE_CREATE } from "../../constants";
+import CostumPopup from '../../components/CostumPopup/CostumPopup';
 
 const CreateVenue = () => {
   const [formData, setFormData] = useState({
@@ -12,8 +13,6 @@ const CreateVenue = () => {
     maxGuests: 0,
     rating: 0,
     media: [
-      { url: '', alt: '' },
-      { url: '', alt: '' },
       { url: '', alt: '' }
     ],
     meta: {
@@ -32,6 +31,8 @@ const CreateVenue = () => {
       lng: 0
     }
   });  
+
+  const [popup, setPopup] = useState({ isVisible: false, message: '', type: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -77,6 +78,21 @@ const CreateVenue = () => {
       }      
   };
 
+  const handleAddMedia = () => {
+    setFormData(prevState => ({
+      ...prevState,
+      media: [...prevState.media, { url: '', alt: '' }]
+    }));
+  };
+
+  const handleDeleteMedia = (index) => {
+    if (formData.media.length > 1) {
+      const newMedia = [...formData.media];
+      newMedia.splice(index, 1);
+      setFormData({ ...formData, media: newMedia });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -104,16 +120,33 @@ const CreateVenue = () => {
   
       const data = await response.json();
       if (response.ok) {
-        console.log('Venue created successfully:', data);
-      } 
+        setPopup({
+          isVisible: true,
+          message: 'Venue created successfully!',
+          type: 'success'
+        });
+      }
       else {
-        console.error('Error creating venue:', data);
+        setPopup({
+          isVisible: true,
+          message: `Error creating venue: ${data.message}`,
+          type: 'error'
+        });
       }
     } 
     catch (error) {
       console.error('Error creating venue:', error);
+      setPopup({
+        isVisible: true,
+        message: 'Something went wrong. Please try again.',
+        type: 'error'
+      });
     }
   };  
+
+  const closePopup = () => {
+    setPopup({ isVisible: false, message: '', type: '' });
+  };
 
   return (
     <motion.div
@@ -123,8 +156,8 @@ const CreateVenue = () => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-        <section className={styles.pageContent}>
-        <h2>Create a New Venue</h2>
+      <section className={`${styles.pageContent} ${popup.isVisible ? styles.blurred : ''}`}>
+      <h2>Create a New Venue</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.fieldGroup}>
           <label>Name</label>
@@ -170,27 +203,45 @@ const CreateVenue = () => {
         </div>
 
         <div className={styles.fieldGroup}>
-          <label>Media (Images)</label>
-          {[0, 1, 2].map((index) => (
-            <div key={index} className={styles.mediaField}>
-              <input
-                type="url"
-                name={`media-${index}-url`}
-                placeholder="Image URL"
-                value={formData.media[index].url}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="text"
-                name={`media-${index}-alt`}
-                placeholder="Image Alt Text"
-                value={formData.media[index].alt}
-                onChange={handleChange}
-              />
+            <label>Media (Images)</label>
+            {formData.media.map((media, index) => (
+              <div key={index} className={styles.mediaField}>
+                <input
+                  type="url"
+                  name={`media-${index}-url`}
+                  placeholder="Image URL"
+                  value={media.url}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="text"
+                  name={`media-${index}-alt`}
+                  placeholder="Image Alt Text"
+                  value={media.alt}
+                  onChange={handleChange}
+                />
+                {index > 0 && (
+                  <button
+                    type="button"
+                    className={styles.deleteButton}
+                    onClick={() => handleDeleteMedia(index)}
+                  >
+                    Delete Image
+                  </button>
+                )}
+              </div>
+            ))}
+            <div className={styles.mediaButtons}>
+              <button
+                type="button"
+                className={styles.addButton}
+                onClick={handleAddMedia}
+              >
+                Add Image
+              </button>
             </div>
-          ))}
-        </div>
+          </div>
 
         <div className={styles.fieldGroup}>
           <label>Meta Tags</label>
@@ -284,6 +335,15 @@ const CreateVenue = () => {
         </button>
       </form>
         </section>
+
+        {popup.isVisible && (
+          <CustomPopup
+            message={popup.message}
+            onClose={closePopup}
+            showButtons={false}
+          />
+        )}
+
     </motion.div>
   );
 };
