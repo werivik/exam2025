@@ -1,9 +1,10 @@
 footer {
     background-color: #1F1B17;
-    height: 400px;
+    height: 425px;
     width: 100%;
     z-index: 998;
     margin-top: 0;
+    margin-bottom: -5px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,6 +31,11 @@ footer {
   color: #F3F0EB;
   width: 90%;
   height: 90%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 50px;
 }
 
 .footerTitles {
@@ -56,4 +62,46 @@ footer {
     font-size: 25px;
     width: 490px;
     text-align: right;
+}
+
+.footerRight {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 80%;
+  margin-top: 50px;
+  gap: 100px;
+  width: 60%;
+}
+
+.footerRight a {
+  color: white;
+  text-decoration: none;
+  text-align: left;
+  position: relative;
+}
+
+.footerRight a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: white;
+  bottom: -5px;
+  border-radius: 99px;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease-out;
+}
+.footerRight a:hover::after{
+  transform: scaleX(1);
+}
+
+.footerRight h3 {
+  font-size: 1.5rem;
+}
+
+.footerRight p {
+  font-size: 1.125rem;
 }
