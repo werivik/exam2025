@@ -267,11 +267,15 @@ const AdminProfile = () => {
                 </div>
                 <div className={styles.allBookings}>
                 {filteredVenues.length > 0 ? (
-                <div className={styles.adminBookings}>
-                  {filteredVenues.map((venue) => (
-                    <VenueCardSecondType key={venue.id} venue={venue} />
-                  ))}
-                </div>
+                  <div className={styles.adminBookings}>
+  {filteredVenues.map((venue) => (
+    <VenueCardSecondType
+      key={venue.id}
+      venue={venue}
+      onClick={() => handleVenueClick(venue)}
+    />
+  ))}
+</div>
               ) : (
                 <p>No venues available for this filter.</p>
               )}
