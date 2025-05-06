@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import styles from './VenueDetailsPopup.module.css';
 import Buttons from '../../components/Buttons/Buttons';
@@ -147,7 +148,9 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
                 <p><strong>Max Guests:</strong> {selectedVenue.maxGuests}</p>
                 <p><strong>Rating:</strong> {selectedVenue.rating} Stars</p>
                 <p><strong>Amenities:</strong> {selectedVenue.meta.wifi ? 'WiFi, ' : ''}{selectedVenue.meta.parking ? 'Parking, ' : ''}{selectedVenue.meta.breakfast ? 'Breakfast, ' : ''}{selectedVenue.meta.pets ? 'Pets Allowed' : ''}</p>
-                <p><a href={`/venue-details/${selectedVenue?.id}`} target="_blank" rel="noopener noreferrer">View Venue</a></p>
+                <Link to={`/venue-details/${selectedVenue?.id}`} target="_blank" rel="noopener noreferrer">
+                View Venue
+                </Link>
               </div>
 
               {userRole === "admin" && (
