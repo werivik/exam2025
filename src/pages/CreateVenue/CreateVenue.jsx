@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './CreateVenue.module.css';
 import { headers } from '../../headers';
 import { motion } from "framer-motion";
@@ -13,9 +13,7 @@ const CreateVenue = () => {
     price: 0,
     maxGuests: 0,
     rating: 0,
-    media: [
-      { url: '', alt: '' }
-    ],
+    media: [{ url: '', alt: '' }],
     meta: {
       wifi: false,
       parking: false,
@@ -30,10 +28,12 @@ const CreateVenue = () => {
       continent: '',
       lat: 0,
       lng: 0
-    }
-  });  
+    },
+    termsAccepted: false,
+  });
 
   const [popup, setPopup] = useState({ isVisible: false, message: '', type: '' });
+  const [isTermsPopupVisible, setIsTermsPopupVisible] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,17 +47,15 @@ const CreateVenue = () => {
           [metaKey]: metaValue === 'true'
         }
       });
-    }
-    
+    } 
     else if (name.startsWith('media-')) {
-        const parts = name.split('-'); 
-        const index = parseInt(parts[1], 10);
-        const field = parts[2];
-        const newMedia = [...formData.media];
-        newMedia[index][field] = value;
-        setFormData({ ...formData, media: newMedia });
-      }      
-    
+      const parts = name.split('-');
+      const index = parseInt(parts[1], 10);
+      const field = parts[2];
+      const newMedia = [...formData.media];
+      newMedia[index][field] = value;
+      setFormData({ ...formData, media: newMedia });
+    } 
     else if (name.includes('location')) {
       const field = name.split('-')[1];
       setFormData({
@@ -68,15 +66,12 @@ const CreateVenue = () => {
         }
       });
     } 
-    
     else {
-        setFormData({
-          ...formData,
-          [name]: name === 'price' || name === 'maxGuests'
-            ? Number(value)
-            : value,
-        });
-      }      
+      setFormData({
+        ...formData,
+        [name]: name === 'price' || name === 'maxGuests' ? Number(value) : value,
+      });
+    }
   };
 
   const handleAddMedia = () => {
@@ -96,29 +91,38 @@ const CreateVenue = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const token = localStorage.getItem('accessToken');
     if (!token) {
       console.error('Token is required!');
       return;
     }
-  
+
+    if (!formData.termsAccepted) {
+      setPopup({
+        isVisible: true,
+        message: 'You must agree to the terms of service before submitting.',
+        type: 'error',
+      });
+      return;
+    }
+
     const transformedFormData = {
       ...formData,
       media: formData.media
         .filter(item => item.url.trim() !== '')
         .map(item => ({ url: item.url, alt: item.alt }))
-    };    
-  
+    };
+
     const dataToSend = transformedFormData;
-  
+
     try {
       const response = await fetch(VENUE_CREATE, {
         method: 'POST',
         headers: headers(token),
         body: JSON.stringify(dataToSend),
       });
-  
+
       const data = await response.json();
       if (response.ok) {
         setPopup({
@@ -126,7 +130,7 @@ const CreateVenue = () => {
           message: 'Venue created successfully!',
           type: 'success'
         });
-      }
+      } 
       else {
         setPopup({
           isVisible: true,
@@ -143,10 +147,30 @@ const CreateVenue = () => {
         type: 'error'
       });
     }
-  };  
+  };
+
+  useEffect(() => {
+    if (popup.isVisible || isTermsPopupVisible) {
+      document.body.style.overflow = 'hidden';
+    } 
+    else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [popup.isVisible, isTermsPopupVisible]);
 
   const closePopup = () => {
     setPopup({ isVisible: false, message: '', type: '' });
+  };
+
+  const openTermsPopup = () => {
+    setIsTermsPopupVisible(true);
+  };
+
+  const closeTermsPopup = () => {
+    setIsTermsPopupVisible(false);
   };
 
   return (
@@ -159,6 +183,18 @@ const CreateVenue = () => {
     >
       <section className={`${styles.pageContent} ${popup.isVisible ? styles.blurred : ''}`}>
         <div className={styles.createPageContent}>
+          <div className={styles.leftSection}>
+            <div className={styles.leftBorder}>
+              <h2>Progress:</h2>
+              <div>Venue Name</div>
+              <div>Venue Description</div>
+              <div>Price per Night</div>
+              <div>Max Guests</div>
+              <div>Meta Tags</div>
+              <div>Venue Media</div>
+              <div>Location</div>
+            </div>
+          </div>
           <div className={styles.createFormContent}>
           <h1>Create a New Venue</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -323,6 +359,21 @@ const CreateVenue = () => {
           </div>
         </div>
 
+        <div className={styles.fieldGroupTerms}>
+  <input
+    type="checkbox"
+    id="termsAccepted"
+    name="termsAccepted"
+    checked={formData.termsAccepted}
+    onChange={(e) =>
+      setFormData({ ...formData, termsAccepted: e.target.checked })
+    }
+  />
+  <label htmlFor="termsAccepted">
+    I agree to the <span className={styles.termsLink} onClick={openTermsPopup}>Terms of Service</span>.
+  </label>
+</div>
+
         <Buttons
         size='medium'
         version='v2'
@@ -337,14 +388,36 @@ const CreateVenue = () => {
       </section>
 
         {popup.isVisible && (
-          <CustomPopup
+          <CostumPopup
             message={popup.message}
             onClose={closePopup}
             showButtons={false}
           />
         )}
 
-    </motion.div>
+{isTermsPopupVisible && (
+  <div className={styles.termsPopupOverlay} onClick={closeTermsPopup}>
+    <div className={styles.termsPopup} onClick={(e) => e.stopPropagation()}>
+      <h2>Terms of Service</h2>
+      <p>
+        By using our platform to create and manage venues, you agree to comply with the following terms:
+      </p>
+      <ul>
+        <li>You are responsible for the accuracy and legality of all venue listings you create.</li>
+        <li>You must not post any content that is false, misleading, or violates any applicable laws.</li>
+        <li>All personal data will be handled in accordance with our Privacy Policy.</li>
+        <li>We reserve the right to remove any content or suspend accounts that violate these terms.</li>
+        <li>Your continued use of the platform constitutes acceptance of any future updates to these terms.</li>
+      </ul>
+      <p>
+        If you do not agree with any part of these terms, please do not use the platform.
+      </p>
+      <button onClick={closeTermsPopup}>Close</button>
+    </div>
+  </div>
+)}
+
+</motion.div>
   );
 };
 
