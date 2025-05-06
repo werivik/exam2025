@@ -3,6 +3,7 @@ import styles from './CreateVenue.module.css';
 import { headers } from '../../headers';
 import { motion } from "framer-motion";
 import { VENUE_CREATE } from "../../constants";
+import Buttons from '../../components/Buttons/Buttons';
 import CostumPopup from '../../components/CostumPopup/CostumPopup';
 
 const CreateVenue = () => {
@@ -181,7 +182,6 @@ const CreateVenue = () => {
             required
           />
         </div>
-        
         </div>
         <div className={styles.formRow}>
         <div className={styles.fieldGroupPrice}>
@@ -270,24 +270,16 @@ const CreateVenue = () => {
                   onChange={handleChange}
                 />
                 {index > 0 && (
-                  <button
-                    type="button"
-                    className={styles.deleteButton}
-                    onClick={() => handleDeleteMedia(index)}
-                  >
-                    Delete Image
-                  </button>
+                  <Buttons size='small' version='v2' onClick={() => handleDeleteMedia(index)}>
+                    Remove
+                  </Buttons>
                 )}
               </div>
             ))}
             <div className={styles.mediaButtons}>
-              <button
-                type="button"
-                className={styles.addButton}
-                onClick={handleAddMedia}
-              >
-                Add Image
-              </button>
+              <Buttons size='small' onClick={handleAddMedia}>
+                +
+              </Buttons>
             </div>
           </div>
         <div className={styles.fieldGroupLocation}>
@@ -331,9 +323,14 @@ const CreateVenue = () => {
           </div>
         </div>
 
-        <button type="submit" className={styles.submitButton}>
+        <Buttons
+        size='medium'
+        version='v2'
+        type="submit"
+        >
           Create Venue
-        </button>
+        </Buttons>
+
       </form>
           </div>
         </div>
