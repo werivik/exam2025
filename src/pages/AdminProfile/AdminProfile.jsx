@@ -7,6 +7,7 @@ import { headers } from '../../headers';
 import defaultAvatar from '/media/images/mdefault.jpg';
 import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType.jsx';
 import Buttons from '../../components/Buttons/Buttons';
+import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -26,6 +27,10 @@ const AdminProfile = () => {
   const [newName, setNewName] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
   const [showPopup, setShowPopup] = useState(false);
+
+  const [selectedVenue, setSelectedVenue] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const navigate = useNavigate();
   const editRef = useRef(null);
@@ -91,7 +96,19 @@ const AdminProfile = () => {
     if (editRef.current) {
       editRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  };  
+
+  useEffect(() => {
+    if (isModalVisible) {
+      document.body.style.overflow = 'hidden';
+    } 
+    else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalVisible]);  
 
   const handleSaveProfile = async () => {
     const token = localStorage.getItem('accessToken');
@@ -128,6 +145,35 @@ const AdminProfile = () => {
 
   const handleRedirect = () => {
     navigate('/create-venue');
+  };
+
+  const nextImage = () => {
+    if (selectedVenue?.media?.length) {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % selectedVenue.media.length);
+    }
+  };
+  
+  const prevImage = () => {
+    if (selectedVenue?.media?.length) {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === 0 ? selectedVenue.media.length - 1 : prevIndex - 1
+      );
+    }
+  }; 
+
+  const handleVenueClick = (venue) => {
+    setSelectedVenue(venue);
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleOverlayClick = (e) => {
+    if (e.target.classList.contains(styles.modalOverlay)) {
+      closeModal();
+    }
   };
 
   return (
@@ -168,7 +214,7 @@ const AdminProfile = () => {
                   {assignedVenues.length > 0 ? (
                     <div className={styles.adminBookings}>
                       {assignedVenues.map((venue) => (
-                        <VenueCardSecondType key={venue.id} venue={venue} />
+                        <VenueCardSecondType key={venue.id} venue={venue} onClick={() => handleVenueClick(venue)} />
                       ))}
                     </div>
                   ) : (
@@ -219,6 +265,19 @@ const AdminProfile = () => {
             </div>
           </div>
         )}
+
+{isModalVisible && selectedVenue && (
+  <VenueDetailsPopup
+    selectedVenue={selectedVenue}
+    selectedBooking={null}
+    isLoading={false}
+    isModalVisible={isModalVisible}
+    closeModal={closeModal}
+    prevImage={prevImage}
+    nextImage={nextImage}
+  />
+)}
+
       </div>
     </motion.div>
   );
