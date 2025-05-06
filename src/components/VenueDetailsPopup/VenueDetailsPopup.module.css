@@ -29,11 +29,19 @@
   
   .bookedVenueImageSlideshow img {
       border-radius: 15px;
-      object-fit: cover;
-      height: 100%;
+      object-fit: contain;
+      height: auto;
+      width: 100%;
       width: 100%;
   }
   
+  .imageSlider {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .bookedVenueImageSlideshow .prevButton, .bookedVenueImageSlideshow .nextButton {
       position: absolute;
       bottom: 0;
