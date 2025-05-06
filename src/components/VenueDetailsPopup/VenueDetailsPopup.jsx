@@ -1,17 +1,95 @@
+import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import styles from './VenueDetailsPopup.module.css';
 import Buttons from '../../components/Buttons/Buttons';
 
-const VenueDetailsPopup = ({
-  selectedVenue,
-  selectedBooking,
-  isLoading,
-  isModalVisible,
-  closeModal,
-  prevImage,
-  nextImage,
-  userRole,
-}) => {
+const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImage, nextImage, userRole, isLoading = false }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedVenue, setEditedVenue] = useState(selectedVenue);
+
+  useEffect(() => {
+    setEditedVenue(selectedVenue);
+  }, [selectedVenue]);
+
+  const handleDelete = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token || !selectedVenue?.id) {
+      console.error('Missing token or venue ID');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/holidaze/venues/${selectedVenue.id}`, {
+        method: 'DELETE',
+        headers: headers(token),
+      });
+
+      if (response.ok) {
+        alert('Venue deleted successfully!');
+        closeModal();
+      } 
+      else {
+        console.error('Failed to delete venue');
+      }
+    } 
+    catch (error) {
+      console.error('Error deleting venue:', error);
+    }
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleSave = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token || !editedVenue?.id) {
+      console.error('Missing token or venue ID');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/holidaze/venues/${editedVenue.id}`, {
+        method: 'PUT',
+        headers: headers(token),
+        body: JSON.stringify({
+          name: editedVenue.name,
+          description: editedVenue.description,
+          media: editedVenue.media,
+          price: editedVenue.price,
+          maxGuests: editedVenue.maxGuests,
+          rating: editedVenue.rating,
+          meta: editedVenue.meta,
+          location: editedVenue.location,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Venue updated successfully!');
+        setIsEditing(false);
+      } 
+      else {
+        console.error('Failed to update venue');
+      }
+    } 
+    catch (error) {
+      console.error('Error updating venue:', error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedVenue((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleClose = () => {
+    setIsEditing(false);
+    closeModal();
+  };
 
   return (
     <motion.div
@@ -34,7 +112,7 @@ const VenueDetailsPopup = ({
         ) : (
           <div className={styles.bookedVenueDetails}>
             <button className={styles.closeVenueButton} onClick={closeModal}>
-                <i className="fa-solid fa-xmark"></i>
+              <i className="fa-solid fa-xmark"></i>
             </button>
 
             <div className={styles.bookedVenueImageSlideshow}>
@@ -69,33 +147,12 @@ const VenueDetailsPopup = ({
                 <p><a href={`/venue-details/${selectedVenue?.id}`} target="_blank" rel="noopener noreferrer">View Venue</a></p>
               </div>
 
-              {userRole === "customer" && selectedBooking && (
-                <div className={styles.bookedVenueBookingInfo}>
-                  <h3>Booking Information</h3>
-                  <p><strong>Guests:</strong> {selectedBooking.guests}</p>
-                  <p><strong>Booking From:</strong> {new Date(selectedBooking.dateFrom).toLocaleDateString()}</p>
-                  <p><strong>Booking To:</strong> {new Date(selectedBooking.dateTo).toLocaleDateString()}</p>
-                  <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
-                  <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
+              {userRole === "admin" && (
+                <div className={styles.bookedVenueEditButtons}>
+                  <Buttons size="small" onClick={handleEdit}>Edit</Buttons>
+                  <Buttons size="small" version="v2" onClick={handleDelete}>Delete</Buttons>
                 </div>
               )}
-
-              <div className={styles.bookedVenueEditButtons}>
-                {userRole === "customer" && (
-                  <>
-                    <Buttons size="small">Edit</Buttons>
-                    <Buttons size="small" version="v2">Cancel</Buttons>
-                  </>
-                )}
-              </div>
-              <div className={styles.bookedVenueEditButtons}>
-                {userRole === "admin" && (
-                  <>
-                    <Buttons size="small">Edit</Buttons>
-                    <Buttons size="small" version="v2">Delete</Buttons>
-                  </>
-                )}
-              </div>
             </div>
           </div>
         )}
