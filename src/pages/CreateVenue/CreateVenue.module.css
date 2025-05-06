@@ -94,3 +94,10 @@
 .fieldGroupName input, .fieldGroupDesc input, .fieldGroupPrice input, .fieldGroupGuests input, .fieldGroupMedia input, .fieldGroupLocation input, .locationInputs input, .mediaField input {
     font-size: 1rem;
 }
+
+.fieldGroupName input, .fieldGroupDesc input, .fieldGroupPrice input, .fieldGroupGuests input, .fieldGroupMedia input, .fieldGroupLocation input, .locationInputs input, .mediaField input {
+    border-radius: 15px;
+    height: 35px;
+    border: solid 1px #1F1B17;
+    padding: 3.5px 3.5px 3.5px 7.5px;
+}
