@@ -157,10 +157,13 @@ const CreateVenue = () => {
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       <section className={`${styles.pageContent} ${popup.isVisible ? styles.blurred : ''}`}>
-      <h2>Create a New Venue</h2>
+        <div className={styles.createPageContent}>
+          <div className={styles.createFormContent}>
+          <h1>Create a New Venue</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.fieldGroup}>
-          <label>Name</label>
+        <div className={styles.formRow}>
+        <div className={styles.fieldGroupName}>
+          <label>Venue Name</label>
           <input
             type="text"
             name="name"
@@ -169,9 +172,8 @@ const CreateVenue = () => {
             required
           />
         </div>
-
-        <div className={styles.fieldGroup}>
-          <label>Description</label>
+        <div className={styles.fieldGroupDesc}>
+          <label>Venue Description</label>
           <textarea
             name="description"
             value={formData.description}
@@ -179,9 +181,11 @@ const CreateVenue = () => {
             required
           />
         </div>
-
-        <div className={styles.fieldGroup}>
-          <label>Price</label>
+        
+        </div>
+        <div className={styles.formRow}>
+        <div className={styles.fieldGroupPrice}>
+          <label>Price Per Night</label>
           <input
             type="number"
             name="price"
@@ -190,9 +194,8 @@ const CreateVenue = () => {
             required
           />
         </div>
-
-        <div className={styles.fieldGroup}>
-          <label>Max Guests</label>
+        <div className={styles.fieldGroupGuests}>
+          <label>Guest Limit</label>
           <input
             type="number"
             name="maxGuests"
@@ -201,51 +204,9 @@ const CreateVenue = () => {
             required
           />
         </div>
-
-        <div className={styles.fieldGroup}>
-            <label>Media (Images)</label>
-            {formData.media.map((media, index) => (
-              <div key={index} className={styles.mediaField}>
-                <input
-                  type="url"
-                  name={`media-${index}-url`}
-                  placeholder="Image URL"
-                  value={media.url}
-                  onChange={handleChange}
-                  required
-                />
-                <input
-                  type="text"
-                  name={`media-${index}-alt`}
-                  placeholder="Image Alt Text"
-                  value={media.alt}
-                  onChange={handleChange}
-                />
-                {index > 0 && (
-                  <button
-                    type="button"
-                    className={styles.deleteButton}
-                    onClick={() => handleDeleteMedia(index)}
-                  >
-                    Delete Image
-                  </button>
-                )}
-              </div>
-            ))}
-            <div className={styles.mediaButtons}>
-              <button
-                type="button"
-                className={styles.addButton}
-                onClick={handleAddMedia}
-              >
-                Add Image
-              </button>
-            </div>
-          </div>
-
-        <div className={styles.fieldGroup}>
+        <div className={styles.fieldGroupMeta}>
           <label>Meta Tags</label>
-          <div>
+          <div className={styles.metaTags}>
             <label>
               <input
                 type="checkbox"
@@ -288,10 +249,50 @@ const CreateVenue = () => {
             </label>
           </div>
         </div>
-
-        <div className={styles.fieldGroup}>
-          <label>Location</label>
-          <div>
+        </div>
+        <div className={styles.fieldGroupMedia}>
+            <label>Media (Images)</label>
+            {formData.media.map((media, index) => (
+              <div key={index} className={styles.mediaField}>
+                <input
+                  type="url"
+                  name={`media-${index}-url`}
+                  placeholder="Image URL"
+                  value={media.url}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="text"
+                  name={`media-${index}-alt`}
+                  placeholder="Image Alt Text"
+                  value={media.alt}
+                  onChange={handleChange}
+                />
+                {index > 0 && (
+                  <button
+                    type="button"
+                    className={styles.deleteButton}
+                    onClick={() => handleDeleteMedia(index)}
+                  >
+                    Delete Image
+                  </button>
+                )}
+              </div>
+            ))}
+            <div className={styles.mediaButtons}>
+              <button
+                type="button"
+                className={styles.addButton}
+                onClick={handleAddMedia}
+              >
+                Add Image
+              </button>
+            </div>
+          </div>
+        <div className={styles.fieldGroupLocation}>
+          <label>Venue Location</label>
+          <div className={styles.locationInputs}>
             <input
               type="text"
               name="location-address"
@@ -334,7 +335,9 @@ const CreateVenue = () => {
           Create Venue
         </button>
       </form>
-        </section>
+          </div>
+        </div>
+      </section>
 
         {popup.isVisible && (
           <CustomPopup
