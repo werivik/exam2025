@@ -120,6 +120,10 @@
     width: 45%;
 }
 
+.fieldGroupPrice, .fieldGroupGuests {
+    width: 150px;
+}
+
 .locationInputs {
     display: flex;
     flex-direction: column;
@@ -148,7 +152,6 @@
 .fieldGroupTerms p {
     font-size: 1rem;
 }
-
 
 
 body.no-scroll {
