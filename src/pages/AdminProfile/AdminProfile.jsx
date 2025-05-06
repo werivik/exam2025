@@ -22,7 +22,6 @@ const capitalizeFirstLetter = (string) => {
 
 const AdminProfile = () => {
   const [userData, setUserData] = useState({});
-  const [assignedVenues, setAssignedVenues] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
@@ -31,6 +30,9 @@ const AdminProfile = () => {
   const [selectedVenue, setSelectedVenue] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [assignedVenues, setAssignedVenues] = useState([]);
+  const [filteredVenues, setFilteredVenues] = useState([]);
+  const [activeFilter, setActiveFilter] = useState('all'); 
 
   const navigate = useNavigate();
   const editRef = useRef(null);
@@ -69,6 +71,7 @@ const AdminProfile = () => {
         const venuesData = await venuesResponse.json();
         if (venuesResponse.ok) {
           setAssignedVenues(venuesData.data || []);
+          setFilteredVenues(venuesData.data || []);
         } 
         else {
           console.error('Failed to fetch venues');
@@ -81,6 +84,24 @@ const AdminProfile = () => {
 
     fetchAdminData();
   }, []);
+
+  const handleFilterChange = (filter) => {
+    setActiveFilter(filter);
+
+    let sortedVenues = [...assignedVenues];
+
+    if (filter === 'newest') {
+      sortedVenues = sortedVenues.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } 
+    else if (filter === 'oldest') {
+      sortedVenues = sortedVenues.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    } 
+    else {
+      sortedVenues = assignedVenues;
+    }
+
+    setFilteredVenues(sortedVenues);
+  };
 
   const handleSignOut = () => {
     localStorage.removeItem('accessToken');
@@ -207,7 +228,8 @@ const AdminProfile = () => {
               <h3>{capitalizeFirstLetter(userData.name) || 'Admin'}</h3>
               </div>
               <div className={styles.profileShortcuts}>
-              <button className={styles.shortcutLink} onClick={handleRedirect}>Create New Venue</button>
+                <button className={styles.shortcutLink}>My Venues</button>
+                <button className={styles.shortcutLink} onClick={handleRedirect}>Create New Venue</button>
                 <button className={styles.shortcutLink} onClick={handleEditProfile}>Edit Profile</button>
                 <button className={styles.signOutButton} onClick={handleSignOut}>Sign out</button>
               </div>
@@ -218,18 +240,41 @@ const AdminProfile = () => {
             <div className={styles.rightBorder}>
               <div className={styles.bookings}>
                 <div className={styles.bookingsTitle}>
-                  <h2>All Venues</h2>
+                  <h2>My Venues</h2>
+                  <div className={styles.bookingsFilter}>
+                  <Buttons
+                  size="medium"
+                  version={activeFilter === 'all' ? 'v3' : 'v3'} 
+                  onClick={() => handleFilterChange('all')}
+                >
+                  All
+                </Buttons>
+                <Buttons
+                  size="medium"
+                  version={activeFilter === 'newest' ? 'v1' : 'v1'} 
+                  onClick={() => handleFilterChange('newest')}
+                >
+                  Newest
+                </Buttons>
+                <Buttons
+                  size="medium"
+                  version={activeFilter === 'oldest' ? 'v2' : 'v2'} 
+                  onClick={() => handleFilterChange('oldest')}
+                >
+                  Oldest
+                </Buttons>
+                  </div>
                 </div>
                 <div className={styles.allBookings}>
-                  {assignedVenues.length > 0 ? (
-                    <div className={styles.adminBookings}>
-                      {assignedVenues.map((venue) => (
-                        <VenueCardSecondType key={venue.id} venue={venue} onClick={() => handleVenueClick(venue)} />
-                      ))}
-                    </div>
-                  ) : (
-                    <p>No venues assigned yet.</p>
-                  )}
+                {filteredVenues.length > 0 ? (
+                <div className={styles.adminBookings}>
+                  {filteredVenues.map((venue) => (
+                    <VenueCardSecondType key={venue.id} venue={venue} />
+                  ))}
+                </div>
+              ) : (
+                <p>No venues available for this filter.</p>
+              )}
                 </div>
               </div>
 
