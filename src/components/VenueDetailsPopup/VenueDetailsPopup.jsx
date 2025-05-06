@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";
 import styles from './VenueDetailsPopup.module.css';
 import Buttons from '../../components/Buttons/Buttons';
@@ -7,6 +7,7 @@ import { headers } from '../../headers';
 import { VENUE_DELETE } from '../../constants';
 
 const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImage, nextImage, userRole, isLoading = false }) => {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [editedVenue, setEditedVenue] = useState(selectedVenue);
 
@@ -41,8 +42,9 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
     }
   };
 
-  const handleEdit = () => {
-    setIsEditing(true);
+  const handleEditClick = () => {
+    navigate(`/edit-venue/${selectedVenue.id}`, { state: { venue: selectedVenue } });
+    closeModal();
   };
 
   const handleSave = async () => {
@@ -155,7 +157,7 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
 
               {userRole === "admin" && (
                 <div className={styles.bookedVenueEditButtons}>
-                  <Buttons size="small" onClick={handleEdit}>Edit</Buttons>
+                  <Buttons size="small" onClick={handleEditClick}>Edit</Buttons>
                   <Buttons size="small" version="v2" onClick={handleDelete}>Delete</Buttons>
                 </div>
               )}

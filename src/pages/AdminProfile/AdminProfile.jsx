@@ -113,35 +113,43 @@ const AdminProfile = () => {
   const handleSaveProfile = async () => {
     const token = localStorage.getItem('accessToken');
     const username = localStorage.getItem('username');
-
+  
     if (!token || !username) {
       console.error('Missing token or name in localStorage');
       return;
     }
-
+  
+    const updateData = {};
+    if (newName) updateData.name = newName;
+  
+    const avatarData = newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName || username}'s avatar` } : undefined;
+    if (avatarData) updateData.avatar = avatarData;
+  
+    if (Object.keys(updateData).length === 0) {
+      console.error('At least one field (name or avatar) must be provided.');
+      return;
+    }
+  
     try {
       const response = await fetch(`${PROFILES_SINGLE.replace("<name>", username)}`, {
         method: 'PUT',
         headers: headers(token),
-        body: JSON.stringify({
-          name: newName,
-          avatar: newAvatar,
-        }),
+        body: JSON.stringify(updateData),
       });
-
+  
       const data = await response.json();
       if (response.ok) {
         setUserData(data.data);
         setIsEditing(false);
       } 
       else {
-        console.error('Failed to update profile');
+        console.error('Failed to update profile', data.errors);
       }
-    } 
+    }
     catch (error) {
       console.error('Error updating profile:', error);
     }
-  };
+  };  
 
   const handleRedirect = () => {
     navigate('/create-venue');
