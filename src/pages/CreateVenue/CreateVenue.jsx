@@ -32,21 +32,59 @@ const CreateVenue = () => {
     termsAccepted: false,
   });
 
+  const [fieldStatus, setFieldStatus] = useState({
+    name: null,
+    description: null,
+    price: null,
+    maxGuests: null,
+    meta: null,
+    media: null,
+    location: null,
+  });  
+
+  const validateFields = (updatedFormData) => {
+    const isValidUrl = (url) => {
+      try {
+        return Boolean(new URL(url));
+      } 
+      catch {
+        return false;
+      }
+    };
+  
+    setFieldStatus({
+      name: updatedFormData.name.trim().length > 2,
+      description: updatedFormData.description.trim().length > 10,
+      price: updatedFormData.price > 0,
+      maxGuests: updatedFormData.maxGuests > 0,
+      meta: Object.values(updatedFormData.meta).some(Boolean),
+      media: updatedFormData.media.every(item => isValidUrl(item.url)),
+      location: [
+        updatedFormData.location.address,
+        updatedFormData.location.city,
+        updatedFormData.location.zip,
+        updatedFormData.location.country,
+        updatedFormData.location.continent,
+      ].every(val => val.trim() !== '')
+    });
+  };  
+
   const [popup, setPopup] = useState({ isVisible: false, message: '', type: '' });
   const [isTermsPopupVisible, setIsTermsPopupVisible] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
+    const { name, value, type, checked } = e.target;
+    let updatedFormData;
+  
     if (name === 'meta') {
       const [metaKey, metaValue] = value.split('=');
-      setFormData({
+      updatedFormData = {
         ...formData,
         meta: {
           ...formData.meta,
-          [metaKey]: metaValue === 'true'
+          [metaKey]: metaValue === 'true' ? checked : !checked
         }
-      });
+      };
     } 
     else if (name.startsWith('media-')) {
       const parts = name.split('-');
@@ -54,25 +92,36 @@ const CreateVenue = () => {
       const field = parts[2];
       const newMedia = [...formData.media];
       newMedia[index][field] = value;
-      setFormData({ ...formData, media: newMedia });
+  
+      updatedFormData = {
+        ...formData,
+        media: newMedia
+      };
     } 
     else if (name.includes('location')) {
       const field = name.split('-')[1];
-      setFormData({
+      updatedFormData = {
         ...formData,
         location: {
           ...formData.location,
           [field]: value
         }
-      });
+      };
     } 
     else {
-      setFormData({
+      updatedFormData = {
         ...formData,
-        [name]: name === 'price' || name === 'maxGuests' ? Number(value) : value,
-      });
+        [name]: (name === 'price' || name === 'maxGuests') ? Number(value) : value
+      };
     }
+  
+    setFormData(updatedFormData);
+    validateFields(updatedFormData);
   };
+  
+  const totalFields = Object.keys(fieldStatus).length;
+  const validFields = Object.values(fieldStatus).filter(val => val === true).length;
+  const progressPercentage = Math.round((validFields / totalFields) * 100);
 
   const handleAddMedia = () => {
     setFormData(prevState => ({
@@ -185,14 +234,20 @@ const CreateVenue = () => {
         <div className={styles.createPageContent}>
           <div className={styles.leftSection}>
             <div className={styles.leftBorder}>
-              <h2>Progress:</h2>
-              <div>Venue Name</div>
-              <div>Venue Description</div>
-              <div>Price per Night</div>
-              <div>Max Guests</div>
-              <div>Meta Tags</div>
-              <div>Venue Media</div>
-              <div>Location</div>
+            <h2>Progress:</h2>
+            <div className={styles.progressDivs}>
+            <div className={`${styles.step} ${fieldStatus.name === true ? styles.valid : fieldStatus.name === false ? styles.invalid : ''}`}>Venue Name</div>
+<div className={`${styles.step} ${fieldStatus.description === true ? styles.valid : fieldStatus.description === false ? styles.invalid : ''}`}>Venue Description</div>
+<div className={`${styles.step} ${fieldStatus.price === true ? styles.valid : fieldStatus.price === false ? styles.invalid : ''}`}>Price per Night</div>
+<div className={`${styles.step} ${fieldStatus.maxGuests === true ? styles.valid : fieldStatus.maxGuests === false ? styles.invalid : ''}`}>Max Guests</div>
+<div className={`${styles.step} ${fieldStatus.meta === true ? styles.valid : fieldStatus.meta === false ? styles.invalid : ''}`}>Meta Tags</div>
+<div className={`${styles.step} ${fieldStatus.media === true ? styles.valid : fieldStatus.media === false ? styles.invalid : ''}`}>Venue Media</div>
+<div className={`${styles.step} ${fieldStatus.location === true ? styles.valid : fieldStatus.location === false ? styles.invalid : ''}`}>Location</div>
+            </div>
+
+<div className={styles.progressBarContainer}>
+  <div className={styles.progressBar} style={{ width: `${progressPercentage}%` }}></div>
+</div>
             </div>
           </div>
           <div className={styles.createFormContent}>
