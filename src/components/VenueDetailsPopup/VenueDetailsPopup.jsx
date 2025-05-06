@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import styles from './VenueDetailsPopup.module.css';
 import Buttons from '../../components/Buttons/Buttons';
+import { headers } from '../../headers';
+import { VENUE_DELETE } from '../../constants';
 
 const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImage, nextImage, userRole, isLoading = false }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -19,7 +21,8 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
     }
 
     try {
-      const response = await fetch(`/holidaze/venues/${selectedVenue.id}`, {
+      const url = VENUE_DELETE.replace('<id>', selectedVenue.id);
+      const response = await fetch(url, {
         method: 'DELETE',
         headers: headers(token),
       });
