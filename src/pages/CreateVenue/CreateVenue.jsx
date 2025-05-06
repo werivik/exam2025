@@ -5,30 +5,33 @@ import { motion } from "framer-motion";
 import { VENUE_CREATE } from "../../constants";
 
 const CreateVenue = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        description: '',
-        price: 0,
-        maxGuests: 0,
-        media: [
-          { url: '', alt: '' },
-          { url: '', alt: '' },
-          { url: '', alt: '' }
-        ],
-        meta: {
-          wifi: false,
-          parking: false,
-          breakfast: false,
-          pets: false
-        },
-        location: {
-          address: '',
-          city: '',
-          zip: '',
-          country: '',
-          continent: ''
-        }
-      });
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    price: 0,
+    maxGuests: 0,
+    rating: 0,
+    media: [
+      { url: '', alt: '' },
+      { url: '', alt: '' },
+      { url: '', alt: '' }
+    ],
+    meta: {
+      wifi: false,
+      parking: false,
+      breakfast: false,
+      pets: false
+    },
+    location: {
+      address: '',
+      city: '',
+      zip: '',
+      country: '',
+      continent: '',
+      lat: 0,
+      lng: 0
+    }
+  });  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,8 +90,8 @@ const CreateVenue = () => {
       ...formData,
       media: formData.media
         .filter(item => item.url.trim() !== '')
-        .map(item => ({ url: item.url, alt: item.alt })),
-    };
+        .map(item => ({ url: item.url, alt: item.alt }))
+    };    
   
     const dataToSend = transformedFormData;
   
