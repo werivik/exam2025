@@ -13,10 +13,12 @@ function App() {
   return (
     <Router>
       <Header isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      <div className={`pageContent ${isSidebarOpen ? 'testBlurred' : ''}`}>
-        <main>
-          <AnimatedRoutes />
-        </main>
+      <div className={`pageContentWrapper ${isSidebarOpen ? 'testBlurred' : ''}`}>
+        <div className="pageContent">
+          <main>
+            <AnimatedRoutes />
+          </main>
+        </div>
         <Footer />
       </div>
     </Router>

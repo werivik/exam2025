@@ -10,7 +10,6 @@
 
 .createPageContent {
     padding-bottom: 100px;
-    height: 100%;
     width: 80%;
     display: flex;
     flex-direction: row;
@@ -28,7 +27,8 @@
 .leftSection {
     width: 250px;
     height: 550px;
-    position: fixed;
+    position: sticky;
+    align-self: flex-start;
     top: 75px;
 }
 
@@ -47,6 +47,8 @@
     justify-content: space-between;
     gap: 15px;
     position: relative;
+
+    overflow: hidden;
 }
 
 .leftBorder h2 {
@@ -61,7 +63,6 @@
 }
 
 .createFormContent {
-    margin-left: 20%;
     width: 80%;
     background-color: white;
     border-radius: 25px;
@@ -192,12 +193,19 @@ body.no-scroll {
   
   .fieldGroupTerms {
     margin-top: 20px;
+    height: 30px;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
   }
   
   .fieldGroupTerms label {
-    font-size: 14px;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
   }
   
   .fieldGroupTerms input[type="checkbox"] {

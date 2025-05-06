@@ -250,7 +250,7 @@ const CreateVenue = () => {
 </div>
             </div>
           </div>
-          <div className={styles.createFormContent}>
+          <div  className={styles.createFormContent}>
           <h1>Create a New Venue</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formRow}>
