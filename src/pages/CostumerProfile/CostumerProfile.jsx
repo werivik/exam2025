@@ -501,6 +501,7 @@ const prevImage = () => {
           closeModal={closeModal}
           prevImage={prevImage}
           nextImage={nextImage}
+          userRole="customer"
         />
       )}
     </motion.div>

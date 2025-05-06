@@ -162,12 +162,14 @@ const AdminProfile = () => {
   }; 
 
   const handleVenueClick = (venue) => {
+    console.log("Venue clicked:", venue);
     setSelectedVenue(venue);
     setIsModalVisible(true);
   };
 
   const closeModal = () => {
     setIsModalVisible(false);
+    setSelectedVenue(null);
   };
 
   const handleOverlayClick = (e) => {
@@ -223,7 +225,6 @@ const AdminProfile = () => {
                 </div>
               </div>
 
-              {isEditing && (
                 <div className={styles.edit} ref={editRef}>
                   <div className={styles.editTitle}>
                     <h2>Edit Profile</h2>
@@ -253,7 +254,6 @@ const AdminProfile = () => {
                     </form>
                   </div>
                 </div>
-              )}
             </div>
           </section>
         </div>
@@ -275,6 +275,7 @@ const AdminProfile = () => {
     closeModal={closeModal}
     prevImage={prevImage}
     nextImage={nextImage}
+    userRole="admin"
   />
 )}
 

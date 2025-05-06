@@ -10,6 +10,7 @@ const VenueDetailsPopup = ({
   closeModal,
   prevImage,
   nextImage,
+  userRole,
 }) => {
 
   return (
@@ -33,7 +34,7 @@ const VenueDetailsPopup = ({
         ) : (
           <div className={styles.bookedVenueDetails}>
             <button className={styles.closeVenueButton} onClick={closeModal}>
-                <i class="fa-solid fa-xmark"></i>
+                <i className="fa-solid fa-xmark"></i>
             </button>
 
             <div className={styles.bookedVenueImageSlideshow}>
@@ -68,18 +69,32 @@ const VenueDetailsPopup = ({
                 <p><a href={`/venue-details/${selectedVenue?.id}`} target="_blank" rel="noopener noreferrer">View Venue</a></p>
               </div>
 
-              <div className={styles.bookedVenueBookingInfo}>
-                <h3>Booking Information</h3>
-                <p><strong>Guests:</strong> {selectedBooking.guests}</p>
-                <p><strong>Booking From:</strong> {new Date(selectedBooking.dateFrom).toLocaleDateString()}</p>
-                <p><strong>Booking To:</strong> {new Date(selectedBooking.dateTo).toLocaleDateString()}</p>
-                <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
-                <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
-              </div>
+              {userRole === "customer" && selectedBooking && (
+                <div className={styles.bookedVenueBookingInfo}>
+                  <h3>Booking Information</h3>
+                  <p><strong>Guests:</strong> {selectedBooking.guests}</p>
+                  <p><strong>Booking From:</strong> {new Date(selectedBooking.dateFrom).toLocaleDateString()}</p>
+                  <p><strong>Booking To:</strong> {new Date(selectedBooking.dateTo).toLocaleDateString()}</p>
+                  <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
+                  <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
+                </div>
+              )}
 
               <div className={styles.bookedVenueEditButtons}>
-                <Buttons size="small">Edit</Buttons>
-                <Buttons size="small" version="v2">Cancel</Buttons>
+                {userRole === "customer" && (
+                  <>
+                    <Buttons size="small">Edit</Buttons>
+                    <Buttons size="small" version="v2">Cancel</Buttons>
+                  </>
+                )}
+              </div>
+              <div className={styles.bookedVenueEditButtons}>
+                {userRole === "admin" && (
+                  <>
+                    <Buttons size="small">Edit</Buttons>
+                    <Buttons size="small" version="v2">Delete</Buttons>
+                  </>
+                )}
               </div>
             </div>
           </div>
