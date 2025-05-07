@@ -17,6 +17,9 @@
     position: relative;
     height: 100%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .datePickerTop {
@@ -30,6 +33,7 @@
   .monthName {
     width: 250px;
     text-align: center;
+    pointer-events: none;
   }
 
   .datePickerTop button {
@@ -62,7 +66,7 @@
   .datePickerCalender {
     position: relative;
     height: 100%;
-    width: 95%;
+    width: 90%;
     transition: 0.25s;
   }
 
@@ -76,6 +80,7 @@
     gap: 10px;
     font-size: 1rem;
     transition: 0.25s;
+    pointer-events: none;
   }
 
   .days {
@@ -113,4 +118,3 @@
     color: #999;
     pointer-events: none;
   }
-  
