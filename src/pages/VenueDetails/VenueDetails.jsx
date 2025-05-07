@@ -526,7 +526,7 @@ const VenueDetails = () => {
       </div>  
       </div>
 
-      <div className={styles.bookPrice}>
+      <div className={styles.maxGuestsSecond}>
         <p>Total Price:<strong> ${totalPrice.toFixed(2)}</strong> <span>/ ${venue.price} per night</span></p>
 
         <Buttons size="large" version="v2" onClick={handleSubmit}>
