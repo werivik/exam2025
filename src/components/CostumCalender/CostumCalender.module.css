@@ -27,7 +27,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 15px;
+    margin-top: 10px;
+    margin-bottom: 25px;
   }
 
   .monthName {
@@ -71,7 +72,7 @@
   }
 
   .daysOfWeek {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
