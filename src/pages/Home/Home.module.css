@@ -176,13 +176,6 @@
     cursor: pointer;
 }
 
-.filterCalender {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    gap: 50px;
-}
-
 .filterCalender input {
     width: 20%;
     left: 10%;
@@ -251,7 +244,7 @@
 
   .costumCalenderPosition {
     position: absolute;
-    top: -475px;
+    top: -465px;
     transition: 0.25s;
   }
 
