@@ -31,7 +31,8 @@ const Home = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [showScrollIcon, setShowScrollIcon] = useState(true);
   const [showGuestDropdown, setShowGuestDropdown] = useState(false);
-  const guestDropdownRef = useRef(null);
+  const guestDropdownRefOne = useRef(null);
+  const guestDropdownRefTwo = useRef(null);  
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
@@ -198,8 +199,10 @@ const Home = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        guestDropdownRef.current &&
-        !guestDropdownRef.current.contains(event.target)
+        guestDropdownRefOne.current &&
+        !guestDropdownRefOne.current.contains(event.target) &&
+        guestDropdownRefTwo.current &&
+        !guestDropdownRefTwo.current.contains(event.target)
       ) {
         setShowGuestDropdown(false);
       }
@@ -209,7 +212,7 @@ const Home = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []); 
+  }, []);  
 
   const VenueTypeSkeleton = () => (
     <div className={`${styles.venueType} ${styles.skeleton}`}>
@@ -334,7 +337,7 @@ const Home = () => {
               </div>
               <div className={styles.filterPeople}>
   <i className="fa-solid fa-person"></i>
-  <div className={styles.guestSelector} ref={guestDropdownRef}>
+  <div className={styles.guestSelector} ref={guestDropdownRefOne}>
   <p onClick={() => setShowGuestDropdown(prev => !prev)}>
     {renderGuestInfo()}
   </p>
@@ -467,7 +470,7 @@ const Home = () => {
                 <div className={styles.filtersColumnsBottom}>
                 <div className={styles.filterPeople}>
   <i className="fa-solid fa-person"></i>
-  <div className={styles.guestSelector} ref={guestDropdownRef}>
+  <div className={styles.guestSelector} ref={guestDropdownRefTwo}>
   <p onClick={() => setShowGuestDropdown(prev => !prev)}>
     {renderGuestInfo()}
   </p>

@@ -279,7 +279,7 @@
     min-width: 225px;
     position: relative;
     cursor: pointer;
-    z-index: 995;
+    z-index: 777;
   }
   
   .guestSelector p {
@@ -299,7 +299,7 @@
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
     padding: 10px;
-    z-index: 999;
+    z-index: 777;
   }
   
   .dropdownMenu.open {
