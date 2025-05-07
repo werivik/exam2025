@@ -36,8 +36,8 @@
     background-color: #B88A44;
     border: none;
     border-radius: 999px;
-    height: 20px;
-    width: 20px;
+    height: 25px;
+    width: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,6 +49,14 @@
     transition: 0.25s;
     background-color: #6B7A3A;
     cursor: pointer;
+  }
+
+  .arrow i {
+    border: none;
+    font-size: 0.9rem;
+    background-color: #b88a4400;
+    height: 10px;
+    width: 10px;
   }
 
   .datePickerCalender {

@@ -97,9 +97,13 @@ const CostumCalender = ({ onDateChange }) => {
     <div ref={calendarRef} className={styles.calendarContainer}>
       <div className={styles.datePicker}>
         <div className={styles.datePickerTop}>
-          <button className={styles.arrow} onClick={() => changeMonth(-1)}>&lt;</button>
+          <button className={styles.arrow} onClick={() => changeMonth(-1)}>
+          <i class="fa-solid fa-chevron-left"></i>
+          </button>
           <span className={styles.monthName}>{getMonthName(currentMonth, currentYear)}</span>
-          <button className={styles.arrow} onClick={() => changeMonth(1)}>&gt;</button>
+          <button className={styles.arrow} onClick={() => changeMonth(1)}>
+          <i class="fa-solid fa-chevron-right"></i>
+          </button>
         </div>
         <div className={styles.datePickerCalender}>
           <div className={styles.daysOfWeek}>
