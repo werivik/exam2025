@@ -51,14 +51,24 @@ const Home = () => {
     if (selectedDateType === 'start') {
       setCheckInDate(newDate);
       setFilters(prev => ({ ...prev, startDate: newDate }));
+  
+      if (filters.endDate && new Date(newDate) > new Date(filters.endDate)) {
+        setCheckOutDate("");
+        setFilters(prev => ({ ...prev, endDate: "" }));
+      }
     } 
     else {
+      if (filters.startDate && new Date(newDate) < new Date(filters.startDate)) {
+        alert("End date cannot be before start date.");
+        return;
+      }
+  
       setCheckOutDate(newDate);
       setFilters(prev => ({ ...prev, endDate: newDate }));
     }
     setShowCalendar(false);
-  };  
-
+  };
+  
   const [filters, setFilters] = useState({
     destination: "",
     startDate: "",
@@ -122,8 +132,8 @@ const Home = () => {
       if (!input) return setSuggestions([]);
       const searchTerm = input.toLowerCase();
       const matches = allLocations.filter((loc) =>
-        loc.toLowerCase().startsWith(searchTerm)
-      );
+        loc.toLowerCase().includes(searchTerm)
+      );      
       setSuggestions(matches.length ? matches : ["No matching results..."]);
     }, 300),
     [allLocations]
@@ -133,7 +143,7 @@ const Home = () => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
     if (name === "destination") handleDestinationSuggestions(value);
-  };
+  }; 
 
   const handleGuestsChange = (e) => {
     const { name, value } = e.target;
@@ -323,38 +333,54 @@ const Home = () => {
       </div>
               </div>
               <div className={styles.filterPeople}>
-                <i className="fa-solid fa-person"></i>
-                <div
-  className={styles.guestSelector}
-  onClick={() => setShowGuestDropdown(prev => !prev)}
-  ref={guestDropdownRef}
->
-                  <p>{renderGuestInfo()}</p>
-                  <div className={`${styles.dropdownMenu} ${showGuestDropdown ? styles.open : ""}`}>
-                    {["adults", "children", "disabled"].map((type) => (
-                      <div key={type} className={styles.dropdownRow}>
-                        <span className={styles.label}>
-                        {type === "adults" ? "Adults" : type === "children" ? "Children" : "Assisted Guests"}
-                        </span>
-                        <div className={styles.counterControls}>
-                          {filters[type] > 0 && (
-                            <button onClick={(e) => {
-                              e.stopPropagation();
-                              setFilters(prev => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
-                            }}>-</button>
-                          )}
-                          <span>{filters[type]}</span>
-                          <button onClick={(e) => {
-                            e.stopPropagation();
-                            setFilters(prev => ({ ...prev, [type]: prev[type] + 1 }));
-                          }}>+</button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
+  <i className="fa-solid fa-person"></i>
+  <div className={styles.guestSelector} ref={guestDropdownRef}>
+  <p onClick={() => setShowGuestDropdown(prev => !prev)}>
+    {renderGuestInfo()}
+  </p>
+  {showGuestDropdown && (
+    <div className={`${styles.dropdownMenu} ${styles.open}`}>
+      {["adults", "children", "disabled"].map((type) => (
+        <div key={type} className={styles.dropdownRow}>
+          <span className={styles.label}>
+            {type === "adults"
+              ? "Adults"
+              : type === "children"
+              ? "Children"
+              : "Assisted Guests"}
+          </span>
+          <div className={styles.counterControls}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilters(prev => ({
+                  ...prev,
+                  [type]: Math.max(0, prev[type] - 1),
+                }));
+              }}
+              disabled={filters[type] === 0}
+            >
+              -
+            </button>
+            <span>{filters[type]}</span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilters(prev => ({
+                  ...prev,
+                  [type]: prev[type] + 1,
+                }));
+              }}
+            >
+              +
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+</div>
               <div className={styles.searchButtonFirst}>
               <Buttons size='small' version='v1'onClick={checkConditionsForSearch}>
                 Search
@@ -440,37 +466,54 @@ const Home = () => {
                 </div>
                 <div className={styles.filtersColumnsBottom}>
                 <div className={styles.filterPeople}>
-                <i className="fa-solid fa-person"></i>
-                <div
-  className={styles.guestSelector}
-  onClick={() => setShowGuestDropdown(prev => !prev)}
-  ref={guestDropdownRef}
->
-                  <p>{renderGuestInfo()}</p>
-                  <div className={`${styles.dropdownMenu} ${showGuestDropdown ? styles.open : ""}`}>
-                    {["adults", "children", "disabled"].map((type) => (
-                      <div key={type} className={styles.dropdownRow}>
-                        <span className={styles.label}>
-                        {type === "adults" ? "Adults" : type === "children" ? "Children" : "Assisted Guests"}
-                        </span>
-                        <div className={styles.counterControls}>
-                          {filters[type] > 0 && (
-                            <button onClick={(e) => {
-                              e.stopPropagation();
-                              setFilters(prev => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
-                            }}>-</button>
-                          )}
-                          <span>{filters[type]}</span>
-                          <button onClick={(e) => {
-                            e.stopPropagation();
-                            setFilters(prev => ({ ...prev, [type]: prev[type] + 1 }));
-                          }}>+</button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+  <i className="fa-solid fa-person"></i>
+  <div className={styles.guestSelector} ref={guestDropdownRef}>
+  <p onClick={() => setShowGuestDropdown(prev => !prev)}>
+    {renderGuestInfo()}
+  </p>
+  {showGuestDropdown && (
+    <div className={`${styles.dropdownMenu} ${styles.open}`}>
+      {["adults", "children", "disabled"].map((type) => (
+        <div key={type} className={styles.dropdownRow}>
+          <span className={styles.label}>
+            {type === "adults"
+              ? "Adults"
+              : type === "children"
+              ? "Children"
+              : "Assisted Guests"}
+          </span>
+          <div className={styles.counterControls}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilters(prev => ({
+                  ...prev,
+                  [type]: Math.max(0, prev[type] - 1),
+                }));
+              }}
+              disabled={filters[type] === 0}
+            >
+              -
+            </button>
+            <span>{filters[type]}</span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setFilters(prev => ({
+                  ...prev,
+                  [type]: prev[type] + 1,
+                }));
+              }}
+            >
+              +
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+</div>
               <div className={styles.searchButtonSecond}>
               <Buttons size='small' version='v1'onClick={checkConditionsForSearch}>
                 Search
@@ -489,12 +532,8 @@ const Home = () => {
             <button onClick={() => setShowWarning(false)} className={styles.closeWarningPopup}>X</button>
           </div>
         </div>
-            )}
-            
+            )}            
           </div>
-
-
-
 
           <img src={Edge} className={styles.edgeRight} alt="" />
         </div>
@@ -557,9 +596,9 @@ const Home = () => {
 <h2>Welcome back <span>{username}</span>,</h2>
               <h3>What would you like to do today?</h3>
               <div className={styles.thirdInfoLinks}>
-              <Link>Upcoming Bookings</Link>
-              <Link>Check out Venues</Link>
-              <Link>See my Profile</Link>
+              <Link to="costumer-profile">Upcoming Bookings</Link>
+              <Link to="/venues">Check out Venues</Link>
+              <Link to="/costumer-profile">See my Profile</Link>
               </div>
             </div>
           </div>
