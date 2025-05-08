@@ -201,7 +201,12 @@ const EditVenue = () => {
   
       const data = await response.json();
       if (response.ok) {
-        setPopupMessage(`Successfully Edited the "${formData.name}", redirecting to Profile Page.`);
+        setPopupMessage(
+          <>
+            <h2>Successfully Edited the "{formData.name}"</h2>
+            <p>Redirecting to Profile Page.</p>
+          </>
+        );
         setPopupType('success');
         setShowPopup(true);
         setTimeout(() => {
@@ -210,7 +215,12 @@ const EditVenue = () => {
         }, 3000);
       } 
       else {
-        setPopupMessage('Could not Save the Changes, please try again.');
+        setPopupMessage(
+          <>
+            <h2>Could not Save the Changes</h2>
+            <p>Please try again.</p>
+          </>
+        );        
         setPopupType('error');
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 2000);
@@ -218,7 +228,12 @@ const EditVenue = () => {
       }
     } 
     catch (error) {
-      setPopupMessage('Could not Save the Changes, please try again.');
+      setPopupMessage(
+        <>
+          <h2>Could not Save the Changes</h2>
+          <p>Please try again.</p>
+        </>
+      );      
       setPopupType('error');
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 2000);

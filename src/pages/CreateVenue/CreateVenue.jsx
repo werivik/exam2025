@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './CreateVenue.module.css';
 import { headers } from '../../headers';
 import { motion } from "framer-motion";
@@ -31,6 +32,8 @@ const CreateVenue = () => {
     },
     termsAccepted: false,
   });
+
+  const navigate = useNavigate();
 
   const [fieldStatus, setFieldStatus] = useState({
     name: null,
@@ -166,13 +169,27 @@ const CreateVenue = () => {
       });
       return;
     }
-
     const transformedFormData = {
-      ...formData,
+      name: formData.name,
+      description: formData.description,
+      price: formData.price,
+      rating: formData.rating,
+      maxGuests: formData.maxGuests,
       media: formData.media
-        .filter(item => item.url.trim() !== '')
-        .map(item => ({ url: item.url, alt: item.alt }))
-    };
+  .filter(item => item.url.trim() !== '')
+  .map(item => ({
+    url: item.url,
+    alt: item.alt && item.alt.trim() !== '' ? item.alt : 'Venue image'
+  })),
+      meta: formData.meta,
+      location: {
+        address: formData.location.address,
+        city: formData.location.city,
+        zip: formData.location.zip,
+        country: formData.location.country,
+        continent: formData.location.continent,
+      },
+    };    
 
     const dataToSend = transformedFormData;
 
@@ -206,7 +223,7 @@ const CreateVenue = () => {
         message: 'Something went wrong. Please try again.',
         type: 'error'
       });
-    }
+    }    
   };
 
   useEffect(() => {
@@ -232,6 +249,17 @@ const CreateVenue = () => {
   const closeTermsPopup = () => {
     setIsTermsPopupVisible(false);
   };
+
+  useEffect(() => {
+    if (popup.isVisible && popup.type === 'success') {
+      const timer = setTimeout(() => {
+        setPopup({ isVisible: false, message: '', type: '' });
+        navigate('/profile');
+      }, 2000);
+  
+      return () => clearTimeout(timer);
+    }
+  }, [popup, navigate]);  
 
   return (
     <motion.div
@@ -374,14 +402,14 @@ const CreateVenue = () => {
                   onChange={handleChange}
                 />
                 {index > 0 && (
-                  <Buttons size='small' version='v2' onClick={() => handleDeleteMedia(index)}>
+                  <Buttons size='small' version='v4' onClick={() => handleDeleteMedia(index)}>
                     Remove
                   </Buttons>
                 )}
               </div>
             ))}
             <div className={styles.mediaButtons}>
-              <Buttons size='small' onClick={handleAddMedia}>
+              <Buttons size='small' version='v3' onClick={handleAddMedia}>
                 +
               </Buttons>
             </div>
@@ -441,7 +469,6 @@ const CreateVenue = () => {
     I agree to the <span className={styles.termsLink} onClick={openTermsPopup}>Terms of Service</span>.
   </label>
 </div>
-
         <Buttons
         size='medium'
         version='v2'
@@ -480,7 +507,7 @@ const CreateVenue = () => {
       <p>
         If you do not agree with any part of these terms, please do not use the platform.
       </p>
-      <button onClick={closeTermsPopup}>Close</button>
+      <button onClick={closeTermsPopup} className={styles.closeTermsButton}>X</button>
     </div>
   </div>
 )}
