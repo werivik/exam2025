@@ -200,7 +200,7 @@
 
   .suggestionList {
     background-color: white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
     text-align: left;
     list-style-type: none;
     font-size: 1.125rem;
@@ -208,13 +208,14 @@
     flex-direction: column;
     gap: 5px;
     position: absolute;
-    width: 90%;
-    top: 5px;
+    width: 100%;
+    top: 15px;
     padding-top: 10px;
     padding-bottom: 10px;
     z-index: 777;
     pointer-events: all;
-    border-radius: 0px 0px 15px 15px;
+    border-radius: 0px 0px 10px 10px;
+    cursor: pointer;
   }
   
   .priceLimits {
