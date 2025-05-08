@@ -4,11 +4,16 @@ import { VENUE_UPDATE } from '../../constants';
 import { headers } from '../../headers';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import CostumPopup from '../../components/CostumPopup/CostumPopup';
 
 const EditVenue = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { state } = useLocation();
+
+  const [popupMessage, setPopupMessage] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupType, setPopupType] = useState('success');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -65,12 +70,16 @@ const EditVenue = () => {
         return;
       }
 
-      const response = await fetch(VENUE_UPDATE.replace('<id>', venueId), {
-        method: 'GET',
+      const response = await fetch(VENUE_UPDATE.replace('<id>', id), {
+        method: 'PUT',
         headers: headers(token),
+        body: JSON.stringify(transformedFormData),
       });
 
       const data = await response.json();
+      if (!response.ok) {
+        console.error('Failed to update venue:', response.status, data);
+      }      
 
       if (response.ok) {
         setFormData({
@@ -103,6 +112,7 @@ const EditVenue = () => {
 
   const handleChange = (e) => {
     const { name, value, checked, type } = e.target;
+    let newValue = value;
   
     if (type === 'checkbox' && name === 'meta') {
       const metaKey = e.target.nextSibling.textContent.trim().toLowerCase();
@@ -132,44 +142,93 @@ const EditVenue = () => {
         [name]: name === 'price' || name === 'maxGuests' ? Number(value) : value,
       });
     }
+    if (name === 'price' || name === 'maxGuests') {
+      newValue = newValue.replace(/^0+(?!$)/, '');
+      if (!/^\d*$/.test(newValue)) return;
+    }
+    setFormData({
+      ...formData,
+      [name]: name === 'price' || name === 'maxGuests' ? Number(newValue) : newValue,
+    });
+  };  
+
+  const handleAddMedia = () => {
+    setFormData((prev) => ({
+      ...prev,
+      media: [...prev.media, { url: '', alt: '' }],
+    }));
+  };
+  
+  const handleDeleteMedia = (index) => {
+    if (formData.media.length > 1) {
+      const updatedMedia = [...formData.media];
+      updatedMedia.splice(index, 1);
+      setFormData({ ...formData, media: updatedMedia });
+    }
   };  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const token = localStorage.getItem('accessToken');
     if (!token) {
       console.error('Token is required!');
       return;
     }
-
+  
     const transformedFormData = {
       ...formData,
-      media: formData.media
-        .filter((item) => item.url.trim() !== '')
-        .map((item) => ({ url: item.url, alt: item.alt })),
+      media: formData.media.filter(item => item.url.trim() !== '').map(item => ({
+        url: item.url,
+        alt: item.alt,
+      })),
+      meta: formData.meta.wifi || formData.meta.parking || formData.meta.breakfast || formData.meta.pets
+        ? formData.meta
+        : undefined,
+      location: formData.location.address || formData.location.city || formData.location.zip || formData.location.country
+        ? formData.location
+        : undefined,
     };
-
+  
+    console.log("Transformed Form Data:", transformedFormData);
+  
     try {
-        const response = await fetch(VENUE_UPDATE.replace('<id>', id), {
-            method: 'PUT',
-            headers: headers(token),
-            body: JSON.stringify(transformedFormData),
-        });
-
+      const response = await fetch(VENUE_UPDATE.replace('<id>', id), {
+        method: 'PUT',
+        headers: headers(token),
+        body: JSON.stringify(transformedFormData),
+      });
+  
       const data = await response.json();
       if (response.ok) {
-        console.log('Venue updated successfully:', data);
-        navigate('/admin-profile');
+        setPopupMessage(`Successfully Edited the "${formData.name}", redirecting to Profile Page.`);
+        setPopupType('success');
+        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(false);
+          navigate('/admin-profile');
+        }, 3000);
       } 
       else {
+        setPopupMessage('Could not Save the Changes, please try again.');
+        setPopupType('error');
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 2000);
         console.error('Error updating venue:', data);
       }
     } 
     catch (error) {
+      setPopupMessage('Could not Save the Changes, please try again.');
+      setPopupType('error');
+      setShowPopup(true);
+      setTimeout(() => setShowPopup(false), 2000);
       console.error('Error updating venue:', error);
     }
-  };
+  };  
+
+  const closePopup = () => {
+    setShowPopup(false);
+  };  
 
   return (
     <motion.div
@@ -179,6 +238,7 @@ const EditVenue = () => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5, ease: 'easeInOut' }}
     >
+      <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
       <section className={styles.pageContent}>
         <h2>Edit Venue</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -206,46 +266,56 @@ const EditVenue = () => {
           <div className={styles.fieldGroup}>
             <label>Price</label>
             <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              required
-            />
+  type="text"
+  name="price"
+  value={formData.price.toString()}
+  onChange={handleChange}
+  required
+  inputMode="numeric"
+/>
           </div>
 
           <div className={styles.fieldGroup}>
             <label>Max Guests</label>
             <input
-              type="number"
-              name="maxGuests"
-              value={formData.maxGuests}
-              onChange={handleChange}
-              required
-            />
+  type="text"
+  name="maxGuests"
+  value={formData.maxGuests.toString()}
+  onChange={handleChange}
+  required
+  inputMode="numeric"
+/>
           </div>
 
           <div className={styles.fieldGroup}>
             <label>Media (Images)</label>
-            {[0, 1, 2].map((index) => (
-              <div key={index} className={styles.mediaField}>
-                <input
-                  type="url"
-                  name={`media-${index}-url`}
-                  placeholder="Image URL"
-                  value={formData.media[index].url}
-                  onChange={handleChange}
-                  required
-                />
-                <input
-                  type="text"
-                  name={`media-${index}-alt`}
-                  placeholder="Image Alt Text"
-                  value={formData.media[index].alt}
-                  onChange={handleChange}
-                />
-              </div>
-            ))}
+            {formData.media.map((media, index) => (
+  <div key={index} className={styles.mediaField}>
+    <input
+      type="url"
+      name={`media-${index}-url`}
+      placeholder="Image URL"
+      value={media.url || ''}
+      onChange={handleChange}
+      required
+    />
+    <input
+      type="text"
+      name={`media-${index}-alt`}
+      placeholder="Image Alt Text"
+      value={media.alt || ''}
+      onChange={handleChange}
+    />
+    {index > 0 && (
+      <button type="button" onClick={() => handleDeleteMedia(index)}>
+        Remove
+      </button>
+    )}
+  </div>
+))}
+<div className={styles.mediaButtons}>
+  <button type="button" onClick={handleAddMedia}>+ Add Media</button>
+</div>
           </div>
 
           <div className={styles.fieldGroup}>
@@ -336,6 +406,16 @@ const EditVenue = () => {
           </button>
         </form>
       </section>
+      </div>
+
+      {showPopup && (
+        <CostumPopup
+  message={popupMessage}
+  onClose={closePopup}
+  showButtons={false}
+/>
+)}
+
     </motion.div>
   );
 };

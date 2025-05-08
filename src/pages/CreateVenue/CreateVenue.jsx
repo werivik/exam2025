@@ -109,12 +109,23 @@ const CreateVenue = () => {
       };
     } 
     else {
-      updatedFormData = {
-        ...formData,
-        [name]: (name === 'price' || name === 'maxGuests') ? Number(value) : value
-      };
-    }
-  
+      let newValue = value;    
+      if (name === 'price' || name === 'maxGuests') {
+        if (!/^\d*$/.test(newValue)) return;
+        newValue = newValue.replace(/^0+(?!$)/, '');
+    
+        updatedFormData = {
+          ...formData,
+          [name]: newValue === '' ? 0 : Number(newValue)
+        };
+      } 
+      else {
+        updatedFormData = {
+          ...formData,
+          [name]: newValue
+        };
+      }
+    }    
     setFormData(updatedFormData);
     validateFields(updatedFormData);
   };
@@ -278,22 +289,24 @@ const CreateVenue = () => {
         <div className={styles.fieldGroupPrice}>
           <label>Price Per Night</label>
           <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            required
-          />
+  type="text"
+  name="price"
+  value={formData.price.toString()}
+  onChange={handleChange}
+  required
+  inputMode="numeric"
+/>
         </div>
         <div className={styles.fieldGroupGuests}>
           <label>Guest Limit</label>
           <input
-            type="number"
-            name="maxGuests"
-            value={formData.maxGuests}
-            onChange={handleChange}
-            required
-          />
+  type="text"
+  name="maxGuests"
+  value={formData.maxGuests.toString()}
+  onChange={handleChange}
+  required
+  inputMode="numeric"
+/>
         </div>
         <div className={styles.fieldGroupMeta}>
           <label>Meta Tags</label>

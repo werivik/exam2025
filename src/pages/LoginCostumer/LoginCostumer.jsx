@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './LoginCostumer.module.css';
 import { motion } from "framer-motion";
 import Buttons from '../../components/Buttons/Buttons';
-
 import { loginCostumer } from '../../auth/login';
 
 const pageVariants = {
