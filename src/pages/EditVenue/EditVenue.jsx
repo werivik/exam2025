@@ -102,9 +102,16 @@ const EditVenue = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    if (name.startsWith('media-')) {
+    const { name, value, checked, type } = e.target;
+  
+    if (type === 'checkbox' && name === 'meta') {
+      const metaKey = e.target.nextSibling.textContent.trim().toLowerCase();
+      setFormData((prev) => ({
+        ...prev,
+        meta: { ...prev.meta, [metaKey]: checked },
+      }));
+    } 
+    else if (name.startsWith('media-')) {
       const parts = name.split('-');
       const index = parseInt(parts[1], 10);
       const field = parts[2];
@@ -119,20 +126,13 @@ const EditVenue = () => {
         location: { ...formData.location, [field]: value },
       });
     } 
-    else if (name === 'meta') {
-      const [metaKey, metaValue] = value.split('=');
-      setFormData({
-        ...formData,
-        meta: { ...formData.meta, [metaKey]: metaValue === 'true' },
-      });
-    } 
     else {
       setFormData({
         ...formData,
         [name]: name === 'price' || name === 'maxGuests' ? Number(value) : value,
       });
     }
-  };
+  };  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -251,46 +251,42 @@ const EditVenue = () => {
           <div className={styles.fieldGroup}>
             <label>Meta Tags</label>
             <div>
-              <label>
-                <input
-                  type="checkbox"
-                  name="meta"
-                  value="wifi=true"
-                  onChange={handleChange}
-                  checked={formData.meta.wifi}
-                />
-                Wifi
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  name="meta"
-                  value="parking=true"
-                  onChange={handleChange}
-                  checked={formData.meta.parking}
-                />
-                Parking
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  name="meta"
-                  value="breakfast=true"
-                  onChange={handleChange}
-                  checked={formData.meta.breakfast}
-                />
-                Breakfast
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  name="meta"
-                  value="pets=true"
-                  onChange={handleChange}
-                  checked={formData.meta.pets}
-                />
-                Pets
-              </label>
+            <label>
+  <input
+    type="checkbox"
+    name="meta"
+    onChange={handleChange}
+    checked={formData.meta.wifi}
+  />
+  Wifi
+</label>
+<label>
+  <input
+    type="checkbox"
+    name="meta"
+    onChange={handleChange}
+    checked={formData.meta.parking}
+  />
+  Parking
+</label>
+<label>
+  <input
+    type="checkbox"
+    name="meta"
+    onChange={handleChange}
+    checked={formData.meta.breakfast}
+  />
+  Breakfast
+</label>
+<label>
+  <input
+    type="checkbox"
+    name="meta"
+    onChange={handleChange}
+    checked={formData.meta.pets}
+  />
+  Pets
+</label>
             </div>
           </div>
 
