@@ -5,8 +5,6 @@ export function headers(accessToken = "") {
   headers.append("Content-Type", "application/json");
   headers.append("X-Noroff-API-Key", API_KEY);
 
-  console.log("Headers being sent:", headers);
-
   if (accessToken) {
     headers.append("Authorization", `Bearer ${accessToken}`);
   }

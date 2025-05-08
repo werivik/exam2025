@@ -137,19 +137,19 @@ const EditVenue = () => {
       });
     } 
     else {
+      if (name === 'price' || name === 'maxGuests') {
+        newValue = newValue.replace(/^0+(?!$)/, '');
+  
+        if (/^\d*$/.test(newValue)) {
+          newValue = Number(newValue);
+        }
+      }
+  
       setFormData({
         ...formData,
-        [name]: name === 'price' || name === 'maxGuests' ? Number(value) : value,
+        [name]: newValue,
       });
     }
-    if (name === 'price' || name === 'maxGuests') {
-      newValue = newValue.replace(/^0+(?!$)/, '');
-      if (!/^\d*$/.test(newValue)) return;
-    }
-    setFormData({
-      ...formData,
-      [name]: name === 'price' || name === 'maxGuests' ? Number(newValue) : newValue,
-    });
   };  
 
   const handleAddMedia = () => {
