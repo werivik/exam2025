@@ -22,7 +22,7 @@ const VenueCardSecondType = ({ venue, onClick }) => {
 <div className={styles.starRating}>
   <span>{venue.rating?.toFixed(1) || "0.0"}</span>
   <div className={styles.starRow}>
-    {[...Array(5)].map((_, i) => (
+    {[...Array(1)].map((_, i) => (
       <img
         key={i}
         src={stars}

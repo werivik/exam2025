@@ -189,6 +189,7 @@ const CreateVenue = () => {
         country: formData.location.country,
         continent: formData.location.continent,
       },
+      status: 'public',
     };    
 
     const dataToSend = transformedFormData;
@@ -254,7 +255,7 @@ const CreateVenue = () => {
     if (popup.isVisible && popup.type === 'success') {
       const timer = setTimeout(() => {
         setPopup({ isVisible: false, message: '', type: '' });
-        navigate('/profile');
+        navigate('/admin-profile');
       }, 2000);
   
       return () => clearTimeout(timer);
