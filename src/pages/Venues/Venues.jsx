@@ -220,7 +220,7 @@ const Venues = () => {
   useEffect(() => {
     const fetchVenues = async () => {
       try {
-        const response = await fetch(`${VENUES}?sort=rating&sortOrder=desc`, {
+        const response = await fetch(`${VENUES}`, {
           method: 'GET',
           headers: headers(),
         });
@@ -228,6 +228,8 @@ const Venues = () => {
 
         const data = await response.json();
         const venuesData = data.data || [];
+
+        const shuffledVenues = shuffleArray(venuesData);
 
         const normalizedVenues = venuesData.map(venue => ({
           ...venue,
@@ -300,6 +302,14 @@ setFilters(prev => ({
     fetchVenues();
   }, []);
 
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };  
+
   useEffect(() => {
     const parsedFilters = {
       continent: searchParams.get("continent") || '',
@@ -360,8 +370,8 @@ setFilters(prev => ({
       const matchesGuests = venue.maxGuests >= totalGuests;
   
       const matchesRating = filters.ratings.length > 0
-        ? filters.ratings.includes(Math.floor(venue.rating))
-        : true;
+      ? filters.ratings.includes(Math.floor(venue.rating || 0))
+      : true;       
   
       const matchesMeta = Object.keys(filters.meta).every(metaKey => {
         return filters.meta[metaKey] === false || venue.meta?.[metaKey] === true;
