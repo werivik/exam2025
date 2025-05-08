@@ -220,10 +220,11 @@ const Venues = () => {
   useEffect(() => {
     const fetchVenues = async () => {
       try {
-        const response = await fetch(`${VENUES}`, {
+        const response = await fetch(`${VENUES}?_owner=true`, {
           method: 'GET',
           headers: headers(),
         });
+        
         if (!response.ok) throw new Error("Failed to fetch venues");
 
         const data = await response.json();

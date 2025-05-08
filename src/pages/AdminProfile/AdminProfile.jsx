@@ -8,6 +8,7 @@ import defaultAvatar from '/media/images/mdefault.jpg';
 import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType.jsx';
 import Buttons from '../../components/Buttons/Buttons';
 import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
+import CostumPopup from '../../components/CostumPopup/CostumPopup';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -24,6 +25,7 @@ const AdminProfile = () => {
   const [userData, setUserData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
   const [showPopup, setShowPopup] = useState(false);
 
@@ -139,9 +141,14 @@ const AdminProfile = () => {
       console.error('Missing token or name in localStorage');
       return;
     }
+
+    if (/\s/.test(newName)) {
+      setUsernameError('Username cannot contain spaces');
+      return;
+    }
   
     const updateData = {};
-    if (newName) updateData.name = newName;
+    if (newName && newName !== userData.name) updateData.name = newName;
   
     const avatarData = newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName || username}'s avatar` } : undefined;
     if (avatarData) updateData.avatar = avatarData;
@@ -159,9 +166,14 @@ const AdminProfile = () => {
       });
   
       const data = await response.json();
+      console.log('Response Data:', data);
       if (response.ok) {
         setUserData(data.data);
         setIsEditing(false);
+
+        if (newName && newName !== userData.name) {
+          localStorage.setItem('username', newName);
+        }
       } 
       else {
         console.error('Failed to update profile', data.errors);

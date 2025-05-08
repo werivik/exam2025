@@ -189,7 +189,6 @@ const CreateVenue = () => {
         country: formData.location.country,
         continent: formData.location.continent,
       },
-      status: 'public',
     };    
 
     const dataToSend = transformedFormData;

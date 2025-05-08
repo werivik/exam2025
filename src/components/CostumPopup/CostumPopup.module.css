@@ -20,3 +20,42 @@
     font-size: 2rem;
   }
   
+  .popupActions {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .yesButton {
+    background-color: #B88A44;
+    font-size: 1.125rem;
+    border: none;
+    color: #1F1B17;
+    border-radius: 15px;
+    width: 50px;
+    height: 25px;
+    text-align: center;
+    transition: 0.25s;
+  }
+
+  .yesButton:hover, .noButton:hover {
+    cursor: pointer;
+    transition: 0.25s;
+    background-color: #6B7A3A;
+    color: #1F1B17;
+  }
+
+  .noButton {
+    background-color: #1F1B17;
+    font-size: 1rem;
+    border: none;
+    color: white;
+    border-radius: 15px;
+    width: 50px;
+    height: 25px;
+    text-align: center;
+    transition: 0.25s;
+  }

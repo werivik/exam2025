@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";
 import styles from './VenueDetailsPopup.module.css';
 import Buttons from '../../components/Buttons/Buttons';
+import CustomPopup from '../CostumPopup/CostumPopup';
 import { headers } from '../../headers';
 import { VENUE_DELETE } from '../../constants';
 
@@ -10,37 +11,11 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [editedVenue, setEditedVenue] = useState(selectedVenue);
+  const [isConfirmDeleteVisible, setIsConfirmDeleteVisible] = useState(false);
 
   useEffect(() => {
     setEditedVenue(selectedVenue);
   }, [selectedVenue]);
-
-  const handleDelete = async () => {
-    const token = localStorage.getItem('accessToken');
-    if (!token || !selectedVenue?.id) {
-      console.error('Missing token or venue ID');
-      return;
-    }
-
-    try {
-      const url = VENUE_DELETE.replace('<id>', selectedVenue.id);
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: headers(token),
-      });
-
-      if (response.ok) {
-        alert('Venue deleted successfully!');
-        closeModal();
-      } 
-      else {
-        console.error('Failed to delete venue');
-      }
-    } 
-    catch (error) {
-      console.error('Error deleting venue:', error);
-    }
-  };
 
   const handleEditClick = () => {
     navigate(`/edit-venue/${selectedVenue.id}`, { state: { venue: selectedVenue } });
@@ -95,6 +70,47 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
   const handleClose = () => {
     setIsEditing(false);
     closeModal();
+  };
+
+  const openDeleteConfirmation = () => {
+    setIsConfirmDeleteVisible(true);
+  };
+  
+  const closeDeleteConfirmation = () => {
+    setIsConfirmDeleteVisible(false);
+  };
+
+  const handleDeleteConfirm = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token || !selectedVenue?.id) {
+      console.error('Missing token or venue ID');
+      return;
+    }  
+
+    try {
+      const url = VENUE_DELETE.replace('<id>', selectedVenue.id);
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: headers(token),
+      });
+  
+      if (response.ok) {
+        closeModal();
+        window.location.reload();
+      } 
+      else {
+        console.error('Failed to delete venue');
+      }
+    } 
+    catch (error) {
+      console.error('Error deleting venue:', error);
+    }
+  
+    setIsConfirmDeleteVisible(false);
+  };
+  
+  const handleDelete = () => {
+    openDeleteConfirmation();
   };
 
   return (
@@ -164,6 +180,16 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
             </div>
           </div>
         )}
+
+{isConfirmDeleteVisible && (
+  <CustomPopup
+    message="Are you sure you want to delete this venue?"
+    onClose={closeDeleteConfirmation}
+    onConfirm={handleDeleteConfirm}
+    onCancel={closeDeleteConfirmation}
+    disableAutoClose={true}
+  />
+)}
       </motion.div>
     </motion.div>
   );
