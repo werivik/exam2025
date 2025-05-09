@@ -117,6 +117,74 @@
     height: 40px;
   }
 
+
+
+
+.sortDropdown {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 20px;
+  margin: 10px 0;
+  margin-right: -75px;
+}
+
+.sortDropdown label {
+  font-weight: bold;
+  color: #333;
+}
+
+.sortDropdown select {
+  padding: 10px 15px;
+  height: 35px;
+  font-size: 1rem;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  appearance: none;
+  position: relative;
+}
+
+.sortDropdown select:hover {
+  border-color: #1F1B17;
+}
+
+.sortDropdown select:focus {
+  border-color: #1F1B17;
+  outline: none;
+}
+
+.sortDropdown select::after {
+  content: "▼";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.sortDropdown select option {
+  padding: 10px;
+  background-color: #fff;
+  color: #333;
+  font-size: 16px;
+}
+
+.sortDropdown select option:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.sortDropdown select:active option {
+  background-color: #e0e0e0;
+}
+
+
+
+
+
   @media (min-width: 350px) {
     .loadMoreButton {
       display: none;
