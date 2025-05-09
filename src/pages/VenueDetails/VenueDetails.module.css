@@ -12,6 +12,7 @@
 }
 .pageStyle {
     width: 80%;
+    margin-top: 75px;
     position: relative;
 }
 .hotelInfoTop {
@@ -36,12 +37,11 @@
     margin-bottom: 10px;
 }
 .titleLocation p {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     height: 100px;
     font-weight: 400;
     margin-bottom: 10px;
     margin-top: 0;
-    font-style: italic;
     display: flex;
     align-items: center;
 }
@@ -54,7 +54,6 @@
     display: flex;
     flex-direction: row;
     overflow: hidden;
-    margin-top: 50px;
 }
 .slideshowLeft {
     width: 20%;
@@ -250,11 +249,12 @@
     background-color: white;
 }
 .hotelInfoRight {
+    position: sticky;
     width: 40%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 50px;
-    position: relative;
     background-color: white;
     padding: 15px;
     padding-bottom: 35px;
@@ -491,7 +491,6 @@
 .maxGuestsSecond {
   display: none;
 }
-
 .starRating {
   position: relative;
   height: 50px;
@@ -501,17 +500,14 @@
   align-items: center;
   margin-top: 15px;
 }
-
 .starRating img {
   width: 25px;
   height: 25px;
 }
-
 .pricepernight {
   opacity: 75%;
   font-size: 1rem;
 }
-
 @media (max-width:1250px) {
   .hotelInfoBottom {
     flex-direction: column;

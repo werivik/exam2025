@@ -348,55 +348,42 @@ const VenueDetails = () => {
             <div className={styles.dividerLine}></div>
             {venue.meta && (
               <div className={styles.meta}>
-                <ul>
-                  <li>
+                    <ul>
+                    <li>
                     <div className={styles.maxGuestsLeft}>
                       <img src={crowd} className={styles.crowdIcon}></img>
                       <p>{venue.maxGuests}</p>
                     </div>
                   </li>
-                  <li>
-                    {venue.meta.wifi ? (
-                      <div className={styles.included}>
-                      </div>
-                    ) : (
-                      <div className={styles.notIncluded}>
-                      </div>
-                    )}
-                    <i className="fa-solid fa-wifi" style={{ opacity: venue.meta.wifi ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.wifi ? 1 : 0.5 }}>Wi-Fi</p>
-                  </li>
-                  <li>
-                    {venue.meta.parking ? (
-                      <div className={styles.included}>
-                      </div>
-                    ) : (
-                      <div className={styles.notIncluded}>
-                        <i className="fa-solid fa-xmark"></i>
-                      </div>
-                    )}
-                    <i className="fa-solid fa-car" style={{ opacity: venue.meta.parking ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.parking ? 1 : 0.5 }}>Parking</p>
-                  </li>
-                  <li>
-                    {venue.meta.breakfast ? (
-                      <div className={styles.included}>
-                      </div>
-                    ) : (
-                      <div className={styles.notIncluded}>
-                      </div>
-                    )}
-                    <i className="fa-solid fa-utensils" style={{ opacity: venue.meta.breakfast ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.breakfast ? 1 : 0.5 }}>Breakfast</p>
-                  </li>
-                  <li>
-                    {venue.meta.pets ? (
-                      <div className={styles.included}>
-                      </div>
-                    ) : (
-                      <div className={styles.notIncluded}>
-                      </div>
-                    )}
-                    <i className="fa-solid fa-paw" style={{ opacity: venue.meta.pets ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.pets ? 1 : 0.5 }}>Pets Allowed</p>
-                  </li>
-                </ul>
+      {venue.meta.wifi && (
+        <li>
+          <div className={styles.included}></div>
+          <i className="fa-solid fa-wifi"></i>
+          <p>Wi-Fi</p>
+        </li>
+      )}
+      {venue.meta.parking && (
+        <li>
+          <div className={styles.included}></div>
+          <i className="fa-solid fa-car"></i>
+          <p>Parking</p>
+        </li>
+      )}
+      {venue.meta.breakfast && (
+        <li>
+          <div className={styles.included}></div>
+          <i className="fa-solid fa-utensils"></i>
+          <p>Breakfast</p>
+        </li>
+      )}
+      {venue.meta.pets && (
+        <li>
+          <div className={styles.included}></div>
+          <i className="fa-solid fa-paw"></i>
+          <p>Pets Allowed</p>
+        </li>
+      )}
+    </ul>
               </div>
             )}
             {owner && (
