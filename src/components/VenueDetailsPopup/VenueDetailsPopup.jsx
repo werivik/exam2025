@@ -6,9 +6,12 @@ import Buttons from '../../components/Buttons/Buttons';
 import CustomPopup from '../CostumPopup/CostumPopup';
 import { headers } from '../../headers';
 import { VENUE_DELETE } from '../../constants';
+import slideshowPrev from "/media/icons/slideshow-next-button.png";
+import slideshowNext from "/media/icons/slideshow-next-button.png";
 
 const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImage, nextImage, userRole, isLoading = false }) => {
   const navigate = useNavigate();
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [editedVenue, setEditedVenue] = useState(selectedVenue);
   const [isConfirmDeleteVisible, setIsConfirmDeleteVisible] = useState(false);
@@ -113,6 +116,14 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
     openDeleteConfirmation();
   };
 
+  const handlePrevImage = (mediaLength) => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + mediaLength) % mediaLength);
+  };
+
+  const handleNextImage = (mediaLength) => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % mediaLength);
+  };
+  
   return (
     <motion.div
       className={styles.modalOverlay}
@@ -138,25 +149,34 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
             </button>
 
             <div className={styles.bookedVenueImageSlideshow}>
-              {selectedVenue?.media && selectedVenue.media.length > 0 ? (
-                <div className={styles.imageSlider}>
-                  <img
-                    src={selectedVenue.media[0].url}
-                    alt={selectedVenue.media[0].alt || "Venue Image"}
-                    className={styles.slideshowImage}
-                  />
-                  <button className={styles.prevButton} onClick={prevImage}>
-                    Previous
-                  </button>
-                  <button className={styles.nextButton} onClick={nextImage}>
-                    Next
-                  </button>
-                </div>
-              ) : (
-                <p>No images available for this venue.</p>
-              )}
-            </div>
-
+            {selectedVenue?.media && selectedVenue.media.length > 0 ? (
+    <div className={styles.imageSlider}>
+      <img
+        src={selectedVenue.media[currentIndex].url}
+        alt={selectedVenue.media[currentIndex].alt || "Venue Image"}
+        className={styles.slideshowImage}
+      />
+      {selectedVenue.media.length > 1 && (
+        <>
+          <button 
+            className={styles.prevButton} 
+            onClick={() => handlePrevImage(selectedVenue.media.length)}
+          >
+            <img src={slideshowPrev} alt="Previous" />
+          </button>
+          <button 
+            className={styles.nextButton} 
+            onClick={() => handleNextImage(selectedVenue.media.length)}
+          >
+            <img src={slideshowNext} alt="Next" />
+          </button>
+        </>
+      )}
+    </div>
+  ) : (
+    <p>No images available for this venue.</p>
+  )}
+</div>
             <div className={styles.bookedVenueRight}>
               <div className={styles.bookedVenueVenueInfo}>
                 <h2>{selectedVenue.name}</h2>
