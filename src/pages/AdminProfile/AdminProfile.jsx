@@ -28,6 +28,7 @@ const AdminProfile = () => {
   const [usernameError, setUsernameError] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
   const [showPopup, setShowPopup] = useState(false);
+  const [showSigningOffPopup, setShowSigningOffPopup] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -108,8 +109,12 @@ const AdminProfile = () => {
   };
 
   const handleConfirmSignOut = () => {
+    setShowPopup(false);
+    setShowSigningOffPopup(true);
+
     localStorage.removeItem('accessToken');
     localStorage.removeItem('username');
+
     setShowPopup(false);
     setTimeout(() => {
       window.location.href = '/';
@@ -356,6 +361,16 @@ const AdminProfile = () => {
             hideBars={true}
           />
         )}
+
+        {showSigningOffPopup && (
+  <CustomPopup
+    message="Signing off..."
+    title=""
+    showButtons={false}
+    disableAutoClose={false}
+    hideBars={false}
+  />
+)}
     </motion.div>
   );
 };
