@@ -63,9 +63,10 @@
 
 
 
-  .popupWrapper {
+.popupWrapper {
   position: relative;
   display: inline-block;
+  padding: 10px;
 }
 
 .bar {
@@ -77,8 +78,8 @@
 
 /* TOP bar: from center to left */
 .topBar {
-  top: -10px;
-  left: 45%;
+  top: 0px;
+  left: 50%;
   height: 4px;
   width: 0;
   animation: topBarAnim 0.4s linear forwards;
@@ -87,8 +88,8 @@
 
 /* LEFT bar: from top to bottom */
 .leftBar {
-  top: -10px;
-  left: -10px;
+  top: 0px;
+  left: 0px;
   width: 4px;
   height: 0;
   animation: leftBarAnim 0.4s linear forwards;
@@ -97,8 +98,8 @@
 
 /* BOTTOM bar: from left to right */
 .bottomBar {
-  bottom: -10px;
-  left: -10px;
+  bottom: 0px;
+  left: 0px;
   height: 4px;
   width: 0;
   animation: bottomBarAnim 0.4s linear forwards;
@@ -108,8 +109,8 @@
 /* RIGHT bar: from bottom to top */
 .rightBar {
   top: auto;
-  bottom: -10px;
-  right: -10px;
+  bottom: 0px;
+  right: 0px;
   width: 4px;
   height: 0;
   animation: rightBarAnim 0.4s linear forwards;
@@ -118,8 +119,8 @@
 
 /* Final TOP segment: right to center */
 .topBarFinish {
-  top: -10px;
-  right: 45%;
+  top: 0px;
+  right: 0;
   height: 4px;
   width: 0;
   animation: topBarFinishAnim 0.4s linear forwards;
@@ -139,34 +140,34 @@
 /* Animations */
 @keyframes topBarAnim {
   to {
-    left: -10px;
-    width: 60%;
+    left: 0px;
+    width: 50%;
   }
 }
 
 @keyframes leftBarAnim {
   to {
-    height: 110%;
-    top: -10px;
+    height: 100%;
+    top: 0px;
   }
 }
 
 @keyframes bottomBarAnim {
   to {
-    width: 105%;
-    left: -10px;
+    width: 100%;
+    left: 0px;
   }
 }
 
 @keyframes rightBarAnim {
   to {
-    height: 110%;
+    height: 100%;
   }
 }
 
 @keyframes topBarFinishAnim {
   to {
-    width: 60%;
-    right: -10px;
+    width: 50%;
+    right: 0px;
   }
 }
