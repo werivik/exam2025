@@ -220,7 +220,7 @@ const Venues = () => {
   useEffect(() => {
     const fetchVenues = async () => {
       try {
-        const response = await fetch(`${VENUES}?_owner=true`, {
+        const response = await fetch(`${VENUES}`, {
           method: 'GET',
           headers: headers(),
         });

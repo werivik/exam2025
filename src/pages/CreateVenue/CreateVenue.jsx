@@ -194,13 +194,15 @@ const CreateVenue = () => {
     const dataToSend = transformedFormData;
 
     try {
-      const response = await fetch(VENUE_CREATE, {
+      const response = await fetch(`${VENUE_CREATE}?_published=true`, {
         method: 'POST',
         headers: headers(token),
         body: JSON.stringify(dataToSend),
       });
 
       const data = await response.json();
+      console.log('Created Venue Response:', data);
+
       if (response.ok) {
         setPopup({
           isVisible: true,
