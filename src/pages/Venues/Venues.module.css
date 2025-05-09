@@ -44,7 +44,8 @@
   max-width: 100%;
   gap: 35px;
   position: relative;
-  align-items: start
+  align-items: start;
+  margin-top: 150px;
 }
 .allHotels > * {
   aspect-ratio: 3 / 4;
@@ -116,28 +117,24 @@
     width: 62.5%;
     height: 40px;
   }
-
-
-
-
 .sortDropdown {
   display: flex;
   align-items: center;
   gap: 5px;
   font-size: 20px;
   margin: 10px 0;
-  margin-right: -75px;
+  margin-top: 25px;
 }
-
 .sortDropdown label {
   font-weight: bold;
   color: #333;
+  font-family: "Playfair Display", serif;
 }
-
 .sortDropdown select {
-  padding: 10px 15px;
   height: 35px;
-  font-size: 1rem;
+  padding-left: 10px;
+  padding-right: 5px;
+  font-size: 15px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 15px;
@@ -145,17 +142,15 @@
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   appearance: none;
   position: relative;
+  font-family: "Playfair Display", serif;
 }
-
 .sortDropdown select:hover {
   border-color: #1F1B17;
 }
-
 .sortDropdown select:focus {
   border-color: #1F1B17;
   outline: none;
 }
-
 .sortDropdown select::after {
   content: "▼";
   position: absolute;
@@ -164,27 +159,20 @@
   transform: translateY(-50%);
   pointer-events: none;
 }
-
 .sortDropdown select option {
   padding: 10px;
   background-color: #fff;
   color: #333;
   font-size: 16px;
+  font-family: "Playfair Display", serif;
 }
-
 .sortDropdown select option:hover {
   background-color: #f1f1f1;
   cursor: pointer;
 }
-
 .sortDropdown select:active option {
   background-color: #e0e0e0;
 }
-
-
-
-
-
   @media (min-width: 350px) {
     .loadMoreButton {
       display: none;

@@ -534,8 +534,7 @@ useEffect(() => {
     setFilteredVenues={setFilteredVenues}
     setNoMatches={setNoMatches}
   />
-          </div>
-<div className={styles.sortDropdown}>
+  <div className={styles.sortDropdown}>
   <label htmlFor="sort">Sort by:</label>
   <select
     id="sort"
@@ -550,6 +549,7 @@ useEffect(() => {
     <option value="ratingHighLow">Rating: High to Low</option>
   </select>
 </div>
+          </div>
             <Buttons size='medium' version='v1' onClick={toggleSidebar}>
               Filters
             </Buttons>
