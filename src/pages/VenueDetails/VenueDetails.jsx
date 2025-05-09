@@ -7,7 +7,7 @@ import { isLoggedIn } from '../../auth/auth';
 import { handleBookingSubmit } from '../../auth/booking';
 import { handleFavoriteToggle } from '../../auth/favorite';
 import slideshowNext from "/media/icons/slideshow-next-button.png";
-import slideshowPrev from "/media/icons/slideshow-next-button.png";
+import slideshowPrev from "/media/icons/slideshow-prev-button.png";
 import star from "/media/rating/christmas-stars.png";
 import heartEmpty from "/media/icons/heartempty.png";
 import heartFull from "/media/icons/heartfull.png";

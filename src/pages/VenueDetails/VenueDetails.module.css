@@ -23,7 +23,6 @@
     align-items: center;
     width: 100%;
     height: auto;
-    margin-bottom: 15px;
 }
 .titleLocation {
     display: flex;
@@ -143,6 +142,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    z-index: 888;
 }
 .slideshowButtons img {
     width: 45px;
@@ -151,7 +151,7 @@
     cursor: pointer;
 }
 .slideshowButtonPrev {
-    transform: scaleX(-1);
+  margin-left: -1px;
 }
 .slideshowProgress {
     position: absolute;
@@ -168,6 +168,7 @@
     transform: translate(-50%);
     border-radius: 15px 15px 0px 0px;
     font-size: 1rem;
+    z-index: 888;
 }
 .noSlideshow {
     position: relative;
@@ -517,6 +518,29 @@
 .maxGuestsFirst span, .maxGuestsSecond span {
   font-size: 1.125rem;
 }
+.goUpButton {
+  position: fixed;
+  z-index: 999;
+  bottom: 10%;
+  right: 3%;
+  background-color: white;
+  border-radius: 99px;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #1F1B17;
+  transition: 0.25s;
+}
+.goUpButton:hover {
+  background-color: #1F1B17;
+  color: white;
+  transition: 0.25s;
+  cursor: pointer;
+}
+
 @media (max-width:1250px) {
   .hotelInfoBottom {
     flex-direction: column;
