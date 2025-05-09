@@ -133,6 +133,8 @@
     height: 100%;
     width: 100%;
     border-radius: 5px;
+    background-image: url(/media/logo/loadingScreen.png);
+    background-position: center;
 }
 .slideshowButtons {
     position: absolute;
@@ -182,6 +184,8 @@
     border-radius: 5px;
     height: 100%;
     width: 100%;
+    background-image: url(/media/logo/loadingScreen.png);
+    background-position: center;
 }
 .hotelInfoBottom {
     font-size: 1.5rem;
