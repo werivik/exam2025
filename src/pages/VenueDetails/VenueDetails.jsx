@@ -405,6 +405,7 @@ const VenueDetails = () => {
                 </div>
               </div>
             )}
+            <div className={styles.dividerLine}></div>
             <div className={styles.venueCreationDates}>
               <div className={styles.venueDates}>
   <p>Created</p>
