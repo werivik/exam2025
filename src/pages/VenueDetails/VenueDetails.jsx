@@ -506,7 +506,7 @@ const VenueDetails = () => {
       <div className={styles.dividerLine}></div>
 
       <div className={styles.maxGuestsPrice}>
-      <p className={styles.maxGuestsSecond}><strong>Max Guests</strong> {venue.maxGuests}</p>
+      <p className={styles.maxGuestsSecond}><strong>{venue.maxGuests}</strong> <span>Max Guests</span></p>
       <div className={styles.bookPrice}>
         <p><span className={styles.totalPriceSpan}>Total Price</span><strong> ${totalPrice.toFixed(2)}</strong> <span>/ ${venue.price} per night</span></p>
 
@@ -526,7 +526,7 @@ const VenueDetails = () => {
 
       <div className={styles.dividerLine}></div>
 
-      <p className={styles.maxGuestsFirst}><strong>Max Guests</strong> {venue.maxGuests}</p>
+      <p className={styles.maxGuestsFirst}><strong>{venue.maxGuests}</strong> <span>Max Guests</span></p>
 
     </>
   ) : (
