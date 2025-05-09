@@ -15,53 +15,6 @@
     margin-top: 75px;
     position: relative;
 }
-.hotelInfoTop {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: auto;
-}
-.titleLocation {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    height: 200px;
-    font-family: "Playfair Display", serif;
-}
-.titleLocation h1 {
-    font-size: 3.5rem;
-    margin-bottom: 10px;
-    margin: 0;
-    padding: 0;
-    margin-bottom: -15px;
-}
-.titleLocation p {
-    font-size: 1.5rem;
-    height: 100px;
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-    margin-bottom: -15px;
-}
-.starRating {
-  position: relative;
-  height: 50px;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-}
-.starRating img {
-  width: 25px;
-  height: 25px;
-}
 .slideshowSection {
     background-color: white;
     border-radius: 10px;
@@ -196,6 +149,54 @@
     justify-content: space-between;
     gap: 5%;
     font-family: "Playfair Display", serif;
+}
+.hotelInfoTop {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: auto;
+}
+.titleLocation {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    height: 200px;
+    font-family: "Playfair Display", serif;
+}
+.titleLocation h1 {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    margin: 0;
+    padding: 0;
+    margin-bottom: -15px;
+}
+.titleLocation p {
+    font-size: 1.5rem;
+    height: 100px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    margin-bottom: -15px;
+}
+.starRating {
+  position: relative;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0;
+  padding: 0;
+}
+.starRating img {
+  width: 25px;
+  height: 25px;
 }
 .hotelInfoLeft {
     width: 55%;
@@ -545,7 +546,26 @@
   transition: 0.25s;
   cursor: pointer;
 }
-
+.venueCreationDates {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 75px;
+}
+.venueDates {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.venueDates p {
+  opacity: 75%;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+.venueDates span {
+  font-size: 1.25rem;
+}
 @media (max-width:1250px) {
   .hotelInfoBottom {
     flex-direction: column;

@@ -135,10 +135,12 @@
     position: relative;
     margin-top: 50px;
     flex-grow: 1;
+    overflow: hidden;
 }
 .rightBorder {
     width: 100%;
     height: auto;
+    overflow: hidden;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -237,7 +239,6 @@
   .popup p {
     font-size: 1.125rem;
   }
-
   .bookings {
     scroll-margin-top: 100px;
   }
@@ -247,11 +248,9 @@
   .edit {
     scroll-margin-top: 100px;
   }
-  
   .allBookings {
     height: 100%;
   }
-
   .costumerBookings {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

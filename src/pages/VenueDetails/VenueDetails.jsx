@@ -263,6 +263,11 @@ const VenueDetails = () => {
   const currentImage = mediaArray[currentSlide]?.url;
   const currentAlt = mediaArray[currentSlide]?.alt || venue.name;
 
+  const formatDate = (isoString) => {
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  return new Date(isoString).toLocaleDateString(undefined, options);
+};
+
   return (
     <motion.div
     className={styles.pageContent}
@@ -400,6 +405,16 @@ const VenueDetails = () => {
                 </div>
               </div>
             )}
+            <div className={styles.venueCreationDates}>
+              <div className={styles.venueDates}>
+  <p>Created</p>
+  <span>{formatDate(venue.created)}</span>
+</div>
+<div className={styles.venueDates}>
+  <p>Updated</p>
+  <span>{formatDate(venue.updated)}</span>
+</div>
+            </div>
           </div>
           <div className={styles.hotelInfoRight}>
   {userLoggedIn ? (
@@ -546,7 +561,6 @@ const VenueDetails = () => {
     </div>
   )}
 </div>
-
         </div>
       </div>    
       {showBookingPopup && (
