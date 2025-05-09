@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Buttons from '../../components/Buttons/Buttons';
 
 import { loginAdmin } from '../../auth/login';
+import CustomPopup from '../../components/CostumPopup/CostumPopup';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -64,16 +65,14 @@ const LoginAdmin = () => {
         setShowPopup(true);
         setTimeout(() => {
           navigate('/admin-profile');
-        }, 1500);
+        }, 2000);
       } 
     } 
-    
     catch (err) {
       setError(err.message || 'Something went wrong');
       console.error('Error during login:', err);
       triggerShake();
     } 
-    
     finally {
       setIsSubmitting(false);
     }
@@ -132,15 +131,15 @@ const LoginAdmin = () => {
       </div>
     </div>
 
-    {showPopup && (
-  <div className={styles.popupOverlay}>
-    <div className={styles.popup}>
-      <h2>Welcome back, {username}!</h2>
-      <p>Redirecting to your profile...</p>
-    </div>
-  </div>
-)}
-
+      {showPopup && (
+        <CustomPopup
+          message={`Welcome back, ${username}! Redirecting to your profile...`}
+          title="Login Successful"
+          onConfirm={() => navigate('/admin-profile')}
+          showButtons={false}
+          disableAutoClose={false}
+        />
+      )}
     </motion.div>
   );
 };

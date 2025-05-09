@@ -5,6 +5,7 @@ import { AUTH_REGISTER } from '../../constants';
 import { headers } from '../../headers';
 import { motion } from "framer-motion";
 import Buttons from '../../components/Buttons/Buttons';
+import CustomPopup from '../../components/CostumPopup/CostumPopup';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -74,7 +75,7 @@ const RegisterAdmin = () => {
 
       setTimeout(() => {
         navigate('/login-admin');
-      }, 1500);
+      }, 2000);
 
     } 
     
@@ -143,12 +144,13 @@ const RegisterAdmin = () => {
       </div>
 
       {showPopup && (
-        <div className={styles.popupOverlay}>
-          <div className={styles.popup}>
-            <h2>Welcome, {username}!</h2>
-            <p>Redirecting to login page...</p>
-          </div>
-        </div>
+        <CustomPopup
+          message={`Welcome, ${username}! Redirecting to the login page...`}
+          title="Registration Successful"
+          onConfirm={() => navigate('/login-admin')}
+          showButtons={false}
+          disableAutoClose={false}
+        />
       )}
     </motion.div>
   );

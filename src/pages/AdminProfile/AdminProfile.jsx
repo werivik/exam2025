@@ -8,7 +8,7 @@ import defaultAvatar from '/media/images/mdefault.jpg';
 import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType.jsx';
 import Buttons from '../../components/Buttons/Buttons';
 import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
-import CostumPopup from '../../components/CostumPopup/CostumPopup';
+import CustomPopup from '../../components/CostumPopup/CostumPopup';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -28,14 +28,12 @@ const AdminProfile = () => {
   const [usernameError, setUsernameError] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
   const [showPopup, setShowPopup] = useState(false);
-
   const [selectedVenue, setSelectedVenue] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [assignedVenues, setAssignedVenues] = useState([]);
   const [filteredVenues, setFilteredVenues] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all'); 
-
   const navigate = useNavigate();
   const editRef = useRef(null);
 
@@ -106,12 +104,20 @@ const AdminProfile = () => {
   };
 
   const handleSignOut = () => {
+    setShowPopup(true);
+  };
+
+  const handleConfirmSignOut = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('username');
-    setShowPopup(true);
+    setShowPopup(false);
     setTimeout(() => {
       window.location.href = '/';
-    }, 1500);
+    }, 2000);
+  };
+
+  const handleCancelSignOut = () => {
+    setShowPopup(false);
   };
 
   const handleEditProfile = () => {
@@ -247,7 +253,6 @@ const AdminProfile = () => {
               </div>
             </div>
           </section>
-
           <section className={styles.rightSection}>
             <div className={styles.rightBorder}>
               <div className={styles.bookings}>
@@ -327,14 +332,6 @@ const AdminProfile = () => {
           </section>
         </div>
 
-        {showPopup && (
-          <div className={styles.popupOverlay}>
-            <div className={styles.popup}>
-              <h2>Signing off...</h2>
-            </div>
-          </div>
-        )}
-
 {isModalVisible && selectedVenue && (
   <VenueDetailsPopup
     selectedVenue={selectedVenue}
@@ -347,8 +344,17 @@ const AdminProfile = () => {
     userRole="admin"
   />
 )}
-
       </div>
+        {showPopup && (
+          <CustomPopup
+            message="Are you sure you want to sign off?"
+            title="Signing off"
+            onConfirm={handleConfirmSignOut}
+            onCancel={handleCancelSignOut}
+            showButtons={true}
+            disableAutoClose={false}
+          />
+        )}
     </motion.div>
   );
 };

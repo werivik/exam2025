@@ -15,9 +15,11 @@
     padding: 20px;
     border-radius: 8px;
     text-align: center;
+    color: #1F1B17;
   }
   .popupContent p {
     font-size: 2rem;
+    color: #1F1B17;
   }
   
   .popupActions {
@@ -59,9 +61,6 @@
     text-align: center;
     transition: 0.25s;
   }
-
-
-
 
 .popupWrapper {
   position: relative;

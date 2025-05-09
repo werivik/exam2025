@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import styles from './RegisterCostumer.module.css';
 import { motion } from "framer-motion";
 import Buttons from '../../components/Buttons/Buttons';
-
+import CustomPopup from '../../components/CostumPopup/CostumPopup';
 import { registerCostumer } from '../../auth/register';
 
 const pageVariants = {
@@ -86,7 +86,7 @@ const RegisterCostumer = () => {
       setShowPopup(true);
       setTimeout(() => {
         navigate('/login-costumer');
-      }, 1500);
+      }, 2000);
     } 
     catch (err) {
       console.error('Registration error:', err);
@@ -178,14 +178,14 @@ const RegisterCostumer = () => {
       </div>
 
       {showPopup && (
-              <div className={styles.popupOverlay}>
-                <div className={styles.popup}>
-                <h2>Welcome, {formData.name}!</h2>
-                <p>Redirecting to Login page...</p>
-                </div>
-              </div>
+        <CustomPopup
+          message={`Welcome, ${formData.name}! Redirecting to the login page...`}
+          title="Registration Successful"
+          onConfirm={() => navigate('/login-costumer')}
+          showButtons={false}
+          disableAutoClose={false}
+        />
       )}
-
     </motion.div>
   );
 };
