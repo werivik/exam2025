@@ -468,10 +468,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 10px;
   }
   .loginMessage {
-    text-align: right;
+    text-align: center;
   }
   .successPopup {
     position: fixed;

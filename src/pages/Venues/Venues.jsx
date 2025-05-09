@@ -404,6 +404,12 @@ useEffect(() => {
   } 
   else if (sortOption === "priceHighLow") {
     sorted.sort((a, b) => (b.price || 0) - (a.price || 0));
+  }
+  else if (sortOption === "ratingLowHigh") {
+    sorted.sort((a, b) => (a.rating || 0) - (b.rating || 0));
+  }
+  else if (sortOption === "ratingHighLow") {
+    sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
   } 
   else if (sortOption === "all") {
     sorted = [...filtered];
@@ -529,7 +535,7 @@ useEffect(() => {
     setNoMatches={setNoMatches}
   />
           </div>
-          <div className={styles.sortDropdown}>
+<div className={styles.sortDropdown}>
   <label htmlFor="sort">Sort by:</label>
   <select
     id="sort"
@@ -540,9 +546,10 @@ useEffect(() => {
     <option value="az">A - Z</option>
     <option value="priceLowHigh">Price: Low to High</option>
     <option value="priceHighLow">Price: High to Low</option>
+    <option value="ratingLowHigh">Rating: Low to High</option>
+    <option value="ratingHighLow">Rating: High to Low</option>
   </select>
 </div>
-
             <Buttons size='medium' version='v1' onClick={toggleSidebar}>
               Filters
             </Buttons>
