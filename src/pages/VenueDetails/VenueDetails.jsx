@@ -8,7 +8,12 @@ import { handleBookingSubmit } from '../../auth/booking';
 import { handleFavoriteToggle } from '../../auth/favorite';
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
-import stars from "/media/rating/christmas-stars.png";
+import star from "/media/rating/christmas-stars.png";
+import heartEmpty from "/media/icons/heartempty.png";
+import heartFull from "/media/icons/heartfull.png";
+import heartGif from "/media/icons/heartgif.gif";
+import crowd from "/media/icons/crowd-icon.png";
+import money from "/media/icons/money.png";
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
@@ -268,15 +273,6 @@ const VenueDetails = () => {
     transition={{ duration: 0.5, ease: "easeInOut" }}
   >
       <div className={`${styles.pageStyle} ${showBookingPopup ? styles.blurred : ''}`}>
-        <div className={styles.hotelInfoTop}>
-          <div className={styles.titleLocation}>
-            <h1>{venue.name}</h1>
-            <p><i className="fa-solid fa-location-dot"></i>{venue.location?.address}, {venue.location?.city}, {venue.location?.country}</p>
-          </div>
-          <div className={styles.hotelInfoTopRight}>
-            <p className={styles.hotelRating}><strong>Rating:</strong> {venue.rating} <img src={stars} alt="Star" className={styles.singleStar} /></p>
-          </div>
-        </div>
         <div className={styles.slideshowSection}>
   {mediaArray.length >= 2 ? (
     <div className={styles.slideshowSection}>
@@ -340,19 +336,31 @@ const VenueDetails = () => {
         </div>
         <div className={styles.hotelInfoBottom}>
           <div className={styles.hotelInfoLeft}>
+          <div className={styles.hotelInfoTop}>
+          <div className={styles.titleLocation}>
+            <h1>{venue.name}</h1>
+            <p>{venue.location?.address}, {venue.location?.city}, {venue.location?.country}</p>
+            <div className={styles.starRating}><img src={star}></img>{venue.rating}</div>
+          </div>
+        </div>
             <p className={styles.description}><h3>Description</h3><br />{venue.description}</p>
+            <p>$ {venue.price} <span className={styles.pricepernight}>/per night</span></p>
+            <div className={styles.dividerLine}></div>
             {venue.meta && (
               <div className={styles.meta}>
-                <h3>Venue Amenities</h3>
                 <ul>
+                  <li>
+                    <div className={styles.maxGuestsLeft}>
+                      <img src={crowd} className={styles.crowdIcon}></img>
+                      <p>{venue.maxGuests}</p>
+                    </div>
+                  </li>
                   <li>
                     {venue.meta.wifi ? (
                       <div className={styles.included}>
-                        <i className="fa-solid fa-check"></i>
                       </div>
                     ) : (
                       <div className={styles.notIncluded}>
-                        <i className="fa-solid fa-xmark"></i>
                       </div>
                     )}
                     <i className="fa-solid fa-wifi" style={{ opacity: venue.meta.wifi ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.wifi ? 1 : 0.5 }}>Wi-Fi</p>
@@ -360,35 +368,30 @@ const VenueDetails = () => {
                   <li>
                     {venue.meta.parking ? (
                       <div className={styles.included}>
-                        <i className="fa-solid fa-check"></i>
                       </div>
                     ) : (
                       <div className={styles.notIncluded}>
                         <i className="fa-solid fa-xmark"></i>
                       </div>
                     )}
-                    <i className="fa-solid fa-car" style={{ opacity: venue.meta.parking ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.parking ? 1 : 0.5 }}>Free Parking</p>
+                    <i className="fa-solid fa-car" style={{ opacity: venue.meta.parking ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.parking ? 1 : 0.5 }}>Parking</p>
                   </li>
                   <li>
                     {venue.meta.breakfast ? (
                       <div className={styles.included}>
-                        <i className="fa-solid fa-check"></i>
                       </div>
                     ) : (
                       <div className={styles.notIncluded}>
-                        <i className="fa-solid fa-xmark"></i>
                       </div>
                     )}
-                    <i className="fa-solid fa-utensils" style={{ opacity: venue.meta.breakfast ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.breakfast ? 1 : 0.5 }}>Breakfast Included</p>
+                    <i className="fa-solid fa-utensils" style={{ opacity: venue.meta.breakfast ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.breakfast ? 1 : 0.5 }}>Breakfast</p>
                   </li>
                   <li>
                     {venue.meta.pets ? (
                       <div className={styles.included}>
-                        <i className="fa-solid fa-check"></i>
                       </div>
                     ) : (
                       <div className={styles.notIncluded}>
-                        <i className="fa-solid fa-xmark"></i>
                       </div>
                     )}
                     <i className="fa-solid fa-paw" style={{ opacity: venue.meta.pets ? 1 : 0.5 }}></i> <p style={{ opacity: venue.meta.pets ? 1 : 0.5 }}>Pets Allowed</p>
@@ -445,7 +448,6 @@ const VenueDetails = () => {
           />
         )}
       </div>
-
       <div className={styles.bookGuests}>
         <div className={styles.filterPeople}>
   <i className="fa-solid fa-person"></i>
@@ -512,8 +514,9 @@ const VenueDetails = () => {
   </div>
         </div>
       </div>
-
       {bookingError && <p className={styles.errorText}>{bookingError}</p>}
+
+      <div className={styles.dividerLine}></div>
 
       <div className={styles.maxGuestsPrice}>
       <p className={styles.maxGuestsSecond}><strong>Max Guests</strong> {venue.maxGuests}</p>
@@ -538,19 +541,6 @@ const VenueDetails = () => {
 
       <p className={styles.maxGuestsFirst}><strong>Max Guests</strong> {venue.maxGuests}</p>
 
-      <div className={styles.favoriteVenue}>
-      <div
-  className={styles.heartContainer}
-  onClick={async () => {
-    const newFavoriteStatus = !isFavorite;
-    setIsFavorite(newFavoriteStatus);
-    await handleFavoriteToggle(venue.id, newFavoriteStatus);
-  }}
->
-  <div className={`${styles.heart} ${isFavorite ? styles.active : ''}`} />
-</div>
-        <p>Add to Favorites</p>
-      </div>
     </>
   ) : (
     <div className={styles.loginReminder}>
