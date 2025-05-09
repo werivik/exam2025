@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 777;
+    z-index: 999;
   }
   .popupContent {
     background: #fff;
@@ -59,3 +59,114 @@
     text-align: center;
     transition: 0.25s;
   }
+
+
+
+
+  .popupWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.bar {
+  position: absolute;
+  background-color: #4caf50;
+  z-index: 1;
+  border-radius: 99px;
+}
+
+/* TOP bar: from center to left */
+.topBar {
+  top: -10px;
+  left: 45%;
+  height: 4px;
+  width: 0;
+  animation: topBarAnim 0.4s linear forwards;
+  animation-delay: 0s;
+}
+
+/* LEFT bar: from top to bottom */
+.leftBar {
+  top: -10px;
+  left: -10px;
+  width: 4px;
+  height: 0;
+  animation: leftBarAnim 0.4s linear forwards;
+  animation-delay: 0.4s;
+}
+
+/* BOTTOM bar: from left to right */
+.bottomBar {
+  bottom: -10px;
+  left: -10px;
+  height: 4px;
+  width: 0;
+  animation: bottomBarAnim 0.4s linear forwards;
+  animation-delay: 0.8s;
+}
+
+/* RIGHT bar: from bottom to top */
+.rightBar {
+  top: auto;
+  bottom: -10px;
+  right: -10px;
+  width: 4px;
+  height: 0;
+  animation: rightBarAnim 0.4s linear forwards;
+  animation-delay: 1.2s;
+}
+
+/* Final TOP segment: right to center */
+.topBarFinish {
+  top: -10px;
+  right: 45%;
+  height: 4px;
+  width: 0;
+  animation: topBarFinishAnim 0.4s linear forwards;
+  animation-delay: 1.6s;
+}
+
+/* Popup content sits on top */
+.popupContent {
+  position: relative;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  z-index: 2;
+}
+
+/* Animations */
+@keyframes topBarAnim {
+  to {
+    left: -10px;
+    width: 60%;
+  }
+}
+
+@keyframes leftBarAnim {
+  to {
+    height: 110%;
+    top: -10px;
+  }
+}
+
+@keyframes bottomBarAnim {
+  to {
+    width: 105%;
+    left: -10px;
+  }
+}
+
+@keyframes rightBarAnim {
+  to {
+    height: 110%;
+  }
+}
+
+@keyframes topBarFinishAnim {
+  to {
+    width: 60%;
+    right: -10px;
+  }
+}

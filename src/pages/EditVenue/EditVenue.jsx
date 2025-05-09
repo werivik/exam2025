@@ -70,7 +70,7 @@ const EditVenue = () => {
         return;
       }
 
-      const response = await fetch(VENUE_UPDATE.replace('<id>', id), {
+      const response = await fetch(`${VENUE_UPDATE}?_published=true`.replace('<id>', id), {
         method: 'PUT',
         headers: headers(token),
         body: JSON.stringify(transformedFormData),
