@@ -178,6 +178,8 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
   )}
 </div>
             <div className={styles.bookedVenueRight}>
+            <div className={styles.fadeOutDivTop}>
+            </div>
               <div className={styles.bookedVenueVenueInfo}>
                 <h2>{selectedVenue.name}</h2>
                 <p>{selectedVenue.rating} Stars</p>
@@ -197,6 +199,8 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
                   <Buttons size="small" version="v2" onClick={handleDelete}>Delete</Buttons>
                 </div>
               )}
+              <div className={styles.fadeOutDivBottom}>
+              </div>
             </div>
           </div>
         )}

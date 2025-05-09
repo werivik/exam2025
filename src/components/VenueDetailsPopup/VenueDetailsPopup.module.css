@@ -52,6 +52,7 @@
       overflow-y: auto;
       color: #1F1B17;
   }
+
   .bookedVenueRight h2 {
       font-size: 2.5rem;
       pointer-events: none;
@@ -134,5 +135,23 @@
         align-items: center;
         justify-content: flex-start;
         margin-top: 25px;
-        margin-bottom: 25px;
+        margin-bottom: 35px;
+    }
+
+    .fadeOutDivBottom {
+        background: #ffffff;
+        background: linear-gradient(0deg,rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+        width: 45%;
+        height: 50px;
+        position: absolute;
+        bottom: 0%;
+    }
+
+    .fadeOutDivTop {
+        background: #ffffff;
+        background: linear-gradient(180deg,rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+        width: 45%;
+        height: 50px;
+        position: absolute;
+        top: 0%;
     }
