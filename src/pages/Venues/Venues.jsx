@@ -50,6 +50,7 @@ const Venues = () => {
   const [availableRatings, setAvailableRatings] = useState([1, 2, 3, 4, 5]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
+  const [sortOption, setSortOption] = useState("all");
 
   const [continents, setContinents] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -350,52 +351,67 @@ setFilters(prev => ({
     setSearchParams(params);
   }, [filters, currentPage]);
 
-  useEffect(() => {
-    const filtered = venues.filter(venue => {
-      const normalizeString = (str) =>
-        str.toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
-      
-      const matchesContinent = filters.continent
-        ? normalizeString(venue.location?.continent || '').startsWith(normalizeString(filters.continent))
-        : true;
-      
-      const matchesCountry = filters.country
-        ? normalizeString(venue.location?.country || '').startsWith(normalizeString(filters.country))
-        : true;
-      
-      const matchesCity = filters.city
-        ? normalizeString(venue.location?.city || '').startsWith(normalizeString(filters.city))
-        : true;       
-  
-      const totalGuests = (filters.adults || 0) + (filters.children || 0) + (filters.assisted || 0);
-      const matchesGuests = venue.maxGuests >= totalGuests;
-  
-      const matchesRating = filters.ratings.length > 0
-      ? filters.ratings.includes(Math.floor(venue.rating || 0))
+useEffect(() => {
+  const filtered = venues.filter(venue => {
+    const normalizeString = (str) =>
+      str.toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
+    
+    const matchesContinent = filters.continent
+      ? normalizeString(venue.location?.continent || '').startsWith(normalizeString(filters.continent))
+      : true;
+    
+    const matchesCountry = filters.country
+      ? normalizeString(venue.location?.country || '').startsWith(normalizeString(filters.country))
+      : true;
+    
+    const matchesCity = filters.city
+      ? normalizeString(venue.location?.city || '').startsWith(normalizeString(filters.city))
       : true;       
-  
-      const matchesMeta = Object.keys(filters.meta).every(metaKey => {
-        return filters.meta[metaKey] === false || venue.meta?.[metaKey] === true;
-      });
-  
-      const matchesPrice =
-        (filters.priceMin === 0 || venue.price >= filters.priceMin) &&
-        (filters.priceMax === 0 || venue.price <= filters.priceMax);
-  
-      return (
-        matchesContinent &&
-        matchesCountry &&
-        matchesCity &&
-        matchesGuests &&
-        matchesRating &&
-        matchesMeta &&
-        matchesPrice
-      );
+
+    const totalGuests = (filters.adults || 0) + (filters.children || 0) + (filters.assisted || 0);
+    const matchesGuests = venue.maxGuests >= totalGuests;
+
+    const matchesRating = filters.ratings.length > 0
+    ? filters.ratings.includes(Math.floor(venue.rating || 0))
+    : true;       
+
+    const matchesMeta = Object.keys(filters.meta).every(metaKey => {
+      return filters.meta[metaKey] === false || venue.meta?.[metaKey] === true;
     });
-  
-    setFilteredVenues(filtered);
-    setNoMatches(filtered.length === 0);
-  }, [filters, venues]);
+
+    const matchesPrice =
+      (filters.priceMin === 0 || venue.price >= filters.priceMin) &&
+      (filters.priceMax === 0 || venue.price <= filters.priceMax);
+
+    return (
+      matchesContinent &&
+      matchesCountry &&
+      matchesCity &&
+      matchesGuests &&
+      matchesRating &&
+      matchesMeta &&
+      matchesPrice
+    );
+  });
+
+  let sorted = [...filtered];
+
+  if (sortOption === "az") {
+    sorted.sort((a, b) => a.name.localeCompare(b.name));
+  } 
+  else if (sortOption === "priceLowHigh") {
+    sorted.sort((a, b) => (a.price || 0) - (b.price || 0));
+  } 
+  else if (sortOption === "priceHighLow") {
+    sorted.sort((a, b) => (b.price || 0) - (a.price || 0));
+  } 
+  else if (sortOption === "all") {
+    sorted = [...filtered];
+  }
+
+  setFilteredVenues(sorted);
+  setNoMatches(filtered.length === 0);
+}, [filters, venues, sortOption]);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -513,6 +529,20 @@ setFilters(prev => ({
     setNoMatches={setNoMatches}
   />
           </div>
+          <div className={styles.sortDropdown}>
+  <label htmlFor="sort">Sort by:</label>
+  <select
+    id="sort"
+    value={sortOption}
+    onChange={(e) => setSortOption(e.target.value)}
+  >
+    <option value="all">All</option>
+    <option value="az">A - Z</option>
+    <option value="priceLowHigh">Price: Low to High</option>
+    <option value="priceHighLow">Price: High to Low</option>
+  </select>
+</div>
+
             <Buttons size='medium' version='v1' onClick={toggleSidebar}>
               Filters
             </Buttons>
