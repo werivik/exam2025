@@ -119,45 +119,42 @@ const Sidebar = ({
                 <span>Max: ${maxPrice}</span>
               </div>
               <div className={styles.priceInputSingle}>
-                <input
-                  type="number"
-                  value={filters.price || ""}
-                  placeholder={`The Minimum price is ${minPrice}`}
-                  min={minPrice}
-                  max={maxPrice}
-                  onChange={(e) => {
-                    const value = e.target.value;
+<input
+  type="number"
+  value={filters.priceMax || ""}
+  placeholder={`The Maximum price is ${maxPrice}`}
+  min={minPrice}
+  max={maxPrice}
+  onChange={(e) => {
+    const value = e.target.value;
 
-                    if (value === "") {
-                      handleFilterChange({ target: { name: "price", value: "" } });
-                    } 
-                    
-                    else {
-                      if (value[0] === "0" && value.length === 1) {
-                        return;
-                      }
-                      const numericValue = Math.max(minPrice, Math.min(maxPrice, parseInt(value)));
-                      handleFilterChange({ target: { name: "price", value: numericValue } });
-                    }
-
-                    filterVenuesByPrice();
-                  }}
-                />
+    if (value === "") {
+      handleFilterChange({ target: { name: "priceMax", value: "" } });
+    } 
+    else {
+      const numericValue = Math.max(minPrice, Math.min(maxPrice, parseInt(value)));
+      handleFilterChange({ target: { name: "priceMax", value: numericValue } });
+    }
+  }}
+/>
               </div>
               <div className={styles.sliderSingle}>
-                <input
-                  type="range"
-                  min={minPrice}
-                  max={maxPrice}
-                  value={filters.price || minPrice}
-                  onChange={(e) => {
-                    handleFilterChange({ target: { name: 'price', value: parseInt(e.target.value) } });
-                    filterVenuesByPrice();
-                  }}
-                  style={{
-                    background: `linear-gradient(to right, #1F1B17 ${(filters.price - minPrice) / (maxPrice - minPrice) * 100}%, #ddd ${(filters.price - minPrice) / (maxPrice - minPrice) * 100}%)`
-                  }}
-                />
+<input
+  type="range"
+  min={minPrice}
+  max={maxPrice}
+  value={filters.priceMax || maxPrice}
+  onChange={(e) => {
+    handleFilterChange({ target: { name: 'priceMax', value: parseInt(e.target.value) } });
+  }}
+  style={{
+    background: `linear-gradient(to right, #1F1B17 ${
+      ((filters.priceMax || maxPrice) - minPrice) / (maxPrice - minPrice) * 100
+    }%, #ddd ${
+      ((filters.priceMax || maxPrice) - minPrice) / (maxPrice - minPrice) * 100
+    }%)`
+  }}
+/>
               </div>
             </div>
 
