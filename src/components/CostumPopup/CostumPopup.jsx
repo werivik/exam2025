@@ -9,7 +9,8 @@ const CustomPopup = ({
   onCancel, 
   showButtons = true, 
   title = "", 
-  disableAutoClose = false
+  disableAutoClose = false,
+    hideBars = false
 }) => {
 
   useEffect(() => {
@@ -25,11 +26,11 @@ const CustomPopup = ({
   return (
 <div className={styles.popupOverlay}>
   <div className={styles.popupWrapper}>
-    <div className={`${styles.bar} ${styles.topBar}`}></div>
-    <div className={`${styles.bar} ${styles.leftBar}`}></div>
-    <div className={`${styles.bar} ${styles.bottomBar}`}></div>
-    <div className={`${styles.bar} ${styles.rightBar}`}></div>
-    <div className={`${styles.bar} ${styles.topBarFinish}`}></div>
+<div className={`${styles.bar} ${styles.topBar} ${hideBars ? styles.hiddenBar : ''}`}></div>
+<div className={`${styles.bar} ${styles.leftBar} ${hideBars ? styles.hiddenBar : ''}`}></div>
+<div className={`${styles.bar} ${styles.bottomBar} ${hideBars ? styles.hiddenBar : ''}`}></div>
+<div className={`${styles.bar} ${styles.rightBar} ${hideBars ? styles.hiddenBar : ''}`}></div>
+<div className={`${styles.bar} ${styles.topBarFinish} ${hideBars ? styles.hiddenBar : ''}`}></div>
     <div className={styles.popupContent}>
       <h3>{title}</h3>
       <p>{message}</p>

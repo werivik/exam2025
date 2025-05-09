@@ -353,6 +353,7 @@ const AdminProfile = () => {
             onCancel={handleCancelSignOut}
             showButtons={true}
             disableAutoClose={false}
+            hideBars={true}
           />
         )}
     </motion.div>
