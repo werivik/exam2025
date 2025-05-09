@@ -125,3 +125,14 @@
     .nextButton {
         right: -25px;
     }
+
+    .bookedVenueEditButtons {
+        display: flex;
+        flex-direction: row;
+        gap: 25px;
+        width: 100%;
+        align-items: center;
+        justify-content: flex-start;
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
