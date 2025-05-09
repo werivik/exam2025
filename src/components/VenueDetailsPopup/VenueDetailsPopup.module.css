@@ -32,6 +32,8 @@
       object-fit: contain;
       height: auto;
       width: 100%;
+      background-image: url(/media/logo/loadingScreen.png);
+      background-position: center;
   }
   
   .imageSlider {

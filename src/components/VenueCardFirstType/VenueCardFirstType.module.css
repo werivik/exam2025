@@ -16,6 +16,8 @@
     object-fit: cover;
     object-position: center;
     border-radius: 25px 25px 5px 5px;
+    background-image: url(/media/logo/loadingScreen.png);
+    background-position: center;
 }
 
 .hotelInfo {
