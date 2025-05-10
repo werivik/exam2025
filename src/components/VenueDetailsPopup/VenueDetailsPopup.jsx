@@ -6,6 +6,7 @@ import Buttons from '../../components/Buttons/Buttons';
 import CustomPopup from '../CostumPopup/CostumPopup';
 import { headers } from '../../headers';
 import { VENUE_DELETE } from '../../constants';
+import { handleDeleteBooking, handleBookingUpdate } from '../../auth/booking';
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 
@@ -154,24 +155,58 @@ const VenueDetailsPopup = ({
     }
   }, [selectedBooking, userRole]);
 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    if (handleSaveBookingChanges) {
-      handleSaveBookingChanges(selectedBooking.id, editValues);
+  const handleSave = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token || !selectedBooking?.id) {
+      console.error('Missing token or booking ID');
+      return;
     }
+    await handleBookingUpdate(selectedBooking.id, editValues);
     setIsEditing(false);
   };
 
-  const handleCancel = () => {
-    if (handleCancelBooking) {
-      handleCancelBooking(selectedBooking.id);
-    }
+const calculateTotalPrice = () => {
+  const { dateFrom, dateTo } = editValues;
+  const venuePricePerNight = selectedVenue.price;
+
+  const dateFromObj = new Date(dateFrom);
+  const dateToObj = new Date(dateTo);
+
+  const timeDifference = dateToObj - dateFromObj;
+  const numberOfNights = timeDifference / (1000 * 3600 * 24);
+
+  return numberOfNights > 0 ? numberOfNights * venuePricePerNight : 0;
+};
+
+const handleCancel = async () => {
+  if (!selectedVenue || !selectedVenue.id) {
+    console.error('Missing selectedBooking or booking ID');
+    alert('Booking data is missing or incorrect. Please try again later.');
+    return;
+  }
+
+  try {
+    await handleDeleteBooking(
+      selectedVenue.id,
+      () => {},
+      {
+        success: (msg) => alert(msg || "Booking cancelled successfully!"),
+        error: (msg) => alert(msg || "Booking cancellation failed. Please try again."),
+      }
+    );
     closeModal();
-  };
+  } 
+  catch (error) {
+    console.error('Error canceling booking:', error);
+    alert('Something went wrong while canceling the booking.');
+  }
+};
 
   return (
     <motion.div
@@ -248,61 +283,73 @@ const VenueDetailsPopup = ({
                   <Buttons size="small" version="v2" onClick={handleDelete}>Delete</Buttons>
                 </div>
               )}
-              {userRole === 'customer' && selectedBooking && (
-              <div className={styles.bookingSection}>
-                {isEditing ? (
-                  <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
-                    <label>
-                      Guests:
-                      <input
-                        type="number"
-                        name="guests"
-                        value={editValues.guests}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </label>
-                    <label>
-                      From:
-                      <input
-                        type="date"
-                        name="dateFrom"
-                        value={editValues.dateFrom}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </label>
-                    <label>
-                      To:
-                      <input
-                        type="date"
-                        name="dateTo"
-                        value={editValues.dateTo}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </label>
-                    <div className={styles.bookedVenueEditButtons}>
-                      <Buttons type="submit" size="small" version="v1">Save</Buttons>
-                      <Buttons type="button" size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel</Buttons>
+              {userRole === 'customer' && selectedVenue?.id && (
+                <div className={styles.bookingSection}>
+                  {isEditing ? (
+                    <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+                      <label>
+                        Guests:
+                        <input
+                          type="number"
+                          name="guests"
+                          value={editValues.guests}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </label>
+                      <label>
+                        From:
+                        <input
+                          type="date"
+                          name="dateFrom"
+                          value={editValues.dateFrom}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </label>
+                      <label>
+                        To:
+                        <input
+                          type="date"
+                          name="dateTo"
+                          value={editValues.dateTo}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </label>
+
+                      <div className={styles.totalPrice}>
+                        <p><strong>Total Price:</strong> ${calculateTotalPrice()}</p>
+                      </div>
+
+                      <div className={styles.bookedVenueEditButtons}>
+                        <Buttons type="submit" size="small" version="v1">Save</Buttons>
+                        <Buttons type="button" size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel</Buttons>
+                      </div>
+                    </form>
+                  ) : (
+                    <div className={styles.bookingInfo}>
+                      <h3>Booking Information</h3>
+                      <p><strong>Guests:</strong> {selectedBooking.guests}</p>
+                      <p><strong>From:</strong> {new Date(selectedBooking.dateFrom).toLocaleDateString()}</p>
+                      <p><strong>To:</strong> {new Date(selectedBooking.dateTo).toLocaleDateString()}</p>
+                      <p><strong>Total Price:</strong> {calculateTotalPrice()}</p>
+                      <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
+                      <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
+                      <div className={styles.bookedVenueEditButtons}>
+                        <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+                        <Buttons 
+  size="small" 
+  version="v2" 
+  onClick={handleCancel}
+  disabled={!selectedBooking?.id}
+>
+  Cancel Booking
+</Buttons>
+                      </div>
                     </div>
-                  </form>
-                ) : (
-                  <div className={styles.bookingInfo}>
-                    <h3>Booking Information</h3>
-                    <p><strong>Guests:</strong> {selectedBooking.guests}</p>
-                    <p><strong>From:</strong> {new Date(selectedBooking.dateFrom).toLocaleDateString()}</p>
-                    <p><strong>To:</strong> {new Date(selectedBooking.dateTo).toLocaleDateString()}</p>
-                    <p><strong>Price:</strong> {selectedBooking.price}</p>
-                    <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
-                    <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
-                    <div className={styles.bookedVenueEditButtons}>
-                      <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
-                      <Buttons size="small" version="v2" onClick={handleCancel}>Cancel Booking</Buttons>
-                    </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
               )}
               <div className={styles.fadeOutDivBottom}>
               </div>

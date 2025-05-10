@@ -123,21 +123,18 @@ const prevImage = () => {
   }, [username]);
   
 
-  const handleVenueClick = (venueId) => {
-    const venue = bookedVenues.find((v) => v.id === venueId);
-  
-    if (venue) {
-      setSelectedVenue(venue); 
-      setSelectedBooking({
-        guests: venue.guests,
-        dateFrom: venue.dateFrom,
-        dateTo: venue.dateTo,
-        created: venue.created,
-        updated: venue.updated,
-      });
-      setIsModalVisible(true);
-    }
-  };  
+const handleVenueClick = (venue) => {
+  setSelectedVenue(venue);
+  setSelectedBooking({
+    id: venue.bookingId,
+    guests: venue.guests,
+    dateFrom: venue.dateFrom,
+    dateTo: venue.dateTo,
+    created: venue.created,
+    updated: venue.updated,
+  });
+  setIsModalVisible(true);
+}; 
     
   const fetchVenueDetails = async (venueId) => {
     try {
@@ -340,21 +337,6 @@ const prevImage = () => {
         </div>
       );
     }
-
-    return (
-      <div className={styles.bookedVenueBookingInfo}>
-        <h3>Booking Information</h3>
-        <p><strong>Guests:</strong> {selectedBooking.guests}</p>
-        <p><strong>Booking From:</strong> {new Date(selectedBooking.dateFrom).toLocaleDateString()}</p>
-        <p><strong>Booking To:</strong> {new Date(selectedBooking.dateTo).toLocaleDateString()}</p>
-        <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
-        <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
-        <div className={styles.bookedVenueEditButtons}>
-          <button onClick={handleEditClick}>Edit</button>
-          <button>Cancel</button>
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -408,11 +390,11 @@ const prevImage = () => {
           ) : filteredVenues.length > 0 ? (
             <div className={styles.costumerBookings}>
 {filteredVenues.map((venue) => (
-  <VenueBooked
-    key={`${venue.id}-${venue.dateFrom.getTime()}`}
-    venue={venue}
-    onClick={() => handleVenueClick(venue.id, venue.bookingId)}
-  />
+<VenueBooked
+  key={`${venue.id}-${venue.dateFrom.getTime()}`}
+  venue={venue}
+  onClick={() => handleVenueClick(venue)}
+/>
 ))}
             </div>
           ) : (
