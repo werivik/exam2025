@@ -23,6 +23,7 @@ const VenueDetailsPopup = ({
   handleCancelBooking,
 }) => {
   const navigate = useNavigate();
+  const [bookingData, setBookingData] = useState(null);
   const [isConfirmDeleteVisible, setIsConfirmDeleteVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [editedVenue, setEditedVenue] = useState(selectedVenue);
@@ -155,6 +156,45 @@ const VenueDetailsPopup = ({
     }
   }, [selectedBooking, userRole]);
 
+    useEffect(() => {
+    if (!selectedBooking && selectedVenue?.bookingId) {
+      const fetchBookingData = async () => {
+        const token = localStorage.getItem('accessToken');
+        if (token && selectedVenue.bookingId) {
+          try {
+            const response = await fetch(`/holidaze/bookings/${selectedVenue.bookingId}`, {
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+if (response.ok) {
+  const data = await response.json();
+  console.log("Fetched booking data:", data);
+  if (data?.data?.id) {
+    setBookingData(data.data);
+  } 
+  else {
+    console.error('Booking data is missing the ID');
+  }
+} else {
+  console.error('Failed to fetch booking data');
+}
+          } 
+          catch (error) {
+            console.error('Error fetching booking data:', error);
+          }
+        }
+      };
+
+      fetchBookingData();
+    } 
+    else {
+      setBookingData(selectedBooking);
+    }
+  }, [selectedBooking, selectedVenue]);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -185,22 +225,31 @@ const calculateTotalPrice = () => {
 };
 
 const handleCancel = async () => {
-  if (!selectedVenue || !selectedVenue.id) {
-    console.error('Missing selectedBooking or booking ID');
+  console.log("Booking data:", bookingData);
+  if (!bookingData?.id) {
+    console.error('Booking data is missing or incorrect');
     alert('Booking data is missing or incorrect. Please try again later.');
     return;
   }
 
   try {
-    await handleDeleteBooking(
-      selectedVenue.id,
-      () => {},
-      {
-        success: (msg) => alert(msg || "Booking cancelled successfully!"),
-        error: (msg) => alert(msg || "Booking cancellation failed. Please try again."),
-      }
-    );
-    closeModal();
+    const token = localStorage.getItem('accessToken');
+    const response = await fetch(`/holidaze/bookings/${bookingData.id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      alert('Booking cancelled successfully!');
+      closeModal();
+      window.location.reload();
+    } 
+    else {
+      alert('Failed to cancel the booking. Please try again.');
+      console.error('Failed to delete booking');
+    }
   } 
   catch (error) {
     console.error('Error canceling booking:', error);
@@ -336,17 +385,17 @@ const handleCancel = async () => {
                       <p><strong>Total Price:</strong> {calculateTotalPrice()}</p>
                       <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
                       <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
-                      <div className={styles.bookedVenueEditButtons}>
-                        <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
-                        <Buttons 
-  size="small" 
-  version="v2" 
-  onClick={handleCancel}
-  disabled={!selectedBooking?.id}
->
-  Cancel Booking
-</Buttons>
-                      </div>
+        <div className={styles.bookedVenueEditButtons}>
+          <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+          <Buttons 
+            size="small" 
+            version="v2" 
+            onClick={handleCancel}
+            disabled={!bookingData?.id}
+          >
+            Cancel Booking
+          </Buttons>
+        </div>
                     </div>
                   )}
                 </div>
