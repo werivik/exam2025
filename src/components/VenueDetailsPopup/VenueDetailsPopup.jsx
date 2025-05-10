@@ -9,12 +9,28 @@ import { VENUE_DELETE } from '../../constants';
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 
-const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImage, nextImage, userRole, isLoading = false }) => {
+const VenueDetailsPopup = ({ 
+  selectedVenue, 
+  isModalVisible, 
+  closeModal, 
+  prevImage, 
+  nextImage, 
+  userRole, 
+  isLoading,
+  selectedBooking,
+  handleSaveBookingChanges,
+  handleCancelBooking,
+}) => {
   const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedVenue, setEditedVenue] = useState(selectedVenue);
   const [isConfirmDeleteVisible, setIsConfirmDeleteVisible] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [editedVenue, setEditedVenue] = useState(selectedVenue);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValues, setEditValues] = useState({
+    dateFrom: '',
+    dateTo: '',
+    guests: 1,
+  });
 
   useEffect(() => {
     setEditedVenue(selectedVenue);
@@ -25,6 +41,7 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
     closeModal();
   };
 
+  /*
   const handleSave = async () => {
     const token = localStorage.getItem('accessToken');
     if (!token || !editedVenue?.id) {
@@ -61,7 +78,9 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
       console.error('Error updating venue:', error);
     }
   };
+  */
 
+  /*
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedVenue((prevState) => ({
@@ -69,6 +88,7 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
       [name]: value,
     }));
   };
+*/
 
   const handleClose = () => {
     setIsEditing(false);
@@ -124,6 +144,35 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
     setCurrentIndex((prevIndex) => (prevIndex + 1) % mediaLength);
   };
   
+    useEffect(() => {
+    if (selectedBooking && userRole === 'customer') {
+      setEditValues({
+        dateFrom: new Date(selectedBooking.dateFrom).toISOString().split('T')[0],
+        dateTo: new Date(selectedBooking.dateTo).toISOString().split('T')[0],
+        guests: selectedBooking.guests,
+      });
+    }
+  }, [selectedBooking, userRole]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = () => {
+    if (handleSaveBookingChanges) {
+      handleSaveBookingChanges(selectedBooking.id, editValues);
+    }
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    if (handleCancelBooking) {
+      handleCancelBooking(selectedBooking.id);
+    }
+    closeModal();
+  };
+
   return (
     <motion.div
       className={styles.modalOverlay}
@@ -176,7 +225,7 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
   ) : (
     <p>No images available for this venue.</p>
   )}
-</div>
+            </div>
             <div className={styles.bookedVenueRight}>
             <div className={styles.fadeOutDivTop}>
             </div>
@@ -184,10 +233,10 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
                 <h2>{selectedVenue.name}</h2>
                 <p>{selectedVenue.rating} Stars</p>
                 <p>{selectedVenue.description}</p>
-                <p><strong>Location:</strong> {selectedVenue.location.city}, {selectedVenue.location.country}, {selectedVenue.location.address} {selectedVenue.location.zip}</p>
                 <p><strong>Price:</strong> ${selectedVenue.price} <span>/ per night</span></p>
                 <p><strong>Max Guests:</strong> {selectedVenue.maxGuests}</p>
                 <p><strong>Amenities:</strong> {selectedVenue.meta.wifi ? 'WiFi, ' : ''}{selectedVenue.meta.parking ? 'Parking, ' : ''}{selectedVenue.meta.breakfast ? 'Breakfast, ' : ''}{selectedVenue.meta.pets ? 'Pets Allowed' : ''}</p>
+                <p><strong>Location:</strong> {selectedVenue.location.city}, {selectedVenue.location.country}, {selectedVenue.location.address} {selectedVenue.location.zip}</p>
                 <Link to={`/venue-details/${selectedVenue?.id}`} target="_blank" rel="noopener noreferrer">
                 View Venue
                 </Link>
@@ -198,6 +247,62 @@ const VenueDetailsPopup = ({ selectedVenue, isModalVisible, closeModal, prevImag
                   <Buttons size="small" onClick={handleEditClick}>Edit</Buttons>
                   <Buttons size="small" version="v2" onClick={handleDelete}>Delete</Buttons>
                 </div>
+              )}
+              {userRole === 'customer' && selectedBooking && (
+              <div className={styles.bookingSection}>
+                {isEditing ? (
+                  <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+                    <label>
+                      Guests:
+                      <input
+                        type="number"
+                        name="guests"
+                        value={editValues.guests}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </label>
+                    <label>
+                      From:
+                      <input
+                        type="date"
+                        name="dateFrom"
+                        value={editValues.dateFrom}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </label>
+                    <label>
+                      To:
+                      <input
+                        type="date"
+                        name="dateTo"
+                        value={editValues.dateTo}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </label>
+                    <div className={styles.bookedVenueEditButtons}>
+                      <Buttons type="submit" size="small" version="v1">Save</Buttons>
+                      <Buttons type="button" size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel</Buttons>
+                    </div>
+                  </form>
+                ) : (
+                  <div className={styles.bookingInfo}>
+                    <h3>Booking Information</h3>
+                    <p><strong>Guests:</strong> {selectedBooking.guests}</p>
+                    <p><strong>From:</strong> {new Date(selectedBooking.dateFrom).toLocaleDateString()}</p>
+                    <p><strong>To:</strong> {new Date(selectedBooking.dateTo).toLocaleDateString()}</p>
+                    <p><strong>Price:</strong> {selectedBooking.price}</p>
+                    <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
+                    <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
+                    <div className={styles.bookedVenueEditButtons}>
+                      <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+                      <Buttons size="small" version="v2" onClick={handleCancel}>Cancel Booking</Buttons>
+                    </div>
+                  </div>
+                )}
+              </div>
               )}
               <div className={styles.fadeOutDivBottom}>
               </div>
