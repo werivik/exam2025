@@ -21,8 +21,8 @@ const VenueDetailsPopup = ({
 }) => {
   const navigate = useNavigate();
   const [bookingData, setBookingData] = useState(null);
-  const [isConfirmDeleteVisible, setIsConfirmDeleteVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isConfirmCancelVisible, setIsConfirmCancelVisible] = useState(false);
   const [editedVenue, setEditedVenue] = useState(selectedVenue);
   const [isEditing, setIsEditing] = useState(false);
   const [editValues, setEditValues] = useState({
@@ -171,6 +171,43 @@ const calculateTotalPrice = () => {
   return numberOfNights > 0 ? numberOfNights * venuePricePerNight : 0;
 };
 
+const openCancelConfirmation = () => {
+  setIsConfirmCancelVisible(true);
+};
+
+const closeCancelConfirmation = () => {
+  setIsConfirmCancelVisible(false);
+};
+
+const handleCancelBookingConfirm = async () => {
+  const token = localStorage.getItem('accessToken');
+  if (!token || !selectedBooking?.id) {
+    console.error('Missing token or booking ID');
+    return;
+  }
+
+  try {
+    const url = `/holidaze/bookings/${selectedBooking.id}`;
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      closeCancelConfirmation();
+      window.location.reload();
+    } 
+    else {
+      console.error('Failed to cancel the booking');
+    }
+  } 
+  catch (error) {
+    console.error('Error canceling the booking:', error);
+  }
+};
+
   return (
     <motion.div
       className={styles.modalOverlay}
@@ -300,7 +337,7 @@ const calculateTotalPrice = () => {
                       <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
                       <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
         <div className={styles.bookedVenueEditButtons}>
-          <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+          <Buttons size="small" version="v1">Edit Booking</Buttons>
           <Buttons size='small' version='v2'>Cancel Booking</Buttons>
         </div>
                     </div>
@@ -313,12 +350,12 @@ const calculateTotalPrice = () => {
           </div>
         )}
 
-{isConfirmDeleteVisible && (
+{isConfirmCancelVisible && (
   <CustomPopup
-    message="Are you sure you want to delete this venue?"
-    onClose={closeDeleteConfirmation}
-    onConfirm={handleDeleteConfirm}
-    onCancel={closeDeleteConfirmation}
+    message="Are you sure you want to cancel this booking?"
+    onClose={closeCancelConfirmation}
+    onConfirm={handleCancelBookingConfirm}
+    onCancel={closeCancelConfirmation}
     disableAutoClose={true}
   />
 )}

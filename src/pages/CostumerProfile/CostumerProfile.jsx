@@ -9,6 +9,7 @@ import Buttons from '../../components/Buttons/Buttons';
 import { updateProfile } from '../../auth/auth';
 import VenueBooked from '../../components/VenueBooked/VenueBooked';
 import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
+import CostumPopup from '../../components/CostumPopup/CostumPopup';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -23,22 +24,20 @@ const capitalizeFirstLetter = (string) => {
 
 const CostumerProfile = () => {
   const [userData, setUserData] = useState({});
-  const [bookedVenues, setBookedVenues] = useState([]);  
-  const [favoriteVenues, setFavoriteVenues] = useState([]);  
+  const [bookedVenues, setBookedVenues] = useState([]);
+  const [favoriteVenues, setFavoriteVenues] = useState([]);
   const [newName, setNewName] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const [successPopupMessage, setSuccessPopupMessage] = useState(''); 
+  const [successPopupMessage, setSuccessPopupMessage] = useState('');
   
   const bookingsRef = useRef(null);
   const favoritesRef = useRef(null);
   const editRef = useRef(null);
-  
-  const username = localStorage.getItem('username');
 
-  const [isVenuesLoading, setIsVenuesLoading] = useState(true);   
-  const [hasError, setHasError] = useState(false);
+  const username = localStorage.getItem('username');
+  const [isVenuesLoading, setIsVenuesLoading] = useState(true);
   const [filter, setFilter] = useState('All');
 
   const [selectedVenue, setSelectedVenue] = useState(null);
@@ -47,156 +46,100 @@ const CostumerProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   const [isEditing, setIsEditing] = useState(false);
   const [editValues, setEditValues] = useState({
-    dateFrom: selectedBooking?.dateFrom || '',
-    dateTo: selectedBooking?.dateTo || '',
-    guests: selectedBooking?.guests || 0,
+    dateFrom: '',
+    dateTo: '',
+    guests: 0,
   });
   const [isCancelPopupVisible, setIsCancelPopupVisible] = useState(false);
   const [bookingToCancel, setBookingToCancel] = useState(null);
-  
-  const handleEditClick = () => {
-    setIsEditing(true);
-  }
-
-const nextImage = () => {
-  setCurrentImageIndex((prevIndex) => (prevIndex + 1) % selectedVenue.media.length);
-};
-
-const prevImage = () => {
-  setCurrentImageIndex((prevIndex) => 
-    prevIndex === 0 ? selectedVenue.media.length - 1 : prevIndex - 1
-  );
-};
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        setHasError(true);
-        return;
-      }
+  const userRole = userData.role || 'guest';
 
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % selectedVenue.media.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? selectedVenue.media.length - 1 : prevIndex - 1
+    );
+  };
+
+  const fetchUserData = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) return;
+
+    try {
       const userProfileUrl = `${PROFILES_SINGLE.replace("<name>", username)}?_bookings=true`;
       const response = await fetch(userProfileUrl, {
-        method: 'GET',
         headers: headers(token),
       });
 
       if (!response.ok) throw new Error('Failed to fetch user profile');
+
       const data = await response.json();
       const profile = data.data;
 
       setUserData(profile);
-      setNewName(profile?.name || '');
-      setNewAvatar(profile?.avatar?.url || '');
+      setNewName(profile.name || '');
+      setNewAvatar(profile.avatar?.url || '');
 
-      const venuesFromBookings = profile.bookings
-      .map((booking) => {
+      const venuesFromBookings = profile.bookings.map((booking) => {
         if (!booking.venue) return null;
         return {
           ...booking.venue,
           dateFrom: new Date(booking.dateFrom),
           dateTo: new Date(booking.dateTo),
           guests: booking.guests,
+          bookingId: booking.id,
         };
-      })
-      .filter(Boolean);   
+      }).filter(Boolean);
 
-      const uniqueVenues = venuesFromBookings.filter((value, index, self) => {
-        return index === self.findIndex((t) => (
-          t.id === value.id && 
-          t.dateFrom.getTime() === value.dateFrom.getTime() && 
-          t.dateTo.getTime() === value.dateTo.getTime()
-        ));
-      });
+      const uniqueVenues = venuesFromBookings.filter((v, i, self) =>
+        i === self.findIndex((t) =>
+          t.id === v.id &&
+          t.dateFrom.getTime() === v.dateFrom.getTime() &&
+          t.dateTo.getTime() === v.dateTo.getTime()
+        )
+      );
 
       uniqueVenues.sort((a, b) => a.dateFrom - b.dateFrom);
       setBookedVenues(uniqueVenues);
-      setIsVenuesLoading(false);
-    };
-    fetchUserData();
-  }, [username]); 
-
-const handleVenueClick = (venue) => {
-  setSelectedVenue(venue);
-  setSelectedBooking({
-    id: venue.bookingId,
-    guests: venue.guests,
-    dateFrom: venue.dateFrom,
-    dateTo: venue.dateTo,
-    created: venue.created,
-    updated: venue.updated,
-  });
-  setIsModalVisible(true);
-}; 
-    
-  const fetchVenueDetails = async (venueId) => {
-    try {
-      const response = await fetch(`${VENUE_SINGLE}${venueId}`);
-      const venueData = await response.json();
-      
-      console.log("Venue Response:", venueData);
-  
-      if (venueResponse.ok) {
-        return venueData.data;
-      } 
-      
-      else {
-        throw new Error(venueData.errors?.[0]?.message || 'Failed to fetch venue');
-      }
     } 
-    
     catch (error) {
-      console.error('Error fetching venue details:', error);
-      return null;
+      console.error(error);
+    } 
+    finally {
+      setIsVenuesLoading(false);
     }
-  };  
+  };
 
-const handleSaveChanges = async () => {
-  const { dateFrom, dateTo, guests } = editValues;
-  
-  if (guests > (selectedVenue.maxGuests || 0)) {
-    alert('Guests cannot exceed the maximum allowed for this venue.');
-    return;
-  }
+  useEffect(() => {
+    fetchUserData();
+  }, [username]);
 
-  try {
-    const updatedBooking = await updateBooking(selectedBooking.id, {
-      dateFrom,
-      dateTo,
-      guests,
+  const handleVenueClick = (venue) => {
+    setSelectedVenue(venue);
+    setSelectedBooking({
+      id: venue.bookingId,
+      guests: venue.guests,
+      dateFrom: venue.dateFrom,
+      dateTo: venue.dateTo,
     });
-    setSelectedBooking(updatedBooking);
-    setIsEditing(false);
-  } 
-  catch (error) {
-    console.error('Error updating booking:', error);
-    alert('Failed to update Booking.');
-  }
-};
+    setIsModalVisible(true);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const sanitizedNewName = newName.trim();
+    const sanitizedNewAvatar = newAvatar.trim();
 
-    const sanitizedNewName = newName || '';
-    const sanitizedNewAvatar = newAvatar || '';
-
-    const token = localStorage.getItem('accessToken');
-    console.log('Access Token:', token);
-
-    console.log('Submitting profile update with:', {
-      username,
-      newName: sanitizedNewName,
-      newAvatar: sanitizedNewAvatar
-    });
-  
-    if (!sanitizedNewName.trim() && !sanitizedNewAvatar.trim()) {
-      alert('At least one of the fields (Name or Avatar URL) must be provided.');
+    if (!sanitizedNewName && !sanitizedNewAvatar) {
+      alert('Please enter a name or avatar URL.');
       return;
     }
 
@@ -206,7 +149,7 @@ const handleSaveChanges = async () => {
         newName: sanitizedNewName,
         newAvatar: sanitizedNewAvatar,
       });
-      console.log('Profile updated successfully:', result);
+
       setUserData((prev) => ({
         ...prev,
         name: sanitizedNewName,
@@ -215,11 +158,8 @@ const handleSaveChanges = async () => {
 
       setSuccessPopupMessage('Profile updated successfully!');
       setShowSuccessPopup(true);
-      setTimeout(() => {
-        setShowSuccessPopup(false);
-      }, 1000);      
+      setTimeout(() => setShowSuccessPopup(false), 1000);
     } 
-    
     catch (err) {
       console.error('Profile update error:', err);
       alert(`Failed to update profile: ${err.message}`);
@@ -227,8 +167,7 @@ const handleSaveChanges = async () => {
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('username');
+    localStorage.clear();
     setShowPopup(true);
     setTimeout(() => {
       window.location.href = '/';
@@ -240,7 +179,7 @@ const handleSaveChanges = async () => {
       ref.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
-  
+
   const today = new Date();
 
   const filterVenues = (venues) => {
@@ -249,7 +188,6 @@ const handleSaveChanges = async () => {
         return venues.filter((venue) => venue.dateFrom >= today);
       case 'Previous':
         return venues.filter((venue) => venue.dateFrom < today);
-      case 'All':
       default:
         return venues;
     }
@@ -267,13 +205,30 @@ const handleSaveChanges = async () => {
     }
   };
 
-  useEffect(() => {
-    if (isModalVisible) {
-      document.body.style.overflow = 'hidden';
+  const handleDeleteBooking = async (bookingId) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token || !bookingId) return;
+
+    try {
+      const response = await fetch(`/holidaze/bookings/${bookingId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        setBookedVenues((prev) => prev.filter((b) => b.bookingId !== bookingId));
+      } 
+      else {
+        console.error('Failed to delete booking');
+      }
     } 
-    else {
-      document.body.style.overflow = '';
+    catch (error) {
+      console.error('Error deleting booking:', error);
     }
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = isModalVisible ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
@@ -286,10 +241,10 @@ const handleSaveChanges = async () => {
       animate="animate"
       exit="exit"
       variants={pageVariants}
-      transition={{ duration: 0.5, ease: "easeInOut" }} 
+      transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-    <div className={`${styles.blurWrapper} ${isModalVisible ? styles.blurred : ''}`}>
-      <div className={styles.profilePage}>
+      <div className={`${styles.blurWrapper} ${isModalVisible ? styles.blurred : ''}`}>
+        <div className={styles.profilePage}>
           <section className={styles.leftSection}>
             <div className={styles.leftBorder}>
               <div className={styles.profileLeftTop}>
@@ -315,7 +270,7 @@ const handleSaveChanges = async () => {
           </section>
           <section className={styles.rightSection}>
             <div className={styles.rightBorder}>
-            <div className={styles.bookings} ref={bookingsRef}>
+              <div className={styles.bookings} ref={bookingsRef}>
                 <div className={styles.bookingsTitle}>
                   <h2>My Bookings</h2>
                   <div className={styles.bookingsFilter}>
@@ -325,31 +280,33 @@ const handleSaveChanges = async () => {
                   </div>
                 </div>
                 <div className={styles.allBookings}>
-                {isVenuesLoading ? (
-            <div>Loading...</div>
-          ) : filteredVenues.length > 0 ? (
-            <div className={styles.costumerBookings}>
-{filteredVenues.map((venue) => (
-<VenueBooked
-  key={`${venue.id}-${venue.dateFrom.getTime()}`}
-  venue={venue}
-  onClick={() => handleVenueClick(venue)}
-/>
-))}
-            </div>
-          ) : (
-            <p>No Venues Booked yet.</p>
-          )}
-            </div>
+                  {isVenuesLoading ? (
+                    <div>Loading...</div>
+                  ) : filteredVenues.length > 0 ? (
+                    <div className={styles.costumerBookings}>
+                      {filteredVenues.map((venue) => (
+                        <VenueBooked
+                          key={`${venue.id}-${venue.dateFrom.getTime()}`}
+                          venue={venue}
+                          onClick={() => handleVenueClick(venue)}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <p>No Venues Booked yet.</p>
+                  )}
+                </div>
               </div>
-<div className={styles.favorites} ref={favoritesRef}>
+              <div className={styles.favorites} ref={favoritesRef}>
                 <div className={styles.favoriteTitle}>
                   <h2>Favorite Venues</h2>
                 </div>
                 <div className={styles.allFavorites}>
                   {favoriteVenues.length > 0 ? (
                     favoriteVenues.map((venue, index) => (
-                      <div key={index} className={styles.favoriteVenue}></div>
+                      <div key={venue.id || index} className={styles.favoriteVenue}>
+                        {/* Render favorite venue details if available */}
+                      </div>
                     ))
                   ) : (
                     <p>No favorite venues found.</p>
@@ -357,7 +314,7 @@ const handleSaveChanges = async () => {
                 </div>
               </div>
               <div className={styles.edit} ref={editRef}>
-              <div className={styles.editTitle}>
+                <div className={styles.editTitle}>
                   <h2>Edit Profile</h2>
                 </div>
                 <div className={styles.allEdits}>
@@ -405,7 +362,7 @@ const handleSaveChanges = async () => {
         )}
 
         {isCancelPopupVisible && (
-          <CustomPopup
+          <CostumPopup
             message="Are you sure you want to cancel your stay?"
             onConfirm={handleConfirmCancelBooking}
             onCancel={handleCloseCancelPopup}
@@ -413,24 +370,23 @@ const handleSaveChanges = async () => {
           />
         )}
 
-      </div>   
+      </div>
       {isModalVisible && (
         <VenueDetailsPopup
-  selectedVenue={selectedVenue}
-  selectedBooking={selectedBooking}
-  isLoading={false}
-  isModalVisible={isModalVisible}
-  closeModal={closeModal}
-  prevImage={prevImage}
-  nextImage={nextImage}
-  userRole="customer"
-  booking={selectedBooking}
-  onClose={() => setShowDetailsPopup(false)}
-  onDelete={handleDeleteBooking}
+          selectedVenue={selectedVenue}
+          selectedBooking={selectedBooking}
+          isModalVisible={isModalVisible}
+          closeModal={closeModal}
+          userRole={userRole}
+          isLoading={isLoading}
+          prevImage={handlePrevImage}
+          nextImage={handleNextImage}
+          handleDeleteBooking={handleDeleteBooking}
         />
       )}
     </motion.div>
   );
 };
+
 
 export default CostumerProfile;
