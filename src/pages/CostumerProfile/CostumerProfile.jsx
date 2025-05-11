@@ -495,19 +495,17 @@ const handleVenueClick = (venue) => {
       </div>   
       {isModalVisible && (
         <VenueDetailsPopup
-          selectedVenue={selectedVenue}
-          selectedBooking={selectedBooking}
-          isLoading={false}
-          isModalVisible={isModalVisible}
-          closeModal={closeModal}
-          prevImage={prevImage}
-          nextImage={nextImage}
-          userRole="customer"
-
-          booking={selectedBooking}
-          venue={selectedBooking.venue}
-          onClose={() => setShowDetailsPopup(false)}
-          onDelete={handleDeleteBooking}
+  selectedVenue={selectedVenue}
+  selectedBooking={selectedBooking}
+  isLoading={false}
+  isModalVisible={isModalVisible}
+  closeModal={closeModal}
+  prevImage={prevImage}
+  nextImage={nextImage}
+  userRole="customer"
+  booking={selectedBooking}
+  onClose={() => setShowDetailsPopup(false)}
+  onDelete={handleDeleteBooking}
         />
       )}
     </motion.div>

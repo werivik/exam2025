@@ -373,7 +373,7 @@ const handleCancel = async (booking) => {
         <div className={styles.bookedVenueEditButtons}>
           <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
 
-          <Buttons size='small' version="v2" onClick={() => handleDeleteBooking(booking.id)}>
+          <Buttons size='small' version="v2" onClick={() => handleDeleteBooking(selectedBooking.id)}>
             Cancel Booking
           </Buttons>
         </div>
