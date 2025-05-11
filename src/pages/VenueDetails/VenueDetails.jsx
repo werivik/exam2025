@@ -231,13 +231,13 @@ const VenueDetails = () => {
     const formattedCheckOutDate = new Date(checkOutDate).toISOString().split('T')[0];
     const guests = adults + children + disabled;
 
-    const newStart = new Date(newStartDate);
-    const newEnd = new Date(newEndDate);
+    const newStart = new Date(checkInDate);
+    const newEnd = new Date(checkOutDate);
 
-    if (newStart >= newEnd) {
-      setErrorMessage('End date must be after start date.');
-      return;
-    }
+if (newStart >= newEnd) {
+  setErrorMessage('End date must be after start date.');
+  return;
+}
 
     const isDoubleBooked = checkForDoubleBooking(newStart, newEnd);
 

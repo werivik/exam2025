@@ -7,6 +7,7 @@ import { headers } from '../../headers';
 import defaultAvatar from '/media/images/mdefault.jpg';
 import Buttons from '../../components/Buttons/Buttons';
 import { updateProfile } from '../../auth/auth';
+import { handleDeleteBooking } from '../../auth/booking';
 import VenueBooked from '../../components/VenueBooked/VenueBooked';
 import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
 
@@ -339,6 +340,24 @@ const handleVenueClick = (venue) => {
     }
   };
 
+  const onDeleteBooking = async (bookingId) => {
+  try {
+    await handleDeleteBooking(bookingId);
+
+    setBookedVenues((prevVenues) =>
+      prevVenues.filter((venue) => venue.bookingId !== bookingId)
+    );
+
+    setIsModalVisible(false);
+    setSuccessPopupMessage("Booking cancelled successfully!");
+    setShowSuccessPopup(true);
+    setTimeout(() => setShowSuccessPopup(false), 1500);
+  } 
+  catch (error) {
+    alert('An error occurred while cancelling the booking.');
+  }
+};
+
   return (
     <motion.div
       className={styles.pageContent}
@@ -484,6 +503,11 @@ const handleVenueClick = (venue) => {
           prevImage={prevImage}
           nextImage={nextImage}
           userRole="customer"
+
+          booking={selectedBooking}
+          venue={selectedBooking.venue}
+          onClose={() => setShowDetailsPopup(false)}
+          onDelete={handleDeleteBooking}
         />
       )}
     </motion.div>

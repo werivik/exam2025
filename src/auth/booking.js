@@ -96,22 +96,19 @@ export const handleBookingUpdate = async (bookingId, updatedValues, setShowBooki
 
 export const handleDeleteBooking = async (bookingId) => {
   const token = localStorage.getItem('accessToken');
-  if (!token) throw new Error("No token found");
-  console.log(bookingId);
 
-  const url = BOOKINGS_DELETE.replace('<id>', bookingId);
-
-  const response = await fetch(url, {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to delete booking");
+  try {
+    const response = await fetch(`/holidaze/bookings/${bookingId}`, {
+      method: 'DELETE',
+      headers: headers(token),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to delete the booking.');
+    }
+    return true;
+  } 
+  catch (error) {
+    console.error('Error deleting booking:', error);
+    throw error;
   }
-
-  return true;
 };
