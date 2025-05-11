@@ -373,15 +373,15 @@ const CostumerProfile = () => {
       </div>
       {isModalVisible && (
         <VenueDetailsPopup
-          selectedVenue={selectedVenue}
-          selectedBooking={selectedBooking}
-          isModalVisible={isModalVisible}
-          closeModal={closeModal}
-          userRole={userRole}
-          isLoading={isLoading}
-          prevImage={handlePrevImage}
-          nextImage={handleNextImage}
-          handleDeleteBooking={handleDeleteBooking}
+  selectedVenue={selectedVenue}
+  selectedBooking={selectedBooking}
+  isModalVisible={isModalVisible}
+  closeModal={closeModal}
+  userRole={userRole}
+  isLoading={isLoading}
+  prevImage={prevImage}
+  nextImage={nextImage}
+  handleDeleteBooking={handleDeleteBooking}
         />
       )}
     </motion.div>

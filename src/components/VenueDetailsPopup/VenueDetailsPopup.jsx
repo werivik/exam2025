@@ -227,12 +227,12 @@ const handleCancelBookingConfirm = async () => {
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <div className={styles.bookedVenueDetails}>
+          <div className={styles.venueDetails}>
             <button className={styles.closeVenueButton} onClick={closeModal}>
               <i className="fa-solid fa-xmark"></i>
             </button>
 
-            <div className={styles.bookedVenueImageSlideshow}>
+            <div className={styles.venueImageSlideshow}>
             {selectedVenue?.media && selectedVenue.media.length > 0 ? (
     <div className={styles.imageSlider}>
       <img
@@ -261,10 +261,10 @@ const handleCancelBookingConfirm = async () => {
     <p>No images available for this venue.</p>
   )}
             </div>
-            <div className={styles.bookedVenueRight}>
+            <div className={styles.venueRight}>
             <div className={styles.fadeOutDivTop}>
             </div>
-              <div className={styles.bookedVenueVenueInfo}>
+              <div className={styles.venueInfo}>
                 <h2>{selectedVenue.name}</h2>
                 <p>{selectedVenue.rating} Stars</p>
                 <p>{selectedVenue.description}</p>
@@ -328,19 +328,27 @@ const handleCancelBookingConfirm = async () => {
                       </div>
                     </form>
                   ) : (
-                    <div className={styles.bookingInfo}>
-                      <h3>Booking Information</h3>
-                      <p><strong>Guests:</strong> {selectedBooking.guests}</p>
-                      <p><strong>From:</strong> {new Date(selectedBooking.dateFrom).toLocaleDateString()}</p>
-                      <p><strong>To:</strong> {new Date(selectedBooking.dateTo).toLocaleDateString()}</p>
-                      <p><strong>Total Price:</strong> {calculateTotalPrice()}</p>
-                      <p><strong>Created:</strong> {new Date(selectedBooking.created).toLocaleDateString()}</p>
-                      <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
-        <div className={styles.bookedVenueEditButtons}>
-          <Buttons size="small" version="v1">Edit Booking</Buttons>
-          <Buttons size='small' version='v2'>Cancel Booking</Buttons>
-        </div>
-                    </div>
+{bookingData ? (
+  <div className={styles.bookingInfo}>
+    <h3>Booking Information</h3>
+    <p><strong>Guests:</strong> {bookingData.guests}</p>
+    <p><strong>From:</strong> {new Date(bookingData.dateFrom).toLocaleDateString()}</p>
+    <p><strong>To:</strong> {new Date(bookingData.dateTo).toLocaleDateString()}</p>
+    <p><strong>Total Price:</strong> ${calculateTotalPrice()}</p>
+    {bookingData.created && (
+      <p><strong>Created:</strong> {new Date(bookingData.created).toLocaleDateString()}</p>
+    )}
+    {bookingData.updated && (
+      <p><strong>Updated:</strong> {new Date(bookingData.updated).toLocaleDateString()}</p>
+    )}
+    <div className={styles.bookedVenueEditButtons}>
+      <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+      <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
+    </div>
+  </div>
+) : (
+  <p>Booking details not available.</p>
+)}
                   )}
                 </div>
               )}
