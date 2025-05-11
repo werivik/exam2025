@@ -6,7 +6,6 @@ import Buttons from '../../components/Buttons/Buttons';
 import CustomPopup from '../CostumPopup/CostumPopup';
 import { headers } from '../../headers';
 import { VENUE_DELETE } from '../../constants';
-import { handleDeleteBooking, handleBookingUpdate } from '../../auth/booking';
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 
@@ -19,8 +18,6 @@ const VenueDetailsPopup = ({
   userRole, 
   isLoading,
   selectedBooking,
-  handleSaveBookingChanges,
-  handleCancelBooking,
 }) => {
   const navigate = useNavigate();
   const [bookingData, setBookingData] = useState(null);
@@ -42,55 +39,6 @@ const VenueDetailsPopup = ({
     navigate(`/edit-venue/${selectedVenue.id}`, { state: { venue: selectedVenue } });
     closeModal();
   };
-
-  /*
-  const handleSave = async () => {
-    const token = localStorage.getItem('accessToken');
-    if (!token || !editedVenue?.id) {
-      console.error('Missing token or venue ID');
-      return;
-    }
-
-    try {
-      const response = await fetch(`/holidaze/venues/${editedVenue.id}`, {
-        method: 'PUT',
-        headers: headers(token),
-        body: JSON.stringify({
-          name: editedVenue.name,
-          description: editedVenue.description,
-          media: editedVenue.media,
-          price: editedVenue.price,
-          maxGuests: editedVenue.maxGuests,
-          rating: editedVenue.rating,
-          meta: editedVenue.meta,
-          location: editedVenue.location,
-        }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        alert('Venue updated successfully!');
-        setIsEditing(false);
-      } 
-      else {
-        console.error('Failed to update venue');
-      }
-    } 
-    catch (error) {
-      console.error('Error updating venue:', error);
-    }
-  };
-  */
-
-  /*
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditedVenue((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-*/
 
   const handleClose = () => {
     setIsEditing(false);
@@ -195,7 +143,6 @@ if (response.ok) {
     }
   }, [selectedBooking, selectedVenue]);
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditValues((prev) => ({ ...prev, [name]: value }));
@@ -222,24 +169,6 @@ const calculateTotalPrice = () => {
   const numberOfNights = timeDifference / (1000 * 3600 * 24);
 
   return numberOfNights > 0 ? numberOfNights * venuePricePerNight : 0;
-};
-
-const handleCancel = async (booking) => {
-  if (!booking?.id) {
-    console.error("Booking data is missing or incorrect");
-    return;
-  }
-
-  try {
-    const success = await handleDeleteBooking(booking.id);
-    if (success) {
-      closeModal();
-      window.location.reload();
-    }
-  } 
-  catch (error) {
-    console.error("Failed to cancel booking:", error);
-  }
 };
 
   return (
@@ -372,10 +301,7 @@ const handleCancel = async (booking) => {
                       <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
         <div className={styles.bookedVenueEditButtons}>
           <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
-
-          <Buttons size='small' version="v2" onClick={() => handleDeleteBooking(selectedBooking.id)}>
-            Cancel Booking
-          </Buttons>
+          <Buttons size='small' version='v2'>Cancel Booking</Buttons>
         </div>
                     </div>
                   )}

@@ -7,7 +7,6 @@ import { headers } from '../../headers';
 import defaultAvatar from '/media/images/mdefault.jpg';
 import Buttons from '../../components/Buttons/Buttons';
 import { updateProfile } from '../../auth/auth';
-import { handleDeleteBooking } from '../../auth/booking';
 import VenueBooked from '../../components/VenueBooked/VenueBooked';
 import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
 
@@ -121,8 +120,7 @@ const prevImage = () => {
       setIsVenuesLoading(false);
     };
     fetchUserData();
-  }, [username]);
-  
+  }, [username]); 
 
 const handleVenueClick = (venue) => {
   setSelectedVenue(venue);
@@ -140,7 +138,7 @@ const handleVenueClick = (venue) => {
   const fetchVenueDetails = async (venueId) => {
     try {
       const response = await fetch(`${VENUE_SINGLE}${venueId}`);
-      const venueData = await venueResponse.json();
+      const venueData = await response.json();
       
       console.log("Venue Response:", venueData);
   
@@ -159,45 +157,28 @@ const handleVenueClick = (venue) => {
     }
   };  
 
-  const handleSaveChanges = async () => {
-    const { dateForm, dateTo, guests } = editValues;
+const handleSaveChanges = async () => {
+  const { dateFrom, dateTo, guests } = editValues;
+  
+  if (guests > (selectedVenue.maxGuests || 0)) {
+    alert('Guests cannot exceed the maximum allowed for this venue.');
+    return;
+  }
 
-    if (guests > selectedVenue.maxGuests) {
-      alert('Guests cannot exceed the maximum allowed for this venue.')
-      return;
-    }
-
-    try {
-      const updatedBooking = await updateBooking(selectedBooking.id, {
-        dateForm,
-        dateTo,
-        guests,
-      });
-      setSelectedBooking(updatedBooking);
-      setIsEditing(false);
-    }
-    catch(error) {
-      console.error('Error updating booking:', error);
-      alert('Failed to update Booking.')
-    }
-  };
-
-  const handleConfirmCancelBooking = async () => {
-    try {
-      await deleteBooking(bookingToCancel);
-      setIsCancelPopupVisible(false);
-      setIsModalVisible(false);
-    } 
-    
-    catch (error) {
-      console.error('Error canceling booking:', error);
-      alert('Failed to cancel booking.');
-    }
-  };
-
-  const handleCloseCancelPopup = () => {
-    setIsCancelPopupVisible(false);
-  };
+  try {
+    const updatedBooking = await updateBooking(selectedBooking.id, {
+      dateFrom,
+      dateTo,
+      guests,
+    });
+    setSelectedBooking(updatedBooking);
+    setIsEditing(false);
+  } 
+  catch (error) {
+    console.error('Error updating booking:', error);
+    alert('Failed to update Booking.');
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -297,66 +278,6 @@ const handleVenueClick = (venue) => {
       document.body.style.overflow = '';
     };
   }, [isModalVisible]);
-
-
-  const renderBookingInfoOrForm = () => {
-    if (isEditing) {
-      return (
-        <div className={styles.editFormContainer}>
-          <form onSubmit={handleSaveChanges} className={styles.editForm}>
-            <label>
-              Guests:
-              <input
-                type="number"
-                value={editValues.guests}
-                onChange={(e) => setEditValues({ ...editValues, guests: e.target.value })}
-                required
-              />
-            </label>
-            <label>
-              From:
-              <input
-                type="date"
-                value={editValues.dateFrom}
-                onChange={(e) => setEditValues({ ...editValues, dateFrom: e.target.value })}
-                required
-              />
-            </label>
-            <label>
-              To:
-              <input
-                type="date"
-                value={editValues.dateTo}
-                onChange={(e) => setEditValues({ ...editValues, dateTo: e.target.value })}
-                required
-              />
-            </label>
-            <div className={styles.editActions}>
-              <Buttons type="submit" size="small" version="v2">Save Changes</Buttons>
-            </div>
-          </form>
-        </div>
-      );
-    }
-  };
-
-  const onDeleteBooking = async (bookingId) => {
-  try {
-    await handleDeleteBooking(bookingId);
-
-    setBookedVenues((prevVenues) =>
-      prevVenues.filter((venue) => venue.bookingId !== bookingId)
-    );
-
-    setIsModalVisible(false);
-    setSuccessPopupMessage("Booking cancelled successfully!");
-    setShowSuccessPopup(true);
-    setTimeout(() => setShowSuccessPopup(false), 1500);
-  } 
-  catch (error) {
-    alert('An error occurred while cancelling the booking.');
-  }
-};
 
   return (
     <motion.div
