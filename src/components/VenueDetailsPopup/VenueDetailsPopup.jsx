@@ -224,36 +224,21 @@ const calculateTotalPrice = () => {
   return numberOfNights > 0 ? numberOfNights * venuePricePerNight : 0;
 };
 
-const handleCancel = async () => {
-  console.log("Booking data:", bookingData);
-  if (!bookingData?.id) {
-    console.error('Booking data is missing or incorrect');
-    alert('Booking data is missing or incorrect. Please try again later.');
+const handleCancel = async (booking) => {
+  if (!booking?.id) {
+    console.error("Booking data is missing or incorrect");
     return;
   }
 
   try {
-    const token = localStorage.getItem('accessToken');
-    const response = await fetch(`/holidaze/bookings/${bookingData.id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (response.ok) {
-      alert('Booking cancelled successfully!');
+    const success = await handleDeleteBooking(booking.id);
+    if (success) {
       closeModal();
       window.location.reload();
-    } 
-    else {
-      alert('Failed to cancel the booking. Please try again.');
-      console.error('Failed to delete booking');
     }
   } 
   catch (error) {
-    console.error('Error canceling booking:', error);
-    alert('Something went wrong while canceling the booking.');
+    console.error("Failed to cancel booking:", error);
   }
 };
 
@@ -387,11 +372,11 @@ const handleCancel = async () => {
                       <p><strong>Updated:</strong> {new Date(selectedBooking.updated).toLocaleDateString()}</p>
         <div className={styles.bookedVenueEditButtons}>
           <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+
           <Buttons 
             size="small" 
             version="v2" 
-            onClick={handleCancel}
-            disabled={!bookingData?.id}
+            onClick={() => bookingData?.id && handleCancel(bookingData)}
           >
             Cancel Booking
           </Buttons>

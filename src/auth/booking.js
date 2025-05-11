@@ -54,70 +54,64 @@ export const handleBookingUpdate = async (bookingId, updatedValues, setShowBooki
   try {
     const token = localStorage.getItem('accessToken');
 
-    const { dateFrom, dateTo, guests } = editValues;
+    const { dateFrom, dateTo, guests } = updatedValues;
 
     if (!validateDate(dateFrom) || !validateDate(dateTo)) {
-    console.error('Invalid date(s)');
-    return;
+      console.error('Invalid date(s)');
+      setPopupMessage('Invalid date(s) provided.');
+      setShowBookingPopup(true);
+      return;
     }
-
-    const requestBody = {
-    dateFrom,
-    dateTo,
-    guests: Number(guests),
-  };
 
     const response = await fetch(BOOKINGS_UPDATE.replace('<id>', bookingId), {
       method: 'PUT',
       headers: headers(token),
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify({
+        dateFrom: new Date(dateFrom).toISOString(),
+        dateTo: new Date(dateTo).toISOString(),
+        guests: Number(guests),
+      }),
     });
 
     const data = await response.json();
 
     if (!response.ok) {
       console.error("Booking update failed:", data);
+      setPopupMessage(data.errors?.[0]?.message || "Booking update failed");
+      setShowBookingPopup(true);
       return;
     }
 
     console.log("Booking updated successfully:", data);
-
+    setPopupMessage("Booking updated!");
+    setShowBookingPopup(true);
     return data;
   } 
   catch (error) {
     console.error("Booking update error:", error);
+    setPopupMessage("Something went wrong updating the booking");
+    setShowBookingPopup(true);
   }
 };
 
-export const handleDeleteBooking = async (bookingId, setUserBookings, toast = { success: console.log, error: console.error }) => {
-  try {
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      toast.error("You need to log in first.");
-      return false;
-    }
+export const handleDeleteBooking = async (bookingId) => {
+  const token = localStorage.getItem('accessToken');
+  if (!token) throw new Error("No token found");
+  console.log(bookingId);
 
-    const response = await fetch(BOOKINGS_DELETE.replace('<id>', bookingId), {
-      method: 'DELETE',
-      headers: headers(token),
-    });
+  const url = BOOKINGS_DELETE.replace('<id>', bookingId);
 
-    if (response.status === 204) {
-      if (typeof setUserBookings === 'function') {
-        setUserBookings(prev => prev.filter(booking => booking.id !== bookingId));
-      }
-      toast.success("Booking deleted");
-      return true;
-    } 
-    else {
-      const data = await response.json();
-      toast.error(data?.errors?.[0]?.message || "Something went wrong deleting the booking");
-      return false;
-    }
-  } 
-  catch (error) {
-    console.error("Booking deletion error:", error);
-    toast.error("Something went wrong deleting the booking");
-    return false;
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete booking");
   }
+
+  return true;
 };
