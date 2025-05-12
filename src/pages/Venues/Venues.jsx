@@ -57,6 +57,7 @@ const Venues = () => {
   const [cities, setCities] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState('');
+const topRef = useRef(null);
 
   const PAGE_SIZE = filtersVisible ? 20 : 20;
 
@@ -419,7 +420,9 @@ useEffect(() => {
   setNoMatches(filtered.length === 0);
 }, [filters, venues, sortOption]);
 
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+const scrollToTop = () => {
+  topRef.current?.scrollIntoView({ behavior: 'smooth' });
+};
 
   const loadMore = () => {
     setVisibleCount(prev => Math.min(prev + 10, filteredVenues.length));
@@ -517,6 +520,7 @@ useEffect(() => {
   setFilteredVenues={setFilteredVenues}
   setNoMatches={setNoMatches}
 />
+<div ref={topRef} />
       <section className={styles.rightSection}>
         <div className={styles.rightBorder}>
           <div className={styles.rightTitles}>
