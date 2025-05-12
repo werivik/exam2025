@@ -578,7 +578,7 @@ const Home = () => {
                   <div
                     key={idx}
                     className={styles.hotelType}
-                    onClick={() => navigate("/hotels", { state: { filters: { meta: type.meta } } })}
+                    onClick={() => navigate("/venues", { state: { filters: { meta: type.meta } } })}
                   >
                     <img src={type.image} alt={type.label} />
                     <h3>{type.label}</h3>
