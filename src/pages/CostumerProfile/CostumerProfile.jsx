@@ -307,9 +307,6 @@ const CostumerProfile = () => {
                 <button className={styles.shortcutLink} onClick={() => scrollToSection(bookingsRef)}>
                   My Bookings
                 </button>
-                <button className={styles.shortcutLink} onClick={() => scrollToSection(favoritesRef)}>
-                  Favorite Venues
-                </button>
                 <button className={styles.shortcutLink} onClick={() => scrollToSection(editRef)}>
                   Edit Profile
                 </button>

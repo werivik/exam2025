@@ -1,28 +1,36 @@
+body, html {
+margin: 0;
+padding: 0;
+overflow-x: hidden;
+}
 .pageContent {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding-bottom: 0;
-    margin-bottom: -100px;
+position: relative;
+width: 100%;
+display: flex;
+justify-content: center;
+min-height: 100vh;
+padding-bottom: 50px;
 }
 .pageContent button, .pageContent input, .pageContent label{
     font-family: "Playfair Display", serif;
 }
 .profilePage {
-    display: flex;
-    justify-content: center;
-    width: 80%;
-    margin-left: 10%;
-    margin-top: 75px;
+display: flex;
+justify-content: flex-start;
+width: 80%;
+margin-left: 10%;
+margin-top: 75px;
+gap: 50px;
+padding-bottom: 50px;
 }
 .leftSection {
-    position: sticky;
-    top: 75px;
-    height: 87vh;
-    width: 35%;
-    min-width: 300px;
+position: sticky;
+top: 75px;
+height: calc(100vh - 150px);
+width: 35%;
+min-width: 300px;
+align-self: flex-start;
+z-index: 10;
 }
 .leftBorder {
     background-color: white;
@@ -131,20 +139,12 @@
     background-color: #B88A44;
 }
 .rightSection {
-    width: 100%;
-    position: relative;
-    margin-top: 50px;
-    flex-grow: 1;
-    overflow: hidden;
+width: 100%;
+flex-grow: 1;
 }
 .rightBorder {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 150px;
+width: 100%;
+height: auto;
 }
 .rightBorder h2 {
     font-size: 3rem;
@@ -152,7 +152,7 @@
     margin: 0;
     padding: 0;
 }
-.bookingsTitle, .favoriteTitle, .editTitle {
+.bookingsTitle, .editTitle {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -174,7 +174,7 @@
     gap: 25px;
     margin-top: 50px;
 }
-.allBookings, .allFavorites, .allEdits {
+.allBookings, .allEdits {
     margin-top: 50px;
 }
 .allEdits {
@@ -241,15 +241,14 @@
   }
   .bookings {
     scroll-margin-top: 100px;
-  }
-  .favorites {
-    scroll-margin-top: 100px;
+    margin-bottom: 100px;
   }
   .edit {
     scroll-margin-top: 100px;
   }
   .allBookings {
-    height: 100%;
+    height: inherit;
+    max-height: fit-content;
   }
   .costumerBookings {
     display: grid;
@@ -259,7 +258,7 @@
     gap: 25px;
     position: relative;
     align-items: start;
-    height: 100%;
+    height: auto;
   }
   .costumerBookings > * {
     aspect-ratio: 3 / 4;
