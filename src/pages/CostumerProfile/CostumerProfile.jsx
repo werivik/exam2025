@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CostumerProfile.module.css';
 import { motion } from "framer-motion";
-import { PROFILES_SINGLE, VENUE_SINGLE } from '../../constants';
+import { PROFILES_SINGLE, VENUE_SINGLE, PROFILES_SINGLE_BY_BOOKINGS } from '../../constants';
 import { headers } from '../../headers';
 import defaultAvatar from '/media/images/mdefault.jpg';
 import Buttons from '../../components/Buttons/Buttons';
@@ -45,6 +45,10 @@ const CostumerProfile = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Added missing error state
+  const [error, setError] = useState(null);
+  const [bookings, setBookings] = useState([]);
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [editValues, setEditValues] = useState({
@@ -58,6 +62,10 @@ const CostumerProfile = () => {
   const navigate = useNavigate();
 
   const userRole = userData.role || 'guest';
+
+  useEffect(() => {
+    fetchUserData();
+  }, [username]);
 
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex + 1) % selectedVenue.media.length);
@@ -119,7 +127,44 @@ const CostumerProfile = () => {
   };
 
   useEffect(() => {
-    fetchUserData();
+    const fetchProfileBookings = async () => {
+      if (!username) return;
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const url = PROFILES_SINGLE_BY_BOOKINGS.replace('<name>', username);
+        
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          throw new Error('No access token found');
+        }
+
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: headers(token)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch bookings');
+        }
+
+        const data = await response.json();
+        setBookings(data.data || []);
+      }
+      catch (err) {
+        console.error('Error fetching profile bookings:', err);
+        setError(err.message);
+        setBookings([]);
+      } 
+      finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfileBookings();
   }, [username]);
 
   const handleVenueClick = (venue) => {
@@ -196,6 +241,10 @@ const CostumerProfile = () => {
   const filteredVenues = filterVenues(bookedVenues);
 
   const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const closeVenueDetailsModal = () => {
     setIsModalVisible(false);
   };
 
@@ -297,22 +346,6 @@ const CostumerProfile = () => {
                   )}
                 </div>
               </div>
-              <div className={styles.favorites} ref={favoritesRef}>
-                <div className={styles.favoriteTitle}>
-                  <h2>Favorite Venues</h2>
-                </div>
-                <div className={styles.allFavorites}>
-                  {favoriteVenues.length > 0 ? (
-                    favoriteVenues.map((venue, index) => (
-                      <div key={venue.id || index} className={styles.favoriteVenue}>
-                        {/* Render favorite venue details if available */}
-                      </div>
-                    ))
-                  ) : (
-                    <p>No favorite venues found.</p>
-                  )}
-                </div>
-              </div>
               <div className={styles.edit} ref={editRef}>
                 <div className={styles.editTitle}>
                   <h2>Edit Profile</h2>
@@ -373,20 +406,16 @@ const CostumerProfile = () => {
       </div>
       {isModalVisible && (
         <VenueDetailsPopup
-  selectedVenue={selectedVenue}
-  selectedBooking={selectedBooking}
-  isModalVisible={isModalVisible}
-  closeModal={closeModal}
-  userRole={userRole}
-  isLoading={isLoading}
-  prevImage={prevImage}
-  nextImage={nextImage}
-  handleDeleteBooking={handleDeleteBooking}
+          selectedVenue={selectedVenue}
+          selectedBooking={selectedBooking}
+          isModalVisible={isModalVisible}
+          closeModal={closeVenueDetailsModal}
+          userRole="customer"
+          isLoading={false}
         />
       )}
     </motion.div>
   );
 };
-
 
 export default CostumerProfile;

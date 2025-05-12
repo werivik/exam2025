@@ -5,6 +5,7 @@ import styles from './VenueDetailsPopup.module.css';
 import Buttons from '../../components/Buttons/Buttons';
 import CustomPopup from '../CostumPopup/CostumPopup';
 import { headers } from '../../headers';
+import { handleBookingDelete } from '../../auth/booking';
 import { VENUE_DELETE } from '../../constants';
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
 import slideshowNext from "/media/icons/slideshow-next-button.png";
@@ -25,6 +26,8 @@ const VenueDetailsPopup = ({
   const [isConfirmCancelVisible, setIsConfirmCancelVisible] = useState(false);
   const [editedVenue, setEditedVenue] = useState(selectedVenue);
   const [isEditing, setIsEditing] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const [showBookingPopup, setShowBookingPopup] = useState(false);
   const [editValues, setEditValues] = useState({
     dateFrom: '',
     dateTo: '',
@@ -93,6 +96,35 @@ const VenueDetailsPopup = ({
   const handleNextImage = (mediaLength) => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % mediaLength);
   };
+
+    useEffect(() => {
+    if (selectedBooking) {
+      setBookingData(selectedBooking);
+      setEditValues({
+        dateFrom: new Date(selectedBooking.dateFrom).toISOString().split('T')[0],
+        dateTo: new Date(selectedBooking.dateTo).toISOString().split('T')[0],
+        guests: selectedBooking.guests,
+      });
+    }
+  }, [selectedBooking]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const calculateTotalPrice = () => {
+    const { dateFrom, dateTo } = editValues;
+    const venuePricePerNight = selectedVenue?.price || 0;
+
+    const dateFromObj = new Date(dateFrom);
+    const dateToObj = new Date(dateTo);
+
+    const timeDifference = dateToObj - dateFromObj;
+    const numberOfNights = timeDifference / (1000 * 3600 * 24);
+
+    return numberOfNights > 0 ? numberOfNights * venuePricePerNight : 0;
+  };
   
     useEffect(() => {
     if (selectedBooking && userRole === 'customer') {
@@ -143,70 +175,52 @@ if (response.ok) {
     }
   }, [selectedBooking, selectedVenue]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditValues((prev) => ({ ...prev, [name]: value }));
-  };
-
   const handleSave = async () => {
-    const token = localStorage.getItem('accessToken');
-    if (!token || !selectedBooking?.id) {
-      console.error('Missing token or booking ID');
+    if (!bookingData?.id) {
+      console.error('No booking ID found');
       return;
     }
-    await handleBookingUpdate(selectedBooking.id, editValues);
-    setIsEditing(false);
+
+    const updatedBooking = await handleBookingUpdate(
+      bookingData.id, 
+      editValues, 
+      setPopupMessage, 
+      setShowBookingPopup
+    );
+
+    if (updatedBooking) {
+      setBookingData(updatedBooking.data);
+      setIsEditing(false);
+    }
   };
 
-const calculateTotalPrice = () => {
-  const { dateFrom, dateTo } = editValues;
-  const venuePricePerNight = selectedVenue.price;
+    const openCancelConfirmation = () => {
+    setIsConfirmCancelVisible(true);
+  };
 
-  const dateFromObj = new Date(dateFrom);
-  const dateToObj = new Date(dateTo);
+  const closeCancelConfirmation = () => {
+    setIsConfirmCancelVisible(false);
+  };
 
-  const timeDifference = dateToObj - dateFromObj;
-  const numberOfNights = timeDifference / (1000 * 3600 * 24);
+  const handleCancelBookingConfirm = async () => {
+    if (!bookingData?.id) {
+      console.error('No booking ID found');
+      return;
+    }
 
-  return numberOfNights > 0 ? numberOfNights * venuePricePerNight : 0;
-};
+    const success = await handleBookingDelete(
+      bookingData.id, 
+      setPopupMessage, 
+      setShowBookingPopup
+    );
 
-const openCancelConfirmation = () => {
-  setIsConfirmCancelVisible(true);
-};
-
-const closeCancelConfirmation = () => {
-  setIsConfirmCancelVisible(false);
-};
-
-const handleCancelBookingConfirm = async () => {
-  const token = localStorage.getItem('accessToken');
-  if (!token || !selectedBooking?.id) {
-    console.error('Missing token or booking ID');
-    return;
-  }
-
-  try {
-    const url = `/holidaze/bookings/${selectedBooking.id}`;
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (response.ok) {
+    if (success) {
       closeCancelConfirmation();
       window.location.reload();
-    } 
-    else {
-      console.error('Failed to cancel the booking');
     }
-  } 
-  catch (error) {
-    console.error('Error canceling the booking:', error);
-  }
-};
+  };
+
+  if (!selectedBooking || !selectedVenue) return null;
 
   return (
     <motion.div
