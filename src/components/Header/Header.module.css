@@ -31,8 +31,6 @@ header {
     transition: 0.15s;
   }
   header.scrolled nav {
-    padding-left: 0.5%;
-    padding-right: 1.5%;
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border-radius: 0px 0px 25px 25px;
@@ -148,6 +146,7 @@ header {
   align-items: center;
   gap: 20px;
   height: 100%;
+  margin-right: 5%;
   margin-top: 0;
   justify-content: flex-end;
   position: relative;
