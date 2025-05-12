@@ -10,7 +10,7 @@ const CustomPopup = ({
   showButtons = true, 
   title = "", 
   disableAutoClose = false,
-    hideBars = false
+  hideBars = false
 }) => {
 
   useEffect(() => {

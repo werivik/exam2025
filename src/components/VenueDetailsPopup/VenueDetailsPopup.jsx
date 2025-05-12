@@ -39,8 +39,12 @@ const VenueDetailsPopup = ({
   }, [selectedVenue]);
 
   const handleEditClick = () => {
-    navigate(`/edit-venue/${selectedVenue.id}`, { state: { venue: selectedVenue } });
-    closeModal();
+    if (userRole === 'admin') {
+      navigate(`/edit-venue/${selectedVenue.id}`, { state: { venue: selectedVenue } });
+      closeModal();
+    } else if (userRole === 'customer') {
+      setIsEditing(true);
+    }
   };
 
   const handleClose = () => {
@@ -97,7 +101,7 @@ const VenueDetailsPopup = ({
     setCurrentIndex((prevIndex) => (prevIndex + 1) % mediaLength);
   };
 
-    useEffect(() => {
+  useEffect(() => {
     if (selectedBooking) {
       setBookingData(selectedBooking);
       setEditValues({
@@ -126,7 +130,7 @@ const VenueDetailsPopup = ({
     return numberOfNights > 0 ? numberOfNights * venuePricePerNight : 0;
   };
   
-    useEffect(() => {
+  useEffect(() => {
     if (selectedBooking && userRole === 'customer') {
       setEditValues({
         dateFrom: new Date(selectedBooking.dateFrom).toISOString().split('T')[0],
@@ -136,7 +140,7 @@ const VenueDetailsPopup = ({
     }
   }, [selectedBooking, userRole]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (!selectedBooking && selectedVenue?.bookingId) {
       const fetchBookingData = async () => {
         const token = localStorage.getItem('accessToken');
@@ -149,18 +153,18 @@ const VenueDetailsPopup = ({
               },
             });
 
-if (response.ok) {
-  const data = await response.json();
-  console.log("Fetched booking data:", data);
-  if (data?.data?.id) {
-    setBookingData(data.data);
-  } 
-  else {
-    console.error('Booking data is missing the ID');
-  }
-} else {
-  console.error('Failed to fetch booking data');
-}
+            if (response.ok) {
+              const data = await response.json();
+              console.log("Fetched booking data:", data);
+              if (data?.data?.id) {
+                setBookingData(data.data);
+              } 
+              else {
+                console.error('Booking data is missing the ID');
+              }
+            } else {
+              console.error('Failed to fetch booking data');
+            }
           } 
           catch (error) {
             console.error('Error fetching booking data:', error);
@@ -175,25 +179,26 @@ if (response.ok) {
     }
   }, [selectedBooking, selectedVenue]);
 
-const handleSave = async () => {
-  if (!bookingData?.id) {
-    console.error('No booking ID found');
-    return;
-  }
+  const handleSave = async () => {
+    if (!bookingData?.id) {
+      console.error('No booking ID found');
+      return;
+    }
 
-  const updatedBooking = await handleBookingUpdate(
-    bookingData.id, 
-    editValues, 
-    setPopupMessage, 
-    setShowBookingPopup
-  );
+    const updatedBooking = await handleBookingUpdate(
+      bookingData.id, 
+      editValues, 
+      setPopupMessage, 
+      setShowBookingPopup
+    );
 
-  if (updatedBooking) {
-    setBookingData(updatedBooking.data);
-    setIsEditing(false);
-  }
-};
-    const openCancelConfirmation = () => {
+    if (updatedBooking) {
+      setBookingData(updatedBooking.data);
+      setIsEditing(false);
+    }
+  };
+
+  const openCancelConfirmation = () => {
     setIsConfirmCancelVisible(true);
   };
 
@@ -246,138 +251,148 @@ const handleSave = async () => {
             </button>
 
             <div className={styles.venueImageSlideshow}>
-            {selectedVenue?.media && selectedVenue.media.length > 0 ? (
-    <div className={styles.imageSlider}>
-      <img
-        src={selectedVenue.media[currentIndex].url}
-        alt={selectedVenue.media[currentIndex].alt || "Venue Image"}
-        className={styles.slideshowImage}
-      />
-      {selectedVenue.media.length > 1 && (
-        <>
-          <button 
-            className={styles.prevButton} 
-            onClick={() => handlePrevImage(selectedVenue.media.length)}
-          >
-            <img src={slideshowPrev} alt="Previous" />
-          </button>
-          <button 
-            className={styles.nextButton} 
-            onClick={() => handleNextImage(selectedVenue.media.length)}
-          >
-            <img src={slideshowNext} alt="Next" />
-          </button>
-        </>
-      )}
-    </div>
-  ) : (
-    <p>No images available for this venue.</p>
-  )}
+              {selectedVenue?.media && selectedVenue.media.length > 0 ? (
+                <div className={styles.imageSlider}>
+                  <img
+                    src={selectedVenue.media[currentIndex].url}
+                    alt={selectedVenue.media[currentIndex].alt || "Venue Image"}
+                    className={styles.slideshowImage}
+                  />
+                  {selectedVenue.media.length > 1 && (
+                    <>
+                      <button 
+                        className={styles.prevButton} 
+                        onClick={() => handlePrevImage(selectedVenue.media.length)}
+                      >
+                        <img src={slideshowPrev} alt="Previous" />
+                      </button>
+                      <button 
+                        className={styles.nextButton} 
+                        onClick={() => handleNextImage(selectedVenue.media.length)}
+                      >
+                        <img src={slideshowNext} alt="Next" />
+                      </button>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <p>No images available for this venue.</p>
+              )}
             </div>
             <div className={styles.venueRight}>
-            <div className={styles.fadeOutDivTop}>
-            </div>
-              <div className={styles.venueInfo}>
-                <h2>{selectedVenue.name}</h2>
-                <p>{selectedVenue.rating} Stars</p>
-                <p>{selectedVenue.description}</p>
-                <p><strong>Price:</strong> ${selectedVenue.price} <span>/ per night</span></p>
-                <p><strong>Max Guests:</strong> {selectedVenue.maxGuests}</p>
-                <p><strong>Amenities:</strong> {selectedVenue.meta.wifi ? 'WiFi, ' : ''}{selectedVenue.meta.parking ? 'Parking, ' : ''}{selectedVenue.meta.breakfast ? 'Breakfast, ' : ''}{selectedVenue.meta.pets ? 'Pets Allowed' : ''}</p>
-                <p><strong>Location:</strong> {selectedVenue.location.city}, {selectedVenue.location.country}, {selectedVenue.location.address} {selectedVenue.location.zip}</p>
-                <Link to={`/venue-details/${selectedVenue?.id}`} target="_blank" rel="noopener noreferrer">
-                View Venue
-                </Link>
-              </div>
+              <div className={styles.fadeOutDivTop}></div>
+              
+              {/* Conditionally render venue info or edit form */}
+              {!isEditing ? (
+                <>
+                  <div className={styles.venueInfo}>
+                    <h2>{selectedVenue.name}</h2>
+                    <p>{selectedVenue.rating} Stars</p>
+                    <p>{selectedVenue.description}</p>
+                    <p><strong>Price:</strong> ${selectedVenue.price} <span>/ per night</span></p>
+                    <p><strong>Max Guests:</strong> {selectedVenue.maxGuests}</p>
+                    <p><strong>Amenities:</strong> {selectedVenue.meta.wifi ? 'WiFi, ' : ''}{selectedVenue.meta.parking ? 'Parking, ' : ''}{selectedVenue.meta.breakfast ? 'Breakfast, ' : ''}{selectedVenue.meta.pets ? 'Pets Allowed' : ''}</p>
+                    <p><strong>Location:</strong> {selectedVenue.location.city}, {selectedVenue.location.country}, {selectedVenue.location.address} {selectedVenue.location.zip}</p>
+                    <Link to={`/venue-details/${selectedVenue?.id}`} target="_blank" rel="noopener noreferrer">
+                      View Venue
+                    </Link>
+                  </div>
 
-              {userRole === "admin" && (
-                <div className={styles.bookedVenueEditButtons}>
-                  <Buttons size="small" onClick={handleEditClick}>Edit</Buttons>
-                  <Buttons size="small" version="v2" onClick={handleDelete}>Delete</Buttons>
+                  {userRole === "admin" && (
+                    <div className={styles.bookedVenueEditButtons}>
+                      <Buttons size="small" onClick={handleEditClick}>Edit</Buttons>
+                      <Buttons size="small" version="v2" onClick={handleDelete}>Delete</Buttons>
+                    </div>
+                  )}
+                </>
+              ) : null}
+
+              {userRole === 'customer' && selectedVenue?.id && (
+                <div className={styles.bookingSection}>
+                  {isEditing ? (
+                    <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+                      <h3>Edit Booking</h3>
+                      <label>
+                        Guests:
+                        <input
+                          type="number"
+                          name="guests"
+                          value={editValues.guests}
+                          onChange={handleInputChange}
+                          required
+                          min="1"
+                          max={selectedVenue.maxGuests}
+                        />
+                      </label>
+                      <label>
+                        From:
+                        <input
+                          type="date"
+                          name="dateFrom"
+                          value={editValues.dateFrom}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </label>
+                      <label>
+                        To:
+                        <input
+                          type="date"
+                          name="dateTo"
+                          value={editValues.dateTo}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </label>
+
+                      <div className={styles.totalPrice}>
+                        <p><strong>Total Price:</strong> ${calculateTotalPrice()}</p>
+                      </div>
+
+                      <div className={styles.bookedVenueEditButtons}>
+                        <Buttons type="submit" size="small" version="v1">Save</Buttons>
+                        <Buttons type="button" size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel</Buttons>
+                      </div>
+                    </form>
+                  ) : bookingData ? (
+                    <div className={styles.bookingInfo}>
+                      <h3>Booking Information</h3>
+                      <p><strong>Guests:</strong> {bookingData.guests}</p>
+                      <p><strong>From:</strong> {new Date(bookingData.dateFrom).toLocaleDateString()}</p>
+                      <p><strong>To:</strong> {new Date(bookingData.dateTo).toLocaleDateString()}</p>
+                      <p><strong>Total Price:</strong> ${calculateTotalPrice()}</p>
+                      {bookingData.created && (
+                        <p><strong>Created:</strong> {new Date(bookingData.created).toLocaleDateString()}</p>
+                      )}
+                      {bookingData.updated && (
+                        <p><strong>Updated:</strong> {new Date(bookingData.updated).toLocaleDateString()}</p>
+                      )}
+                      <div className={styles.bookedVenueEditButtons}>
+                        <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+                        <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
+                      </div>
+                    </div>
+                  ) : (
+                    <p>Booking details not available.</p>
+                  )}
                 </div>
               )}
-{userRole === 'customer' && selectedVenue?.id && (
-  <div className={styles.bookingSection}>
-    {isEditing ? (
-      <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
-        <label>
-          Guests:
-          <input
-            type="number"
-            name="guests"
-            value={editValues.guests}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <label>
-          From:
-          <input
-            type="date"
-            name="dateFrom"
-            value={editValues.dateFrom}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-        <label>
-          To:
-          <input
-            type="date"
-            name="dateTo"
-            value={editValues.dateTo}
-            onChange={handleInputChange}
-            required
-          />
-        </label>
-
-        <div className={styles.totalPrice}>
-          <p><strong>Total Price:</strong> ${calculateTotalPrice()}</p>
-        </div>
-
-        <div className={styles.bookedVenueEditButtons}>
-          <Buttons type="submit" size="small" version="v1">Save</Buttons>
-          <Buttons type="button" size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel</Buttons>
-        </div>
-      </form>
-    ) : bookingData ? (
-      <div className={styles.bookingInfo}>
-        <h3>Booking Information</h3>
-        <p><strong>Guests:</strong> {bookingData.guests}</p>
-        <p><strong>From:</strong> {new Date(bookingData.dateFrom).toLocaleDateString()}</p>
-        <p><strong>To:</strong> {new Date(bookingData.dateTo).toLocaleDateString()}</p>
-        <p><strong>Total Price:</strong> ${calculateTotalPrice()}</p>
-        {bookingData.created && (
-          <p><strong>Created:</strong> {new Date(bookingData.created).toLocaleDateString()}</p>
-        )}
-        {bookingData.updated && (
-          <p><strong>Updated:</strong> {new Date(bookingData.updated).toLocaleDateString()}</p>
-        )}
-        <div className={styles.bookedVenueEditButtons}>
-          <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
-          <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
-        </div>
-      </div>
-    ) : (
-      <p>Booking details not available.</p>
-    )}
-  </div>
-)}
-              <div className={styles.fadeOutDivBottom}>
-              </div>
+              
+              <div className={styles.fadeOutDivBottom}></div>
             </div>
           </div>
         )}
 
-{isConfirmCancelVisible && (
-  <CustomPopup
-    message="Are you sure you want to cancel this booking?"
-    onClose={closeCancelConfirmation}
-    onConfirm={handleCancelBookingConfirm}
-    onCancel={closeCancelConfirmation}
-    disableAutoClose={true}
-  />
-)}
+        {isConfirmCancelVisible && (
+          <CustomPopup
+            message="Are you sure you want to cancel this booking?"
+            onClose={closeCancelConfirmation}
+            onConfirm={handleCancelBookingConfirm}
+            onCancel={closeCancelConfirmation}
+            disableAutoClose={true}
+            hideBars = {true}
+          />
+        )}
       </motion.div>
     </motion.div>
   );
