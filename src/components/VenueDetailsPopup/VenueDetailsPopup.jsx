@@ -5,7 +5,7 @@ import styles from './VenueDetailsPopup.module.css';
 import Buttons from '../../components/Buttons/Buttons';
 import CustomPopup from '../CostumPopup/CostumPopup';
 import { headers } from '../../headers';
-import { handleBookingDelete } from '../../auth/booking';
+import { handleBookingDelete, handleBookingUpdate } from '../../auth/booking';
 import { VENUE_DELETE } from '../../constants';
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
 import slideshowNext from "/media/icons/slideshow-next-button.png";
@@ -175,25 +175,24 @@ if (response.ok) {
     }
   }, [selectedBooking, selectedVenue]);
 
-  const handleSave = async () => {
-    if (!bookingData?.id) {
-      console.error('No booking ID found');
-      return;
-    }
+const handleSave = async () => {
+  if (!bookingData?.id) {
+    console.error('No booking ID found');
+    return;
+  }
 
-    const updatedBooking = await handleBookingUpdate(
-      bookingData.id, 
-      editValues, 
-      setPopupMessage, 
-      setShowBookingPopup
-    );
+  const updatedBooking = await handleBookingUpdate(
+    bookingData.id, 
+    editValues, 
+    setPopupMessage, 
+    setShowBookingPopup
+  );
 
-    if (updatedBooking) {
-      setBookingData(updatedBooking.data);
-      setIsEditing(false);
-    }
-  };
-
+  if (updatedBooking) {
+    setBookingData(updatedBooking.data);
+    setIsEditing(false);
+  }
+};
     const openCancelConfirmation = () => {
     setIsConfirmCancelVisible(true);
   };

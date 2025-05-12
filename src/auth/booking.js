@@ -51,6 +51,37 @@ export const handleBookingUpdate = async (
   setPopupMessage, 
   setShowBookingPopup
 ) => {
+  if (!bookingId) {
+    console.error('No booking ID provided');
+    if (setPopupMessage) setPopupMessage('Invalid booking ID');
+    if (setShowBookingPopup) setShowBookingPopup(true);
+    return null;
+  }
+
+  if (!validateDate(bookingData.dateFrom) || !validateDate(bookingData.dateTo)) {
+    console.error('Invalid date format');
+    if (setPopupMessage) setPopupMessage('Invalid dates. Please check your dates.');
+    if (setShowBookingPopup) setShowBookingPopup(true);
+    return null;
+  }
+
+  const guests = parseInt(bookingData.guests, 10);
+  if (isNaN(guests) || guests < 1) {
+    console.error('Invalid number of guests');
+    if (setPopupMessage) setPopupMessage('Please enter a valid number of guests');
+    if (setShowBookingPopup) setShowBookingPopup(true);
+    return null;
+  }
+
+  const dateFrom = new Date(bookingData.dateFrom);
+  const dateTo = new Date(bookingData.dateTo);
+  if (dateTo <= dateFrom) {
+    console.error('Check-out date must be after check-in date');
+    if (setPopupMessage) setPopupMessage('Check-out date must be after check-in date');
+    if (setShowBookingPopup) setShowBookingPopup(true);
+    return null;
+  }
+
   try {
     const token = localStorage.getItem('accessToken');
     
@@ -84,7 +115,8 @@ export const handleBookingUpdate = async (
     if (setShowBookingPopup) setShowBookingPopup(true);
     
     return data;
-  } catch (error) {
+  } 
+  catch (error) {
     console.error("Booking update API error:", error);
     if (setPopupMessage) setPopupMessage("Booking update failed. Please try again.");
     if (setShowBookingPopup) setShowBookingPopup(true);
