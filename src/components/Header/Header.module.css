@@ -21,6 +21,7 @@ header {
     font-size: 1.25rem;
     transition: 0.15s;
     color: #f2f2f2;
+    background-color: transparent;
   }
   nav ul li a, a, li a {
     font-size: 1.25rem;
