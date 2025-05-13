@@ -4,7 +4,7 @@ import debounce from "lodash.debounce";
 import styles from "./Header.module.css";
 import headerLogo from "/media/logo/logo-default.png";
 import headerLogoHover from "/media/logo/logo-hover.png";
-import { VENUES, PROFILES_SINGLE } from "../../constants";
+import { VENUES, PROFILES_SINGLE, PROFILES_SEARCH, VENUES_SEARCH } from "../../constants";
 import { headers } from "../../headers";
 import { isLoggedIn, getUserRole } from "../../auth/auth";
 
@@ -22,6 +22,7 @@ function Header() {
   const [userRole, setUserRole] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const [filters, setFilters] = useState({ destination: "" });
 
   const [userData, setUserData] = useState(null);
 
@@ -101,42 +102,59 @@ function Header() {
     fetchVenues();
   }, []);
 
-  const handleSearch = useCallback(
-    debounce((input) => {
+const handleSearch = useCallback(
+  debounce(async (input) => {
+    if (!input) {
+      setSuggestions([]);
+      return;
+    }
+
+    try {
       const term = input.toLowerCase();
-      if (!term) return setSuggestions([]);
 
-      const unique = (arr) =>
-        arr.filter((v, i, self) => v && self.indexOf(v) === i);
+      const venuesRes = await fetch(`${VENUES_SEARCH}`, {
+        headers: headers()
+      });
+      const venuesData = await venuesRes.json();
 
-      const regions = unique(
-        venues
-          .map((v) => v.location?.continent)
-          .filter((val) => val?.toLowerCase().startsWith(term))
-      ).map((val) => ({ type: "Region", value: val }));
+      const locationMatches = (venuesData.data || []).flatMap((v) => {
+        const locs = [];
+        if (v.location?.city) locs.push({ type: "City", value: v.location.city });
+        if (v.location?.country) locs.push({ type: "Country", value: v.location.country });
+        if (v.location?.continent) locs.push({ type: "Region", value: v.location.continent });
+        return locs;
+      });
 
-      const cities = unique(
-        venues
-          .map((v) => v.location?.city)
-          .filter((val) => val?.toLowerCase().startsWith(term))
-      ).map((val) => ({ type: "City", value: val }));
+      const venueMatches = (venuesData.data || []).map((v) => ({
+        type: "Venue",
+        value: v.name,
+        id: v.id,
+      }));
 
-      const names = unique(
-        venues
-          .map((v) => v.name)
-          .filter((val) => val?.toLowerCase().startsWith(term))
-      ).map((val) => ({ type: "Venue", value: val }));
+      const profilesRes = await fetch(`${PROFILES_SEARCH}`, {
+        headers: headers()
+      });
+      const profilesData = await profilesRes.json();
 
-      const allSuggestions = [...regions, ...cities, ...names].slice(0, 10);
+      const profileMatches = (profilesData.data || []).map((p) => ({
+        type: "Profile",
+        value: p.name,
+      }));
 
-      setSuggestions(
-        allSuggestions.length
-          ? allSuggestions
-          : [{ type: "None", value: "No matching results..." }]
-      );
-    }, 300),
-    [venues]
-  );
+      const combined = [...venueMatches, ...locationMatches, ...profileMatches];
+      const unique = Array.from(
+        new Map(combined.map((item) => [`${item.type}:${item.value}`, item])).values()
+      ).slice(0, 10);
+
+      setSuggestions(unique.length ? unique : [{ type: "None", value: "No matching results..." }]);
+    } 
+    catch (err) {
+      console.error("Search error:", err);
+      setSuggestions([{ type: "None", value: "Error searching..." }]);
+    }
+  }, 300),
+  []
+);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -144,21 +162,22 @@ function Header() {
     handleSearch(value);
   };
 
-  const handleSelect = (item) => {
-    if (item.type === "Venue") {
-      const selectedVenue = venues.find(v => v.name === item.value);
-
-      if (selectedVenue?.id) {
-        navigate(`/venue-details/${selectedVenue.id}`);
-      }
-    } 
-    else {
-      navigate("/venues");
-    }
-  
-    setSearchTerm("");
-    setSuggestions([]);
-  };
+const handleSelect = (item) => {
+  if (item.type === "Venue" && item.id) {
+    navigate(`/venue-details/${item.id}`);
+  }
+  else if (item.type === "Profile") {
+    navigate(`/venue-details/${item.value}`);
+  } 
+  else if (["City", "Country", "Region"].includes(item.type)) {
+    navigate("/venues", {
+      state: { filters: { destination: item.value } },
+    });
+  }
+  setFilters({ destination: "" });
+  setSuggestions([]);
+  setIsSearchOpen(false);
+};
 
   const toggleSearchBar = () => {
     setIsSearchOpen((prevState) => !prevState);
@@ -336,13 +355,17 @@ function Header() {
                   className={styles.searchbarContent}
                   style={{ display: isSearchOpen ? "block" : "none" }}
                 >
-                  <input
-                    type="text"
-                    className={styles.searchInput}
-                    placeholder="Search venues, cities, or countries..."
-                    value={searchTerm}
-                    onChange={handleInputChange}
-                  />
+<input
+  type="text"
+  className={styles.searchInput}
+  placeholder="Search venues, profiles, or locations..."
+  value={filters.destination}
+  onChange={(e) => {
+    const value = e.target.value;
+    setFilters({ destination: value });
+    handleSearch(value);
+  }}
+/>
                   {searchTerm && suggestions.length > 0 && (
                     <ul className={styles.suggestionsList}>
                       {suggestions.map((item, index) => (
