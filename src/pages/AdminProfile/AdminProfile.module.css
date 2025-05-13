@@ -19,7 +19,6 @@
   margin-top: 75px;
   gap: 50px;
 }
-
 .profileContentTop {
   height: 550px;
   width: 100%;
@@ -117,8 +116,6 @@
   height: 15px;
   margin-right: 5px;
 }
-
-
 .rightSection {
   width: 95%;
   position: relative;
@@ -365,9 +362,6 @@
 .dashEdit .allEdits {
   width: 95%;
 }
-
-
-
 @media (max-width:1025px){
 .profilePage {
   width: 90%;
@@ -375,6 +369,12 @@
 }
 .rightBorder h2 {
   font-size: 2.5rem;
+}
+}
+@media (max-width:725px){
+  .profilePage {
+  width: 95%;
+  margin-left: 2.5%;
 }
 }
 @media (max-width:425px){
