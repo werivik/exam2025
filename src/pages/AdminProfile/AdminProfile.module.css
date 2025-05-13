@@ -333,60 +333,86 @@
 
 
 
-
-.dashBoard {
-  background-color: #fffefb;
+.dashViewProfile {
   height: 100%;
-  min-height: 80vh;
-  border-radius: 25px;
+  min-height: 100vh;
   width: 100%;
 }
-.dashBoardBorder {
-  margin: 25px;
-  height: 100%;
-  min-height: 75vh;
+.dashProfileTop {
+  height: 350px;
+  width: 100%;
   position: relative;
-  color: #1F1B17;
-}
-.dashBoardBorder h2 {
-  font-size: 2rem;
-  margin-bottom: 50px;
-}
-.dashBoardBorder .divideLineSecond {
-  background-color: #1F1B17;
-  margin-left: 25px;
-  height: 0.5px;
-  z-index: 888;
-  width: 70%;
-  margin-top: 30px;
-  margin-bottom: 30px;
-}
-
-.dashBorderLinks {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 25px;
-  margin-left: 25px;
 }
-.dashBorderLinks h3 {
-  font-size: 1.5rem;
-  margin: 0;
-  padding: 0;
+.dashProfileBanner {
+  height: 400px;
+  width: 100%;
+  z-index: 1;
 }
-.dashBorderLinks button {
-  background-color: transparent;
-  border: none;
-  font-size: 1rem;
-  color: #1F1B17;
+.dashProfileBanner img, .dashProfileAvatar .dashAvatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-.signOutButtonDash {
+.bannerEdgeLeft, .bannerEdgeRight {
+  width: 15px;
   position: absolute;
   bottom: 0;
-  margin-left: 25px;
+  z-index: 3;
 }
-
-
+.bannerEdgeRight {
+  left: 140px;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+.dashProfileAvatar .dashAvatar {
+  position: absolute;
+  height: 125px;
+  width: 125px;
+  z-index: 2;
+  bottom: -10px;
+  margin-left: 15px;
+  border-radius: 99px 99px 15px 15px;
+}
+.dashProfileAvatar .dashAvatar  {
+  border-radius: 99px 99px 15px 15px;
+}
+.dashProfileInfo {
+  margin-top: 10px;
+  margin-left: 15px;
+  margin-bottom: 50px;
+}
+.dashProfileInfo h2 {
+  margin-top: 35px;
+  font-size: 1.5rem;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.dashProfileInfo p {
+  font-size: 1.125rem;
+  margin-top: 5px;
+  font-style: italic;
+}
+.dashRating {
+  margin-top: -5px;
+  margin-bottom: 35px;
+  font-size: 1rem;
+}
+.dashRating span {
+  opacity: 75%;
+  font-size: 0.9rem;
+}
+.dashBio {
+  font-size: 1.125rem;
+  width: 95%;
+}
+.dashBottom {
+  margin-left: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
 
 
 
@@ -430,7 +456,6 @@
   margin-left: 5%;
 }
 }
-
 @media (max-width:665px) {
   .bookingsFilter {
     display: none;
@@ -442,4 +467,10 @@
   .leftSection, .rightSection {
     display: none;
   }
+
+  .profilePage {
+  margin: 0;
+  width: 100%;
+  padding: 0;
+ }
 }

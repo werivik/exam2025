@@ -10,6 +10,9 @@ import Buttons from '../../components/Buttons/Buttons';
 import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
 import CustomPopup from '../../components/CostumPopup/CostumPopup';
 
+import bannerImage from '../../../media/logo/loadingScreen.png';
+import bannerEdge from '../../../media/images/beige-edge.png';
+
 const pageVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
@@ -242,27 +245,52 @@ const AdminProfile = () => {
       <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
         <div className={styles.profilePage}>
 
-          <section className={styles.dashBoard}>
-            <div className={styles.dashBoardBorder}>
-              <h2>Dashboard</h2>
-              <div className={styles.dashBorderLinks}>
-              <h3>Profile</h3>
-              <button>View Profile</button>
-              <button>Edit Profile</button>
+          <section className={styles.dashViewProfile}>
+            <div className={styles.dashProfileTop}>
+              <div className={styles.dashProfileBanner}>
+                <img src={bannerImage}></img>
               </div>
-              <div className={styles.divideLineSecond}></div>
-              <div className={styles.dashBorderLinks}>
-              <h3>Venues</h3>
-              <button>View My Venues</button>
+              <div className={styles.dashProfileAvatar}>
+                <img src={bannerEdge} className={styles.bannerEdgeLeft}></img>
+                <img
+                  className={styles.dashAvatar}
+                  src={userData.avatar?.url || defaultAvatar}
+                  alt={userData.name || 'Admin Avatar'}
+                />
               </div>
-              <div className={styles.divideLineSecond}></div>
-              <div className={styles.dashBorderLinks}>
-              <h3>Booking</h3>
-              <button>View My Booking</button>
-              </div>
-              <button className={styles.signOutButtonDash}>Sign Out</button>
+              <img src={bannerEdge} className={styles.bannerEdgeRight}></img>
             </div>
+            <div className={styles.dashProfileInfo}>
+              <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
+              <p>Venue Manager</p>
+              <div className={styles.dashRating}>5<span> / reviews</span></div>
+              <div className={styles.dashBio}>
+                Felis dapibus placerat varius sapien eget dolor primis. Dis posuere molestie cras felis accumsan hendrerit lacus senectus ultrices molestie lacus consequat rutrum metus vestibulum. Lobortis habitant felis vulputate ut orci litora nisl pharetra lacinia consequat taciti. Ullamcorper congue pretium ornare diam congue tempus rhoncus. Tellus malesuada et morbi sapien sed urna metus ultrices dolor euismod augue nullam penatibus torquent vulputate pede sociosqu.
+              </div>
+              </div>
+              <div className={styles.dashBottom}>
+                <div className={styles.dashVenues}>
+                <h3>Venues</h3>
+              </div>
+              <div className={styles.dashVenues}>
+                <h3>Edit Profile</h3>
+              </div>
+              </div>
           </section>
+
+          <section className={styles.dashEditProfile}>
+          
+          </section>
+
+          <section className={styles.dashVenues}>
+          
+          </section>
+
+          <section className={styles.dashBooking}>
+          
+          </section>
+
+
 
           <section className={styles.leftSection}>
             <div className={styles.leftBorder}>
