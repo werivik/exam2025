@@ -322,9 +322,33 @@ const AdminProfile = () => {
 
           </section>
 
+          <section className={styles.profileContentTop}>
+            <div className={styles.profileBorder}>
+            <div className={styles.profileTop}>
+              <div className={styles.profileBanner}>
+                <img src={bannerImage}></img>
+              </div>
+              <div className={styles.profileAvatarContent}>
+                <img src={bannerEdge} className={styles.profileEdgeLeft}></img>
+                <img
+                  className={styles.profileAvatar}
+                  src={userData.avatar?.url || defaultAvatar}
+                  alt={userData.name || 'Admin Avatar'}
+                />
+                <img src={bannerEdge} className={styles.profileEdgeRight}></img>
+              </div>
+            </div>
+              <div className={styles.profileContentInfo}>
+              <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
+              <p>Venue Manager</p>
+              <div className={styles.profileRating}><img src={starRating}></img>5<span> / (...) reviews</span></div>
+            </div>
+            </div>
+          </section>
 
 
 
+{/*
           <section className={styles.leftSection}>
             <div className={styles.leftBorder}>
               <div className={styles.profileLeftTop}>
@@ -342,23 +366,8 @@ const AdminProfile = () => {
               </div>
             </div>
           </section>
-          <section className={styles.topSection}>
-            <div className={styles.topBorder}>
-              <div className={styles.profileTop}>
-                <img
-                  src={userData.avatar?.url || defaultAvatar}
-                  alt={userData.name || 'Admin Avatar'}
-                />
-              <h3>{capitalizeFirstLetter(userData.name) || 'Admin'}</h3>
-              </div>
-              <div className={styles.topShortcuts}>
-                <button className={styles.shortcutLink}>My Venues</button>
-                <button className={styles.shortcutLink} onClick={handleRedirect}>Create New Venue</button>
-                <button className={styles.shortcutLink} onClick={handleEditProfile}>Edit Profile</button>
-                <button className={styles.topSignOutButton} onClick={handleSignOut}>Sign out</button>
-              </div>
-            </div>
-          </section>
+*/}
+
           <section className={styles.rightSection}>
             <div className={styles.rightBorder}>
               <div className={styles.bookings}>
@@ -436,6 +445,7 @@ const AdminProfile = () => {
                 </div>
             </div>
           </section>
+
         </div>
 
 {isModalVisible && selectedVenue && (
