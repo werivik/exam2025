@@ -10,6 +10,7 @@ import Buttons from '../../components/Buttons/Buttons';
 import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
 import CustomPopup from '../../components/CostumPopup/CostumPopup';
 
+import starRating from '../../../media/rating/christmas-stars.png';
 import bannerImage from '../../../media/logo/loadingScreen.png';
 import bannerEdge from '../../../media/images/beige-edge.png';
 
@@ -263,7 +264,7 @@ const AdminProfile = () => {
             <div className={styles.dashProfileInfo}>
               <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
               <p>Venue Manager</p>
-              <div className={styles.dashRating}>5<span> / reviews</span></div>
+              <div className={styles.dashRating}><img src={starRating}></img>5<span> / (...) reviews</span></div>
               <div className={styles.dashBio}>
                 Felis dapibus placerat varius sapien eget dolor primis. Dis posuere molestie cras felis accumsan hendrerit lacus senectus ultrices molestie lacus consequat rutrum metus vestibulum. Lobortis habitant felis vulputate ut orci litora nisl pharetra lacinia consequat taciti. Ullamcorper congue pretium ornare diam congue tempus rhoncus. Tellus malesuada et morbi sapien sed urna metus ultrices dolor euismod augue nullam penatibus torquent vulputate pede sociosqu.
               </div>
