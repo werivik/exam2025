@@ -173,7 +173,7 @@
     height: 70vh;
   }
   .paginationDots {
-    top: 47vh;
+    top: 46vh;
     left: 50%;
     transform: translate(-50%);
     flex-direction: row;
