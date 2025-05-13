@@ -265,16 +265,14 @@ const AdminProfile = () => {
               <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
               <p>Venue Manager</p>
               <div className={styles.dashRating}><img src={starRating}></img>5<span> / (...) reviews</span></div>
-              <div className={styles.dashBio}>
-                Felis dapibus placerat varius sapien eget dolor primis. Dis posuere molestie cras felis accumsan hendrerit lacus senectus ultrices molestie lacus consequat rutrum metus vestibulum. Lobortis habitant felis vulputate ut orci litora nisl pharetra lacinia consequat taciti. Ullamcorper congue pretium ornare diam congue tempus rhoncus. Tellus malesuada et morbi sapien sed urna metus ultrices dolor euismod augue nullam penatibus torquent vulputate pede sociosqu.
               </div>
-              </div>
+              <button onClick={handleRedirect}>Create Venue</button>
+              <button onClick={handleSignOut}>Sign Out</button>
               <div className={styles.dashBottom}>
                 <div className={styles.dashDivideLine}></div>
                 <div className={styles.dashVenues}>
                   <div className={styles.dashVenuesTitle}>
                     <h3>Venues</h3>
-                    <button onClick={handleRedirect}>Create Venue</button>
                   </div>
                   {filteredVenues.length > 0 ? (
                   <div className={styles.adminBookings}>
@@ -342,60 +340,17 @@ const AdminProfile = () => {
               <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
               <p>Venue Manager</p>
               <div className={styles.profileRating}><img src={starRating}></img>5<span> / (...) reviews</span></div>
+              <button onClick={handleSignOut} className={styles.signOutButton}>Sign Out</button>
             </div>
             </div>
           </section>
-
-
-
-{/*
-          <section className={styles.leftSection}>
-            <div className={styles.leftBorder}>
-              <div className={styles.profileLeftTop}>
-                <img
-                  src={userData.avatar?.url || defaultAvatar}
-                  alt={userData.name || 'Admin Avatar'}
-                />
-              <h3>{capitalizeFirstLetter(userData.name) || 'Admin'}</h3>
-              </div>
-              <div className={styles.profileShortcuts}>
-                <button className={styles.shortcutLink}>My Venues</button>
-                <button className={styles.shortcutLink} onClick={handleRedirect}>Create New Venue</button>
-                <button className={styles.shortcutLink} onClick={handleEditProfile}>Edit Profile</button>
-                <button className={styles.signOutButton} onClick={handleSignOut}>Sign out</button>
-              </div>
-            </div>
-          </section>
-*/}
 
           <section className={styles.rightSection}>
             <div className={styles.rightBorder}>
               <div className={styles.bookings}>
                 <div className={styles.bookingsTitle}>
                   <h2>My Venues</h2>
-                  <div className={styles.bookingsFilter}>
-                  <Buttons
-                  size="medium"
-                  version={activeFilter === 'all' ? 'v3' : 'v3'} 
-                  onClick={() => handleFilterChange('all')}
-                >
-                  All
-                </Buttons>
-                <Buttons
-                  size="medium"
-                  version={activeFilter === 'newest' ? 'v1' : 'v1'} 
-                  onClick={() => handleFilterChange('newest')}
-                >
-                  Newest
-                </Buttons>
-                <Buttons
-                  size="medium"
-                  version={activeFilter === 'oldest' ? 'v2' : 'v2'} 
-                  onClick={() => handleFilterChange('oldest')}
-                >
-                  Oldest
-                </Buttons>
-                  </div>
+                  <button onClick={handleRedirect}>Create Venue</button>
                 </div>
                 <div className={styles.allBookings}>
                 {filteredVenues.length > 0 ? (
