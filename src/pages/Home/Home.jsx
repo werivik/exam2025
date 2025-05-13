@@ -279,7 +279,6 @@ useEffect(() => {
   return () => window.removeEventListener("resize", updateDisplayedVenues);
 }, [venues, updateDisplayedVenues]);
 
-
   return (
     <>
 <motion.div
@@ -640,11 +639,9 @@ useEffect(() => {
             <div className={styles.thirdInfo}>
               <h2>Join Us and Start Your<br />Next Adventure today...</h2>
               <p>Unlock Booking, Reservations and Discounts by Creating an Account with us today.</p>
-              <Link to="/register-costumer" className={styles.registerButton}>
               <Buttons size='large' version='v1'>
                 Register
               </Buttons>
-              </Link>
             </div>
           </div>
         </>

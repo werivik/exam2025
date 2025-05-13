@@ -414,7 +414,6 @@
         transition: 0.25s;
     }
 }
-
 @keyframes shimmer {
     0% {
       background-position: -1000px 0;
@@ -423,7 +422,6 @@
       background-position: 1000px 0;
     }
 }
-  
 .skeleton .hotelTypeImagePlaceholder {
     width: 100%;
     height: 250px;
@@ -439,7 +437,6 @@
     );
     background-size: 1000px 100%;
 }
-  
 .skeleton .hotelTypeTextPlaceholder {
     width: 100%;
     height: 50px;
@@ -456,7 +453,6 @@
     );
     background-size: 1000px 100%;
 }
-
 .thirdSection {
     background-color: #B88A44;
     height: 80vh;
@@ -468,13 +464,11 @@
     justify-content: center;
     align-items: center;
 }
-
 .thirdBorder {
   width: 80%;
   height: 70%;
   position: relative;
 }
-
 .thirdContentRegister {
     display: flex;
     justify-content: space-between;
@@ -483,7 +477,6 @@
     height: 100%;
     position: relative;
 }
-
 .thirdContentLogin {
     display: flex;
     justify-content: space-between;
@@ -492,7 +485,6 @@
     height: 100%;
     position: relative;
 }
-
 .thirdContentRegister img, .thirdContentLogin img {
     width: 55%;
     height: 100%;
@@ -500,36 +492,31 @@
     border-radius: 25px;
     pointer-events: none;
 }
-
 .thirdInfo {
     width: 45%;
+    min-width: 600px;
     color: #F3F0EB;
     position: relative;
 }
-
 .thirdInfo h2 {
     font-size: 3rem;
     pointer-events: none;
 }
-
 .thirdInfo p {
     font-size: 1.8rem;
     pointer-events: none;
 }
-
 .thirdContentLogin .thirdInfo h2 {
   margin-bottom: 0;
   padding-bottom: 0;
   pointer-events: none;
   text-align: center;
 }
-
 .thirdContentLogin .thirdInfo h2 span {
   font-size: 3.5rem;
   font-style: italic;
   pointer-events: none;
 }
-
 .thirdContentLogin .thirdInfo h3 {
   margin-top: 10px;
   padding-top: 0;
@@ -537,7 +524,6 @@
   text-align: center;
   pointer-events: none;
 }
-
 .thirdInfoLinks {
   margin-top: 10%;
   width: 90%;
@@ -548,7 +534,6 @@
   justify-content: space-around;
   gap: 25px;
 }
-
 .thirdInfoLinks a {
   color: white;
   font-size: 1.8rem;
@@ -556,7 +541,6 @@
   position: relative;
   transition: 0.25s;
 }
-
 .thirdInfoLinks a::after {
   content: '';
   position: absolute;
@@ -570,19 +554,13 @@
   transform-origin: left;
   transition: transform 0.25s ease-out;
  }
-
  .thirdInfoLinks a:hover::after{
   transform: scaleX(1);
 }
-
-.registerButton {
-    position: absolute;
-    top: 75%;
-    left: 50%;
-    transform: translate(-50%);
-    text-decoration: none;
+.thirdInfo button {
+  margin-left: 30%;
+  margin-top: 10%;
 }
-
 .fourthSection {
     margin-top: -50px;
     width: 100%;
@@ -595,12 +573,10 @@
     z-index: 1;
     margin-bottom: 0;
 }
-
 .fourthBorder {
     width: 80%;
     height: 100%;
 }
-
 .fourthTitle {
     display: flex;
     flex-direction: row;
@@ -610,11 +586,9 @@
     color: #1F1B17;
     margin-top: 50px;
 }
-
 .fourthTitle h2 {
     font-size: 3rem;
 }
-
 .fourthTitle .browseAllLink {
     font-size: 1.8rem;
     font-style: italic;
@@ -623,7 +597,6 @@
     text-decoration: none;
     position: relative;
 }
-
 .fourthTitle .browseAllLink::after {
     content: '';
     position: absolute;
@@ -637,11 +610,9 @@
     transform-origin: left;
     transition: transform 0.25s ease-out;
 }
-
 .fourthTitle .browseAllLink:hover::after{
     transform: scaleX(1);
 }
-
 .browseAllLinkSecond {
   display: none;
   font-size: 1.8rem;
@@ -653,7 +624,6 @@
   right: 2.5%;
   margin-top: 25px;
 }
-
 .browseAllLinkSecond::after {
   content: '';
   position: absolute;
@@ -667,11 +637,9 @@
   transform-origin: left;
   transition: transform 0.25s ease-out;
 }
-
 .browseAllLinkSecond:hover::after{
   transform: scaleX(1);
 }
-
 .popularHotels {
     height: 400px;
     width: 100%;
@@ -681,7 +649,6 @@
     gap: 25px;
     margin-top: 50px;
 }
-
 .warningPopup {
   position: absolute;
   background-color: #B88A44;
@@ -694,16 +661,13 @@
   border-radius: 15px;
   color: white;
 }
-
 .popupContent {
   position: relative;
 }
-
 .popupContent h2 {
   margin: 0;
   padding: 0;
 }
-
 .closeWarningPopup {
   position: absolute;
   top: 0;
@@ -714,13 +678,11 @@
   background-color: white;
   transition: 0.25s;
 }
-
 .closeWarningPopup:hover {
   background-color: #1F1B17;
   color: white;
   transition: 0.25s;
 }
-
 .scrollSideIcon {
   display: none;
   position: absolute;
@@ -748,8 +710,16 @@
     height: 70vh;
   }
   .thirdBorder {
-    width: 95%;
+    width: 80%;
     height: 70%;
+  }
+  .thirdInfo {
+    min-width: 400px;
+    text-align: center;
+    position: relative;
+  }
+  .thirdBorder button {
+    margin-left: 37.5%;
   }
 .thirdContentRegister {
   gap: 10px;
@@ -961,6 +931,20 @@ font-size: 1.75rem;
   margin-top: 25px;
 }
 }
+@media (max-width:525px) {
+  .thirdInfo {
+    height: 95%;
+    position: relative;
+  }
+  .thirdInfo p {
+    margin-bottom: 25px;
+  }
+.thirdInfo button {
+  position: absolute;
+  right: 40%;
+  margin-top: 50px;
+ }
+}
 @media (max-width:360px) {
   .registerButton {
     margin-top: 15px;
@@ -1034,29 +1018,27 @@ font-size: 1.75rem;
   margin-top: -50px;
 }
 .thirdBorder {
-width: 95%;
-height: 60%;
+width: 80%;
+height: 75%;
 }
 .thirdInfo {
   width: 100%;
-  margin-left: 5%;
-  margin-right: 5%;
-  text-align: center;
+  margin-top: 2.5%;
+  position: relative;
+}
+.thirdInfo button {
+  position: absolute;
+  left: 10%;
+  top: 45%;
 }
 .thirdInfo h2 {
   font-size: 1.75rem;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   padding: 0;
 }
 .thirdInfo p {
   font-size: 1.125rem;
   margin: 0;
-}
-.thirdContentLogin .thirdInfo h2 span {
-font-size: 1.8rem;
-}
-.thirdContentLogin .thirdInfo h3 {
-font-size: 1.75rem;
 }
 .thirdBorder img {
   display: none;
@@ -1120,6 +1102,9 @@ font-size: 1.75rem;
   .fourthBorder {
     width: 90%;
   }
+  .thirdInfo button {
+    margin-left: 35%;
+  }
 }
 @media (max-width:433px) {
   .secondSection h2 {
@@ -1129,5 +1114,20 @@ font-size: 1.75rem;
 @media (max-width:1198px) {
   .hotelType h3 {
     font-size: 1.25rem;
+  }
+}
+@media (max-width:845px) {
+  .thirdInfo h2 {
+    font-size: 1.75rem;
+  }
+  .thirdInfo p {
+    font-size: 1.125rem;
+  }
+  .thirdInfo {
+    min-width: 300px;
+  }
+  .thirdInfo button {
+    margin-left: 30%;
+    margin-top: 15%;
   }
 }
