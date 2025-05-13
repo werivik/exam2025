@@ -261,18 +261,18 @@ const AdminProfile = () => {
               </div>
               <img src={bannerEdge} className={styles.bannerEdgeRight}></img>
             </div>
-            <div className={styles.dashProfileInfo}>
-              <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
-              <p>Venue Manager</p>
-              <div className={styles.dashRating}><img src={starRating}></img>5<span> / (...) reviews</span></div>
+              <div className={styles.dashProfileInfo}>
+                <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
+                <p>Venue Manager</p>
+                <div className={styles.dashRating}><img src={starRating}></img>5<span> / (...) reviews</span></div>
+                <Buttons size='small' version='v2' onClick={handleSignOut}>Sign Out</Buttons>
               </div>
-              <button onClick={handleRedirect}>Create Venue</button>
-              <button onClick={handleSignOut}>Sign Out</button>
               <div className={styles.dashBottom}>
                 <div className={styles.dashDivideLine}></div>
                 <div className={styles.dashVenues}>
                   <div className={styles.dashVenuesTitle}>
                     <h3>Venues</h3>
+                    <Buttons size="small" version="v1" onClick={handleRedirect}>Create Venue</Buttons>
                   </div>
                   {filteredVenues.length > 0 ? (
                   <div className={styles.adminBookings}>
