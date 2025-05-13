@@ -387,4 +387,7 @@
  .dashViewProfile {
   display: block;
  }
+ .profileContentTop {
+  display: none;
+ }
 }
