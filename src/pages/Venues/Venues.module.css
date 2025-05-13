@@ -46,6 +46,7 @@
   position: relative;
   align-items: start;
   margin-top: 150px;
+  min-width: 100px;
 }
 .allHotels > * {
   aspect-ratio: 3 / 4;
