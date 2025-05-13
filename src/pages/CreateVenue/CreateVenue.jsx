@@ -294,7 +294,7 @@ const CreateVenue = () => {
           <div  className={styles.createFormContent}>
           <h1>Create a New Venue</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.formRow}>
+        <div className={styles.formRowFirst}>
         <div className={styles.fieldGroupName}>
           <label>Name</label>
           <input
@@ -411,7 +411,7 @@ const CreateVenue = () => {
               </div>
             ))}
             <div className={styles.mediaButtons}>
-              <Buttons size='small' version='v3' onClick={handleAddMedia}>
+              <Buttons size='small' version='v5' onClick={handleAddMedia}>
                 +
               </Buttons>
             </div>
@@ -473,7 +473,7 @@ const CreateVenue = () => {
 </div>
         <Buttons
         size='medium'
-        version='v2'
+        version='v4'
         type="submit"
         >
           Create Venue

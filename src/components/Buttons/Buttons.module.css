@@ -94,6 +94,13 @@
     height: 35px;
 }
 
+.smallv5 {
+    background-color: #B88A44;
+    width: 25px;
+    height: 25px;
+    font-size: 1rem;
+}
+
 .mediumv1 {
     background-color: #1F1B17;
     color: #F3F0EB;
@@ -107,6 +114,11 @@
 .mediumv3 {
     background-color: white;
     color: #1F1B17;
+}
+
+.mediumv4 {
+    background-color: #B88A44;
+    color: #F3F0EB;
 }
 
 .mediumv3:hover {
@@ -171,11 +183,24 @@
         width: 75px;
     }
 
+    .smallv5 {
+    background-color: #B88A44;
+    width: 25px;
+    height: 25px;
+    font-size: 1rem;
+    }
+
     .medium {
         height: 35px;
         width: 85px;
         font-size: 0.9rem;
     }
+    .mediumv4 {
+    background-color: #B88A44;
+    color: #F3F0EB;
+    font-size: 0.9rem;
+    width: 150px;
+   }
 
     .large {
         height: 40px;

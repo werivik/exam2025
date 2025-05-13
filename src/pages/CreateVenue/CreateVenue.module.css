@@ -79,12 +79,15 @@
     align-items: flex-start;
     gap: 50px;
 }
-.formRow {
+.formRow, .formRowFirst, .formRowSecond {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: row;
     gap: 50px;
+}
+.formRowFirst {
+  gap: 50px;
 }
 .fieldGroupName, .fieldGroupDesc, .fieldGroupPrice, .fieldGroupGuests, .fieldGroupMeta, .fieldGroupMedia, .fieldGroupLocation {
     height: 100%;
@@ -92,6 +95,9 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+}
+.fieldGroupName {
+  width: 60%;
 }
 .metaTags {
     display: flex;
@@ -113,7 +119,7 @@
 }
 .fieldGroupPrice, .fieldGroupGuests {
     width: 150px;
-    min-width: 125px;
+    min-width: 150px;
 }
 .locationInputs {
     display: flex;
@@ -183,6 +189,7 @@ body.no-scroll {
   .fieldGroupTerms {
     margin-top: 20px;
     height: 30px;
+    width: 250px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -251,13 +258,8 @@ body.no-scroll {
   }
 
 @media (max-width:1095px){
-  .leftSection {
-    height: 475px;
-    width: 175px;
-    min-width: 175px;
-  }
-  .leftBorder h2 {
-    font-size: 1.5rem;
+.leftBorder h2 {
+  font-size: 1.5rem;
 }
 .createPageContent h1 {
   font-size: 2.5rem;
@@ -272,12 +274,50 @@ body.no-scroll {
 .formRow {
     gap: 25px;
 }
+.formRowFirst {
+  gap: 25px;
 }
-@media (max-width:1025px) {
+}
+@media (max-width:1025px){
   .createPageContent {
      width: 90%;
   }
+  .leftBorder{
+    width: 175px;
+  }
+  .createPageContent {
+    gap: 10px;
+}
+  .createFormContent {
+    width: calc(100% - 10px);
+  }
 }
 @media (max-width:885px){
-
+.formRowFirst, .formRowSecond {
+  flex-direction: column;
+  width: 100%;
+}
+.fieldGroupName {
+  width: 100%;
+}
+}
+@media (max-width:722px){
+  .createPageContent {
+    width: 96%;
+    margin-left: 2%;
+  }
+  .leftSection {
+    display: none;
+  }
+}
+@media (max-width:475px){
+.createPageContent h1 {
+  font-size: 1.75rem;
+}
+.fieldGroupName label, .fieldGroupDesc label, .fieldGroupPrice label, .fieldGroupGuests label, .fieldGroupMeta label, .fieldGroupMedia label, .fieldGroupLocation label {
+  font-size: 0.9rem;
+}
+.fieldGroupName input, .fieldGroupDesc textarea, .fieldGroupPrice input, .fieldGroupGuests input, .fieldGroupMedia input, .fieldGroupLocation input, .locationInputs input, .mediaField input {
+  font-size: 0.9rem;
+}
 }
