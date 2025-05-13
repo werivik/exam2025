@@ -386,8 +386,8 @@
 .dashProfileInfo h2 {
   margin-top: 35px;
   font-size: 1.5rem;
-  margin-bottom: 0;
-  padding-bottom: 0;
+  margin: 0;
+  padding: 0;
 }
 .dashProfileInfo p {
   font-size: 1.125rem;
@@ -411,7 +411,23 @@
   margin-left: 15px;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+}
+.dashDivideLine {
+  height: 1px;
+  width: 95%;
+  background-color: #1F1B17;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.dashVenuesTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 95%;
+}
+.dashEdit .allEdits {
+  width: 95%;
 }
 
 

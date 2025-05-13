@@ -269,9 +269,12 @@ const AdminProfile = () => {
               </div>
               </div>
               <div className={styles.dashBottom}>
+                <div className={styles.dashDivideLine}></div>
                 <div className={styles.dashVenues}>
-                <h3>Venues</h3>
-                <button onClick={handleRedirect}>Create Venue</button>
+                  <div className={styles.dashVenuesTitle}>
+                    <h3>Venues</h3>
+                    <button onClick={handleRedirect}>Create Venue</button>
+                  </div>
                   {filteredVenues.length > 0 ? (
                   <div className={styles.adminBookings}>
   {filteredVenues.map((venue) => (
@@ -286,8 +289,8 @@ const AdminProfile = () => {
                 <p>No venues Made yet.</p>
               )}
                 </div>
-
-              <div className={styles.dashVenues}>
+                <div className={styles.dashDivideLine}></div>
+              <div className={styles.dashEdit}>
                 <h3>Edit Profile</h3>
                   <div className={styles.allEdits}>
                     <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
