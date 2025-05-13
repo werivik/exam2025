@@ -138,7 +138,7 @@
   margin: 0;
   padding: 0;
 }
-.bookingsTitle, .editTitle {
+.venuesTitle, .editTitle {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -146,13 +146,13 @@
   height: 100px;
   align-items: center;
 }
-.bookingsFilter {
+.venuesFilter {
   display: flex;
   flex-direction: row;
   gap: 15px;
   justify-content: flex-end;
 }
-.adminBookings {
+.adminVenues {
   height: 400px;
   width: 100%;
   display: flex;
@@ -161,7 +161,7 @@
   gap: 25px;
   margin-top: 50px;
 }
-.allBookings, .allEdits {
+.allVenues, .allEdits {
   margin-top: 50px;
 }
 .allEdits {
@@ -228,16 +228,17 @@
 .popup p {
   font-size: 1.125rem;
 }
-.bookings {
+.venues {
+  margin-top: 50px;
   scroll-margin-top: 100px;
 }
 .edit {
   scroll-margin-top: 100px;
 }
-.allBookings {
+.allVenues {
   height: 100%;
 }
-.adminBookings {
+.adminVenues {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-auto-rows: 1fr;
@@ -247,7 +248,7 @@
   align-items: start;
   height: 100%;
 }
-.adminBookings > * {
+.adminVenues > * {
   aspect-ratio: 3 / 4;
   max-width: 400px;
   width: 100%;
@@ -257,61 +258,6 @@
 .no-scroll {
   overflow: hidden;
 }  
-.topSection {
-  display: none;
-  position: relative;
-  width: 100%;
-  background-color: #1F1B17;
-  height: 250px;
-  border-radius: 15px;
-}
-.topBorder {
-  margin: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  height: calc(100%-10px);
-  gap: 50px;
-  width: 100%;
-}
-.profileTop{
-  position: relative;
-  width: 40%;
-  min-width: 200px;
-  border-radius: 5px;
-}
-.profileTop img {
-  height: 100%;
-  width: 100%;
-  border-radius: 5px;
-}
-.profileTop h3 {
-  background-color: #fffefb;
-  width: 100%;
-  margin: 0;
-  padding: 5px;
-  position: absolute;
-  bottom: 5px;
-  border-radius: 0px 0px 5px 5px;
-  text-align: center;
-}
-.topShortcuts {
-  width: 55%;
-  margin-right: 5%;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 50px;
-}
-.topShortcuts {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-
-
-
-
-
 
 .dashViewProfile {
   height: 100%;

@@ -340,21 +340,21 @@ const AdminProfile = () => {
               <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
               <p>Venue Manager</p>
               <div className={styles.profileRating}><img src={starRating}></img>5<span> / (...) reviews</span></div>
-              <button onClick={handleSignOut} className={styles.signOutButton}>Sign Out</button>
+              <Buttons size='small' version='v2'>Sign Out</Buttons>
             </div>
             </div>
           </section>
 
           <section className={styles.rightSection}>
             <div className={styles.rightBorder}>
-              <div className={styles.bookings}>
-                <div className={styles.bookingsTitle}>
+              <div className={styles.venues}>
+                <div className={styles.venuesTitle}>
                   <h2>My Venues</h2>
-                  <button onClick={handleRedirect}>Create Venue</button>
+                  <Buttons size='small' version='v1' onClick={handleRedirect}>Create Venue</Buttons>
                 </div>
-                <div className={styles.allBookings}>
+                <div className={styles.allVenues}>
                 {filteredVenues.length > 0 ? (
-                  <div className={styles.adminBookings}>
+                  <div className={styles.adminVenues}>
   {filteredVenues.map((venue) => (
     <VenueCardSecondType
       key={venue.id}
@@ -368,7 +368,6 @@ const AdminProfile = () => {
               )}
                 </div>
               </div>
-
                 <div className={styles.edit} ref={editRef}>
                   <div className={styles.editTitle}>
                     <h2>Edit Profile</h2>
