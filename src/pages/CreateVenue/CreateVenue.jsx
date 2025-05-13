@@ -296,7 +296,7 @@ const CreateVenue = () => {
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formRow}>
         <div className={styles.fieldGroupName}>
-          <label>Venue Name</label>
+          <label>Name</label>
           <input
             type="text"
             name="name"
@@ -305,18 +305,7 @@ const CreateVenue = () => {
             required
           />
         </div>
-        <div className={styles.fieldGroupDesc}>
-          <label>Venue Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        </div>
-        <div className={styles.formRow}>
-        <div className={styles.fieldGroupPrice}>
+          <div className={styles.fieldGroupPrice}>
           <label>Price Per Night</label>
           <input
   type="text"
@@ -327,7 +316,7 @@ const CreateVenue = () => {
   inputMode="numeric"
 />
         </div>
-        <div className={styles.fieldGroupGuests}>
+                <div className={styles.fieldGroupGuests}>
           <label>Guest Limit</label>
           <input
   type="text"
@@ -337,6 +326,17 @@ const CreateVenue = () => {
   required
   inputMode="numeric"
 />
+        </div>
+        </div>
+        <div className={styles.formRowSecond}>
+        <div className={styles.fieldGroupDesc}>
+          <label>Description</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          />
         </div>
         <div className={styles.fieldGroupMeta}>
           <label>Meta Tags</label>
@@ -417,7 +417,7 @@ const CreateVenue = () => {
             </div>
           </div>
         <div className={styles.fieldGroupLocation}>
-          <label>Venue Location</label>
+          <label>Location</label>
           <div className={styles.locationInputs}>
             <input
               type="text"
@@ -428,16 +428,16 @@ const CreateVenue = () => {
             />
             <input
               type="text"
-              name="location-city"
-              placeholder="City"
-              value={formData.location.city}
+              name="location-zip"
+              placeholder="ZIP"
+              value={formData.location.zip}
               onChange={handleChange}
             />
             <input
               type="text"
-              name="location-zip"
-              placeholder="ZIP"
-              value={formData.location.zip}
+              name="location-city"
+              placeholder="City"
+              value={formData.location.city}
               onChange={handleChange}
             />
             <input
@@ -468,7 +468,7 @@ const CreateVenue = () => {
     }
   />
   <label htmlFor="termsAccepted">
-    I agree to the <span className={styles.termsLink} onClick={openTermsPopup}>Terms of Service</span>.
+    I agree to the <span className={styles.termsLink} onClick={openTermsPopup}>Terms of Service.</span>
   </label>
 </div>
         <Buttons

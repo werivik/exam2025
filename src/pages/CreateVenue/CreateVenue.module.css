@@ -53,7 +53,7 @@
     padding-bottom: 0;
 }
 .leftBorder div {
-    font-size: 1.125rem;
+    font-size: 1rem;
     pointer-events: none;
 }
 .createFormContent {
@@ -97,10 +97,10 @@
     display: flex;
     flex-direction: row;
     gap: 10px;
+    font-size: 1rem;
 }
 .metaTags label input {
     font-size: 1rem;
-    background-color: pink;
 }
 .mediaField {
     width: 100%;
@@ -113,6 +113,7 @@
 }
 .fieldGroupPrice, .fieldGroupGuests {
     width: 150px;
+    min-width: 125px;
 }
 .locationInputs {
     display: flex;
@@ -123,13 +124,25 @@
     font-size: 1.5rem;
 }
 .fieldGroupName input, .fieldGroupDesc input, .fieldGroupPrice input, .fieldGroupGuests input, .fieldGroupMedia input, .fieldGroupLocation input, .locationInputs input, .mediaField input {
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
-.fieldGroupName input, .fieldGroupDesc input, .fieldGroupPrice input, .fieldGroupGuests input, .fieldGroupMedia input, .fieldGroupLocation input, .locationInputs input, .mediaField input {
+.fieldGroupName input, .fieldGroupDesc textarea, .fieldGroupPrice input, .fieldGroupGuests input, .fieldGroupMedia input, .fieldGroupLocation input, .locationInputs input, .mediaField input {
     border-radius: 15px;
     height: 35px;
     border: solid 1px #1F1B17;
     padding: 3.5px 3.5px 3.5px 7.5px;
+}
+.formRowSecond {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 50px;
+}
+.fieldGroupDesc textarea {
+  width: 100%;
+}
+.fieldGroupMeta {
+  width: 60%;
 }
 .fieldGroupTerms label {
     display: flex;
@@ -237,8 +250,34 @@ body.no-scroll {
     cursor: pointer;
   }
 
-  @media (max-width:1025px) {
+@media (max-width:1095px){
+  .leftSection {
+    height: 475px;
+    width: 175px;
+    min-width: 175px;
+  }
+  .leftBorder h2 {
+    font-size: 1.5rem;
+}
+.createPageContent h1 {
+  font-size: 2.5rem;
+  margin-bottom: 50px;
+}
+.fieldGroupName label, .fieldGroupDesc label, .fieldGroupPrice label, .fieldGroupGuests label, .fieldGroupMeta label, .fieldGroupMedia label, .fieldGroupLocation label {
+  font-size: 1.25rem;
+}
+.formRowSecond {
+  gap: 25px;
+}
+.formRow {
+    gap: 25px;
+}
+}
+@media (max-width:1025px) {
   .createPageContent {
      width: 90%;
   }
+}
+@media (max-width:885px){
+
 }
