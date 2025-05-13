@@ -241,6 +241,29 @@ const AdminProfile = () => {
     >
       <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
         <div className={styles.profilePage}>
+
+          <section className={styles.dashBoard}>
+            <div className={styles.dashBoardBorder}>
+              <h2>Dashboard</h2>
+              <div className={styles.dashBorderLinks}>
+              <h3>Profile</h3>
+              <button>View Profile</button>
+              <button>Edit Profile</button>
+              </div>
+              <div className={styles.divideLineSecond}></div>
+              <div className={styles.dashBorderLinks}>
+              <h3>Venues</h3>
+              <button>View My Venues</button>
+              </div>
+              <div className={styles.divideLineSecond}></div>
+              <div className={styles.dashBorderLinks}>
+              <h3>Booking</h3>
+              <button>View My Booking</button>
+              </div>
+              <button className={styles.signOutButtonDash}>Sign Out</button>
+            </div>
+          </section>
+
           <section className={styles.leftSection}>
             <div className={styles.leftBorder}>
               <div className={styles.profileLeftTop}>
@@ -255,6 +278,23 @@ const AdminProfile = () => {
                 <button className={styles.shortcutLink} onClick={handleRedirect}>Create New Venue</button>
                 <button className={styles.shortcutLink} onClick={handleEditProfile}>Edit Profile</button>
                 <button className={styles.signOutButton} onClick={handleSignOut}>Sign out</button>
+              </div>
+            </div>
+          </section>
+          <section className={styles.topSection}>
+            <div className={styles.topBorder}>
+              <div className={styles.profileTop}>
+                <img
+                  src={userData.avatar?.url || defaultAvatar}
+                  alt={userData.name || 'Admin Avatar'}
+                />
+              <h3>{capitalizeFirstLetter(userData.name) || 'Admin'}</h3>
+              </div>
+              <div className={styles.topShortcuts}>
+                <button className={styles.shortcutLink}>My Venues</button>
+                <button className={styles.shortcutLink} onClick={handleRedirect}>Create New Venue</button>
+                <button className={styles.shortcutLink} onClick={handleEditProfile}>Edit Profile</button>
+                <button className={styles.topSignOutButton} onClick={handleSignOut}>Sign out</button>
               </div>
             </div>
           </section>

@@ -12,10 +12,12 @@
 }
 .profilePage {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
   width: 80%;
   margin-left: 10%;
   margin-top: 75px;
+  gap: 50px;
 }
 .leftSection {
   position: sticky;
@@ -151,18 +153,19 @@
   margin: 0;
   padding: 0;
 }
-.bookingsTitle, .favoriteTitle, .editTitle {
+.bookingsTitle, .editTitle {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
   height: 100px;
+  align-items: center;
 }
 .bookingsFilter {
   display: flex;
   flex-direction: row;
   gap: 15px;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 .adminBookings {
   height: 400px;
@@ -173,7 +176,7 @@
   gap: 25px;
   margin-top: 50px;
 }
-.allBookings, .allFavorites, .allEdits {
+.allBookings, .allEdits {
   margin-top: 50px;
 }
 .allEdits {
@@ -244,9 +247,6 @@
 .bookings {
   scroll-margin-top: 100px;
 }
-.favorites {
-  scroll-margin-top: 100px;
-}
 .edit {
   scroll-margin-top: 100px;
 }
@@ -276,3 +276,170 @@
 .no-scroll {
   overflow: hidden;
 }  
+
+.topSection {
+  display: none;
+  position: relative;
+  width: 100%;
+  background-color: #1F1B17;
+  height: 250px;
+  border-radius: 15px;
+}
+.topBorder {
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: calc(100%-10px);
+  gap: 50px;
+  width: 100%;
+}
+.profileTop{
+  position: relative;
+  width: 40%;
+  min-width: 200px;
+  border-radius: 5px;
+}
+.profileTop img {
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+}
+.profileTop h3 {
+  background-color: #fffefb;
+  width: 100%;
+  margin: 0;
+  padding: 5px;
+  position: absolute;
+  bottom: 5px;
+  border-radius: 0px 0px 5px 5px;
+  text-align: center;
+}
+.topShortcuts {
+  width: 55%;
+  margin-right: 5%;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 50px;
+}
+.topShortcuts {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+
+
+
+
+
+
+.dashBoard {
+  background-color: #fffefb;
+  height: 100%;
+  min-height: 80vh;
+  border-radius: 25px;
+  width: 100%;
+}
+.dashBoardBorder {
+  margin: 25px;
+  height: 100%;
+  min-height: 75vh;
+  position: relative;
+  color: #1F1B17;
+}
+.dashBoardBorder h2 {
+  font-size: 2rem;
+  margin-bottom: 50px;
+}
+.dashBoardBorder .divideLineSecond {
+  background-color: #1F1B17;
+  margin-left: 25px;
+  height: 0.5px;
+  z-index: 888;
+  width: 70%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.dashBorderLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 25px;
+  margin-left: 25px;
+}
+.dashBorderLinks h3 {
+  font-size: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+.dashBorderLinks button {
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  color: #1F1B17;
+}
+.signOutButtonDash {
+  position: absolute;
+  bottom: 0;
+  margin-left: 25px;
+}
+
+
+
+
+
+@media (max-width:1300px){
+  .leftSection {
+  width: 25%;
+  min-width: 200px;
+}
+.leftBorder {
+  width: 200px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 5px;
+}
+.profileLeftTop {
+  height: 150px;
+  margin-bottom: 75px;
+}
+.profileLeftTop img {
+  width: 150px;
+  height: 150px;
+}
+.profileLeftTop h3 {
+  bottom: -55px;
+  width: 150px;
+}
+.shortcutLink {
+  font-size: 1rem;
+}
+.rightBorder h2 {
+  font-size: 2.5rem;
+}
+}
+@media (max-width:1025px) {
+.leftSection {
+    display: none;
+}
+.profilePage {
+  flex-direction: column;
+  width: 90%;
+  margin-left: 5%;
+}
+}
+
+@media (max-width:665px) {
+  .bookingsFilter {
+    display: none;
+  }
+}
+
+
+@media (max-width:425px){
+  .leftSection, .rightSection {
+    display: none;
+  }
+}
