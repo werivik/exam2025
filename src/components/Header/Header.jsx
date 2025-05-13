@@ -393,8 +393,8 @@ const handleSelect = (item) => {
               <div
                 className={`${styles.divideLine} ${
                   isSearchOpen ? styles.divideLineActive : ""
-                }`}
-              ></div>
+                }`}>
+                </div>
               <li>
                 <Link to="/venues">Venues</Link>
               </li>

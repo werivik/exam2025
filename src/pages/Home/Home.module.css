@@ -823,17 +823,11 @@ font-size: 2rem;
 .thirdContentLogin .thirdInfo h3 {
 font-size: 1.75rem;
 }
-
+.fourthBorder {
+    width: 80%;
+}
 }
 @media (max-width:1300px) {
-  .popularHotels {
-    overflow-x: scroll;
-  }
-  .popularHotels {
-    overflow-y: scroll;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
   .popularHotels::-webkit-scrollbar {
     display: none;
   }
@@ -859,7 +853,7 @@ font-size: 1.75rem;
     display: block;
   }
   .hotelType {
-    min-width: 300px;
+    min-width: 275px;
   }
   .secondSection {
     padding-bottom: 0px;
@@ -1026,7 +1020,6 @@ font-size: 1.75rem;
     margin-top: 15px;
   }
 }
-/* Phone Responsive - ALL */
 @media (max-width:725px){
   .heroSection {
     width: 100%;
@@ -1125,10 +1118,6 @@ font-size: 1.75rem;
 .fourthSection {
   max-height: 650px;
 }
-.fourthBorder {
-  width: 85%;
-  height: 100%;
-}
 .popularHotels {
   height: 350px;
   gap: 10px;
@@ -1153,7 +1142,6 @@ font-size: 1.75rem;
   }
 }
 }
-/* Tabel Responsive - Second Section */
 @media (max-width:1400px) {
   .typeTitle {
     height: 175px;
@@ -1176,5 +1164,15 @@ font-size: 1.75rem;
   .secondSection{
     padding-bottom: 0px;
     height: 550px;
+  }
+}
+@media (max-width:690px) {
+  .fourthBorder{
+    overflow-y: scroll;
+  }
+}
+@media (max-width:1000px) {
+  .fourthBorder {
+    width: 90%;
   }
 }

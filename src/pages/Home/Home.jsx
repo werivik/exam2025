@@ -38,6 +38,7 @@ const Home = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDateType, setSelectedDateType] = useState('start');
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(isLoggedIn());
+  const [displayedVenues, setDisplayedVenues] = useState([]);
   const [profile, setProfile] = useState(null);
 
   const toggleCalendar = (type) => {
@@ -252,6 +253,32 @@ const Home = () => {
   }, []);
 
   const username = localStorage.getItem("username");
+
+const updateDisplayedVenues = useCallback(() => {
+  let limit = 5;
+
+  const width = window.innerWidth;
+
+  if (width <= 690) {
+    limit = 5;
+  } 
+  else if (width <= 1093) {
+    limit = 3;
+  } 
+  else if (width <= 1375) {
+    limit = 4;
+  }
+
+  setDisplayedVenues(venues.slice(0, limit));
+}, [venues]);
+
+useEffect(() => {
+  updateDisplayedVenues();
+
+  window.addEventListener("resize", updateDisplayedVenues);
+  return () => window.removeEventListener("resize", updateDisplayedVenues);
+}, [venues, updateDisplayedVenues]);
+
 
   return (
     <>
@@ -622,7 +649,6 @@ const Home = () => {
           </div>
         </>
       )}
-
         </div>
       </section>
       <section className={styles.fourthSection}>
@@ -634,9 +660,9 @@ const Home = () => {
             </div>
 
             <div className={styles.popularHotels}>
-              {venues.map((venue) => (
-                <VenueCardFirstType key={venue.id} venue={venue} />
-              ))}
+{displayedVenues.map((venue) => (
+  <VenueCardFirstType key={venue.id} venue={venue} />
+))}
             </div>
 
             <Link to="/venues" className={styles.browseAllLinkSecond}>Browse All</Link>

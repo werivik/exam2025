@@ -69,14 +69,6 @@ header {
     background-color: white;
     opacity: 1;
   }
-  .headerRightLinks .divideLine {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%);
-  }
-  .headerRightLinks .divideLineActive {
-    left: 37.5%;
-  }
   .menuLeftLinks {
     display: none;
     flex-direction: row;
@@ -87,6 +79,7 @@ header {
     justify-content: flex-start;
     height: 60px;
     padding: 0;
+    position: relative;
   }
   .menuLeftLinks a {
     border: solid 2px rgba(255, 255, 255, 0);
@@ -144,14 +137,16 @@ header {
 .headerRightLinks {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
   height: 100%;
-  margin-right: 5%;
+  width: 100%;
+  padding-right: 10px;
   margin-top: 0;
   justify-content: flex-end;
   position: relative;
 }
 .headerRightLinks li {
+  position: relative;
   height: 100%;
   width: 100%;
   display: flex;
@@ -176,6 +171,14 @@ header {
   transition: 0.25s;
   border: solid white 2px;
 }
+.headerRightLinks .divideLine {
+  position: absolute;
+  right: 52.5%;
+}
+.menuLeftLinks .divideLine {
+  position: absolute;
+  left: 42.25%;
+}
 .headerLogoContent {
   position: absolute;
   left: 50%;
@@ -196,6 +199,7 @@ header {
   flex-direction: row;
   justify-content: end;
   transition: 0.25s;
+  margin-right: -10px;
 }
 .searchContainer.searchOpen {
   justify-content: space-between;
