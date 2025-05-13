@@ -106,7 +106,7 @@
 .slideshowButtonPrev {
   margin-left: -1px;
 }
-.slideshowProgress {
+.slideshowProgressFirst {
     position: absolute;
     height: 35px;
     background-color: white;
@@ -122,6 +122,20 @@
     border-radius: 15px 15px 0px 0px;
     font-size: 1rem;
     z-index: 888;
+}
+.slideshowProgressSecond {
+  display: none;
+  position: absolute;
+  font-size: 0.9rem;
+  top: 1.5%;
+  height: 35px;
+  min-width: 75px;
+  right: 1.5%;
+  border-radius: 10px;
+  background-color: #1f1b17c5;
+  color: white;
+  align-items: center;    
+  justify-content: center;
 }
 .noSlideshow {
     position: relative;
@@ -643,67 +657,6 @@
   font-size: 1.25rem;
 }
 }
-@media (max-width:905px) {
-  .pageContent {
-  margin-top: 50px;
-}
-.slideshowSection {
-  flex-direction: column-reverse;
-  height: 100%;
-  max-height: 70vh;
-}
-.slideshowLeft {
-  width: calc(100% - 15px);
-  height: 15%;
-  position: relative;
-}
-.slideshowLeftContent {
-    flex-direction: row;
-    height: 100%;
-    position: relative;
-}
-.previewImage {
-    width: 100%;
-    height: 100%;
-}
-.currentlyViewing {
-    left: 17%;
-    max-width: 150px;
-    border-radius: 0px 0px 5px 5px;
-}
-.slideshowLeftContent img {
-    height: 100%;
-    min-height: 20vh;
-    max-height: 20vh;
-    width: calc(33% - 5px);
-}
-.slideshowRight {
-    height: 100%;
-    max-height: 50vh;
-    min-height: 50vh;
-    width: calc(100% - 20px);
-}
-.slideshowRight img {
-  min-height: 50vh;
-  max-height: 50vh;
-}
-.slideshowButtons img {
-    width: 35px;
-    height: 79px;
-}
-.slideshowProgress {
-  top: 93%;
-}
-.guestSelector p {
-  font-size: 1rem;
-}
-.bookDate input {
-  font-size: 1rem;
-}
-.noSlideshow {
-  width: calc(100% - 20px);
-}
-}
 @media (max-width:619px) {
   .maxGuestsPrice .maxGuestsSecond {
     width: 175px;
@@ -718,21 +671,15 @@
   .hotelInfoBottom {
     gap: 50px;
   }
-  .currentlyViewing {
-    font-size: 0.9rem;
-    left: 16%;
-  }
   .hotelInfoBottom {
     margin-top: 25px;
   }
   .pageContent {
     padding-bottom: 100px;
   }
+  .slideshowSection {
+  max-height: 600px;
 }
-@media (max-width:540px) {
-  .currentlyViewing {
-    display: none;
-  }
 }
 @media (max-width:510px) {
   .maxGuestsPrice {
@@ -765,8 +712,19 @@
 .bookDate input {
   font-size: 0.9rem;
 }
+.slideshowButtons img {
+    width: 35px;
+    height: 79px;
 }
-@media (max-width:500px) {
+.slideshowSection {
+  max-height: 500px;
+}
+}
+@media (max-width:905px) {
+  .pageContent {
+    margin-bottom: 0;
+    padding-bottom: 75px;
+  }
   .pageStyle {
     width: 100%;
     margin-top: 25px;
@@ -784,9 +742,27 @@
   margin: 0;
   border-radius: 0;
 }
+.slideshowRight {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+.slideshowRight img {
+    border-radius: 0px;
+}
+.slideshowLeft {
+  display: none;
+}
 .hotelInfoBottom {
   width: 95%;
   margin-left: 2.5%;
+}
+.slideshowProgressFirst {
+  display: none;
+}
+.slideshowProgressSecond {
+  display: flex;
 }
 }
 @media (max-width:370px) {
@@ -804,6 +780,9 @@
 }
 .bookPrice strong {
     font-size: 1.125rem;
+}
+.slideshowSection {
+  max-height: 400px;
 }
 }
 @media (max-width:315px) {

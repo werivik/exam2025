@@ -307,7 +307,7 @@ if (newStart >= newEnd) {
             <img src={slideshowNext} alt="Next" />
           </div>
         </div>
-        <div className={styles.slideshowProgress}>
+        <div className={styles.slideshowProgressFirst}>
           <p>{currentSlide + 1} out of {mediaArray.length}</p>
         </div>
         
@@ -320,6 +320,9 @@ if (newStart >= newEnd) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
           >
+        <div className={styles.slideshowProgressSecond}>
+          <p>{currentSlide + 1} out of {mediaArray.length}</p>
+        </div>
             <img
               src={currentImage}
               alt={currentAlt}
