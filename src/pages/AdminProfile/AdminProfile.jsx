@@ -271,24 +271,53 @@ const AdminProfile = () => {
               <div className={styles.dashBottom}>
                 <div className={styles.dashVenues}>
                 <h3>Venues</h3>
-              </div>
+                <button onClick={handleRedirect}>Create Venue</button>
+                  {filteredVenues.length > 0 ? (
+                  <div className={styles.adminBookings}>
+  {filteredVenues.map((venue) => (
+    <VenueCardSecondType
+      key={venue.id}
+      venue={venue}
+      onClick={() => handleVenueClick(venue)}
+    />
+  ))}
+</div>
+              ) : (
+                <p>No venues Made yet.</p>
+              )}
+                </div>
+
               <div className={styles.dashVenues}>
                 <h3>Edit Profile</h3>
+                  <div className={styles.allEdits}>
+                    <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
+                      <label>
+                        Name:
+                        <input
+                          type="text"
+                          value={newName}
+                          onChange={(e) => setNewName(e.target.value)}
+                          required
+                        />
+                      </label>
+                      <label>
+                        Avatar URL:
+                        <input
+                          type="url"
+                          value={newAvatar}
+                          onChange={(e) => setNewAvatar(e.target.value)}
+                        />
+                      </label>
+                      <div className={styles.editActions}>
+                        <Buttons type="submit" size="small" version="v2">Save Changes</Buttons>
+                      </div>
+                    </form>
+                  </div>
               </div>
               </div>
+
           </section>
 
-          <section className={styles.dashEditProfile}>
-          
-          </section>
-
-          <section className={styles.dashVenues}>
-          
-          </section>
-
-          <section className={styles.dashBooking}>
-          
-          </section>
 
 
 
