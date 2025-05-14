@@ -315,6 +315,29 @@ const handleVenueClick = (venue) => {
 
   const userRole = userData?.venueManager ? "admin" : "customer";
 
+  const handleRedirectWithClose = () => {
+  if (window.innerWidth < 1125) toggleDashboard();
+  handleRedirect();
+};
+
+const scrollToProfileDesktop = () => {
+  if (profileRef?.current) {
+    profileRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+const scrollToEditDesktop = () => {
+  if (editRef?.current) {
+    editRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+const scrollToVenuesDesktop = () => {
+  if (venuesRef?.current) {
+    venuesRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
   return (
     <motion.div
       className={styles.pageContent}
@@ -441,23 +464,25 @@ const handleVenueClick = (venue) => {
                   </div>
                 </div>
                 <div className={styles.divideLine}></div>
-                <div className={styles.leftShortcut}>
-                  <div className={styles.leftLink}>
-                    <h3>Venues</h3>
-                    <button>My Venues</button>
-                    <button>Create Venue</button>
-                    <button>Edit Venue</button>
-                  </div>
-                  <div className={styles.divideLine}></div>
-                  <div className={styles.leftLink}>
-                    <h3>Profile</h3>
-                    <button>View Profile</button>
-                    <button>Edit Profile</button>
-                  </div>
-                  <div className={styles.signOutButton}>
-                    <Buttons size='small' version='v1'>Sign out</Buttons>
-                  </div>
-                </div>
+<div className={styles.leftShortcut}>
+<div className={styles.leftLink}>
+  <h3>Venues</h3>
+  <button onClick={scrollToVenuesDesktop}>My Venues</button>
+  <button onClick={handleRedirect}>Create Venue</button>
+  <button onClick={scrollToVenuesDesktop}>Edit Venue</button>
+</div>
+  <div className={styles.divideLine}></div>
+
+<div className={styles.leftLink}>
+  <h3>Profile</h3>
+  <button onClick={scrollToProfileDesktop}>View Profile</button>
+  <button onClick={scrollToEditDesktop}>Edit Profile</button>
+</div>
+
+  <div className={styles.signOutButton}>
+    <Buttons size="small" version="v1" onClick={handleSignOut}>Sign out</Buttons>
+  </div>
+</div>
               </div>
             </section>
             <section className={styles.profileRight}>

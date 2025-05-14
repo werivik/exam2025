@@ -106,7 +106,7 @@
   background: white;
   bottom: -5px;
   border-radius: 99px;
-  left: 0;
+  left: 6px;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.25s ease-out;
@@ -114,10 +114,6 @@
  .profileDesktop .leftLink button:hover::after{
   transform: scaleX(1);
 }
-
-
-
-
 .profileDesktop .profileRight {
   width: 100%;
   position: relative;
@@ -156,8 +152,6 @@
   left: 50%;
   transform: translate(-50%);
 }
-
-
 .profilePage {
   display: flex;
   flex-direction: column;
@@ -535,9 +529,6 @@ body.modal-open {
   right: 45px;
   top: 400px;
 }
-
-
-
 .dashViewProfile .profileRating, .profileContentTop .profileRating, .profileDesktop .leftBorder .profileRating .leftTop {
   margin-top: -5px;
   margin-bottom: 35px;
@@ -553,12 +544,6 @@ body.modal-open {
   margin-right: 5px;
   border: none;
 }
-
-
-
-
-
-
 @media (max-width:1125px){
 .profileTablet {
   display: block;
