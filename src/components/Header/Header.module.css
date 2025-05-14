@@ -74,7 +74,7 @@ header {
   .menuLeftLinks {
     display: none;
     flex-direction: row;
-    gap: 10px;
+    gap: 15px;
     margin: 0;
     align-items: center;
     justify-content: flex-start;
@@ -178,7 +178,7 @@ header {
 }
 .menuLeftLinks .divideLine {
   position: absolute;
-  left: 42.25%;
+  left: 41%;
 }
 .headerLogoContent {
   position: absolute;
