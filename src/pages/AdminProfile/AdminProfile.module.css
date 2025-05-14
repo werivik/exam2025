@@ -327,11 +327,12 @@
   width: 100%;
   margin-bottom: 15px;
 }
+.dashEdit {
+  margin-bottom: -50px;
+}
 .dashEdit .allEdits {
   width: 95%;
 }
-
-
 .dashViewProfile .profileRating, .profileContentTop .profileRating {
   margin-top: -5px;
   margin-bottom: 35px;
@@ -346,11 +347,25 @@
   height: 15px;
   margin-right: 5px;
 }
-
+.dashProfileInfo .dashboardButton {
+  width: 100%;
+  right: 15px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  position: absolute;
+  top: 440px;
+}
+.dashBottom .editActions {
+  display: flex;
+  width: 100%;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-top: 25px;
+}
 body.modal-open {
   overflow: hidden;
 }
-
 .divideLineProfile {
   height: 0.5px;
   width: 95%;
@@ -370,7 +385,6 @@ body.modal-open {
   right: 25px;
   top: 400px;
 }
-
 @media (max-width:1025px){
 .profilePage {
   width: 90%;

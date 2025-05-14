@@ -360,7 +360,9 @@ const handleVenueClick = (venue) => {
                   <img src={starRating} alt="Star rating" />
                   {averageRating}<span> / ({totalReviews}) reviews</span>
                 </div>
-                <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
+                <div className={styles.dashboardButton}>
+                  <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
+                </div>
               </div>
               <div className={styles.dashBottom}>
                 <div className={styles.dashDivideLine}></div>
@@ -403,6 +405,14 @@ const handleVenueClick = (venue) => {
                           type="url"
                           value={newAvatar}
                           onChange={(e) => setNewAvatar(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Banner URL:
+                        <input
+                          type="url"
+                          value={newBanner}
+                          onChange={(e) => setNewBanner(e.target.value)}
                         />
                       </label>
                       <div className={styles.editActions}>
