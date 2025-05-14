@@ -51,6 +51,8 @@ const Home = () => {
   
   const guestDropdownRefOne = useRef(null);
   const guestDropdownRefTwo = useRef(null);
+  const calendarRef = useRef(null);
+  const dateFilterRef = useRef(null);
   
   const [filters, setFilters] = useState({
     destination: "",
@@ -133,13 +135,33 @@ const Home = () => {
       ) {
         setShowGuestDropdown(false);
       }
+      
+      if (
+        showCalendar &&
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target) &&
+        dateFilterRef.current &&
+        !dateFilterRef.current.contains(event.target)
+      ) {
+        setShowCalendar(false);
+      }
     };
   
     document.addEventListener("mousedown", handleClickOutside);
+    
+    const handleScroll = () => {
+      if (showCalendar) {
+        setShowCalendar(false);
+      }
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [showCalendar]);
 
   const updateDisplayedVenues = useCallback(() => {
     const width = window.innerWidth;
@@ -314,7 +336,7 @@ const Home = () => {
   );
 
   const DateFilter = () => (
-    <div className={styles.filterCalender}>
+    <div className={styles.filterCalender} ref={dateFilterRef}>
       <i
         className="fa-solid fa-calendar-days"
         onClick={() => toggleCalendar('start')}
@@ -342,11 +364,13 @@ const Home = () => {
       />
       <div className={styles.costumCalenderPosition}>
         {showCalendar && (
-          <CustomCalender
-            key={selectedDateType + checkInDate + checkOutDate}
-            value={selectedDateType === 'start' ? checkInDate : checkOutDate}
-            onDateChange={handleDateChange}
-          />
+          <div ref={calendarRef}>
+            <CustomCalender
+              key={selectedDateType + checkInDate + checkOutDate}
+              value={selectedDateType === 'start' ? checkInDate : checkOutDate}
+              onDateChange={handleDateChange}
+            />
+          </div>
         )}
       </div>
     </div>
@@ -420,8 +444,8 @@ const Home = () => {
       >
         <section className={styles.firstSection}>
           <div className={styles.heroSection}>
-            <BannerSlideshow />
-              <div className={styles.bannerFilters}>
+            <BannerSlideshow />    
+            <div className={styles.bannerFilters}>
               <img src={Edge} className={styles.edgeLeft} alt="" />
               <div className={styles.filterContent}>
                 <div className={styles.allFilters}>
@@ -438,7 +462,6 @@ const Home = () => {
                 </div>
                 {showWarning && <WarningPopup />}
               </div>
-              
               <div className={styles.filterContentSecond}>
                 <div className={styles.allFilters}>
                   <div className={styles.filtersColumns}>
@@ -460,14 +483,12 @@ const Home = () => {
             </div>
           </div>
         </section>
-        
         {showScrollIcon && (
           <div className={styles.scrollIcon}>
             <i className={`fa-solid fa-chevron-down ${styles.bounceIcon}`}></i>
             <i className={`fa-solid fa-chevron-down ${styles.bounceIcon} ${styles.delay}`}></i>
           </div>
-        )}
-        
+        )}        
         <section className={styles.secondSection}>
           <div className={styles.secondBorder}>
             <div className={styles.typeTitle}>
@@ -503,8 +524,7 @@ const Home = () => {
               )}
             </div>
           </div>
-        </section>
-        
+        </section>        
         <section className={styles.thirdSection}>
           <div className={styles.thirdBorder}>
             {isUserLoggedIn ? (
@@ -537,8 +557,7 @@ const Home = () => {
               </>
             )}
           </div>
-        </section>
-        
+        </section>        
         <section className={styles.fourthSection}>
           <div className={styles.fourthBorder}>
             <div className={styles.fourthContent}>
