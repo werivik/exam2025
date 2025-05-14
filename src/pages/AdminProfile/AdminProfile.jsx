@@ -268,10 +268,12 @@ const Profile = ({ userType = 'admin' }) => {
 
   const toggleDashboard = () => setShowDashboard(prev => !prev);
 
-  const scrollToSection = (ref) => {
+const scrollToSection = (ref) => {
     if (ref?.current) {
       ref.current.scrollIntoView({ behavior: 'smooth' });
-      toggleDashboard();
+      if (showDashboard) {
+        toggleDashboard();
+      }
     }
   };
 
@@ -445,7 +447,7 @@ const Profile = ({ userType = 'admin' }) => {
                   
                   <div className={styles.linkGroup}>
                     <h3>Profile</h3>
-                    <button onClick={() => scrollToSection(desktopRefs.profile)}>View Profile</button>
+                    <button onClick={() => scrollToSection(desktopRefs.banner)}>View Profile</button>
                     <button onClick={() => scrollToSection(desktopRefs.edit)}>Edit Profile</button>
                   </div>
                   
