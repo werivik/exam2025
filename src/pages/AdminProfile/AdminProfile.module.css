@@ -1,4 +1,4 @@
-.pageContent {
+.container {
   position: relative;
   height: 100%;
   width: 100%;
@@ -7,298 +7,193 @@
   padding-bottom: 0;
   margin-bottom: 50px;
 }
-.pageContent button, .pageContent input, .pageContent label{
+.container button, 
+.container input, 
+.container label {
   font-family: "Playfair Display", serif;
 }
-.profileTablet {
-  display: none;
-}
-.profileTablet, .profileDesktop {
+.contentWrapper {
   width: 100%;
-}
-.profileDesktop {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 50px;
-}
-.profileDesktop .profileLeft {
-  left: 0;
-  height: 90vh;
-  width: 300px;
-  margin-bottom: 50px;
-  border-radius: 25px;
-}
-.profileDesktop .leftBorder {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 100%;
-  padding: 25px;
   height: 100%;
-  background-color: #1F1B17;
-  border-radius: 25px;
-  color: #fffefb;
-  z-index: 2;
-  position: relative;
 }
-.profileDesktop .leftBorder .leftTop {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  align-items: center;
-  margin-bottom: 15px;
-}
-.profileDesktop .leftBorder .leftTop .profileAvatar {
-  width: 175px;
-  height: 175px;
-  border-radius: 999px;
-  border: solid #fffefb 1px;
-  object-fit: cover;
-}
-.profileDesktop .leftBorder .leftTop h2, .profileDesktop .leftBorder .leftTop p, .profileDesktop .leftBorder .leftTop .profileRating {
-  width: 100%;
-  text-align: left;
-}
-.profileDesktop .leftBorder .leftTop h3 {
-  margin-bottom: 0;
-  padding: 0;
+.blurred {
+  filter: blur(5px);
   pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+  scroll-behavior: none;
 }
-.profileDesktop .leftBorder .leftTop p {
-  font-style: italic;
-  margin-top: 2.5px;
-  margin-bottom: 2.5px;
-}
-.profileDesktop .leftShortcut {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  height: auto;
-}
-.profileDesktop .leftBorder .divideLine {
-  height: 0.5px;
-  width: 100%;
-  background-color: #fffefb;
-}
-.profileDesktop .leftLink {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.profileDesktop .leftLink button {
-  background-color: transparent;
-  width: fit-content;
-  color: #fffefb;
-  font-size: 1rem;
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  position: relative;
-  transition: 0.25s;
-}
-.profileDesktop .leftLink button::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 0.5px;
-  background: white;
-  bottom: -5px;
-  border-radius: 99px;
-  left: 6px;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.25s ease-out;
- }
- .profileDesktop .leftLink button:hover::after{
-  transform: scaleX(1);
-}
-.profileDesktop .profileRight {
-  width: 100%;
-  position: relative;
-  z-index: 1;
-  height:fit-content;
-}
-.profileDesktop .profileRight .rightBanner {
-  width: 100%;
-  height: 35vh;
-  border-radius: 25px;
-  position: relative;
-}
-.profileDesktop .profileRight .rightBanner img {
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  border-radius: 25px;
-  background-color: #1F1B17;
-}
-.profileDesktop .adminVenues, .profileDesktop .edit{
-  height: auto;
-}
-.profileDesktop .divideLine {
-  background-color: #1F1B17;
-  height: 0.5px;
-  width: 100%;
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-.profileDesktop .profileRight h2 {
-  font-size: 2.5rem;
-}
-.profileDesktop .signOutButton {
-  position: absolute;
-  bottom: 25px;
-  left: 50%;
-  transform: translate(-50%);
+  background-color: rgba(31, 27, 23, 0.6);
+  z-index: 10;
 }
 .profilePage {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 80%;
-  margin-left: 10%;
-  margin-top: 75px;
+  margin: 75px auto 0;
   gap: 50px;
 }
-.profileContentTop {
-  height: 550px;
+.divider {
+  height: 0.5px;
   width: 100%;
-  position: relative;
+  background-color: #1F1B17;
+  border-radius: 99px;
+  margin: 15px 0;
 }
-.profileContentTop .profileTop {
+.rating {
+  margin-top: 0px;
+  font-size: 1.125rem;
+}
+.rating span {
+  opacity: 75%;
+  font-size: 0.9rem;
+}
+.rating img {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+  margin-right: 5px;
+  border: none;
+}
+.mobileProfile {
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  display: none;
+}
+.profileTop {
   height: 350px;
   width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
 }
-.profileContentTop .profileBanner {
-  height: 350px;
+.bannerWrapper {
+  height: 400px;
   width: 100%;
   z-index: 1;
   border-radius: 25px;
 }
-.profileContentTop .profileBanner img {
-  border-radius: 25px;
-}
-.profileContentTop .profileBanner img, .profileContentTop .profileAvatarContent .profileAvatar {
+.bannerWrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 25px;
 }
-.profileContentTop .profileAvatarContent .bannerEdgeLeft, .profileContentTop .profileAvatarContent .bannerEdgeRight {
+.avatarWrapper {
+  position: relative;
+}
+.avatar {
+  position: absolute;
+  height: 125px;
+  width: 125px;
+  z-index: 2;
+  bottom: -10px;
+  margin-left: 15px;
+  border-radius: 99px 99px 15px 15px;
+  object-fit: cover;
+}
+.edgeLeft, 
+.edgeRight {
   width: 15px;
   position: absolute;
   bottom: 0;
   z-index: 3;
 }
-.profileContentTop .profileAvatarContent .bannerEdgeRight {
+.edgeRight {
   left: 140px;
-  -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
 }
-.profileContentTop .profileAvatarContent .profileAvatar {
+.profileInfo {
+  margin-top: 10px;
+  margin-left: 15px;
+}
+.profileInfo h2 {
+  margin: 25px 0 0;
+  font-size: 1.5rem;
+  padding: 0;
+}
+.profileInfo p {
+  font-size: 1.125rem;
+  margin-top: 5px;
+  font-style: italic;
+}
+.dashBtn {
+  width: 100%;
+  right: 15px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
   position: absolute;
-  height: 175px;
-  width: 175px;
-  z-index: 2;
-  bottom: -10px;
-  margin-left: 40px;
-  border-radius: 99px 99px 15px 15px;
+  top: 440px;
 }
-.profileContentTop .profileAvatarContent .profileAvatar  {
-  border-radius: 99px 99px 15px 15px;
+.mobileContent {
+  margin: 0 15px;
+  display: flex;
+  flex-direction: column;
 }
-.profileEdgeLeft, .profileEdgeRight {
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  max-height: 20px;
-  max-width: 25px;
-  object-fit: contain;
-  z-index: 1;
-  bottom: -2px;
+.sectionHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 15px;
 }
-.profileEdgeLeft {
-  left: 17px;
+.sectionHeader h3 {
+  font-size: 1.75rem;
+  margin: 0;
 }
-.profileEdgeRight{
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
-  left: 210px;
-}
-.profileContentInfo {
-  margin-left: 40px;
-  margin-top: 25px;
-  min-width: 250px;
-}
-.profileContentInfo h2 {
-  margin-top: 50px;
+.sectionHeader h2 {
   font-size: 2.5rem;
   margin: 0;
   padding: 0;
 }
-.profileContentInfo p {
-  font-size: 1.25rem;
-  margin-top: 5px;
-  font-style: italic;
+.venuesSection {
+  margin-top: 50px;
+  scroll-margin-top: 100px;
 }
-.rightSection {
-  width: 95%;
-  margin-left: 25px;
-  margin-right: 25px;
-  position: relative;
-  flex-grow: 1;
-}
-.rightBorder {
-  width: 100%;
-  height: auto;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 100px;
-}
-.rightBorder h2 {
-  font-size: 3rem;
-  pointer-events: none;
-  margin: 0;
-  padding: 0;
-}
-.venuesTitle, .editTitle {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  height: 100px;
-  align-items: center;
-}
-.venuesFilter {
-  display: flex;
-  flex-direction: row;
-  gap: 15px;
-  justify-content: flex-end;
-}
-.adminVenues {
-  height: 400px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.venueGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-auto-rows: 1fr;
+  max-width: 100%;
   gap: 25px;
-  margin-top: 50px;
+  position: relative;
+  align-items: start;
+  height: 100%;
 }
-.allVenues, .allEdits {
-  margin-top: 50px;
+.venueGrid > * {
+  aspect-ratio: 3 / 4;
+  max-width: 400px;
+  width: 100%;
+  height: 100%;
+  justify-self: center;
 }
-.allEdits {
+.venuesContent {
+  margin-top: 50px;
+  height: 100%;
+}
+.editSection {
+  scroll-margin-top: 100px;
+}
+.editContent {
+  margin-top: 50px;
   height: 450px;
   position: relative;
 }
-.allEdits .editForm {
+.editForm {
   display: flex;
   flex-direction: column;
   gap: 25px;
+  width: 95%;
 }
 .editForm input {
   width: 100%;
@@ -316,190 +211,6 @@
   flex-direction: column;
   gap: 10px;
 }
-.blurred {
-  filter: blur(5px);
-  pointer-events: none;
-  user-select: none;
-  overflow: hidden;
-  scroll-behavior: none;
-}  
-.blurWrapper {
-  width: 100%;
-  height: 100%;
-}  
-.popupOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(31, 27, 23, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-.popup {
-  background: #fffefb;
-  padding: 2rem 3rem;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
-  font-family: "Playfair Display", serif;
-  text-align: center;
-  color: #1F1B17;
-}
-.popup h2 {
-  font-size: 1.75rem;
-  margin-bottom: 1rem;
-}
-.popup p {
-  font-size: 1.125rem;
-}
-.venues {
-  margin-top: 50px;
-  scroll-margin-top: 100px;
-}
-.edit {
-  scroll-margin-top: 100px;
-}
-.allVenues {
-  height: 100%;
-}
-.adminVenues {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-auto-rows: 1fr;
-  max-width: 100%;
-  gap: 25px;
-  position: relative;
-  align-items: start;
-  height: 100%;
-}
-.adminVenues > * {
-  aspect-ratio: 3 / 4;
-  max-width: 400px;
-  width: 100%;
-  height: 100%;
-  justify-self: center;
-}
-.no-scroll {
-  overflow: hidden;
-}  
-.dashViewProfile {
-  height: 100%;
-  min-height: 100vh;
-  width: 100%;
-  display: none;
-}
-.dashProfileTop {
-  height: 350px;
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-.dashProfileBanner {
-  height: 400px;
-  width: 100%;
-  z-index: 1;
-}
-.dashProfileBanner img, .dashProfileAvatar .dashAvatar {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.bannerEdgeLeft, .bannerEdgeRight {
-  width: 15px;
-  position: absolute;
-  bottom: 0;
-  z-index: 3;
-}
-.bannerEdgeRight {
-  left: 140px;
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
-}
-.dashProfileAvatar .dashAvatar {
-  position: absolute;
-  height: 125px;
-  width: 125px;
-  z-index: 2;
-  bottom: -10px;
-  margin-left: 15px;
-  border-radius: 99px 99px 15px 15px;
-}
-.dashProfileAvatar .dashAvatar  {
-  border-radius: 99px 99px 15px 15px;
-}
-.dashProfileInfo {
-  margin-top: 10px;
-  margin-left: 15px;
-}
-.dashProfileInfo h2 {
-  margin-top: 35px;
-  font-size: 1.5rem;
-  margin: 0;
-  padding: 0;
-  margin-top: 25px;
-}
-.dashProfileInfo p {
-  font-size: 1.125rem;
-  margin-top: 5px;
-  font-style: italic;
-}
-.dashBottom {
-  margin-left: 15px;
-  margin-right: 15px;
-  display: flex;
-  flex-direction: column;
-}
-.dashBottom h3 {
-  font-size: 1.75rem;
-}
-.dashDivideLine {
-  height: 1px;
-  width: 100%;
-  background-color: #1F1B17;
-  margin-top: 25px;
-  margin-bottom: 25px;
-}
-.dashVenuesTitle {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 15px;
-}
-.dashEdit {
-  margin-bottom: -50px;
-}
-.dashEdit .allEdits {
-  width: 95%;
-}
-.dashViewProfile .profileRating, .profileContentTop .profileRating {
-  margin-top: -5px;
-  margin-bottom: 35px;
-  font-size: 1.125rem;
-}
-.dashViewProfile .profileRating span, .profileContentTop .profileRating span {
-  opacity: 75%;
-  font-size: 1rem;
-}
-.dashViewProfile .profileRating img, .profileContentTop .profileRating img {
-  width: 15px;
-  height: 15px;
-  margin-right: 5px;
-}
-.dashProfileInfo .dashboardButton {
-  width: 100%;
-  right: 15px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  position: absolute;
-  top: 440px;
-}
 .editActions {
   display: flex;
   width: 100%;
@@ -507,97 +218,223 @@
   justify-content: flex-end;
   margin-top: 25px;
 }
+.desktopProfile {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 50px;
+}
+.sidebar {
+  left: 0;
+  height: 90vh;
+  width: 300px;
+  margin-bottom: 50px;
+  border-radius: 25px;
+}
+.sidebarContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 25px;
+  height: 100%;
+  background-color: #1F1B17;
+  border-radius: 25px;
+  color: #fffefb;
+  z-index: 2;
+  position: relative;
+}
+.userInfo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.userInfo .avatar {
+  width: 175px;
+  height: 175px;
+  border-radius: 999px;
+  border: solid #fffefb 1px;
+  object-fit: cover;
+  position: relative;
+  margin-left: 7.5px;
+  margin-right: 7.5px;
+}
+.userInfo h2, 
+.userInfo p, 
+.userInfo .profileRating {
+  width: 100%;
+  text-align: left;
+}
+.userInfo h2 {
+  margin-bottom: 0;
+}
+.userInfo h3 {
+  margin-bottom: 0;
+  padding: 0;
+  pointer-events: none;
+}
+.userInfo p {
+  font-style: italic;
+  margin-top: 2.5px;
+  margin-bottom: 2.5px;
+}
+.navLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: auto;
+}
+.linkGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.linkGroup button {
+  background-color: transparent;
+  width: fit-content;
+  color: #fffefb;
+  font-size: 1rem;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  transition: 0.25s;
+}
+.linkGroup button::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 0.5px;
+  background: white;
+  bottom: -5px;
+  border-radius: 99px;
+  left: 6px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease-out;
+}
+.linkGroup button:hover::after {
+  transform: scaleX(1);
+}
+.signOutBtnWrapper {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translate(-50%);
+}
+.mainContent {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  height: fit-content;
+}
+.tabletProfile {
+  display: none;
+  width: 100%;
+}
+.profileHeader {
+  height: 550px;
+  width: 100%;
+  position: relative;
+}
+.avatarContainer {
+  position: relative;
+}
+.tabletContent {
+  width: 95%;
+  margin: 0 25px;
+  position: relative;
+  flex-grow: 1;
+}
+.contentContainer {
+  width: 100%;
+  height: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+
+.desktopProfile 
+.userInfo {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.desktopProfile 
+.divider {
+  background-color: #fffefb;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
 body.modal-open {
   overflow: hidden;
 }
-.divideLineProfile {
-  height: 0.5px;
-  width: 95%;
-  margin-left: 25px;
-  margin-right: 25px;
-  background-color: #1F1B17;
-  border-radius: 99px;
-}
-.divideLineContent {
-  height: 0.5px;
-  width: 100%;
-  background-color: #1F1B17;
-  border-radius: 99px;
-}
-.profileContentInfo button {
-  position: absolute;
-  right: 45px;
-  top: 400px;
-}
-.dashViewProfile .profileRating, .profileContentTop .profileRating, .profileDesktop .leftBorder .profileRating .leftTop {
-  margin-top: -5px;
-  margin-bottom: 35px;
-  font-size: 1.125rem;
-}
-.dashViewProfile .profileRating span, .profileContentTop .profileRating span, .profileDesktop .leftBorder .profileRating .leftTop span {
-  opacity: 75%;
-  font-size: 1rem;
-}
-.dashViewProfile .profileRating img, .profileContentTop .profileRating img, .profileDesktop .leftBorder .leftTop .profileRating img{
-  width: 15px;
-  height: 15px;
-  margin-right: 5px;
-  border: none;
-}
-@media (max-width:1125px){
-.profileTablet {
-  display: block;
-}
-.profileDesktop {
-  display: none;
-}
-}
-@media (max-width:1025px){
-.profilePage {
-  width: 90%;
-  margin-left: 5%;
-}
-.rightBorder h2 {
-  font-size: 2.5rem;
-}
-}
-@media (max-width:725px){
-  .profilePage {
-  width: 95%;
-  margin-left: 2.5%;
-}
-}
-@media (max-width:425px){
-  .leftSection, .rightSection, .divideLineProfile {
+@media (max-width: 1125px) {
+  .tabletProfile {
+    display: block;
+  }
+  
+  .desktopProfile {
     display: none;
   }
+}
+@media (max-width: 1025px) {
   .profilePage {
-  margin: 0;
-  width: 100%;
-  padding: 0;
- }
- .dashViewProfile {
-  display: block;
- }
- .profileContentTop {
-  display: none;
- }
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  
+  .contentContainer h2 {
+    font-size: 2.5rem;
+  }
 }
-@media (max-width:325px) {
-.dashProfileInfo .dashboardButton {
-  width: 95%;
-  display: flex;
-  position: inherit;
+@media (max-width: 725px) {
+  .profilePage {
+    width: 95%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+  }
 }
+@media (max-width: 425px) {
+  .tabletProfile, 
+  .desktopProfile {
+    display: none;
+  }
+  
+  .profilePage {
+    margin: 0;
+    width: 100%;
+    padding: 0;
+  }
+  
+  .mobileProfile {
+    display: block;
+  }
 }
-@media (max-width:275px){
-  .dashVenuesTitle {
+@media (max-width: 325px) {
+  .dashBtn {
+    width: 95%;
+    display: flex;
+    position: inherit;
+  }
+}
+@media (max-width: 275px) {
+  .sectionHeader {
     flex-direction: column;
     align-items: flex-start;
   }
-    .dashVenuesTitle button {
-      margin-left: 27%;
-      margin-top: 25px;
-      margin-bottom: 25px;
-    }
+  .sectionHeader button {
+    margin-left: 27%;
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
 }
