@@ -103,7 +103,7 @@
 }
 .profileDesktop .profileRight .rightBanner {
   width: 100%;
-  height: 250px;
+  height: 35vh;
   border-radius: 25px;
   position: relative;
 }
