@@ -26,7 +26,7 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const Profile = ({ userType = 'admin' }) => {
+const AdminProfile = () => {
   const [userData, setUserData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState('');
@@ -268,7 +268,7 @@ const Profile = ({ userType = 'admin' }) => {
 
   const toggleDashboard = () => setShowDashboard(prev => !prev);
 
-const scrollToSection = (ref) => {
+  const scrollToSection = (ref) => {
     if (ref?.current) {
       ref.current.scrollIntoView({ behavior: 'smooth' });
       if (showDashboard) {
@@ -285,9 +285,6 @@ const scrollToSection = (ref) => {
       document.body.style.overflow = '';
     };
   }, [isModalVisible, showDashboard]);
-
-  const userRole = userData?.venueManager ? "admin" : "customer";
-  const userDisplayRole = userRole === "admin" ? "Venue Manager" : "Customer";
 
   const RatingDisplay = () => (
     <div className={styles.rating}>
@@ -344,7 +341,7 @@ const scrollToSection = (ref) => {
       <Dashboard
         showDashboard={showDashboard}
         toggleDashboard={toggleDashboard}
-        userRole={userRole}
+        userRole="admin"
         onScrollToProfileTop={() => scrollToSection(mobileRefs.profile)}
         onScrollToProfileEdit={() => scrollToSection(mobileRefs.edit)}
         onScrollToVenues={() => scrollToSection(mobileRefs.venues)}
@@ -371,7 +368,7 @@ const scrollToSection = (ref) => {
             
             <div className={styles.profileInfo}>
               <h2>{capitalizeFirstLetter(userData.name) || 'User'}</h2>
-              <p>{userDisplayRole}</p>
+              <p>Venue Manager</p>
               <RatingDisplay />
               <div className={styles.dashBtn}>
                 <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
@@ -384,9 +381,7 @@ const scrollToSection = (ref) => {
               <div className={styles.venuesSection} ref={mobileRefs.venues}>
                 <div className={styles.sectionHeader}>
                   <h3>Venues</h3>
-                  {userRole === 'admin' && (
-                    <Buttons size="small" version="v1" onClick={handleCreateVenue}>Create Venue</Buttons>
-                  )}
+                  <Buttons size="small" version="v1" onClick={handleCreateVenue}>Create Venue</Buttons>
                 </div>
                 
                 {filteredVenues.length > 0 ? (
@@ -425,7 +420,7 @@ const scrollToSection = (ref) => {
                     alt={userData.name || 'User Avatar'}
                   />
                   <h2>{capitalizeFirstLetter(userData.name) || 'User'}</h2>
-                  <p>{userDisplayRole}</p>
+                  <p>Venue Manager</p>
                   <RatingDisplay />
                 </div>
                 
@@ -435,12 +430,8 @@ const scrollToSection = (ref) => {
                   <div className={styles.linkGroup}>
                     <h3>Venues</h3>
                     <button onClick={() => scrollToSection(desktopRefs.venues)}>My Venues</button>
-                    {userRole === 'admin' && (
-                      <>
-                        <button onClick={handleCreateVenue}>Create Venue</button>
-                        <button onClick={() => scrollToSection(desktopRefs.venues)}>Edit Venue</button>
-                      </>
-                    )}
+                    <button onClick={handleCreateVenue}>Create Venue</button>
+                    <button onClick={() => scrollToSection(desktopRefs.venues)}>Edit Venue</button>
                   </div>
                   
                   <div className={styles.divider}></div>
@@ -466,9 +457,7 @@ const scrollToSection = (ref) => {
               <div className={styles.venuesSection} ref={desktopRefs.venues}>
                 <div className={styles.sectionHeader}>
                   <h2>My Venues</h2>
-                  {userRole === 'admin' && (
-                    <Buttons size='small' version='v1' onClick={handleCreateVenue}>Create Venue</Buttons>
-                  )}
+                  <Buttons size='small' version='v1' onClick={handleCreateVenue}>Create Venue</Buttons>
                 </div>
                 
                 <div className={styles.venuesContent}>
@@ -519,7 +508,7 @@ const scrollToSection = (ref) => {
               
               <div className={styles.profileInfo}>
                 <h2>{capitalizeFirstLetter(userData.name) || 'User'}</h2>
-                <p>{userDisplayRole}</p>
+                <p>Venue Manager</p>
                 <RatingDisplay />
                 <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
               </div>
@@ -532,9 +521,7 @@ const scrollToSection = (ref) => {
                 <div className={styles.venuesSection} ref={mobileRefs.venues}>
                   <div className={styles.sectionHeader}>
                     <h2>My Venues</h2>
-                    {userRole === 'admin' && (
-                      <Buttons size='small' version='v1' onClick={handleCreateVenue}>Create Venue</Buttons>
-                    )}
+                    <Buttons size='small' version='v1' onClick={handleCreateVenue}>Create Venue</Buttons>
                   </div>
                   
                   <div className={styles.venuesContent}>
@@ -580,12 +567,12 @@ const scrollToSection = (ref) => {
           closeModal={closeModal}
           prevImage={prevImage}
           nextImage={nextImage}
-          userRole={userRole}
+          userRole="admin"
         />
       )}
       
       {showPopup && (
-        <CustomPopup
+        <CostumPopup
           message="Are you sure you want to sign off?"
           title="Signing off"
           onConfirm={handleConfirmSignOut}
@@ -597,7 +584,7 @@ const scrollToSection = (ref) => {
       )}
       
       {showSigningOffPopup && (
-        <CustomPopup
+        <CostumPopup
           message="Signing off..."
           title=""
           showButtons={false}
@@ -609,4 +596,4 @@ const scrollToSection = (ref) => {
   );
 };
 
-export default Profile;
+export default AdminProfile;
