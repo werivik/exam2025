@@ -408,7 +408,6 @@ const CostumerProfile = () => {
       
       <div className={`${styles.contentWrapper} ${showPopup ? styles.blurred : ''}`}>
         <div className={styles.profilePage}>
-          {/* Mobile Profile Section */}
           <section className={styles.mobileProfile} ref={mobileRefs.profile}>
             <div className={styles.profileTop}>
               <div className={styles.bannerWrapper}>
@@ -474,7 +473,6 @@ const CostumerProfile = () => {
             </div>
           </section>
 
-          {/* Desktop Profile Section */}
           <div className={styles.desktopProfile}>
             <section className={styles.sidebar}>
               <div className={styles.sidebarContent}>
@@ -521,9 +519,9 @@ const CostumerProfile = () => {
                 <div className={styles.sectionHeader}>
                   <h2>My Bookings</h2>
                   <div className={styles.bookingsFilter}>
-                    <Buttons size="small" version="v3" onClick={() => setFilter('All')}>All</Buttons>
-                    <Buttons size="small" version="v1" onClick={() => setFilter('Future')}>Future</Buttons>
-                    <Buttons size="small" version="v2" onClick={() => setFilter('Previous')}>Previous</Buttons>
+                    <Buttons size="medium" version="v3" onClick={() => setFilter('All')}>All</Buttons>
+                    <Buttons size="medium" version="v2" onClick={() => setFilter('Future')}>Future</Buttons>
+                    <Buttons size="medium" version="v1" onClick={() => setFilter('Previous')}>Previous</Buttons>
                   </div>
                 </div>
                 
@@ -560,7 +558,6 @@ const CostumerProfile = () => {
             </section>
           </div>
 
-          {/* Tablet Profile Section */}
           <div className={styles.tabletProfile}>
             <section className={styles.profileHeader} ref={desktopRefs.profile}>
               <div className={styles.bannerWrapper}>
@@ -591,7 +588,7 @@ const CostumerProfile = () => {
                   <div className={styles.sectionHeader}>
                     <h2>My Bookings</h2>
                     <div className={styles.bookingsFilter}>
-                      <Buttons size="small" version="v3" onClick={() => setFilter('All')}>All</Buttons>
+                      <Buttons size="small" version="v1" onClick={() => setFilter('All')}>All</Buttons>
                       <Buttons size="small" version="v1" onClick={() => setFilter('Future')}>Future</Buttons>
                       <Buttons size="small" version="v2" onClick={() => setFilter('Previous')}>Previous</Buttons>
                     </div>
