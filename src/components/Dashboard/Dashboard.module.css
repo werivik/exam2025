@@ -1,0 +1,86 @@
+.filterSidebarContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 25px;
+    height: 100%;
+    padding-bottom: 50px;
+    margin-left: 25px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    color: #1F1B17;
+  }
+
+  .divideLine {
+    height: 0.5px;
+    width: 100%;
+    border: 99px;
+    background-color: #1F1B17;
+  }
+
+  .filterSidebarContent {
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .filterSidebarContent::-webkit-scrollbar {
+    display: none;
+  }
+
+  .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .filterSidebar {
+    position: fixed;
+    top: 0;
+    left: -500px;
+    width: 375px;
+    height: 100vh;
+    background-color: white;
+    color: #1F1B17;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: all 0.4s ease;
+    z-index: 1100;
+    border-radius: 0px 25px 25px 0px;
+    font-size: 1rem;
+  }
+  
+  .showDashboard {
+    left: 0;
+  }
+  
+ .dashboardLink {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: flex-start;
+ }
+
+  @media (max-width:500px) {
+    .filterSidebar {
+      width: 100%;
+      border-radius: 0px;
+    }
+  }

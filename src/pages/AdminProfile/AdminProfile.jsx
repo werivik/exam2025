@@ -14,6 +14,8 @@ import starRating from '../../../media/rating/christmas-stars.png';
 import bannerImage from '../../../media/logo/loadingScreen.png';
 import bannerEdge from '../../../media/images/beige-edge.png';
 
+import Dashboard from '../../components/Dashboard/Dashboard.jsx';
+
 const pageVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
@@ -46,8 +48,10 @@ const AdminProfile = () => {
   const [averageRating, setAverageRating] = useState(0);
   const [totalReviews, setTotalReviews] = useState(0);
 
+  const [showDashboard, setShowDashboard] = useState(false);
+
   useEffect(() => {
-const fetchAdminData = async () => {
+  const fetchAdminData = async () => {
   const token = localStorage.getItem('accessToken');
   const username = localStorage.getItem('username');
 
@@ -259,7 +263,6 @@ const handleVenueClick = (venue) => {
   setIsModalVisible(true);
 };
 
-
   const closeModal = () => {
     setIsModalVisible(false);
     setSelectedVenue(null);
@@ -271,6 +274,35 @@ const handleVenueClick = (venue) => {
     }
   };
 
+  const toggleDashboard = () => setShowDashboard(prev => !prev);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      Object.entries(inputRefs).forEach(([key, ref]) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setShowLocationSuggestions(prev => ({ ...prev, [key]: false }));
+        }
+      });
+    };
+  
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);   
+
+    useEffect(() => {
+    if (showDashboard) {
+      document.body.style.overflow = 'hidden';
+    } 
+    
+    else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showDashboard]);  
+
+
   return (
     <motion.div
       className={styles.pageContent}
@@ -280,6 +312,13 @@ const handleVenueClick = (venue) => {
       variants={pageVariants}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
+
+  {showDashboard && <div className={styles.backdrop} onClick={toggleDashboard}></div>}
+  <Dashboard
+  showDashboard={showDashboard}
+  toggleDashboard={toggleDashboard}
+/>
+
       <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
         <div className={styles.profilePage}>
 
@@ -383,7 +422,7 @@ const handleVenueClick = (venue) => {
   <img src={starRating} alt="Star rating" />
   {averageRating}<span> / ({totalReviews}) reviews</span>
 </div>
-              <button className={styles.dashboardButton}>Dashboard</button>
+              <button className={styles.dashboardButton}  onClick={toggleDashboard}>Dashboard</button>
             </div>
             </div>
           </section>
