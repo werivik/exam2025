@@ -490,7 +490,7 @@ const DateFilter = () => (
             <BannerSlideshow />    
             <div className={styles.bannerFilters}>
               <img src={Edge} className={styles.edgeLeft} alt="" />
-{window.innerWidth > 900 ? (
+{window.innerWidth > 1375 ? (
   <div className={styles.filterContent}>
     <div className={styles.allFilters}>
       <div className={styles.filtersLeft}>
