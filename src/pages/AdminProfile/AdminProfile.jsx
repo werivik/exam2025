@@ -8,8 +8,7 @@ import defaultAvatar from '/media/images/mdefault.jpg';
 import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType.jsx';
 import Buttons from '../../components/Buttons/Buttons';
 import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
-import CustomPopup from '../../components/CostumPopup/CostumPopup';
-
+import CostumPopup from '../../components/CostumPopup/CostumPopup';
 import starRating from '../../../media/rating/christmas-stars.png';
 import bannerImage from '../../../media/logo/loadingScreen.png';
 import bannerEdge from '../../../media/images/beige-edge.png';
@@ -27,7 +26,7 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const AdminProfile = () => {
+const Profile = ({ userType = 'admin' }) => {
   const [userData, setUserData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState('');
@@ -41,88 +40,109 @@ const AdminProfile = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [assignedVenues, setAssignedVenues] = useState([]);
   const [filteredVenues, setFilteredVenues] = useState([]);
-  const [activeFilter, setActiveFilter] = useState('all'); 
-  const navigate = useNavigate();
-
-const editRef = useRef(null);
-const profileRef = useRef(null);
-const venuesRef = useRef(null);
-const bookingsRef = useRef(null);
-
+  const [activeFilter, setActiveFilter] = useState('all');
   const [averageRating, setAverageRating] = useState(0);
   const [totalReviews, setTotalReviews] = useState(0);
-
   const [showDashboard, setShowDashboard] = useState(false);
+  const navigate = useNavigate();
+
+  const mobileRefs = {
+    profile: useRef(null),
+    edit: useRef(null),
+    venues: useRef(null),
+    bookings: useRef(null)
+  };
+
+  const desktopRefs = {
+    profile: useRef(null),
+    edit: useRef(null),
+    venues: useRef(null),
+    banner: useRef(null)
+  };
 
   useEffect(() => {
-  const fetchAdminData = async () => {
-  const token = localStorage.getItem('accessToken');
-  const username = localStorage.getItem('username');
+    fetchUserData();
+  }, []);
 
-  if (!token || !username) {
-    console.error('Missing token or name in localStorage');
-    return;
-  }
+  const fetchUserData = async () => {
+    const token = localStorage.getItem('accessToken');
+    const username = localStorage.getItem('username');
 
-  try {
-    const adminProfileUrl = PROFILES_SINGLE.replace("<name>", username);
-    const response = await fetch(adminProfileUrl, {
-      method: 'GET',
-      headers: headers(token),
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.errors?.[0]?.message || 'Failed to fetch admin data');
+    if (!token || !username) {
+      console.error('Missing token or name in localStorage');
+      return;
     }
 
-    setUserData(data.data || {});
-    setNewName(data.data.name);
-    setNewAvatar(data.data.avatar?.url || '');
-    setNewBanner(data.data.banner?.url || '');
-
-    const venuesResponse = await fetch(PROFILES_SINGLE_BY_VENUES.replace('<name>', username), {
-      method: 'GET',
-      headers: headers(token),
-    });
-
-    const venuesData = await venuesResponse.json();
-    if (venuesResponse.ok) {
-      const venues = venuesData.data || [];
-
-      setAssignedVenues(venues);
-      setFilteredVenues(venues);
-
-      let totalRating = 0;
-      let reviewCount = 0;
-
-      venues.forEach((venue) => {
-        if (venue.rating && venue.rating > 0 && venue._count?.reviews > 0) {
-          totalRating += venue.rating * venue._count.reviews;
-          reviewCount += venue._count.reviews;
-        }
+    try {
+      const profileUrl = PROFILES_SINGLE.replace("<name>", username);
+      const response = await fetch(profileUrl, {
+        method: 'GET',
+        headers: headers(token),
       });
 
-      if (reviewCount > 0) {
-        const avg = totalRating / reviewCount;
-        setAverageRating(Math.min(5, parseFloat(avg.toFixed(1))));
-        setTotalReviews(reviewCount);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.errors?.[0]?.message || 'Failed to fetch user data');
+      }
+
+      setUserData(data.data || {});
+      setNewName(data.data.name);
+      setNewAvatar(data.data.avatar?.url || '');
+      setNewBanner(data.data.banner?.url || '');
+
+      await fetchUserVenues(token, username);
+    } 
+    catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const fetchUserVenues = async (token, username) => {
+    try {
+      const venuesResponse = await fetch(PROFILES_SINGLE_BY_VENUES.replace('<name>', username), {
+        method: 'GET',
+        headers: headers(token),
+      });
+
+      const venuesData = await venuesResponse.json();
+      if (venuesResponse.ok) {
+        const venues = venuesData.data || [];
+
+        setAssignedVenues(venues);
+        setFilteredVenues(venues);
+
+        calculateRatings(venues);
       } 
       else {
-        setAverageRating(0);
-        setTotalReviews(0);
+        console.error('Failed to fetch venues');
       }
     } 
-    else {
-      console.error('Failed to fetch venues');
+    catch (error) {
+      console.error('Error fetching user venues:', error);
     }
-  } 
-  catch (error) {
-    console.error('Error fetching admin data:', error);
-  }
-};
-    fetchAdminData();
-  }, []);
+  };
+
+  const calculateRatings = (venues) => {
+    let totalRating = 0;
+    let reviewCount = 0;
+
+    venues.forEach((venue) => {
+      if (venue.rating && venue.rating > 0 && venue._count?.reviews > 0) {
+        totalRating += venue.rating * venue._count.reviews;
+        reviewCount += venue._count.reviews;
+      }
+    });
+
+    if (reviewCount > 0) {
+      const avg = totalRating / reviewCount;
+      setAverageRating(Math.min(5, parseFloat(avg.toFixed(1))));
+      setTotalReviews(reviewCount);
+    } 
+    else {
+      setAverageRating(0);
+      setTotalReviews(0);
+    }
+  };
 
   const handleFilterChange = (filter) => {
     setActiveFilter(filter);
@@ -153,7 +173,6 @@ const bookingsRef = useRef(null);
     localStorage.removeItem('accessToken');
     localStorage.removeItem('username');
 
-    setShowPopup(false);
     setTimeout(() => {
       window.location.href = '/';
     }, 2000);
@@ -165,22 +184,10 @@ const bookingsRef = useRef(null);
 
   const handleEditProfile = () => {
     setIsEditing(true);
-    if (editRef.current) {
-      editRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (mobileRefs.edit.current) {
+      mobileRefs.edit.current.scrollIntoView({ behavior: 'smooth' });
     }
   };  
-
-  useEffect(() => {
-    if (isModalVisible) {
-      document.body.style.overflow = 'hidden';
-    } 
-    else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isModalVisible]);  
 
   const handleSaveProfile = async () => {
     const token = localStorage.getItem('accessToken');
@@ -196,14 +203,14 @@ const bookingsRef = useRef(null);
       return;
     }
   
-const updateData = {};
-if (newName && newName !== userData.name) updateData.name = newName;
+    const updateData = {};
+    if (newName && newName !== userData.name) updateData.name = newName;
 
-const avatarData = newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName || username}'s avatar` } : undefined;
-if (avatarData) updateData.avatar = avatarData;
+    const avatarData = newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName || username}'s avatar` } : undefined;
+    if (avatarData) updateData.avatar = avatarData;
 
-const bannerData = newBanner.trim() ? { url: newBanner.trim(), alt: `${newName || username}'s banner` } : undefined;
-if (bannerData) updateData.banner = bannerData;
+    const bannerData = newBanner.trim() ? { url: newBanner.trim(), alt: `${newName || username}'s banner` } : undefined;
+    if (bannerData) updateData.banner = bannerData;
   
     try {
       const response = await fetch(`${PROFILES_SINGLE.replace("<name>", username)}`, {
@@ -213,7 +220,7 @@ if (bannerData) updateData.banner = bannerData;
       });
   
       const data = await response.json();
-      console.log('Response Data:', data);
+      
       if (response.ok) {
         setUserData(data.data);
         setIsEditing(false);
@@ -231,8 +238,18 @@ if (bannerData) updateData.banner = bannerData;
     }
   };  
 
-  const handleRedirect = () => {
+  const handleCreateVenue = () => {
     navigate('/create-venue');
+  };
+
+  const handleVenueClick = (venue) => {
+    setSelectedVenue(venue);
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+    setSelectedVenue(null);
   };
 
   const nextImage = () => {
@@ -249,441 +266,345 @@ if (bannerData) updateData.banner = bannerData;
     }
   }; 
 
-  useEffect(() => {
-  if (isModalVisible) {
-    document.body.classList.add('modal-open');
-  } 
-  else {
-    document.body.classList.remove('modal-open');
-  }
-  return () => {
-    document.body.classList.remove('modal-open');
-  };
-}, [isModalVisible]);
-
-
-const handleVenueClick = (venue) => {
-  setSelectedVenue(venue);
-  setIsModalVisible(true);
-};
-
-  const closeModal = () => {
-    setIsModalVisible(false);
-    setSelectedVenue(null);
-  };
-
-  const handleOverlayClick = (e) => {
-    if (e.target.classList.contains(styles.modalOverlay)) {
-      closeModal();
-    }
-  };
-
-  const scrollToSection = (ref) => {
-  if (ref?.current) {
-    ref.current.scrollIntoView({ behavior: 'smooth' });
-    toggleDashboard();
-  }
-};
-
   const toggleDashboard = () => setShowDashboard(prev => !prev);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      Object.entries(inputRefs).forEach(([key, ref]) => {
-        if (ref.current && !ref.current.contains(event.target)) {
-          setShowLocationSuggestions(prev => ({ ...prev, [key]: false }));
-        }
-      });
-    };
-  
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);   
-
-    useEffect(() => {
-    if (showDashboard) {
-      document.body.style.overflow = 'hidden';
-    } 
-    
-    else {
-      document.body.style.overflow = '';
+  const scrollToSection = (ref) => {
+    if (ref?.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+      toggleDashboard();
     }
+  };
+
+  useEffect(() => {
+    const shouldLockScroll = isModalVisible || showDashboard;
+    document.body.style.overflow = shouldLockScroll ? 'hidden' : '';
+    
     return () => {
       document.body.style.overflow = '';
     };
-  }, [showDashboard]);  
+  }, [isModalVisible, showDashboard]);
 
   const userRole = userData?.venueManager ? "admin" : "customer";
+  const userDisplayRole = userRole === "admin" ? "Venue Manager" : "Customer";
 
-  const handleRedirectWithClose = () => {
-  if (window.innerWidth < 1125) toggleDashboard();
-  handleRedirect();
-};
+  const RatingDisplay = () => (
+    <div className={styles.rating}>
+      <img src={starRating} alt="Star rating" />
+      {averageRating}<span> / ({totalReviews}) reviews</span>
+    </div>
+  );
 
-const scrollToProfileDesktop = () => {
-  if (profileRef?.current) {
-    profileRef.current.scrollIntoView({ behavior: 'smooth' });
-  }
-};
-
-const scrollToEditDesktop = () => {
-  if (editRef?.current) {
-    editRef.current.scrollIntoView({ behavior: 'smooth' });
-  }
-};
-
-const scrollToVenuesDesktop = () => {
-  if (venuesRef?.current) {
-    venuesRef.current.scrollIntoView({ behavior: 'smooth' });
-  }
-};
+  const EditProfileForm = () => (
+    <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
+      <label>
+        Name:
+        <input
+          type="text"
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          required
+        />
+        {usernameError && <span className={styles.error}>{usernameError}</span>}
+      </label>
+      <label>
+        Avatar URL:
+        <input
+          type="url"
+          value={newAvatar}
+          onChange={(e) => setNewAvatar(e.target.value)}
+        />
+      </label>
+      <label>
+        Banner URL:
+        <input
+          type="url"
+          value={newBanner}
+          onChange={(e) => setNewBanner(e.target.value)}
+        />
+      </label>
+      <div className={styles.actionBtns}>
+        <Buttons type="submit" size="small" version="v1">Save Changes</Buttons>
+      </div>
+    </form>
+  );
 
   return (
     <motion.div
-      className={styles.pageContent}
+      className={styles.container}
       initial="initial"
       animate="animate"
       exit="exit"
       variants={pageVariants}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
-
-  {showDashboard && <div className={styles.backdrop} onClick={toggleDashboard}></div>}
-<Dashboard
-  showDashboard={showDashboard}
-  toggleDashboard={toggleDashboard}
-  userRole={userRole}
-  onScrollToProfileTop={() => scrollToSection(profileRef)}
-  onScrollToProfileEdit={() => scrollToSection(editRef)}
-  onScrollToVenues={() => scrollToSection(venuesRef)}
-  onSignOut={handleSignOut}
-/>
-      <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
+      {showDashboard && <div className={styles.backdrop} onClick={toggleDashboard}></div>}
+      
+      <Dashboard
+        showDashboard={showDashboard}
+        toggleDashboard={toggleDashboard}
+        userRole={userRole}
+        onScrollToProfileTop={() => scrollToSection(mobileRefs.profile)}
+        onScrollToProfileEdit={() => scrollToSection(mobileRefs.edit)}
+        onScrollToVenues={() => scrollToSection(mobileRefs.venues)}
+        onSignOut={handleSignOut}
+      />
+      
+      <div className={`${styles.contentWrapper} ${showPopup ? styles.blurred : ''}`}>
         <div className={styles.profilePage}>
-          <section className={styles.dashViewProfile} ref={profileRef}>
-            <div className={styles.dashProfileTop}>
-              <div className={styles.dashProfileBanner}>
+          <section className={styles.mobileProfile} ref={mobileRefs.profile}>
+            <div className={styles.profileTop}>
+              <div className={styles.bannerWrapper}>
                 <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
               </div>
-              <div className={styles.dashProfileAvatar}>
-                <img src={bannerEdge} className={styles.bannerEdgeLeft}></img>
+              <div className={styles.avatarWrapper}>
+                <img src={bannerEdge} className={styles.edgeLeft}></img>
                 <img
-                  className={styles.dashAvatar}
+                  className={styles.avatar}
                   src={userData.avatar?.url || defaultAvatar}
-                  alt={userData.name || 'Admin Avatar'}
+                  alt={userData.name || 'User Avatar'}
                 />
+                <img src={bannerEdge} className={styles.edgeRight}></img>
               </div>
-              <img src={bannerEdge} className={styles.bannerEdgeRight}></img>
             </div>
-              <div className={styles.dashProfileInfo}>
-                <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
-                <p>Venue Manager</p>
-                <div className={styles.profileRating}>
-                  <img src={starRating} alt="Star rating" />
-                  {averageRating}<span> / ({totalReviews}) reviews</span>
-                </div>
-                <div className={styles.dashboardButton}>
-                  <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
-                </div>
+            
+            <div className={styles.profileInfo}>
+              <h2>{capitalizeFirstLetter(userData.name) || 'User'}</h2>
+              <p>{userDisplayRole}</p>
+              <RatingDisplay />
+              <div className={styles.dashBtn}>
+                <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
               </div>
-              <div className={styles.dashBottom}>
-                <div className={styles.dashDivideLine}></div>
-                <div className={styles.dashVenues} ref={venuesRef}>
-                  <div className={styles.dashVenuesTitle}>
-                    <h3>Venues</h3>
-                    <Buttons size="small" version="v1" onClick={handleRedirect}>Create Venue</Buttons>
-                  </div>
-                  {filteredVenues.length > 0 ? (
-                  <div className={styles.adminBookings}>
-  {filteredVenues.map((venue) => (
-    <VenueCardSecondType
-      key={venue.id}
-      venue={venue}
-      onClick={() => handleVenueClick(venue)}
-    />
-  ))}
-</div>
-              ) : (
-                <p>No venues Made yet.</p>
-              )}
+            </div>
+            
+            <div className={styles.mobileContent}>
+              <div className={styles.divider}></div>
+              
+              <div className={styles.venuesSection} ref={mobileRefs.venues}>
+                <div className={styles.sectionHeader}>
+                  <h3>Venues</h3>
+                  {userRole === 'admin' && (
+                    <Buttons size="small" version="v1" onClick={handleCreateVenue}>Create Venue</Buttons>
+                  )}
                 </div>
-                <div className={styles.dashDivideLine}></div>
-              <div className={styles.dashEdit} ref={editRef}>
-                <h3>Edit Profile</h3>
-                  <div className={styles.allEdits}>
-                    <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
-                      <label>
-                        Name:
-                        <input
-                          type="text"
-                          value={newName}
-                          onChange={(e) => setNewName(e.target.value)}
-                          required
-                        />
-                      </label>
-                      <label>
-                        Avatar URL:
-                        <input
-                          type="url"
-                          value={newAvatar}
-                          onChange={(e) => setNewAvatar(e.target.value)}
-                        />
-                      </label>
-                      <label>
-                        Banner URL:
-                        <input
-                          type="url"
-                          value={newBanner}
-                          onChange={(e) => setNewBanner(e.target.value)}
-                        />
-                      </label>
-                      <div className={styles.editActions}>
-                        <Buttons type="submit" size="small" version="v1">Save Changes</Buttons>
-                      </div>
-                    </form>
-                  </div>
-              </div>
-              </div>
-
-          </section>
-
-          <div className={styles.profileDesktop}>
-            <section className={styles.profileLeft}>
-              <div className={styles.leftBorder}>
-                <div className={styles.leftTop}>
-                  <img
-                    className={styles.profileAvatar}
-                    src={userData.avatar?.url || defaultAvatar}
-                    alt={userData.name || 'Admin Avatar'}
-                  />
-                  <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
-                  <p>Venue Manager</p>
-                  <div className={styles.profileRating}>
-                    <img src={starRating} alt="Star rating" />
-                    {averageRating}<span> / ({totalReviews}) reviews</span>
-                  </div>
-                </div>
-                <div className={styles.divideLine}></div>
-<div className={styles.leftShortcut}>
-<div className={styles.leftLink}>
-  <h3>Venues</h3>
-  <button onClick={scrollToVenuesDesktop}>My Venues</button>
-  <button onClick={handleRedirect}>Create Venue</button>
-  <button onClick={scrollToVenuesDesktop}>Edit Venue</button>
-</div>
-  <div className={styles.divideLine}></div>
-
-<div className={styles.leftLink}>
-  <h3>Profile</h3>
-  <button onClick={scrollToProfileDesktop}>View Profile</button>
-  <button onClick={scrollToEditDesktop}>Edit Profile</button>
-</div>
-
-  <div className={styles.signOutButton}>
-    <Buttons size="small" version="v1" onClick={handleSignOut}>Sign out</Buttons>
-  </div>
-</div>
-              </div>
-            </section>
-            <section className={styles.profileRight}>
-              <div className={styles.rightBanner}>
-                <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
-              </div>
-              <div className={styles.venues} ref={venuesRef}>
-                <div className={styles.venuesTitle}>
-                  <h2>My Venues</h2>
-                  <Buttons size='small' version='v1' onClick={handleRedirect}>Create Venue</Buttons>
-                </div>
-                <div className={styles.allVenues}>
+                
                 {filteredVenues.length > 0 ? (
-                  <div className={styles.adminVenues}>
+                  <div className={styles.venueGrid}>
                     {filteredVenues.map((venue) => (
                       <VenueCardSecondType
-                      key={venue.id}
-                      venue={venue}
-                      onClick={() => handleVenueClick(venue)}
+                        key={venue.id}
+                        venue={venue}
+                        onClick={() => handleVenueClick(venue)}
                       />
                     ))}
                   </div>
-              ) : (
-                <p>No venues available for this filter.</p>
-              )}
+                ) : (
+                  <p>No venues yet.</p>
+                )}
+              </div>
+              
+              <div className={styles.divider}></div>
+              
+              <div className={styles.editSection} ref={mobileRefs.edit}>
+                <h3>Edit Profile</h3>
+                <div className={styles.editContent}>
+                  <EditProfileForm />
                 </div>
               </div>
-              <div className={styles.divideLine}></div>
-                <div className={styles.edit} ref={editRef}>
-                  <div className={styles.editTitle}>
-                    <h2>Edit Profile</h2>
+            </div>
+          </section>
+
+          <div className={styles.desktopProfile}>
+            <section className={styles.sidebar}>
+              <div className={styles.sidebarContent}>
+                <div className={styles.userInfo}>
+                  <img
+                    className={styles.avatar}
+                    src={userData.avatar?.url || defaultAvatar}
+                    alt={userData.name || 'User Avatar'}
+                  />
+                  <h2>{capitalizeFirstLetter(userData.name) || 'User'}</h2>
+                  <p>{userDisplayRole}</p>
+                  <RatingDisplay />
+                </div>
+                
+                <div className={styles.divider}></div>
+                
+                <div className={styles.navLinks}>
+                  <div className={styles.linkGroup}>
+                    <h3>Venues</h3>
+                    <button onClick={() => scrollToSection(desktopRefs.venues)}>My Venues</button>
+                    {userRole === 'admin' && (
+                      <>
+                        <button onClick={handleCreateVenue}>Create Venue</button>
+                        <button onClick={() => scrollToSection(desktopRefs.venues)}>Edit Venue</button>
+                      </>
+                    )}
                   </div>
-                  <div className={styles.allEdits}>
-                    <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
-                      <label>
-                        Name:
-                        <input
-                          type="text"
-                          value={newName}
-                          onChange={(e) => setNewName(e.target.value)}
-                          required
-                        />
-                      </label>
-                      <label>
-                        Avatar URL:
-                        <input
-                          type="url"
-                          value={newAvatar}
-                          onChange={(e) => setNewAvatar(e.target.value)}
-                        />
-                      </label>
-                      <label>
-                        Banner URL:
-                        <input
-                          type="url"
-                          value={newBanner}
-                          onChange={(e) => setNewBanner(e.target.value)}
-                        />
-                      </label>
-                      <div className={styles.editActions}>
-                        <Buttons type="submit" size="small" version="v1">Save Changes</Buttons>
-                      </div>
-                    </form>
+                  
+                  <div className={styles.divider}></div>
+                  
+                  <div className={styles.linkGroup}>
+                    <h3>Profile</h3>
+                    <button onClick={() => scrollToSection(desktopRefs.profile)}>View Profile</button>
+                    <button onClick={() => scrollToSection(desktopRefs.edit)}>Edit Profile</button>
+                  </div>
+                  
+                  <div className={styles.signOutBtnWrapper}>
+                    <Buttons size="small" version="v1" onClick={handleSignOut}>Sign out</Buttons>
                   </div>
                 </div>
-
+              </div>
+            </section>
+            
+            <section className={styles.mainContent}>
+              <div className={styles.bannerWrapper} ref={desktopRefs.banner}>
+                <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
+              </div>
+              
+              <div className={styles.venuesSection} ref={desktopRefs.venues}>
+                <div className={styles.sectionHeader}>
+                  <h2>My Venues</h2>
+                  {userRole === 'admin' && (
+                    <Buttons size='small' version='v1' onClick={handleCreateVenue}>Create Venue</Buttons>
+                  )}
+                </div>
+                
+                <div className={styles.venuesContent}>
+                  {filteredVenues.length > 0 ? (
+                    <div className={styles.venueGrid}>
+                      {filteredVenues.map((venue) => (
+                        <VenueCardSecondType
+                          key={venue.id}
+                          venue={venue}
+                          onClick={() => handleVenueClick(venue)}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <p>No venues available.</p>
+                  )}
+                </div>
+              </div>
+              
+              <div className={styles.divider}></div>
+              
+              <div className={styles.editSection} ref={desktopRefs.edit}>
+                <div className={styles.sectionHeader}>
+                  <h2>Edit Profile</h2>
+                </div>
+                
+                <div className={styles.editContent}>
+                  <EditProfileForm />
+                </div>
+              </div>
             </section>
           </div>
 
-          <div className={styles.profileTablet}>
-            <section className={styles.profileContentTop} ref={profileRef}>
-            <div className={styles.profileBorder}>
-            <div className={styles.profileTop}>
-              <div className={styles.profileBanner}>
+          <div className={styles.tabletProfile}>
+            <section className={styles.profileHeader} ref={desktopRefs.profile}>
+              <div className={styles.bannerWrapper}>
                 <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
               </div>
-              <div className={styles.profileAvatarContent}>
-                <img src={bannerEdge} className={styles.profileEdgeLeft}></img>
+              <div className={styles.avatarContainer}>
+                <img src={bannerEdge} className={styles.edgeLeft}></img>
                 <img
-                  className={styles.profileAvatar}
+                  className={styles.avatar}
                   src={userData.avatar?.url || defaultAvatar}
-                  alt={userData.name || 'Admin Avatar'}
+                  alt={userData.name || 'User Avatar'}
                 />
-                <img src={bannerEdge} className={styles.profileEdgeRight}></img>
+                <img src={bannerEdge} className={styles.edgeRight}></img>
               </div>
-            </div>
-              <div className={styles.profileContentInfo}>
-              <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
-              <p>Venue Manager</p>
-              <div className={styles.profileRating}>
-                <img src={starRating} alt="Star rating" />
-                {averageRating}<span> / ({totalReviews}) reviews</span>
+              
+              <div className={styles.profileInfo}>
+                <h2>{capitalizeFirstLetter(userData.name) || 'User'}</h2>
+                <p>{userDisplayRole}</p>
+                <RatingDisplay />
+                <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
               </div>
-              <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
-            </div>
-            </div>
-          </section>
-          <div className={styles.divideLineProfile}></div>
+            </section>
+            
+            <div className={styles.divider}></div>
 
-          <section className={styles.rightSection}>
-            <div className={styles.rightBorder}>
-              <div className={styles.venues} ref={venuesRef}>
-                <div className={styles.venuesTitle}>
-                  <h2>My Venues</h2>
-                  <Buttons size='small' version='v1' onClick={handleRedirect}>Create Venue</Buttons>
+            <section className={styles.tabletContent}>
+              <div className={styles.contentContainer}>
+                <div className={styles.venuesSection} ref={mobileRefs.venues}>
+                  <div className={styles.sectionHeader}>
+                    <h2>My Venues</h2>
+                    {userRole === 'admin' && (
+                      <Buttons size='small' version='v1' onClick={handleCreateVenue}>Create Venue</Buttons>
+                    )}
+                  </div>
+                  
+                  <div className={styles.venuesContent}>
+                    {filteredVenues.length > 0 ? (
+                      <div className={styles.venueGrid}>
+                        {filteredVenues.map((venue) => (
+                          <VenueCardSecondType
+                            key={venue.id}
+                            venue={venue}
+                            onClick={() => handleVenueClick(venue)}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <p>No venues available for this filter.</p>
+                    )}
+                  </div>
                 </div>
-                <div className={styles.allVenues}>
-                {filteredVenues.length > 0 ? (
-                  <div className={styles.adminVenues}>
-  {filteredVenues.map((venue) => (
-    <VenueCardSecondType
-      key={venue.id}
-      venue={venue}
-      onClick={() => handleVenueClick(venue)}
-    />
-  ))}
-</div>
-              ) : (
-                <p>No venues available for this filter.</p>
-              )}
-                </div>
-              </div>
                 
-                <div className={styles.divideLineContent}></div>
-
-                <div className={styles.edit} ref={editRef}>
-                  <div className={styles.editTitle}>
+                <div className={styles.divider}></div>
+                
+                <div className={styles.editSection} ref={mobileRefs.edit}>
+                  <div className={styles.sectionHeader}>
                     <h2>Edit Profile</h2>
                   </div>
-                  <div className={styles.allEdits}>
-                    <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
-                      <label>
-                        Name:
-                        <input
-                          type="text"
-                          value={newName}
-                          onChange={(e) => setNewName(e.target.value)}
-                          required
-                        />
-                      </label>
-                      <label>
-                        Avatar URL:
-                        <input
-                          type="url"
-                          value={newAvatar}
-                          onChange={(e) => setNewAvatar(e.target.value)}
-                        />
-                      </label>
-                      <label>
-                        Banner URL:
-                        <input
-                          type="url"
-                          value={newBanner}
-                          onChange={(e) => setNewBanner(e.target.value)}
-                        />
-                      </label>
-                      <div className={styles.editActions}>
-                        <Buttons type="submit" size="small" version="v1">Save Changes</Buttons>
-                      </div>
-                    </form>
+                  
+                  <div className={styles.editContent}>
+                    <EditProfileForm />
                   </div>
                 </div>
-            </div>
-          </section>
+              </div>
+            </section>
           </div>
         </div>
-{isModalVisible && selectedVenue && (
-  <VenueDetailsPopup
-    selectedVenue={selectedVenue}
-    selectedBooking={null}
-    isLoading={false}
-    isModalVisible={isModalVisible}
-    closeModal={closeModal}
-    prevImage={prevImage}
-    nextImage={nextImage}
-    userRole="admin"
-  />
-)}
       </div>
-        {showPopup && (
-          <CustomPopup
-            message="Are you sure you want to sign off?"
-            title="Signing off"
-            onConfirm={handleConfirmSignOut}
-            onCancel={handleCancelSignOut}
-            showButtons={true}
-            disableAutoClose={false}
-            hideBars={true}
-          />
-        )}
-        {showSigningOffPopup && (
-  <CustomPopup
-    message="Signing off..."
-    title=""
-    showButtons={false}
-    disableAutoClose={false}
-    hideBars={false}
-  />
-        )}
+      
+      {isModalVisible && selectedVenue && (
+        <VenueDetailsPopup
+          selectedVenue={selectedVenue}
+          selectedBooking={null}
+          isLoading={false}
+          isModalVisible={isModalVisible}
+          closeModal={closeModal}
+          prevImage={prevImage}
+          nextImage={nextImage}
+          userRole={userRole}
+        />
+      )}
+      
+      {showPopup && (
+        <CustomPopup
+          message="Are you sure you want to sign off?"
+          title="Signing off"
+          onConfirm={handleConfirmSignOut}
+          onCancel={handleCancelSignOut}
+          showButtons={true}
+          disableAutoClose={false}
+          hideBars={true}
+        />
+      )}
+      
+      {showSigningOffPopup && (
+        <CustomPopup
+          message="Signing off..."
+          title=""
+          showButtons={false}
+          disableAutoClose={false}
+          hideBars={false}
+        />
+      )}
     </motion.div>
   );
 };
 
-export default AdminProfile;
+export default Profile;
