@@ -40,14 +40,21 @@ header {
     background-color: #f2f2f268;
     color: #1F1B17;
   }
-  header.scrolled nav .headerRightLinks li a, header.scrolled nav .menuOpen, header.scrolled nav .menuOpen i, header.scrolled nav .headerRightLinks .searchInactive, header.scrolled .menuLeftLinks a {
+  header.scrolled nav .headerRightLinks li a, 
+  header.scrolled nav .menuOpen, 
+  header.scrolled nav .menuOpen i, 
+  header.scrolled nav .headerRightLinks .searchInactive, 
+  header.scrolled .menuLeftLinks a {
     color: #1F1B17;
     transition: 0.25s;
   }
   header.scrolled .divideLine {
     background-color: #1F1B17;
   }
-  header.scrolled nav .headerRightLinks li a:hover, header.scrolled nav .menuOpen:hover ,header.scrolled nav .searchInactive:hover, header.scrolled .menuLeftLinks a:hover {
+  header.scrolled nav .headerRightLinks li a:hover, 
+  header.scrolled nav .menuOpen:hover,
+  header.scrolled nav .searchInactive:hover, 
+  header.scrolled .menuLeftLinks a:hover {
     transition: 0.25s;
     border-color: #1F1B17;
   }
@@ -138,9 +145,8 @@ header {
 .headerRightLinks {
   display: flex;
   align-items: center;
-  gap: 25px;
-  height: 100%;
-  width: 100%;
+  gap: 10px;
+  height: 60px;
   padding-right: 10px;
   margin-top: 0;
   justify-content: flex-end;
@@ -148,8 +154,6 @@ header {
 }
 .headerRightLinks li {
   position: relative;
-  height: 100%;
-  width: 100%;
   display: flex;
   align-items: center;
 }
@@ -173,12 +177,13 @@ header {
   border: solid white 2px;
 }
 .headerRightLinks .divideLine {
-  position: absolute;
-  right: 52.5%;
+  position: relative;
+  right: auto;
+  margin: 0px;
 }
 .menuLeftLinks .divideLine {
   position: absolute;
-  left: 41%;
+  left: 42.5%;
 }
 .headerLogoContent {
   position: absolute;
@@ -194,23 +199,23 @@ header {
 }
 .searchContainer {
   position: relative;
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: end;
+  align-items: center;
   transition: 0.25s;
-  margin-right: -10px;
+  color: #f2f2f2;
 }
 .searchContainer.searchOpen {
   justify-content: space-between;
+  top: 0;
   transition: 0.25s;
 }
 .searchInput {
   padding: 0.25rem;
   border: none;
   border-radius: 10px;
-  top: 0;
+  top: -12px;
   margin-top: 15px;
   padding-left: 7px;
   width: 100%;
