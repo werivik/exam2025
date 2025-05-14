@@ -10,9 +10,131 @@
 .pageContent button, .pageContent input, .pageContent label{
   font-family: "Playfair Display", serif;
 }
+.profileTablet {
+  display: none;
+}
 .profileTablet, .profileDesktop {
   width: 100%;
 }
+.profileDesktop {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 50px;
+}
+.profileDesktop .profileLeft {
+  left: 0;
+  height: 90vh;
+  width: 300px;
+  margin-bottom: 50px;
+  border-radius: 25px;
+}
+.profileDesktop .leftBorder {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 25px;
+  height: 100%;
+  background-color: #1F1B17;
+  border-radius: 25px;
+  color: #fffefb;
+  z-index: 2;
+  position: relative;
+}
+.profileDesktop .leftBorder .leftTop {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.profileDesktop .leftBorder .leftTop .profileAvatar {
+  width: 175px;
+  height: 175px;
+  border-radius: 999px;
+  border: solid #fffefb 1px;
+  object-fit: cover;
+}
+.profileDesktop .leftBorder .leftTop h2, .profileDesktop .leftBorder .leftTop p, .profileDesktop .leftBorder .leftTop .profileRating {
+  width: 100%;
+  text-align: left;
+}
+.profileDesktop .leftBorder .leftTop h2 {
+  margin-bottom: 0;
+  padding: 0;
+}
+.profileDesktop .leftBorder .leftTop p {
+  font-style: italic;
+  margin-top: 2.5px;
+  margin-bottom: 2.5px;
+}
+.profileDesktop .leftShortcut {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: auto;
+}
+.profileDesktop .leftBorder .divideLine {
+  height: 0.5px;
+  width: 100%;
+  background-color: #fffefb;
+}
+.profileDesktop .leftLink {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.profileDesktop .leftLink button {
+  background-color: transparent;
+  width: fit-content;
+  color: #fffefb;
+  font-size: 1rem;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+.profileDesktop .profileRight {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  height:fit-content;
+}
+.profileDesktop .profileRight .rightBanner {
+  width: 100%;
+  height: 250px;
+  border-radius: 25px;
+  position: relative;
+}
+.profileDesktop .profileRight .rightBanner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 25px;
+  background-color: #1F1B17;
+}
+.profileDesktop .adminVenues, .profileDesktop .edit{
+  height: auto;
+}
+.profileDesktop .divideLine {
+  background-color: #1F1B17;
+  height: 0.5px;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.profileDesktop .profileRight h2 {
+  font-size: 2.5rem;
+}
+.profileDesktop .signOutButton {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+
 .profilePage {
   display: flex;
   flex-direction: column;
@@ -391,7 +513,34 @@ body.modal-open {
   top: 400px;
 }
 
+
+
+.dashViewProfile .profileRating, .profileContentTop .profileRating, .profileDesktop .leftBorder .profileRating .leftTop {
+  margin-top: -5px;
+  margin-bottom: 35px;
+  font-size: 1.125rem;
+}
+.dashViewProfile .profileRating span, .profileContentTop .profileRating span, .profileDesktop .leftBorder .profileRating .leftTop span {
+  opacity: 75%;
+  font-size: 1rem;
+}
+.dashViewProfile .profileRating img, .profileContentTop .profileRating img, .profileDesktop .leftBorder .leftTop .profileRating img{
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  border: none;
+}
+
+
+
+
+
+
+
 @media (max-width:1025px){
+.profileTablet {
+  display: block;
+}
 .profilePage {
   width: 90%;
   margin-left: 5%;

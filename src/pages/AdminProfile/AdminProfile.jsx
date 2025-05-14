@@ -425,7 +425,106 @@ const handleVenueClick = (venue) => {
           </section>
 
           <div className={styles.profileDesktop}>
+            <section className={styles.profileLeft}>
+              <div className={styles.leftBorder}>
+                <div className={styles.leftTop}>
+                  <img
+                    className={styles.profileAvatar}
+                    src={userData.avatar?.url || defaultAvatar}
+                    alt={userData.name || 'Admin Avatar'}
+                  />
+                  <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
+                  <p>Venue Manager</p>
+                  <div className={styles.profileRating}>
+                    <img src={starRating} alt="Star rating" />
+                    {averageRating}<span> / ({totalReviews}) reviews</span>
+                  </div>
+                </div>
+                <div className={styles.divideLine}></div>
+                <div className={styles.leftShortcut}>
+                  <div className={styles.leftLink}>
+                    <h3>Venues</h3>
+                    <button>My Venues</button>
+                    <button>Create Venue</button>
+                    <button>Edit Venue</button>
+                  </div>
+                  <div className={styles.divideLine}></div>
+                  <div className={styles.leftLink}>
+                    <h3>Profile</h3>
+                    <button>View Profile</button>
+                    <button>Edit Profile</button>
+                  </div>
+                  <div className={styles.signOutButton}>
+                    <Buttons size='small' version='v1'>Sign out</Buttons>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section className={styles.profileRight}>
+              <div className={styles.rightBanner}>
+                <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
+              </div>
+              <div className={styles.venues} ref={venuesRef}>
+                <div className={styles.venuesTitle}>
+                  <h2>My Venues</h2>
+                  <Buttons size='small' version='v1' onClick={handleRedirect}>Create Venue</Buttons>
+                </div>
+                <div className={styles.allVenues}>
+                {filteredVenues.length > 0 ? (
+                  <div className={styles.adminVenues}>
+                    {filteredVenues.map((venue) => (
+                      <VenueCardSecondType
+                      key={venue.id}
+                      venue={venue}
+                      onClick={() => handleVenueClick(venue)}
+                      />
+                    ))}
+                  </div>
+              ) : (
+                <p>No venues available for this filter.</p>
+              )}
+                </div>
+              </div>
+              <div className={styles.divideLine}></div>
+                <div className={styles.edit} ref={editRef}>
+                  <div className={styles.editTitle}>
+                    <h2>Edit Profile</h2>
+                  </div>
+                  <div className={styles.allEdits}>
+                    <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
+                      <label>
+                        Name:
+                        <input
+                          type="text"
+                          value={newName}
+                          onChange={(e) => setNewName(e.target.value)}
+                          required
+                        />
+                      </label>
+                      <label>
+                        Avatar URL:
+                        <input
+                          type="url"
+                          value={newAvatar}
+                          onChange={(e) => setNewAvatar(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Banner URL:
+                        <input
+                          type="url"
+                          value={newBanner}
+                          onChange={(e) => setNewBanner(e.target.value)}
+                        />
+                      </label>
+                      <div className={styles.editActions}>
+                        <Buttons type="submit" size="small" version="v1">Save Changes</Buttons>
+                      </div>
+                    </form>
+                  </div>
+                </div>
 
+            </section>
           </div>
 
           <div className={styles.profileTablet}>
