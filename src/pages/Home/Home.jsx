@@ -47,7 +47,6 @@ const Home = () => {
   const [selectedDateType, setSelectedDateType] = useState('start');
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(isLoggedIn());
   const [displayedVenues, setDisplayedVenues] = useState([]);
-  const [showWarning, setShowWarning] = useState(false);
   
   const guestDropdownRefOne = useRef(null);
   const guestDropdownRefTwo = useRef(null);
@@ -208,6 +207,16 @@ const Home = () => {
   const handleGuestsChange = (type, increment) => {
     const newValue = Math.max(0, filters[type] + increment);
     
+    if (type === "adults" && newValue === 0 && filters.children > 0 && filters.disabled === 0) {
+      alert("At least one adult or Assisted guest must be present if there are children.");
+      return;
+    }
+    
+    if (type === "disabled" && newValue === 0 && filters.children > 0 && filters.adults === 0) {
+      alert("At least one adult or Assisted guest must be present if there are children.");
+      return;
+    }
+    
     if (type === "children" && newValue > 0 && filters.adults === 0 && filters.disabled === 0) {
       alert("At least one adult or Assisted guest must be present if there are children.");
       return;
@@ -216,118 +225,114 @@ const Home = () => {
     setFilters(prev => ({ ...prev, [type]: newValue }));
   };
 
-const toggleCalendar = (type) => {
-  if (showCalendar && selectedDateType === type) {
-    setShowCalendar(false);
-    return;
-  }  
-  setSelectedDateType(type);
-  setShowCalendar(true);
-};
-
-const handleDateChange = (newDate) => {
-  if (selectedDateType === 'start') {
-    setCheckInDate(newDate);
-    setFilters(prev => ({ ...prev, startDate: newDate }));
-
-    if (checkOutDate && new Date(parseDate(newDate)) > new Date(parseDate(checkOutDate))) {
-      setCheckOutDate("");
-      setFilters(prev => ({ ...prev, endDate: "" }));
-    }
-  } 
-  else {
-    if (checkInDate && new Date(parseDate(newDate)) < new Date(parseDate(checkInDate))) {
-      alert("End date cannot be before start date.");
+  const toggleCalendar = (type) => {
+    if (showCalendar && selectedDateType === type) {
+      setShowCalendar(false);
       return;
-    }
-
-    setCheckOutDate(newDate);
-    setFilters(prev => ({ ...prev, endDate: newDate }));
-  }
-  
-  setTimeout(() => {
-  }, 100);    setShowCalendar(false);
-
-};
-
-const parseDate = (dateString) => {
-  if (!dateString) return null;
-  
-  try {
-    const parts = dateString.split(' ');
-    if (parts.length === 3) {
-      const day = parseInt(parts[0]);
-      const month = parts[1];
-      const year = parseInt(parts[2]);
-      
-      const monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-      ];
-      const monthIndex = monthNames.findIndex(m => m === month);
-      
-      if (monthIndex !== -1) {
-        return new Date(year, monthIndex, day);
-      }
-    }
-  } 
-  catch (e) {
-    console.error("Error parsing date:", e);
-  }
-  return null;
-};
-
-  const renderGuestInfo = () => {
-    let guestInfo = `${filters.adults} Adult${filters.adults !== 1 ? "s" : ""}`;
-    if (filters.children > 0) guestInfo += `, ${filters.children} Child${filters.children !== 1 ? "ren" : ""}`;
-    if (filters.disabled > 0) guestInfo += `, ${filters.disabled} Assisted${filters.disabled !== 1 ? " " : ""}`;
-    return guestInfo;
+    }  
+    setSelectedDateType(type);
+    setShowCalendar(true);
   };
 
-  const checkConditionsForSearch = () => {
-    const totalGuests = parseInt(filters.adults) + parseInt(filters.disabled);
-    if (totalGuests < 1 || !filters.startDate) {
-      setShowWarning(true);
+  const handleDateChange = (newDate) => {
+    if (selectedDateType === 'start') {
+      setCheckInDate(newDate);
+      setFilters(prev => ({ ...prev, startDate: newDate }));
+
+      if (checkOutDate && new Date(parseDate(newDate)) > new Date(parseDate(checkOutDate))) {
+        setCheckOutDate("");
+        setFilters(prev => ({ ...prev, endDate: "" }));
+      }
     } 
     else {
-      setShowWarning(false);
-      applyFilters();
-    }
-  };
-
-  const applyFilters = async () => {
-    const totalGuests = parseInt(filters.adults) + parseInt(filters.disabled);
-    if (totalGuests < 1) return alert("Please enter at least one adult or assisted guest.");
-    if (!filters.startDate) return alert("Please select a start date.");
-
-    if (filters.destination.trim()) {
-      try {
-        let query = `${VENUES}/search`;
-        const params = new URLSearchParams();
-
-        params.append("q", filters.destination.trim());
-        if (filters.startDate) params.append("startDate", filters.startDate);
-        if (filters.endDate) params.append("endDate", filters.endDate);
-        query += `?${params.toString()}`;
-
-        const response = await fetch(query, { method: "GET", headers: headers() });
-        if (!response.ok) throw new Error("Failed to fetch filtered results");
-
-        const result = await response.json();
-        const filtered = result.data.filter(venue => 
-          venue.maxGuests >=
-          (parseInt(filters.adults) + parseInt(filters.children) + parseInt(filters.disabled))
-        );
-
-        setVenues(filtered);
-      } 
-      catch (error) {
-        console.error("Error filtering venues:", error);
+      if (checkInDate && new Date(parseDate(newDate)) < new Date(parseDate(checkInDate))) {
+        alert("End date cannot be before start date.");
+        return;
       }
-    }
 
-    navigate("/venues", { state: { filters } });
+      setCheckOutDate(newDate);
+      setFilters(prev => ({ ...prev, endDate: newDate }));
+    }
+    
+    setTimeout(() => {
+      setShowCalendar(false);
+    }, 100);
   };
+
+  const parseDate = (dateString) => {
+    if (!dateString) return null;
+    
+    try {
+      const parts = dateString.split(' ');
+      if (parts.length === 3) {
+        const day = parseInt(parts[0]);
+        const month = parts[1];
+        const year = parseInt(parts[2]);
+        
+        const monthNames = [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        const monthIndex = monthNames.findIndex(m => m === month);
+        
+        if (monthIndex !== -1) {
+          return new Date(year, monthIndex, day);
+        }
+      }
+    } 
+    catch (e) {
+      console.error("Error parsing date:", e);
+    }
+    return null;
+  };
+
+  const renderGuestInfo = () => {
+    const parts = [];
+    
+    if (filters.adults > 0) {
+      parts.push(`${filters.adults} Adult${filters.adults !== 1 ? "s" : ""}`);
+    }
+    
+    if (filters.children > 0) {
+      parts.push(`${filters.children} Child${filters.children !== 1 ? "ren" : ""}`);
+    }
+    
+    if (filters.disabled > 0) {
+      parts.push(`${filters.disabled} Assisted${filters.disabled !== 1 ? " Guests" : " Guest"}`);
+    }
+    
+    return parts.join(", ");
+  };
+
+const applyFilters = () => {
+  if (filters.children > 0 && filters.adults === 0 && filters.disabled === 0) {
+    alert("At least one adult or Assisted guest must be present if there are children.");
+    return;
+  }
+  
+  const appliedFilters = {};
+  
+  if (filters.destination) {
+    const destinationParts = filters.destination.split(',').map(part => part.trim());
+    
+    if (destinationParts.length === 2) {
+      appliedFilters.city = destinationParts[0];
+      appliedFilters.country = destinationParts[1];
+    } 
+    else {
+      appliedFilters.destination = filters.destination;
+    }
+  }
+  
+  if (filters.startDate) appliedFilters.startDate = filters.startDate;
+  if (filters.endDate) appliedFilters.endDate = filters.endDate;
+  
+  appliedFilters.adults = filters.adults;
+  appliedFilters.children = filters.children;
+  appliedFilters.disabled = filters.disabled;
+  
+  navigate("/venues", { state: { filters: appliedFilters } });
+};
 
   const VenueTypeSkeleton = () => (
     <div className={`${styles.venueType} ${styles.skeleton}`}>
@@ -366,58 +371,58 @@ const parseDate = (dateString) => {
     </div>
   );
 
-const DateFilter = () => (
-  <div className={styles.filterCalender} ref={dateFilterRef}>
-    <i
-      className="fa-solid fa-calendar-days"
-      onClick={(e) => {
-        e.stopPropagation();
-        toggleCalendar('start');
-      }}
-    ></i>
-    <input
-      className={styles.startDateFilter}
-      type="text"
-      value={checkInDate}
-      placeholder="Start"
-      onClick={(e) => {
-        e.stopPropagation();
-        toggleCalendar('start');
-      }}
-      readOnly
-    />
+  const DateFilter = () => (
+    <div className={styles.filterCalender} ref={dateFilterRef}>
+      <i
+        className="fa-solid fa-calendar-days"
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleCalendar('start');
+        }}
+      ></i>
+      <input
+        className={styles.startDateFilter}
+        type="text"
+        value={checkInDate}
+        placeholder="Start"
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleCalendar('start');
+        }}
+        readOnly
+      />
 
-    <i
-      className="fa-solid fa-calendar-days"
-      onClick={(e) => {
-        e.stopPropagation();
-        toggleCalendar('end');
-      }}
-    ></i>
-    <input
-      className={styles.endDateFilter}
-      type="text"
-      value={checkOutDate}
-      placeholder="End"
-      onClick={(e) => {
-        e.stopPropagation();
-        toggleCalendar('end');
-      }}
-      readOnly
-    />
-    <div className={styles.costumCalenderPosition}>
-      {showCalendar && (
-        <div ref={calendarRef}>
-          <CustomCalender
-            key={`${selectedDateType}-${Date.now()}`}
-            value={selectedDateType === 'start' ? checkInDate : checkOutDate}
-            onDateChange={handleDateChange}
-          />
-        </div>
-      )}
+      <i
+        className="fa-solid fa-calendar-days"
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleCalendar('end');
+        }}
+      ></i>
+      <input
+        className={styles.endDateFilter}
+        type="text"
+        value={checkOutDate}
+        placeholder="End"
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleCalendar('end');
+        }}
+        readOnly
+      />
+      <div className={styles.costumCalenderPosition}>
+        {showCalendar && (
+          <div ref={calendarRef}>
+            <CustomCalender
+              key={`${selectedDateType}-${Date.now()}`}
+              value={selectedDateType === 'start' ? checkInDate : checkOutDate}
+              onDateChange={handleDateChange}
+            />
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
 
   const GuestFilter = ({ refProp }) => (
     <div className={styles.filterPeople}>
@@ -465,16 +470,6 @@ const DateFilter = () => (
     </div>
   );
 
-  const WarningPopup = () => (
-    <div className={styles.warningPopup}>
-      <div className={styles.popupContent}>
-        <h2>Warning</h2>
-        <p>Please enter at least one adult or assisted guest, and select a start date to use the filter.</p>
-        <button onClick={() => setShowWarning(false)} className={styles.closeWarningPopup}>X</button>
-      </div>
-    </div>
-  );
-
   return (
     <>
       <motion.div
@@ -499,12 +494,11 @@ const DateFilter = () => (
       </div>
       <GuestFilter refProp={guestDropdownRefOne} />
       <div className={styles.searchButtonFirst}>
-        <Buttons size='small' version='v1' onClick={checkConditionsForSearch}>
+        <Buttons size='small' version='v1' onClick={applyFilters}>
           Search
         </Buttons>
       </div>
     </div>
-    {showWarning && <WarningPopup />}
   </div>
 ) : (
   <div className={styles.filterContentSecond}>
@@ -515,14 +509,13 @@ const DateFilter = () => (
         <div className={styles.filtersColumnsBottom}>
           <GuestFilter refProp={guestDropdownRefTwo} />
           <div className={styles.searchButtonSecond}>
-            <Buttons size='small' version='v1' onClick={checkConditionsForSearch}>
+            <Buttons size='small' version='v1' onClick={applyFilters}>
               Search
             </Buttons>
           </div>
         </div>
       </div>
     </div>
-    {showWarning && <WarningPopup />}
   </div>
 )}
               <img src={Edge} className={styles.edgeRight} alt="" />
