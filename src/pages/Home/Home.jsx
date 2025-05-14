@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback, useRef, React } from 'react';
-import { useNavigate, Link, redirect } from 'react-router-dom';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import debounce from 'lodash.debounce';
 import styles from './Home.module.css';
@@ -25,51 +25,32 @@ const pageVariants = {
   exit: { opacity: 0 },
 };
 
+const FEATURE_TYPES = [
+  { image: breakfastImage, label: "Breakfast Included", meta: { breakfast: true } },
+  { image: parkingImage, label: "Free Parking", meta: { parking: true } },
+  { image: wifiImage, label: "Excellent WiFi", meta: { wifi: true } },
+  { image: animalImage, label: "Animal Friendly", meta: { pets: true } },
+];
+
 const Home = () => {
+  const navigate = useNavigate();
+  const username = localStorage.getItem("username");
+  
   const [venues, setVenues] = useState([]);
   const [allLocations, setAllLocations] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [showScrollIcon, setShowScrollIcon] = useState(true);
   const [showGuestDropdown, setShowGuestDropdown] = useState(false);
-  const guestDropdownRefOne = useRef(null);
-  const guestDropdownRefTwo = useRef(null);  
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDateType, setSelectedDateType] = useState('start');
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(isLoggedIn());
   const [displayedVenues, setDisplayedVenues] = useState([]);
-  const [profile, setProfile] = useState(null);
-
-  const toggleCalendar = (type) => {
-    setShowCalendar(false);
-    setSelectedDateType(type);
-    setTimeout(() => {
-      setShowCalendar(true);
-    }, 0);
-  };  
-
-  const handleDateChange = (newDate) => {
-    if (selectedDateType === 'start') {
-      setCheckInDate(newDate);
-      setFilters(prev => ({ ...prev, startDate: newDate }));
+  const [showWarning, setShowWarning] = useState(false);
   
-      if (filters.endDate && new Date(newDate) > new Date(filters.endDate)) {
-        setCheckOutDate("");
-        setFilters(prev => ({ ...prev, endDate: "" }));
-      }
-    } 
-    else {
-      if (filters.startDate && new Date(newDate) < new Date(filters.startDate)) {
-        alert("End date cannot be before start date.");
-        return;
-      }
-  
-      setCheckOutDate(newDate);
-      setFilters(prev => ({ ...prev, endDate: newDate }));
-    }
-    setShowCalendar(false);
-  };
+  const guestDropdownRefOne = useRef(null);
+  const guestDropdownRefTwo = useRef(null);
   
   const [filters, setFilters] = useState({
     destination: "",
@@ -80,8 +61,6 @@ const Home = () => {
     disabled: 0,
   });
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -90,7 +69,6 @@ const Home = () => {
     const fetchVenues = async () => {
       try {
         const response = await fetch(VENUES, { method: "GET", headers: headers() });
-
         if (!response.ok) throw new Error("Failed to fetch venues");
 
         const result = await response.json();
@@ -129,6 +107,64 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const update = () => setIsUserLoggedIn(isLoggedIn());
+
+    window.addEventListener("authchange", update);
+    window.addEventListener("storage", (e) => {
+      if (e.key === "accessToken") update();
+    });
+
+    update();
+
+    return () => {
+      window.removeEventListener("authchange", update);
+      window.removeEventListener("storage", update);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        guestDropdownRefOne.current &&
+        !guestDropdownRefOne.current.contains(event.target) &&
+        guestDropdownRefTwo.current &&
+        !guestDropdownRefTwo.current.contains(event.target)
+      ) {
+        setShowGuestDropdown(false);
+      }
+    };
+  
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const updateDisplayedVenues = useCallback(() => {
+    const width = window.innerWidth;
+    let limit = 5;
+
+    if (width <= 690) {
+      limit = 5;
+    } 
+    else if (width <= 1093) {
+      limit = 3;
+    } 
+    else if (width <= 1375) {
+      limit = 4;
+    }
+
+    setDisplayedVenues(venues.slice(0, limit));
+  }, [venues]);
+
+  useEffect(() => {
+    updateDisplayedVenues();
+
+    window.addEventListener("resize", updateDisplayedVenues);
+    return () => window.removeEventListener("resize", updateDisplayedVenues);
+  }, [venues, updateDisplayedVenues]);
+
   const handleDestinationSuggestions = useCallback(
     debounce((input) => {
       if (!input) return setSuggestions([]);
@@ -145,15 +181,47 @@ const Home = () => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
     if (name === "destination") handleDestinationSuggestions(value);
-  }; 
+  };
 
-  const handleGuestsChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "children" && value > 0 && filters.adults === 0 && filters.disabled === 0) {
+  const handleGuestsChange = (type, increment) => {
+    const newValue = Math.max(0, filters[type] + increment);
+    
+    if (type === "children" && newValue > 0 && filters.adults === 0 && filters.disabled === 0) {
       alert("At least one adult or Assisted guest must be present if there are children.");
       return;
     }
-    setFilters(prev => ({ ...prev, [name]: value }));
+    
+    setFilters(prev => ({ ...prev, [type]: newValue }));
+  };
+
+  const toggleCalendar = (type) => {
+    setShowCalendar(false);
+    setSelectedDateType(type);
+    setTimeout(() => {
+      setShowCalendar(true);
+    }, 0);
+  };  
+
+  const handleDateChange = (newDate) => {
+    if (selectedDateType === 'start') {
+      setCheckInDate(newDate);
+      setFilters(prev => ({ ...prev, startDate: newDate }));
+  
+      if (filters.endDate && new Date(newDate) > new Date(filters.endDate)) {
+        setCheckOutDate("");
+        setFilters(prev => ({ ...prev, endDate: "" }));
+      }
+    } 
+    else {
+      if (filters.startDate && new Date(newDate) < new Date(filters.startDate)) {
+        alert("End date cannot be before start date.");
+        return;
+      }
+  
+      setCheckOutDate(newDate);
+      setFilters(prev => ({ ...prev, endDate: newDate }));
+    }
+    setShowCalendar(false);
   };
 
   const renderGuestInfo = () => {
@@ -161,6 +229,17 @@ const Home = () => {
     if (filters.children > 0) guestInfo += `, ${filters.children} Child${filters.children !== 1 ? "ren" : ""}`;
     if (filters.disabled > 0) guestInfo += `, ${filters.disabled} Assisted${filters.disabled !== 1 ? " " : ""}`;
     return guestInfo;
+  };
+
+  const checkConditionsForSearch = () => {
+    const totalGuests = parseInt(filters.adults) + parseInt(filters.disabled);
+    if (totalGuests < 1 || !filters.startDate) {
+      setShowWarning(true);
+    } 
+    else {
+      setShowWarning(false);
+      applyFilters();
+    }
   };
 
   const applyFilters = async () => {
@@ -197,24 +276,6 @@ const Home = () => {
     navigate("/venues", { state: { filters } });
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        guestDropdownRefOne.current &&
-        !guestDropdownRefOne.current.contains(event.target) &&
-        guestDropdownRefTwo.current &&
-        !guestDropdownRefTwo.current.contains(event.target)
-      ) {
-        setShowGuestDropdown(false);
-      }
-    };
-  
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);  
-
   const VenueTypeSkeleton = () => (
     <div className={`${styles.venueType} ${styles.skeleton}`}>
       <div className={styles.skeletonImage}></div>
@@ -222,452 +283,281 @@ const Home = () => {
     </div>
   );
 
-  const [showWarning, setShowWarning] = useState(false);
+  const DestinationFilter = () => (
+    <div className={styles.filterDestination}>
+      <i className="fa-solid fa-location-dot"></i>
+      <input
+        name="destination"
+        placeholder="Search destination..."
+        value={filters.destination}
+        onChange={handleInputChange}
+        autoComplete="off"
+      />
+      {filters.destination && suggestions.length > 0 && (
+        <ul className={styles.suggestionsList}>
+          {suggestions.map((suggestion, index) => (
+            <li
+              key={index}
+              onClick={() => {
+                if (suggestion !== "No matching results...") {
+                  setFilters(prev => ({ ...prev, destination: suggestion }));
+                  setSuggestions([]);
+                }
+              }}
+            >
+              {suggestion}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 
-  const checkConditionsForSearch = () => {
-    const totalGuests = parseInt(filters.adults) + parseInt(filters.disabled);
-    if (totalGuests < 1 || !filters.startDate) {
-      setShowWarning(true);
-    } 
-    
-    else {
-      setShowWarning(false);
-      applyFilters();
-    }
-  };
+  const DateFilter = () => (
+    <div className={styles.filterCalender}>
+      <i
+        className="fa-solid fa-calendar-days"
+        onClick={() => toggleCalendar('start')}
+      ></i>
+      <input
+        className={styles.startDateFilter}
+        type="text"
+        value={checkInDate}
+        placeholder="Start"
+        onClick={() => toggleCalendar('start')}
+        readOnly
+      />
 
-  useEffect(() => {
-    const update = () => setIsUserLoggedIn(isLoggedIn());
+      <i
+        className="fa-solid fa-calendar-days"
+        onClick={() => toggleCalendar('end')}
+      ></i>
+      <input
+        className={styles.endDateFilter}
+        type="text"
+        value={checkOutDate}
+        placeholder="End"
+        onClick={() => toggleCalendar('end')}
+        readOnly
+      />
+      <div className={styles.costumCalenderPosition}>
+        {showCalendar && (
+          <CustomCalender
+            key={selectedDateType + checkInDate + checkOutDate}
+            value={selectedDateType === 'start' ? checkInDate : checkOutDate}
+            onDateChange={handleDateChange}
+          />
+        )}
+      </div>
+    </div>
+  );
 
-    window.addEventListener("authchange", update);
-    window.addEventListener("storage", (e) => {
-      if (e.key === "accessToken") update();
-    });
+  const GuestFilter = ({ refProp }) => (
+    <div className={styles.filterPeople}>
+      <i className="fa-solid fa-person"></i>
+      <div className={styles.guestSelector} ref={refProp}>
+        <p onClick={() => setShowGuestDropdown(prev => !prev)}>
+          {renderGuestInfo()}
+        </p>
+        {showGuestDropdown && (
+          <div className={`${styles.dropdownMenu} ${styles.open}`}>
+            {["adults", "children", "disabled"].map((type) => (
+              <div key={type} className={styles.dropdownRow}>
+                <span className={styles.label}>
+                  {type === "adults"
+                    ? "Adults"
+                    : type === "children"
+                    ? "Children"
+                    : "Assisted Guests"}
+                </span>
+                <div className={styles.counterControls}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleGuestsChange(type, -1);
+                    }}
+                    disabled={filters[type] === 0}
+                  >
+                    -
+                  </button>
+                  <span>{filters[type]}</span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleGuestsChange(type, 1);
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 
-    update();
-
-    return () => {
-      window.removeEventListener("authchange", update);
-      window.removeEventListener("storage", update);
-    };
-  }, []);
-
-  const username = localStorage.getItem("username");
-
-const updateDisplayedVenues = useCallback(() => {
-  let limit = 5;
-
-  const width = window.innerWidth;
-
-  if (width <= 690) {
-    limit = 5;
-  } 
-  else if (width <= 1093) {
-    limit = 3;
-  } 
-  else if (width <= 1375) {
-    limit = 4;
-  }
-
-  setDisplayedVenues(venues.slice(0, limit));
-}, [venues]);
-
-useEffect(() => {
-  updateDisplayedVenues();
-
-  window.addEventListener("resize", updateDisplayedVenues);
-  return () => window.removeEventListener("resize", updateDisplayedVenues);
-}, [venues, updateDisplayedVenues]);
+  const WarningPopup = () => (
+    <div className={styles.warningPopup}>
+      <div className={styles.popupContent}>
+        <h2>Warning</h2>
+        <p>Please enter at least one adult or assisted guest, and select a start date to use the filter.</p>
+        <button onClick={() => setShowWarning(false)} className={styles.closeWarningPopup}>X</button>
+      </div>
+    </div>
+  );
 
   return (
     <>
-<motion.div
-  className={styles.pageContent}
-  initial="initial"
-  animate="animate"
-  exit="exit"
-  variants={pageVariants}
-  transition={{ duration: 0.5, ease: "easeInOut" }}
->
-      <section className={styles.firstSection}>
-        <div className={styles.heroSection}>
-        <BannerSlideshow />
-        <div className={styles.bannerFilters}>
-          <img src={Edge} className={styles.edgeLeft} alt="" />
-          <div className={styles.filterContent}>
-            <div className={styles.allFilters}>
-              <div className={styles.filtersLeft}>
-                <div className={styles.filterDestination}>
-                  <i className="fa-solid fa-location-dot"></i>
-                  <input
-                    name="destination"
-                    placeholder="Search destination..."
-                    value={filters.destination}
-                    onChange={handleInputChange}
-                    autoComplete="off"
-                  />
-                  {filters.destination && suggestions.length > 0 && (
-                    <ul className={styles.suggestionsList}>
-                      {suggestions.map((suggestion, index) => (
-                        <li
-                          key={index}
-                          onClick={() => {
-                            if (suggestion !== "No matching results...") {
-                              setFilters(prev => ({ ...prev, destination: suggestion }));
-                              setSuggestions([]);
-                            }
-                          }}
-                        >
-                          {suggestion}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+      <motion.div
+        className={styles.pageContent}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={pageVariants}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      >
+        <section className={styles.firstSection}>
+          <div className={styles.heroSection}>
+            <BannerSlideshow />
+              <div className={styles.bannerFilters}>
+              <img src={Edge} className={styles.edgeLeft} alt="" />
+              <div className={styles.filterContent}>
+                <div className={styles.allFilters}>
+                  <div className={styles.filtersLeft}>
+                    <DestinationFilter />
+                    <DateFilter />
+                  </div>
+                  <GuestFilter refProp={guestDropdownRefOne} />
+                  <div className={styles.searchButtonFirst}>
+                    <Buttons size='small' version='v1' onClick={checkConditionsForSearch}>
+                      Search
+                    </Buttons>
+                  </div>
                 </div>
-                <div className={styles.filterCalender}>
-        <i
-          className="fa-solid fa-calendar-days"
-          onClick={() => toggleCalendar('start')}
-        ></i>
-        <input
-          className={styles.startDateFilter}
-          type="text"
-          value={checkInDate}
-          placeholder="Start"
-          onClick={() => toggleCalendar('start')}
-          readOnly
-        />
-
-        <i
-          className="fa-solid fa-calendar-days"
-          onClick={() => toggleCalendar('end')}
-        ></i>
-        <input
-          className={styles.endDateFilter}
-          type="text"
-          value={checkOutDate}
-          placeholder="End"
-          onClick={() => toggleCalendar('end')}
-          readOnly
-        />
-        <div className={styles.costumCalenderPosition}>
-        {showCalendar && (
-  <CustomCalender
-    key={selectedDateType + checkInDate + checkOutDate}
-    value={selectedDateType === 'start' ? checkInDate : checkOutDate}
-    onDateChange={handleDateChange}
-  />
-)}
-        </div>
-      </div>
+                {showWarning && <WarningPopup />}
               </div>
-              <div className={styles.filterPeople}>
-  <i className="fa-solid fa-person"></i>
-  <div className={styles.guestSelector} ref={guestDropdownRefOne}>
-  <p onClick={() => setShowGuestDropdown(prev => !prev)}>
-    {renderGuestInfo()}
-  </p>
-  {showGuestDropdown && (
-    <div className={`${styles.dropdownMenu} ${styles.open}`}>
-      {["adults", "children", "disabled"].map((type) => (
-        <div key={type} className={styles.dropdownRow}>
-          <span className={styles.label}>
-            {type === "adults"
-              ? "Adults"
-              : type === "children"
-              ? "Children"
-              : "Assisted Guests"}
-          </span>
-          <div className={styles.counterControls}>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setFilters(prev => ({
-                  ...prev,
-                  [type]: Math.max(0, prev[type] - 1),
-                }));
-              }}
-              disabled={filters[type] === 0}
-            >
-              -
-            </button>
-            <span>{filters[type]}</span>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setFilters(prev => ({
-                  ...prev,
-                  [type]: prev[type] + 1,
-                }));
-              }}
-            >
-              +
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-  )}
-</div>
-</div>
-              <div className={styles.searchButtonFirst}>
-              <Buttons size='small' version='v1'onClick={checkConditionsForSearch}>
-                Search
-              </Buttons>
+              
+              <div className={styles.filterContentSecond}>
+                <div className={styles.allFilters}>
+                  <div className={styles.filtersColumns}>
+                    <DestinationFilter />
+                    <DateFilter />
+                    <div className={styles.filtersColumnsBottom}>
+                      <GuestFilter refProp={guestDropdownRefTwo} />
+                      <div className={styles.searchButtonSecond}>
+                        <Buttons size='small' version='v1' onClick={checkConditionsForSearch}>
+                          Search
+                        </Buttons>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {showWarning && <WarningPopup />}            
               </div>
-            
+              <img src={Edge} className={styles.edgeRight} alt="" />
             </div>
-            {showWarning && (
-        <div className={styles.warningPopup}>
-          <div className={styles.popupContent}>
-            <h2>Warning</h2>
-            <p>Please enter at least one adult or assisted guest, and select a start date to use the filter.</p>
-            <button onClick={() => setShowWarning(false)} className={styles.closeWarningPopup}>X</button>
           </div>
-        </div>
-            )}
+        </section>
+        
+        {showScrollIcon && (
+          <div className={styles.scrollIcon}>
+            <i className={`fa-solid fa-chevron-down ${styles.bounceIcon}`}></i>
+            <i className={`fa-solid fa-chevron-down ${styles.bounceIcon} ${styles.delay}`}></i>
           </div>
-          <div className={styles.filterContentSecond}>
-            <div className={styles.allFilters}>
-              <div className={styles.filtersColumns}>
-                <div className={styles.filterDestination}>
-                  <i className="fa-solid fa-location-dot"></i>
-                  <input
-                    name="destination"
-                    placeholder="Search destination..."
-                    value={filters.destination}
-                    onChange={handleInputChange}
-                    autoComplete="off"
-                  />
-                  {filters.destination && suggestions.length > 0 && (
-                    <ul className={styles.suggestionsList}>
-                      {suggestions.map((suggestion, index) => (
-                        <li
-                          key={index}
-                          onClick={() => {
-                            if (suggestion !== "No matching results...") {
-                              setFilters(prev => ({ ...prev, destination: suggestion }));
-                              setSuggestions([]);
-                            }
-                          }}
-                        >
-                          {suggestion}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-                <div className={styles.filterCalender}>
-        <i
-          className="fa-solid fa-calendar-days"
-          onClick={() => toggleCalendar('start')}
-        ></i>
-        <input
-          className={styles.startDateFilter}
-          type="text"
-          value={checkInDate}
-          placeholder="Start"
-          onClick={() => toggleCalendar('start')}
-          readOnly
-        />
-
-        <i
-          className="fa-solid fa-calendar-days"
-          onClick={() => toggleCalendar('end')}
-        ></i>
-        <input
-          className={styles.endDateFilter}
-          type="text"
-          value={checkOutDate}
-          placeholder="End"
-          onClick={() => toggleCalendar('end')}
-          readOnly
-        />
-        <div className={styles.costumCalenderPosition}>
-        {showCalendar && (
-  <CustomCalender
-    key={selectedDateType + checkInDate + checkOutDate}
-    value={selectedDateType === 'start' ? checkInDate : checkOutDate}
-    onDateChange={handleDateChange}
-  />
-)}
-        </div>
-                </div>
-                <div className={styles.filtersColumnsBottom}>
-                <div className={styles.filterPeople}>
-  <i className="fa-solid fa-person"></i>
-  <div className={styles.guestSelector} ref={guestDropdownRefTwo}>
-  <p onClick={() => setShowGuestDropdown(prev => !prev)}>
-    {renderGuestInfo()}
-  </p>
-  {showGuestDropdown && (
-    <div className={`${styles.dropdownMenu} ${styles.open}`}>
-      {["adults", "children", "disabled"].map((type) => (
-        <div key={type} className={styles.dropdownRow}>
-          <span className={styles.label}>
-            {type === "adults"
-              ? "Adults"
-              : type === "children"
-              ? "Children"
-              : "Assisted Guests"}
-          </span>
-          <div className={styles.counterControls}>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setFilters(prev => ({
-                  ...prev,
-                  [type]: Math.max(0, prev[type] - 1),
-                }));
-              }}
-              disabled={filters[type] === 0}
-            >
-              -
-            </button>
-            <span>{filters[type]}</span>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setFilters(prev => ({
-                  ...prev,
-                  [type]: prev[type] + 1,
-                }));
-              }}
-            >
-              +
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-  )}
-</div>
-</div>
-              <div className={styles.searchButtonSecond}>
-              <Buttons size='small' version='v1'onClick={checkConditionsForSearch}>
-                Search
-              </Buttons>
-              </div>
-                </div>
-              </div>
-            
+        )}
+        
+        <section className={styles.secondSection}>
+          <div className={styles.secondBorder}>
+            <div className={styles.typeTitle}>
+              <h2>Choose your perfect Stay</h2>
+              <p>"A journey of a thousand miles begins<br />with a single step."</p>
             </div>
 
-            {showWarning && (
-        <div className={styles.warningPopup}>
-          <div className={styles.popupContent}>
-            <h2>Warning</h2>
-            <p>Please enter at least one adult or assisted guest, and select a start date to use the filter.</p>
-            <button onClick={() => setShowWarning(false)} className={styles.closeWarningPopup}>X</button>
-          </div>
-        </div>
-            )}            
-          </div>
+            <div className={styles.scrollSideIcon}>
+              <i className={`fa-solid fa-chevron-down ${styles.bounceIcon}`}></i>
+            </div>
 
-          <img src={Edge} className={styles.edgeRight} alt="" />
-        </div>
-        </div>
-      </section>
-      {showScrollIcon && (
-        <div className={styles.scrollIcon}>
-          <i className={`fa-solid fa-chevron-down ${styles.bounceIcon}`}></i>
-          <i className={`fa-solid fa-chevron-down ${styles.bounceIcon} ${styles.delay}`}></i>
-        </div>
-      )}
-      <section className={styles.secondSection}>
-        <div className={styles.secondBorder}>
-          <div className={styles.typeTitle}>
-            <h2>Choose your perfect Stay</h2>
-            <p>“A journey of a thousand miles begins<br />with a single step.”</p>
+            <div className={styles.typeContent}>
+              {venues.length === 0 ? (
+                <>
+                  <VenueTypeSkeleton />
+                  <VenueTypeSkeleton />
+                  <VenueTypeSkeleton />
+                  <VenueTypeSkeleton />
+                </>
+              ) : (
+                <>
+                  {FEATURE_TYPES.map((type, idx) => (
+                    <div
+                      key={idx}
+                      className={styles.hotelType}
+                      onClick={() => navigate("/venues", { state: { filters: { meta: type.meta } } })}
+                    >
+                      <img src={type.image} alt={type.label} />
+                      <h3>{type.label}</h3>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
           </div>
-
-          <div className={styles.scrollSideIcon}>
-          <i className={`fa-solid fa-chevron-down ${styles.bounceIcon}`}></i>
-          </div>
-
-          <div className={styles.typeContent}>
-            {venues.length === 0 ? (
+        </section>
+        
+        <section className={styles.thirdSection}>
+          <div className={styles.thirdBorder}>
+            {isUserLoggedIn ? (
               <>
-                <VenueTypeSkeleton />
-                <VenueTypeSkeleton />
-                <VenueTypeSkeleton />
-                <VenueTypeSkeleton />
+                <div className={styles.thirdContentLogin}>
+                  <img src={registerImage} alt="Reception" />
+                  <div className={styles.thirdInfo}>
+                    <h2>Welcome back <span>{username}</span>,</h2>
+                    <h3>What would you like to do today?</h3>
+                    <div className={styles.thirdInfoLinks}>
+                      <Link to="costumer-profile">Upcoming Bookings</Link>
+                      <Link to="/venues">Check out Venues</Link>
+                      <Link to="/costumer-profile">See my Profile</Link>
+                    </div>
+                  </div>
+                </div>
               </>
             ) : (
               <>
-                {[
-                  { image: breakfastImage, label: "Breakfast Included", meta: { breakfast: true } },
-                  { image: parkingImage, label: "Free Parking", meta: { parking: true } },
-                  { image: wifiImage, label: "Excellent WiFi", meta: { wifi: true } },
-                  { image: animalImage, label: "Animal Friendly", meta: { pets: true } },
-                ].map((type, idx) => (
-                  <div
-                    key={idx}
-                    className={styles.hotelType}
-                    onClick={() => navigate("/venues", { state: { filters: { meta: type.meta } } })}
-                  >
-                    <img src={type.image} alt={type.label} />
-                    <h3>{type.label}</h3>
+                <div className={styles.thirdContentRegister}>
+                  <img src={registerImage} alt="Reception" />
+                  <div className={styles.thirdInfo}>
+                    <h2>Join Us and Start Your<br />Next Adventure today...</h2>
+                    <p>Unlock Booking, Reservations and Discounts by Creating an Account with us today.</p>
+                    <Buttons size='large' version='v1'>
+                      Register
+                    </Buttons>
                   </div>
-                ))}
+                </div>
               </>
             )}
           </div>
-        </div>
-      </section>
-      <section className={styles.thirdSection}>
-        <div className={styles.thirdBorder}>
-        {isUserLoggedIn ? (
-        <>
-<div className={styles.thirdContentLogin}>
-            <img src={registerImage} alt="Reception" />
-            <div className={styles.thirdInfo}>
-<h2>Welcome back <span>{username}</span>,</h2>
-              <h3>What would you like to do today?</h3>
-              <div className={styles.thirdInfoLinks}>
-              <Link to="costumer-profile">Upcoming Bookings</Link>
-              <Link to="/venues">Check out Venues</Link>
-              <Link to="/costumer-profile">See my Profile</Link>
+        </section>
+        
+        <section className={styles.fourthSection}>
+          <div className={styles.fourthBorder}>
+            <div className={styles.fourthContent}>
+              <div className={styles.fourthTitle}>
+                <h2>Explore Our Most Popular Hotels<br />for Every Traveler</h2>
+                <Link to="/venues" className={styles.browseAllLink}>Browse All</Link>
               </div>
+
+              <div className={styles.popularHotels}>
+                {displayedVenues.map((venue) => (
+                  <VenueCardFirstType key={venue.id} venue={venue} />
+                ))}
+              </div>
+
+              <Link to="/venues" className={styles.browseAllLinkSecond}>Browse All</Link>
             </div>
           </div>
-        </>
-      ) : (
-        <>
-          <div className={styles.thirdContentRegister}>
-            <img src={registerImage} alt="Reception" />
-            <div className={styles.thirdInfo}>
-              <h2>Join Us and Start Your<br />Next Adventure today...</h2>
-              <p>Unlock Booking, Reservations and Discounts by Creating an Account with us today.</p>
-              <Buttons size='large' version='v1'>
-                Register
-              </Buttons>
-            </div>
-          </div>
-        </>
-      )}
-        </div>
-      </section>
-      <section className={styles.fourthSection}>
-        <div className={styles.fourthBorder}>
-          <div className={styles.fourthContent}>
-            <div className={styles.fourthTitle}>
-              <h2>Explore Our Most Popular Hotels<br />for Every Traveler</h2>
-              <Link to="/venues" className={styles.browseAllLink}>Browse All</Link>
-            </div>
-
-            <div className={styles.popularHotels}>
-{displayedVenues.map((venue) => (
-  <VenueCardFirstType key={venue.id} venue={venue} />
-))}
-            </div>
-
-            <Link to="/venues" className={styles.browseAllLinkSecond}>Browse All</Link>
-
-          </div>
-        </div>
-      </section>
-    </motion.div>
+        </section>
+      </motion.div>
     </>
   );
 };
