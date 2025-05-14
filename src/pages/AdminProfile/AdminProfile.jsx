@@ -337,7 +337,6 @@ const handleVenueClick = (venue) => {
 />
       <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
         <div className={styles.profilePage}>
-
           <section className={styles.dashViewProfile} ref={profileRef}>
             <div className={styles.dashProfileTop}>
               <div className={styles.dashProfileBanner}>
@@ -425,7 +424,12 @@ const handleVenueClick = (venue) => {
 
           </section>
 
-          <section className={styles.profileContentTop} ref={profileRef}>
+          <div className={styles.profileDesktop}>
+
+          </div>
+
+          <div className={styles.profileTablet}>
+            <section className={styles.profileContentTop} ref={profileRef}>
             <div className={styles.profileBorder}>
             <div className={styles.profileTop}>
               <div className={styles.profileBanner}>
@@ -452,7 +456,6 @@ const handleVenueClick = (venue) => {
             </div>
             </div>
           </section>
-
           <div className={styles.divideLineProfile}></div>
 
           <section className={styles.rightSection}>
@@ -513,16 +516,15 @@ const handleVenueClick = (venue) => {
                         />
                       </label>
                       <div className={styles.editActions}>
-                        <Buttons type="submit" size="small" version="v2">Save Changes</Buttons>
+                        <Buttons type="submit" size="small" version="v1">Save Changes</Buttons>
                       </div>
                     </form>
                   </div>
                 </div>
             </div>
           </section>
-
+          </div>
         </div>
-
 {isModalVisible && selectedVenue && (
   <VenueDetailsPopup
     selectedVenue={selectedVenue}
@@ -547,7 +549,6 @@ const handleVenueClick = (venue) => {
             hideBars={true}
           />
         )}
-
         {showSigningOffPopup && (
   <CustomPopup
     message="Signing off..."
@@ -556,7 +557,7 @@ const handleVenueClick = (venue) => {
     disableAutoClose={false}
     hideBars={false}
   />
-)}
+        )}
     </motion.div>
   );
 };
