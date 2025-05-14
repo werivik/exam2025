@@ -34,13 +34,41 @@ const formatDate = (date) => {
   });
 };
 
-const CostumCalender = ({ onDateChange }) => {
+const parseDate = (dateString) => {
+  if (!dateString) return null;
+  
+  try {
+    const parts = dateString.split(' ');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0]);
+      const month = parts[1];
+      const year = parseInt(parts[2]);
+      
+      const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      const monthIndex = monthNames.findIndex(m => m === month);
+      
+      if (monthIndex !== -1) {
+        return new Date(year, monthIndex, day);
+      }
+    }
+  } 
+  catch (e) {
+    console.error("Error parsing date:", e);
+  }
+  return null;
+};
+
+const CustomCalender = ({ value, onDateChange }) => {
   const today = new Date();
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [selectedDate, setSelectedDate] = useState(null);
+  const initialDate = value ? parseDate(value) : null;
+
+  const [currentMonth, setCurrentMonth] = useState(initialDate ? initialDate.getMonth() : today.getMonth());
+  const [currentYear, setCurrentYear] = useState(initialDate ? initialDate.getFullYear() : today.getFullYear());
+  const [selectedDate, setSelectedDate] = useState(initialDate);
   const [days, setDays] = useState([]);
-  const [isVisible, setIsVisible] = useState(true);
   const calendarRef = useRef(null);
 
   useEffect(() => {
@@ -48,37 +76,28 @@ const CostumCalender = ({ onDateChange }) => {
   }, [currentMonth, currentYear]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
-        setIsVisible(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+    const parsedDate = parseDate(value);
+    if (parsedDate) {
+      setSelectedDate(parsedDate);
+      setCurrentMonth(parsedDate.getMonth());
+      setCurrentYear(parsedDate.getFullYear());
+    }
+  }, [value]);
 
   const handleDateClick = (day) => {
     if (day.faded) return;
     const selected = new Date(currentYear, currentMonth, day.date);
     setSelectedDate(selected);
-    if (onDateChange) onDateChange(formatDate(selected));
+    if (onDateChange) {
+      const formattedDate = formatDate(selected);
+      onDateChange(formattedDate);
+    }
   };
 
   const changeMonth = (offset) => {
     const newDate = new Date(currentYear, currentMonth + offset);
     setCurrentMonth(newDate.getMonth());
     setCurrentYear(newDate.getFullYear());
-  };
-
-  const quickSelect = (offsetDays) => {
-    const d = new Date();
-    d.setDate(d.getDate() + offsetDays);
-    setCurrentMonth(d.getMonth());
-    setCurrentYear(d.getFullYear());
-    setSelectedDate(d);
-    if (onDateChange) onDateChange(formatDate(d));
   };
 
   const isToday = (day) => {
@@ -93,16 +112,16 @@ const CostumCalender = ({ onDateChange }) => {
     selectedDate.getMonth() === currentMonth &&
     selectedDate.getFullYear() === currentYear;
 
-  return isVisible ? (
+  return (
     <div ref={calendarRef} className={styles.calendarContainer}>
       <div className={styles.datePicker}>
         <div className={styles.datePickerTop}>
           <button className={styles.arrow} onClick={() => changeMonth(-1)}>
-          <i class="fa-solid fa-chevron-left"></i>
+            <i className="fa-solid fa-chevron-left"></i>
           </button>
           <span className={styles.monthName}>{getMonthName(currentMonth, currentYear)}</span>
           <button className={styles.arrow} onClick={() => changeMonth(1)}>
-          <i class="fa-solid fa-chevron-right"></i>
+            <i className="fa-solid fa-chevron-right"></i>
           </button>
         </div>
         <div className={styles.datePickerCalender}>
@@ -130,11 +149,12 @@ const CostumCalender = ({ onDateChange }) => {
         </div>
       </div>
     </div>
-  ) : null;
+  );
 };
 
-CostumCalender.propTypes = {
-  onDateChange: PropTypes.func,
+CustomCalender.propTypes = {
+  value: PropTypes.string,
+  onDateChange: PropTypes.func
 };
 
-export default CostumCalender;
+export default CustomCalender;

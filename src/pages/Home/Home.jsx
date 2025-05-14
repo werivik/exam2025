@@ -216,35 +216,66 @@ const Home = () => {
     setFilters(prev => ({ ...prev, [type]: newValue }));
   };
 
-  const toggleCalendar = (type) => {
+const toggleCalendar = (type) => {
+  if (showCalendar && selectedDateType === type) {
     setShowCalendar(false);
-    setSelectedDateType(type);
-    setTimeout(() => {
-      setShowCalendar(true);
-    }, 0);
-  };  
+    return;
+  }  
+  setSelectedDateType(type);
+  setShowCalendar(true);
+};
 
-  const handleDateChange = (newDate) => {
-    if (selectedDateType === 'start') {
-      setCheckInDate(newDate);
-      setFilters(prev => ({ ...prev, startDate: newDate }));
-  
-      if (filters.endDate && new Date(newDate) > new Date(filters.endDate)) {
-        setCheckOutDate("");
-        setFilters(prev => ({ ...prev, endDate: "" }));
-      }
-    } 
-    else {
-      if (filters.startDate && new Date(newDate) < new Date(filters.startDate)) {
-        alert("End date cannot be before start date.");
-        return;
-      }
-  
-      setCheckOutDate(newDate);
-      setFilters(prev => ({ ...prev, endDate: newDate }));
+const handleDateChange = (newDate) => {
+  if (selectedDateType === 'start') {
+    setCheckInDate(newDate);
+    setFilters(prev => ({ ...prev, startDate: newDate }));
+
+    if (checkOutDate && new Date(parseDate(newDate)) > new Date(parseDate(checkOutDate))) {
+      setCheckOutDate("");
+      setFilters(prev => ({ ...prev, endDate: "" }));
     }
-    setShowCalendar(false);
-  };
+  } 
+  else {
+    if (checkInDate && new Date(parseDate(newDate)) < new Date(parseDate(checkInDate))) {
+      alert("End date cannot be before start date.");
+      return;
+    }
+
+    setCheckOutDate(newDate);
+    setFilters(prev => ({ ...prev, endDate: newDate }));
+  }
+  
+  setTimeout(() => {
+  }, 100);    setShowCalendar(false);
+
+};
+
+const parseDate = (dateString) => {
+  if (!dateString) return null;
+  
+  try {
+    const parts = dateString.split(' ');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0]);
+      const month = parts[1];
+      const year = parseInt(parts[2]);
+      
+      const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      const monthIndex = monthNames.findIndex(m => m === month);
+      
+      if (monthIndex !== -1) {
+        return new Date(year, monthIndex, day);
+      }
+    }
+  } 
+  catch (e) {
+    console.error("Error parsing date:", e);
+  }
+  return null;
+};
 
   const renderGuestInfo = () => {
     let guestInfo = `${filters.adults} Adult${filters.adults !== 1 ? "s" : ""}`;
@@ -335,46 +366,58 @@ const Home = () => {
     </div>
   );
 
-  const DateFilter = () => (
-    <div className={styles.filterCalender} ref={dateFilterRef}>
-      <i
-        className="fa-solid fa-calendar-days"
-        onClick={() => toggleCalendar('start')}
-      ></i>
-      <input
-        className={styles.startDateFilter}
-        type="text"
-        value={checkInDate}
-        placeholder="Start"
-        onClick={() => toggleCalendar('start')}
-        readOnly
-      />
+const DateFilter = () => (
+  <div className={styles.filterCalender} ref={dateFilterRef}>
+    <i
+      className="fa-solid fa-calendar-days"
+      onClick={(e) => {
+        e.stopPropagation();
+        toggleCalendar('start');
+      }}
+    ></i>
+    <input
+      className={styles.startDateFilter}
+      type="text"
+      value={checkInDate}
+      placeholder="Start"
+      onClick={(e) => {
+        e.stopPropagation();
+        toggleCalendar('start');
+      }}
+      readOnly
+    />
 
-      <i
-        className="fa-solid fa-calendar-days"
-        onClick={() => toggleCalendar('end')}
-      ></i>
-      <input
-        className={styles.endDateFilter}
-        type="text"
-        value={checkOutDate}
-        placeholder="End"
-        onClick={() => toggleCalendar('end')}
-        readOnly
-      />
-      <div className={styles.costumCalenderPosition}>
-        {showCalendar && (
-          <div ref={calendarRef}>
-            <CustomCalender
-              key={selectedDateType + checkInDate + checkOutDate}
-              value={selectedDateType === 'start' ? checkInDate : checkOutDate}
-              onDateChange={handleDateChange}
-            />
-          </div>
-        )}
-      </div>
+    <i
+      className="fa-solid fa-calendar-days"
+      onClick={(e) => {
+        e.stopPropagation();
+        toggleCalendar('end');
+      }}
+    ></i>
+    <input
+      className={styles.endDateFilter}
+      type="text"
+      value={checkOutDate}
+      placeholder="End"
+      onClick={(e) => {
+        e.stopPropagation();
+        toggleCalendar('end');
+      }}
+      readOnly
+    />
+    <div className={styles.costumCalenderPosition}>
+      {showCalendar && (
+        <div ref={calendarRef}>
+          <CustomCalender
+            key={`${selectedDateType}-${Date.now()}`}
+            value={selectedDateType === 'start' ? checkInDate : checkOutDate}
+            onDateChange={handleDateChange}
+          />
+        </div>
+      )}
     </div>
-  );
+  </div>
+);
 
   const GuestFilter = ({ refProp }) => (
     <div className={styles.filterPeople}>
@@ -447,38 +490,41 @@ const Home = () => {
             <BannerSlideshow />    
             <div className={styles.bannerFilters}>
               <img src={Edge} className={styles.edgeLeft} alt="" />
-              <div className={styles.filterContent}>
-                <div className={styles.allFilters}>
-                  <div className={styles.filtersLeft}>
-                    <DestinationFilter />
-                    <DateFilter />
-                  </div>
-                  <GuestFilter refProp={guestDropdownRefOne} />
-                  <div className={styles.searchButtonFirst}>
-                    <Buttons size='small' version='v1' onClick={checkConditionsForSearch}>
-                      Search
-                    </Buttons>
-                  </div>
-                </div>
-                {showWarning && <WarningPopup />}
-              </div>
-              <div className={styles.filterContentSecond}>
-                <div className={styles.allFilters}>
-                  <div className={styles.filtersColumns}>
-                    <DestinationFilter />
-                    <DateFilter />
-                    <div className={styles.filtersColumnsBottom}>
-                      <GuestFilter refProp={guestDropdownRefTwo} />
-                      <div className={styles.searchButtonSecond}>
-                        <Buttons size='small' version='v1' onClick={checkConditionsForSearch}>
-                          Search
-                        </Buttons>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {showWarning && <WarningPopup />}            
-              </div>
+{window.innerWidth > 900 ? (
+  <div className={styles.filterContent}>
+    <div className={styles.allFilters}>
+      <div className={styles.filtersLeft}>
+        <DestinationFilter />
+        <DateFilter />
+      </div>
+      <GuestFilter refProp={guestDropdownRefOne} />
+      <div className={styles.searchButtonFirst}>
+        <Buttons size='small' version='v1' onClick={checkConditionsForSearch}>
+          Search
+        </Buttons>
+      </div>
+    </div>
+    {showWarning && <WarningPopup />}
+  </div>
+) : (
+  <div className={styles.filterContentSecond}>
+    <div className={styles.allFilters}>
+      <div className={styles.filtersColumns}>
+        <DestinationFilter />
+        <DateFilter />
+        <div className={styles.filtersColumnsBottom}>
+          <GuestFilter refProp={guestDropdownRefTwo} />
+          <div className={styles.searchButtonSecond}>
+            <Buttons size='small' version='v1' onClick={checkConditionsForSearch}>
+              Search
+            </Buttons>
+          </div>
+        </div>
+      </div>
+    </div>
+    {showWarning && <WarningPopup />}
+  </div>
+)}
               <img src={Edge} className={styles.edgeRight} alt="" />
             </div>
           </div>
