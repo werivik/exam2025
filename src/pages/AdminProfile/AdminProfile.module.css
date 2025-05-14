@@ -61,9 +61,10 @@
   width: 100%;
   text-align: left;
 }
-.profileDesktop .leftBorder .leftTop h2 {
+.profileDesktop .leftBorder .leftTop h3 {
   margin-bottom: 0;
   padding: 0;
+  pointer-events: none;
 }
 .profileDesktop .leftBorder .leftTop p {
   font-style: italic;
@@ -94,7 +95,29 @@
   border: none;
   text-align: left;
   cursor: pointer;
+  position: relative;
+  transition: 0.25s;
 }
+.profileDesktop .leftLink button::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 0.5px;
+  background: white;
+  bottom: -5px;
+  border-radius: 99px;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease-out;
+ }
+ .profileDesktop .leftLink button:hover::after{
+  transform: scaleX(1);
+}
+
+
+
+
 .profileDesktop .profileRight {
   width: 100%;
   position: relative;
@@ -536,11 +559,15 @@ body.modal-open {
 
 
 
-
-@media (max-width:1025px){
+@media (max-width:1125px){
 .profileTablet {
   display: block;
 }
+.profileDesktop {
+  display: none;
+}
+}
+@media (max-width:1025px){
 .profilePage {
   width: 90%;
   margin-left: 5%;
