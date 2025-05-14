@@ -367,9 +367,12 @@
   justify-content: center;
 }
 
-.navLinks
+.sidebarContent
 .divider {
   background-color: #fffefb;
+  margin: 0;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .no-scroll {
