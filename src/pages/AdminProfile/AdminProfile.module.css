@@ -98,7 +98,7 @@
   padding: 0;
 }
 .profileContentInfo p {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin-top: 5px;
   font-style: italic;
 }
@@ -382,26 +382,10 @@ body.modal-open {
   border-radius: 99px;
 }
 
-.dashboardButton {
+.profileContentInfo button {
   position: absolute;
   right: 25px;
   top: 400px;
-  padding: 7.5px;
-  border-radius: 10px;
-  border: none;
-  background-color: #1F1B17;
-  color: #fffefb;
-  font-size: 1rem;
-}
-
-.dashboardButtonDash {
-  font-size: 1rem;
-  padding: 7.5px;
-  border-radius: 10px;
-  border: none;
-  background-color: #1F1B17;
-  color: #fffefb;
-  font-size: 1rem;
 }
 
 @media (max-width:1025px){

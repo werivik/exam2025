@@ -43,7 +43,11 @@ const AdminProfile = () => {
   const [filteredVenues, setFilteredVenues] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all'); 
   const navigate = useNavigate();
-  const editRef = useRef(null);
+
+const editRef = useRef(null);
+const profileRef = useRef(null);
+const venuesRef = useRef(null);
+const bookingsRef = useRef(null);
 
   const [averageRating, setAverageRating] = useState(0);
   const [totalReviews, setTotalReviews] = useState(0);
@@ -274,6 +278,13 @@ const handleVenueClick = (venue) => {
     }
   };
 
+  const scrollToSection = (ref) => {
+  if (ref?.current) {
+    ref.current.scrollIntoView({ behavior: 'smooth' });
+    toggleDashboard();
+  }
+};
+
   const toggleDashboard = () => setShowDashboard(prev => !prev);
 
   useEffect(() => {
@@ -302,6 +313,7 @@ const handleVenueClick = (venue) => {
     };
   }, [showDashboard]);  
 
+  const userRole = userData?.venueManager ? "admin" : "customer";
 
   return (
     <motion.div
@@ -314,11 +326,15 @@ const handleVenueClick = (venue) => {
     >
 
   {showDashboard && <div className={styles.backdrop} onClick={toggleDashboard}></div>}
-  <Dashboard
+<Dashboard
   showDashboard={showDashboard}
   toggleDashboard={toggleDashboard}
+  userRole={userRole}
+  onScrollToProfileTop={() => scrollToSection(profileRef)}
+  onScrollToProfileEdit={() => scrollToSection(editRef)}
+  onScrollToVenues={() => scrollToSection(venuesRef)}
+  onSignOut={handleSignOut}
 />
-
       <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
         <div className={styles.profilePage}>
 
@@ -341,10 +357,10 @@ const handleVenueClick = (venue) => {
                 <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
                 <p>Venue Manager</p>
                 <div className={styles.profileRating}>
-  <img src={starRating} alt="Star rating" />
-  {averageRating}<span> / ({totalReviews}) reviews</span>
-</div>
-                <button className={styles.dashboardButtonDash}>Dashboard</button>
+                  <img src={starRating} alt="Star rating" />
+                  {averageRating}<span> / ({totalReviews}) reviews</span>
+                </div>
+                <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
               </div>
               <div className={styles.dashBottom}>
                 <div className={styles.dashDivideLine}></div>
@@ -399,7 +415,7 @@ const handleVenueClick = (venue) => {
 
           </section>
 
-          <section className={styles.profileContentTop}>
+          <section className={styles.profileContentTop}  ref={profileRef}>
             <div className={styles.profileBorder}>
             <div className={styles.profileTop}>
               <div className={styles.profileBanner}>
@@ -419,10 +435,10 @@ const handleVenueClick = (venue) => {
               <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
               <p>Venue Manager</p>
               <div className={styles.profileRating}>
-  <img src={starRating} alt="Star rating" />
-  {averageRating}<span> / ({totalReviews}) reviews</span>
-</div>
-              <button className={styles.dashboardButton}  onClick={toggleDashboard}>Dashboard</button>
+                <img src={starRating} alt="Star rating" />
+                {averageRating}<span> / ({totalReviews}) reviews</span>
+              </div>
+              <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
             </div>
             </div>
           </section>
@@ -431,7 +447,7 @@ const handleVenueClick = (venue) => {
 
           <section className={styles.rightSection}>
             <div className={styles.rightBorder}>
-              <div className={styles.venues}>
+              <div className={styles.venues} ref={venuesRef}>
                 <div className={styles.venuesTitle}>
                   <h2>My Venues</h2>
                   <Buttons size='small' version='v1' onClick={handleRedirect}>Create Venue</Buttons>

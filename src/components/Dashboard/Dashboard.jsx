@@ -5,6 +5,11 @@ import Buttons from '../Buttons/Buttons';
 const Dashboard = ({
   showDashboard,
   toggleDashboard,
+  userRole,
+  onScrollToProfileTop,
+  onScrollToProfileEdit,
+  onScrollToVenues,
+  onSignOut,
 }) => {
 
   return (
@@ -18,29 +23,38 @@ const Dashboard = ({
           &times;
           </Buttons>
 
-          <h2>Dashboard</h2>
+<h2>Dashboard</h2>
 
-          <div className={styles.dashboardLink}>
-            <h3>Venues</h3>
-            <button>My Venues</button>
-            <button>Create Venue</button>
-            <button>Edit Venue</button>
-          </div>
+{userRole === 'admin' && (
+  <div className={styles.dashboardLink}>
+    <h3>Venues</h3>
+    <button onClick={onScrollToVenues}>My Venues</button>
+    <button onClick={() => { toggleDashboard(); window.location.href = "/create-venue"; }}>Create Venue</button>
+    <button onClick={onScrollToVenues}>Edit Venue</button>
+  </div>
+)}
 
-          <div className={styles.divideLine}></div>
+{userRole === 'customer' && (
+  <div className={styles.dashboardLink}>
+    <h3>Bookings</h3>
+    <button onClick={() => scrollToSection(bookingsRef)}>View My Bookings</button>
+    <button onClick={() => scrollToSection(bookingsRef)}>Edit Bookings</button>
+  </div>
+)}
 
-          <div className={styles.dashboardLink}>
-            <h3>Profile</h3>
-            <button>View Profile</button>
-            <button>Edit Profile</button>
-          </div>
+<div className={styles.divideLine}></div>
 
-          <div className={styles.divideLine}></div>
+<div className={styles.dashboardLink}>
+  <h3>Profile</h3>
+  <button onClick={onScrollToProfileTop}>View Profile</button>
+  <button onClick={onScrollToProfileEdit}>Edit Profile</button>
+</div>
 
-          <div className={styles.dashboardLink}>
-            <button>Sign out</button>
-          </div>
+<div className={styles.divideLine}></div>
 
+<div className={styles.dashboardLink}>
+  <button onClick={onSignOut}>Sign out</button>
+</div>
         </div>
       </div>
     </>
