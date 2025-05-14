@@ -42,7 +42,8 @@ const VenueDetailsPopup = ({
     if (userRole === 'admin') {
       navigate(`/edit-venue/${selectedVenue.id}`, { state: { venue: selectedVenue } });
       closeModal();
-    } else if (userRole === 'customer') {
+    } 
+    else if (userRole === 'customer') {
       setIsEditing(true);
     }
   };
@@ -224,7 +225,7 @@ const VenueDetailsPopup = ({
     }
   };
 
-  if (!selectedBooking || !selectedVenue) return null;
+if (!selectedVenue) return null;
 
   return (
     <motion.div
@@ -264,13 +265,13 @@ const VenueDetailsPopup = ({
                         className={styles.prevButton} 
                         onClick={() => handlePrevImage(selectedVenue.media.length)}
                       >
-                        <img src={slideshowPrev} alt="Previous" />
+                        <img src={slideshowPrev} alt="Previous"></img>
                       </button>
                       <button 
                         className={styles.nextButton} 
                         onClick={() => handleNextImage(selectedVenue.media.length)}
                       >
-                        <img src={slideshowNext} alt="Next" />
+                        <img src={slideshowNext} alt="Next"></img>
                       </button>
                     </>
                   )}
@@ -282,7 +283,6 @@ const VenueDetailsPopup = ({
             <div className={styles.venueRight}>
               <div className={styles.fadeOutDivTop}></div>
               
-              {/* Conditionally render venue info or edit form */}
               {!isEditing ? (
                 <>
                   <div className={styles.venueInfo}>

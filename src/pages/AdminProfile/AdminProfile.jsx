@@ -31,6 +31,7 @@ const AdminProfile = () => {
   const [newName, setNewName] = useState('');
   const [usernameError, setUsernameError] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
+  const [newBanner, setNewBanner] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [showSigningOffPopup, setShowSigningOffPopup] = useState(false);
   const [selectedVenue, setSelectedVenue] = useState(null);
@@ -42,51 +43,76 @@ const AdminProfile = () => {
   const navigate = useNavigate();
   const editRef = useRef(null);
 
+  const [averageRating, setAverageRating] = useState(0);
+  const [totalReviews, setTotalReviews] = useState(0);
+
   useEffect(() => {
-    const fetchAdminData = async () => {
-      const token = localStorage.getItem('accessToken');
-      const username = localStorage.getItem('username');
+const fetchAdminData = async () => {
+  const token = localStorage.getItem('accessToken');
+  const username = localStorage.getItem('username');
 
-      if (!token || !username) {
-        console.error('Missing token or name in localStorage');
-        return;
-      }
+  if (!token || !username) {
+    console.error('Missing token or name in localStorage');
+    return;
+  }
 
-      try {
-        const adminProfileUrl = PROFILES_SINGLE.replace("<name>", username);
-        const response = await fetch(adminProfileUrl, {
-          method: 'GET',
-          headers: headers(token),
-        });
+  try {
+    const adminProfileUrl = PROFILES_SINGLE.replace("<name>", username);
+    const response = await fetch(adminProfileUrl, {
+      method: 'GET',
+      headers: headers(token),
+    });
 
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.errors?.[0]?.message || 'Failed to fetch admin data');
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.errors?.[0]?.message || 'Failed to fetch admin data');
+    }
+
+    setUserData(data.data || {});
+    setNewName(data.data.name);
+    setNewAvatar(data.data.avatar?.url || '');
+    setNewBanner(data.data.banner?.url || '');
+
+    const venuesResponse = await fetch(PROFILES_SINGLE_BY_VENUES.replace('<name>', username), {
+      method: 'GET',
+      headers: headers(token),
+    });
+
+    const venuesData = await venuesResponse.json();
+    if (venuesResponse.ok) {
+      const venues = venuesData.data || [];
+
+      setAssignedVenues(venues);
+      setFilteredVenues(venues);
+
+      let totalRating = 0;
+      let reviewCount = 0;
+
+      venues.forEach((venue) => {
+        if (venue.rating && venue.rating > 0 && venue._count?.reviews > 0) {
+          totalRating += venue.rating * venue._count.reviews;
+          reviewCount += venue._count.reviews;
         }
+      });
 
-        setUserData(data.data || {});
-        setNewName(data.data.name);
-        setNewAvatar(data.data.avatar?.url || '');
-
-        const venuesResponse = await fetch(PROFILES_SINGLE_BY_VENUES.replace('<name>', username), {
-          method: 'GET',
-          headers: headers(token),
-        });
-
-        const venuesData = await venuesResponse.json();
-        if (venuesResponse.ok) {
-          setAssignedVenues(venuesData.data || []);
-          setFilteredVenues(venuesData.data || []);
-        } 
-        else {
-          console.error('Failed to fetch venues');
-        }
+      if (reviewCount > 0) {
+        const avg = totalRating / reviewCount;
+        setAverageRating(Math.min(5, parseFloat(avg.toFixed(1))));
+        setTotalReviews(reviewCount);
       } 
-      catch (error) {
-        console.error('Error fetching admin data:', error);
+      else {
+        setAverageRating(0);
+        setTotalReviews(0);
       }
-    };
-
+    } 
+    else {
+      console.error('Failed to fetch venues');
+    }
+  } 
+  catch (error) {
+    console.error('Error fetching admin data:', error);
+  }
+};
     fetchAdminData();
   }, []);
 
@@ -162,16 +188,14 @@ const AdminProfile = () => {
       return;
     }
   
-    const updateData = {};
-    if (newName && newName !== userData.name) updateData.name = newName;
-  
-    const avatarData = newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName || username}'s avatar` } : undefined;
-    if (avatarData) updateData.avatar = avatarData;
-  
-    if (Object.keys(updateData).length === 0) {
-      console.error('At least one field (name or avatar) must be provided.');
-      return;
-    }
+const updateData = {};
+if (newName && newName !== userData.name) updateData.name = newName;
+
+const avatarData = newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName || username}'s avatar` } : undefined;
+if (avatarData) updateData.avatar = avatarData;
+
+const bannerData = newBanner.trim() ? { url: newBanner.trim(), alt: `${newName || username}'s banner` } : undefined;
+if (bannerData) updateData.banner = bannerData;
   
     try {
       const response = await fetch(`${PROFILES_SINGLE.replace("<name>", username)}`, {
@@ -217,11 +241,24 @@ const AdminProfile = () => {
     }
   }; 
 
-  const handleVenueClick = (venue) => {
-    console.log("Venue clicked:", venue);
-    setSelectedVenue(venue);
-    setIsModalVisible(true);
+  useEffect(() => {
+  if (isModalVisible) {
+    document.body.classList.add('modal-open');
+  } 
+  else {
+    document.body.classList.remove('modal-open');
+  }
+  return () => {
+    document.body.classList.remove('modal-open');
   };
+}, [isModalVisible]);
+
+
+const handleVenueClick = (venue) => {
+  setSelectedVenue(venue);
+  setIsModalVisible(true);
+};
+
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -249,7 +286,7 @@ const AdminProfile = () => {
           <section className={styles.dashViewProfile}>
             <div className={styles.dashProfileTop}>
               <div className={styles.dashProfileBanner}>
-                <img src={bannerImage}></img>
+                <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
               </div>
               <div className={styles.dashProfileAvatar}>
                 <img src={bannerEdge} className={styles.bannerEdgeLeft}></img>
@@ -264,8 +301,11 @@ const AdminProfile = () => {
               <div className={styles.dashProfileInfo}>
                 <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
                 <p>Venue Manager</p>
-                <div className={styles.dashRating}><img src={starRating}></img>5<span> / (...) reviews</span></div>
-                <Buttons size='small' version='v2' onClick={handleSignOut}>Sign Out</Buttons>
+                <div className={styles.profileRating}>
+  <img src={starRating} alt="Star rating" />
+  {averageRating}<span> / ({totalReviews}) reviews</span>
+</div>
+                <button className={styles.dashboardButtonDash}>Dashboard</button>
               </div>
               <div className={styles.dashBottom}>
                 <div className={styles.dashDivideLine}></div>
@@ -324,7 +364,7 @@ const AdminProfile = () => {
             <div className={styles.profileBorder}>
             <div className={styles.profileTop}>
               <div className={styles.profileBanner}>
-                <img src={bannerImage}></img>
+                <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
               </div>
               <div className={styles.profileAvatarContent}>
                 <img src={bannerEdge} className={styles.profileEdgeLeft}></img>
@@ -339,11 +379,16 @@ const AdminProfile = () => {
               <div className={styles.profileContentInfo}>
               <h2>{capitalizeFirstLetter(userData.name) || 'Admin'}</h2>
               <p>Venue Manager</p>
-              <div className={styles.profileRating}><img src={starRating}></img>5<span> / (...) reviews</span></div>
-              <Buttons size='small' version='v2'>Sign Out</Buttons>
+              <div className={styles.profileRating}>
+  <img src={starRating} alt="Star rating" />
+  {averageRating}<span> / ({totalReviews}) reviews</span>
+</div>
+              <button className={styles.dashboardButton}>Dashboard</button>
             </div>
             </div>
           </section>
+
+          <div className={styles.divideLineProfile}></div>
 
           <section className={styles.rightSection}>
             <div className={styles.rightBorder}>
@@ -368,6 +413,9 @@ const AdminProfile = () => {
               )}
                 </div>
               </div>
+                
+                <div className={styles.divideLineContent}></div>
+
                 <div className={styles.edit} ref={editRef}>
                   <div className={styles.editTitle}>
                     <h2>Edit Profile</h2>
@@ -389,6 +437,14 @@ const AdminProfile = () => {
                           type="url"
                           value={newAvatar}
                           onChange={(e) => setNewAvatar(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Banner URL:
+                        <input
+                          type="url"
+                          value={newBanner}
+                          onChange={(e) => setNewBanner(e.target.value)}
                         />
                       </label>
                       <div className={styles.editActions}>

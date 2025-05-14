@@ -127,7 +127,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 150px;
+  gap: 100px;
 }
 .rightBorder h2 {
   font-size: 3rem;
@@ -162,7 +162,7 @@
   margin-top: 50px;
 }
 .allEdits {
-  height: 300px;
+  height: 450px;
   position: relative;
 }
 .allEdits .editForm {
@@ -362,6 +362,48 @@
 .dashEdit .allEdits {
   width: 95%;
 }
+body.modal-open {
+  overflow: hidden;
+}
+
+.divideLineProfile {
+  height: 0.5px;
+  width: 95%;
+  margin-left: 25px;
+  margin-right: 25px;
+  background-color: #1F1B17;
+  border-radius: 99px;
+}
+
+.divideLineContent {
+  height: 0.5px;
+  width: 100%;
+  background-color: #1F1B17;
+  border-radius: 99px;
+}
+
+.dashboardButton {
+  position: absolute;
+  right: 25px;
+  top: 400px;
+  padding: 7.5px;
+  border-radius: 10px;
+  border: none;
+  background-color: #1F1B17;
+  color: #fffefb;
+  font-size: 1rem;
+}
+
+.dashboardButtonDash {
+  font-size: 1rem;
+  padding: 7.5px;
+  border-radius: 10px;
+  border: none;
+  background-color: #1F1B17;
+  color: #fffefb;
+  font-size: 1rem;
+}
+
 @media (max-width:1025px){
 .profilePage {
   width: 90%;
