@@ -300,23 +300,18 @@ const handleVenueClick = (venue) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);   
 
-useEffect(() => {
-  if (showDashboard) {
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-  } else {
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
-  }
-
-  return () => {
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
-  };
-}, [showDashboard]); 
+    useEffect(() => {
+    if (showDashboard) {
+      document.body.style.overflow = 'hidden';
+    } 
+    
+    else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showDashboard]);  
 
   const userRole = userData?.venueManager ? "admin" : "customer";
 
@@ -421,7 +416,7 @@ useEffect(() => {
                         />
                       </label>
                       <div className={styles.editActions}>
-                        <Buttons type="submit" size="small" version="v2">Save Changes</Buttons>
+                        <Buttons type="submit" size="small" version="v1">Save Changes</Buttons>
                       </div>
                     </form>
                   </div>

@@ -385,6 +385,7 @@ body.modal-open {
   right: 25px;
   top: 400px;
 }
+
 @media (max-width:1025px){
 .profilePage {
   width: 90%;
