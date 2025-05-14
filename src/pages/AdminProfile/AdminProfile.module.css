@@ -102,20 +102,6 @@
   margin-top: 5px;
   font-style: italic;
 }
-.profileContentInfo .profileRating {
-  margin-top: -5px;
-  margin-bottom: 35px;
-  font-size: 1.125rem;
-}
-.profileContentInfo .profileRating span {
-  opacity: 75%;
-  font-size: 1rem;
-}
-.profileContentInfo .profileRating img {
-  width: 15px;
-  height: 15px;
-  margin-right: 5px;
-}
 .rightSection {
   width: 95%;
   position: relative;
@@ -317,24 +303,6 @@
   margin-top: 5px;
   font-style: italic;
 }
-.dashRating {
-  margin-top: -5px;
-  margin-bottom: 35px;
-  font-size: 1rem;
-}
-.dashRating span {
-  opacity: 75%;
-  font-size: 0.9rem;
-}
-.dashRating img {
-  width: 15px;
-  height: 15px;
-  margin-right: 5px;
-}
-.dashBio {
-  font-size: 1.125rem;
-  width: 95%;
-}
 .dashBottom {
   margin-left: 15px;
   margin-right: 15px;
@@ -362,6 +330,23 @@
 .dashEdit .allEdits {
   width: 95%;
 }
+
+
+.dashViewProfile .profileRating, .profileContentTop .profileRating {
+  margin-top: -5px;
+  margin-bottom: 35px;
+  font-size: 1.125rem;
+}
+.dashViewProfile .profileRating span, .profileContentTop .profileRating span {
+  opacity: 75%;
+  font-size: 1rem;
+}
+.dashViewProfile .profileRating img, .profileContentTop .profileRating img {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+}
+
 body.modal-open {
   overflow: hidden;
 }
@@ -374,14 +359,12 @@ body.modal-open {
   background-color: #1F1B17;
   border-radius: 99px;
 }
-
 .divideLineContent {
   height: 0.5px;
   width: 100%;
   background-color: #1F1B17;
   border-radius: 99px;
 }
-
 .profileContentInfo button {
   position: absolute;
   right: 25px;
@@ -404,7 +387,7 @@ body.modal-open {
 }
 }
 @media (max-width:425px){
-  .leftSection, .rightSection {
+  .leftSection, .rightSection, .divideLineProfile {
     display: none;
   }
   .profilePage {

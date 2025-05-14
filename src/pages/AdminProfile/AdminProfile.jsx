@@ -338,7 +338,7 @@ const handleVenueClick = (venue) => {
       <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
         <div className={styles.profilePage}>
 
-          <section className={styles.dashViewProfile}>
+          <section className={styles.dashViewProfile} ref={profileRef}>
             <div className={styles.dashProfileTop}>
               <div className={styles.dashProfileBanner}>
                 <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
@@ -364,7 +364,7 @@ const handleVenueClick = (venue) => {
               </div>
               <div className={styles.dashBottom}>
                 <div className={styles.dashDivideLine}></div>
-                <div className={styles.dashVenues}>
+                <div className={styles.dashVenues} ref={venuesRef}>
                   <div className={styles.dashVenuesTitle}>
                     <h3>Venues</h3>
                     <Buttons size="small" version="v1" onClick={handleRedirect}>Create Venue</Buttons>
@@ -384,7 +384,7 @@ const handleVenueClick = (venue) => {
               )}
                 </div>
                 <div className={styles.dashDivideLine}></div>
-              <div className={styles.dashEdit}>
+              <div className={styles.dashEdit} ref={editRef}>
                 <h3>Edit Profile</h3>
                   <div className={styles.allEdits}>
                     <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
@@ -415,7 +415,7 @@ const handleVenueClick = (venue) => {
 
           </section>
 
-          <section className={styles.profileContentTop}  ref={profileRef}>
+          <section className={styles.profileContentTop} ref={profileRef}>
             <div className={styles.profileBorder}>
             <div className={styles.profileTop}>
               <div className={styles.profileBanner}>
