@@ -375,6 +375,12 @@
   margin-bottom: 15px;
 }
 
+.desktopProfile 
+.mainContent
+.bannerWrapper {
+  margin-bottom: 75px;
+}
+
 .no-scroll {
   overflow: hidden;
 }
