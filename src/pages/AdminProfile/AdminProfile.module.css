@@ -416,6 +416,13 @@ body.modal-open {
   display: none;
  }
 }
+@media (max-width:325px) {
+.dashProfileInfo .dashboardButton {
+  width: 95%;
+  display: flex;
+  position: inherit;
+}
+}
 @media (max-width:275px){
   .dashVenuesTitle {
     flex-direction: column;
