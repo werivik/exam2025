@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, memo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
 import styles from "./Header.module.css";
@@ -8,12 +8,148 @@ import { VENUES, PROFILES_SINGLE, PROFILES_SEARCH, VENUES_SEARCH } from "../../c
 import { headers } from "../../headers";
 import { isLoggedIn, getUserRole } from "../../auth/auth";
 
+const Logo = memo(({ isHovered, setIsHovered }) => (
+  <Link to="/" className={styles.headerLogoContent}>
+    <img
+      src={isHovered ? headerLogoHover : headerLogo}
+      alt="Logo"
+      className={isHovered ? styles.headerLogoHover : styles.headerLogo}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    />
+  </Link>
+));
+
+const SearchBar = memo(({ 
+  isSearchOpen, 
+  filters, 
+  setFilters, 
+  suggestions, 
+  handleSearch, 
+  handleSelect 
+}) => (
+  <div
+    className={styles.searchbarContent}
+    style={{ display: isSearchOpen ? "block" : "none" }}
+  >
+    <input
+      type="text"
+      className={styles.searchInput}
+      placeholder="Search venues, profiles, or locations..."
+      value={filters.destination}
+      onChange={(e) => {
+        const value = e.target.value;
+        setFilters({ destination: value });
+        handleSearch(value);
+      }}
+    />
+    {filters.destination && suggestions.length > 0 && (
+      <ul className={styles.suggestionsList}>
+        {suggestions.map((item, index) => (
+          <li
+            key={index}
+            className={styles.suggestionItem}
+            onClick={() => item.type !== "None" && handleSelect(item)}
+          >
+            {item.type !== "None" && (
+              <span className={styles.suggestionLabel}>{item.type}</span>
+            )}
+            {item.value}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+));
+
+const MenuLinks = memo(({ isUserLoggedIn, userData }) => (
+  <ul className={styles.menuLeftLinks}>
+    {isUserLoggedIn ? (
+      <>
+        {userData?.venueManager ? (
+          <>
+            <Link to="/admin-profile">Profile</Link>
+            <div className={styles.divideLine}></div>
+            <Link to="/admin-profile">My Venues</Link>
+          </>
+        ) : (
+          <>
+            <Link to="/costumer-profile">Profile</Link>
+            <div className={styles.divideLine}></div>
+            <Link to="/costumer-profile">Bookings</Link>
+          </>
+        )}
+      </>
+    ) : (
+      <>
+        <Link to="/login-costumer">Login</Link>
+        <div className={styles.divideLine}></div>
+        <Link to="/register-costumer">Register</Link>
+      </>
+    )}
+  </ul>
+));
+
+const SidebarMenu = memo(({ 
+  isOpen, 
+  onClose, 
+  isUserLoggedIn, 
+  userData 
+}) => (
+  isOpen && (
+    <div className={styles.sidebarHeader}>
+      <button
+        className={styles.sidebarClose}
+        onClick={onClose}
+      >
+        <i className="fa-solid fa-angles-left"></i> Hide Menu
+      </button>
+
+      <ul className={styles.menuLinks}>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/venues">Venues</Link></li>
+      </ul>
+
+      <div className={styles.divideLineLaying}></div>
+
+      {isUserLoggedIn && (
+        <ul className={styles.menuLinks}>
+          {userData?.venueManager ? (
+            <>
+              <li><Link to="/admin-profile">My Venues</Link></li>
+              <li><Link to="/admin-profile">My Profile</Link></li>
+            </>
+          ) : (
+            <>
+              <li><Link to="/costumer-profile">My Bookings</Link></li>
+              <li><Link to="/costumer-profile">My Profile</Link></li>
+            </>
+          )}
+        </ul>
+      )}
+
+      <ul className={styles.menuLinks}>
+        <li><Link to="/about">About Us</Link></li>
+        <li><Link to="/contact">Contact Us</Link></li>
+      </ul>
+
+      <div className={styles.divideLineLaying}></div>
+
+      {!isUserLoggedIn && (
+        <ul className={styles.menuLinks}>
+          <li><Link to="/login-costumer">Login</Link></li>
+          <li><Link to="/register-costumer">Register</Link></li>
+        </ul>
+      )}
+    </div>
+  )
+));
+
 function Header() {
-  const loginOrRegisterRoutes = ['/login-costumer', '/register-costumer']
+  const loginOrRegisterRoutes = ['/login-costumer', '/register-costumer'];
   const [isHovered, setIsHovered] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [venues, setVenues] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -23,7 +159,6 @@ function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [filters, setFilters] = useState({ destination: "" });
-
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
@@ -41,18 +176,20 @@ function Header() {
         const data = await response.json();
         if (response.ok) {
           setUserData(data.data);
-        }
-        
+        } 
         else {
           console.error('Failed to fetch user profile');
         }
-      } catch (error) {
+      } 
+      catch (error) {
         console.error('Error fetching profile:', error);
       }
     };
 
-    fetchUserProfile();
-  }, []);
+    if (isUserLoggedIn) {
+      fetchUserProfile();
+    }
+  }, [isUserLoggedIn]);
   
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -63,7 +200,6 @@ function Header() {
     if (isUserLoggedIn) {
       fetchUserRole();
     } 
-    
     else {
       setUserRole(null);
     }
@@ -77,13 +213,11 @@ function Header() {
       window.addEventListener("scroll", handleScroll);
       return () => window.removeEventListener("scroll", handleScroll);
     } 
-    
     else {
       setScrolled(true);
     }
   }, [location.pathname, isUserLoggedIn]);
   
-
   useEffect(() => {
     const fetchVenues = async () => {
       try {
@@ -102,88 +236,80 @@ function Header() {
     fetchVenues();
   }, []);
 
-const handleSearch = useCallback(
-  debounce(async (input) => {
-    if (!input) {
-      setSuggestions([]);
-      return;
-    }
+  const handleSearch = useCallback(
+    debounce(async (input) => {
+      if (!input) {
+        setSuggestions([]);
+        return;
+      }
 
-    try {
-      const term = input.toLowerCase();
+      try {
+        const venuesRes = await fetch(`${VENUES_SEARCH}`, {
+          headers: headers()
+        });
+        const venuesData = await venuesRes.json();
 
-      const venuesRes = await fetch(`${VENUES_SEARCH}`, {
-        headers: headers()
-      });
-      const venuesData = await venuesRes.json();
+        const locationMatches = (venuesData.data || []).flatMap((v) => {
+          const locs = [];
+          if (v.location?.city) locs.push({ type: "City", value: v.location.city });
+          if (v.location?.country) locs.push({ type: "Country", value: v.location.country });
+          if (v.location?.continent) locs.push({ type: "Region", value: v.location.continent });
+          return locs;
+        });
 
-      const locationMatches = (venuesData.data || []).flatMap((v) => {
-        const locs = [];
-        if (v.location?.city) locs.push({ type: "City", value: v.location.city });
-        if (v.location?.country) locs.push({ type: "Country", value: v.location.country });
-        if (v.location?.continent) locs.push({ type: "Region", value: v.location.continent });
-        return locs;
-      });
+        const venueMatches = (venuesData.data || []).map((v) => ({
+          type: "Venue",
+          value: v.name,
+          id: v.id,
+        }));
 
-      const venueMatches = (venuesData.data || []).map((v) => ({
-        type: "Venue",
-        value: v.name,
-        id: v.id,
-      }));
+        const profilesRes = await fetch(`${PROFILES_SEARCH}`, {
+          headers: headers()
+        });
+        const profilesData = await profilesRes.json();
 
-      const profilesRes = await fetch(`${PROFILES_SEARCH}`, {
-        headers: headers()
-      });
-      const profilesData = await profilesRes.json();
+        const profileMatches = (profilesData.data || []).map((p) => ({
+          type: "Profile",
+          value: p.name,
+        }));
 
-      const profileMatches = (profilesData.data || []).map((p) => ({
-        type: "Profile",
-        value: p.name,
-      }));
+        const combined = [...venueMatches, ...locationMatches, ...profileMatches];
+        const unique = Array.from(
+          new Map(combined.map((item) => [`${item.type}:${item.value}`, item])).values()
+        ).slice(0, 10);
 
-      const combined = [...venueMatches, ...locationMatches, ...profileMatches];
-      const unique = Array.from(
-        new Map(combined.map((item) => [`${item.type}:${item.value}`, item])).values()
-      ).slice(0, 10);
+        setSuggestions(unique.length ? unique : [{ type: "None", value: "No matching results..." }]);
+      } 
+      catch (err) {
+        console.error("Search error:", err);
+        setSuggestions([{ type: "None", value: "Error searching..." }]);
+      }
+    }, 300),
+    []
+  );
 
-      setSuggestions(unique.length ? unique : [{ type: "None", value: "No matching results..." }]);
+  const handleSelect = useCallback((item) => {
+    if (item.type === "Venue" && item.id) {
+      navigate(`/venue-details/${item.id}`);
     } 
-    catch (err) {
-      console.error("Search error:", err);
-      setSuggestions([{ type: "None", value: "Error searching..." }]);
+    else if (item.type === "Profile") {
+      navigate(`/venue-details/${item.value}`);
+    } 
+    else if (["City", "Country", "Region"].includes(item.type)) {
+      navigate("/venues", {
+        state: { filters: { destination: item.value } },
+      });
     }
-  }, 300),
-  []
-);
+    setFilters({ destination: "" });
+    setSuggestions([]);
+    setIsSearchOpen(false);
+  }, [navigate]);
 
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    handleSearch(value);
-  };
+  const toggleSearchBar = useCallback(() => {
+    setIsSearchOpen(prev => !prev);
+  }, []);
 
-const handleSelect = (item) => {
-  if (item.type === "Venue" && item.id) {
-    navigate(`/venue-details/${item.id}`);
-  }
-  else if (item.type === "Profile") {
-    navigate(`/venue-details/${item.value}`);
-  } 
-  else if (["City", "Country", "Region"].includes(item.type)) {
-    navigate("/venues", {
-      state: { filters: { destination: item.value } },
-    });
-  }
-  setFilters({ destination: "" });
-  setSuggestions([]);
-  setIsSearchOpen(false);
-};
-
-  const toggleSearchBar = () => {
-    setIsSearchOpen((prevState) => !prevState);
-  };
-
-  const isSimpleHeader = loginOrRegisterRoutes.includes(location.pathname); 
+  const isSimpleHeader = loginOrRegisterRoutes.includes(location.pathname);
 
   useEffect(() => {
     setIsUserLoggedIn(isLoggedIn());
@@ -238,40 +364,15 @@ const handleSelect = (item) => {
     setIsSidebarOpen(false);
   }, [location.pathname]);
 
+  const headerClassName = `${scrolled && !isSimpleHeader ? styles.scrolled : ""} ${
+    isSimpleHeader ? styles.simpleHeader : ""
+  }`;
+
   return (
     <div ref={sidebarRef}>
-      <header
-        className={`${scrolled && !isSimpleHeader ? styles.scrolled : ""} ${
-          isSimpleHeader ? styles.simpleHeader : ""
-        }`}
-      >
+      <header className={headerClassName}>
         <nav className={styles.nav}>
-
-        <ul className={styles.menuLeftLinks}>
-        {isUserLoggedIn ? (
-  <>
-    {userData?.venueManager ? (
-      <>
-        <Link to="/admin-profile">Profile</Link>
-        <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
-        <Link to="/admin-profile">My Venues</Link>
-      </>
-    ) : (
-      <>
-        <Link to="/costumer-profile">Profile</Link>
-        <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
-        <Link to="/costumer-profile">Bookings</Link>
-      </>
-    )}
-  </>
-) : (
-    <>
-      <Link to="/login-costumer">Login</Link>
-      <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}></div>
-      <Link to="/register-costumer">Register</Link>
-    </>
-  )}
-</ul>
+          <MenuLinks isUserLoggedIn={isUserLoggedIn} userData={userData} />
 
           {!isSidebarOpen && (
             <button
@@ -280,109 +381,25 @@ const handleSelect = (item) => {
             >
               <i className="fa-solid fa-ellipsis-vertical"></i> Menu
             </button>
-          )}
-  
-  {isSidebarOpen && (
-  <div className={styles.sidebarHeader}>
-    <button
-      className={styles.sidebarClose}
-      onClick={() => setIsSidebarOpen(false)}
-    >
-      <i className="fa-solid fa-angles-left"></i> Hide Menu
-    </button>
-
-    <ul className={styles.menuLinks}>
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/venues">Venues</Link></li>
-    </ul>
-
-    <div className={styles.divideLineLaying}></div>
-
-    {isUserLoggedIn && (
-      <ul className={styles.menuLinks}>
-        {userData?.venueManager ? (
-          <>
-            <li><Link to="/admin-profile">My Venues</Link></li>
-            <li><Link to="/admin-profile">My Profile</Link></li>
-          </>
-        ) : (
-          <>
-            <li><Link to="/costumer-profile">My Bookings</Link></li>
-            <li><Link to="/costumer-profile">My Profile</Link></li>
-          </>
-        )}
-      </ul>
-    )}
-
-    <ul className={styles.menuLinks}>
-      <li><Link to="/about">About Us</Link></li>
-      <li><Link to="/contact">Contact Us</Link></li>
-    </ul>
-
-    <div className={styles.divideLineLaying}></div>
-
-    {!isUserLoggedIn && (
-      <ul className={styles.menuLinks}>
-        <li><Link to="/login-costumer">Login</Link></li>
-        <li><Link to="/register-costumer">Register</Link></li>
-      </ul>
-    )}
-  </div>
-)}
-          <div
-            className={`${styles.headerContent} ${
-              isSidebarOpen ? styles.blurred : ""
-            }`}
-          >
-            <Link to="/" className={styles.headerLogoContent}>
-              <img
-                src={isHovered ? headerLogoHover : headerLogo}
-                alt="Logo"
-                className={
-                  isHovered ? styles.headerLogoHover : styles.headerLogo
-                }
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              />
-            </Link>
+          )}          
+          <SidebarMenu 
+            isOpen={isSidebarOpen} 
+            onClose={() => setIsSidebarOpen(false)} 
+            isUserLoggedIn={isUserLoggedIn}
+            userData={userData}
+          />
+          <div className={`${styles.headerContent} ${isSidebarOpen ? styles.blurred : ""}`}>
+            <Logo isHovered={isHovered} setIsHovered={setIsHovered} />
             <ul className={styles.headerRightLinks}>
-              <li
-                className={`${styles.searchContainer} ${
-                  isSearchOpen ? styles.searchOpen : ""
-                }`}
-              >
-                <div
-                  className={styles.searchbarContent}
-                  style={{ display: isSearchOpen ? "block" : "none" }}
-                >
-<input
-  type="text"
-  className={styles.searchInput}
-  placeholder="Search venues, profiles, or locations..."
-  value={filters.destination}
-  onChange={(e) => {
-    const value = e.target.value;
-    setFilters({ destination: value });
-    handleSearch(value);
-  }}
-/>
-                  {searchTerm && suggestions.length > 0 && (
-                    <ul className={styles.suggestionsList}>
-                      {suggestions.map((item, index) => (
-                        <li
-                          key={index}
-                          className={styles.suggestionItem}
-                          onClick={() => item.type !== "None" && handleSelect(item)}
-                        >
-                          {item.type !== "None" && (
-                            <span className={styles.suggestionLabel}>{item.type}</span>
-                          )}
-                          {item.value}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+              <li className={`${styles.searchContainer} ${isSearchOpen ? styles.searchOpen : ""}`}>
+                <SearchBar 
+                  isSearchOpen={isSearchOpen}
+                  filters={filters}
+                  setFilters={setFilters}
+                  suggestions={suggestions}
+                  handleSearch={handleSearch}
+                  handleSelect={handleSelect}
+                />
                 <i
                   className={`fa-solid fa-magnifying-glass ${
                     isSearchOpen ? styles.searchActive : styles.searchInactive
@@ -390,11 +407,8 @@ const handleSelect = (item) => {
                   onClick={toggleSearchBar}
                 />
               </li>
-              <div
-                className={`${styles.divideLine} ${
-                  isSearchOpen ? styles.divideLineActive : ""
-                }`}>
-                </div>
+              <div className={`${styles.divideLine} ${isSearchOpen ? styles.divideLineActive : ""}`}>
+              </div>
               <li>
                 <Link to="/venues">Venues</Link>
               </li>
@@ -406,4 +420,4 @@ const handleSelect = (item) => {
   );  
 }
 
-export default Header;
+export default memo(Header);
