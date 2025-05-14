@@ -45,7 +45,8 @@
   width: 100%;
   background-color: #1F1B17;
   border-radius: 99px;
-  margin: 15px 0;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 .rating {
   margin-top: 0px;
@@ -366,7 +367,7 @@
   justify-content: center;
 }
 
-.desktopProfile 
+.navLinks
 .divider {
   background-color: #fffefb;
 }
