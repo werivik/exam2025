@@ -865,6 +865,7 @@ padding: 10px;
 width: 25%;
 height: 100%;
 padding-right: 10px;
+position: relative;
 }
 .slideshowLeftContent {
 height: 100%;
@@ -873,14 +874,14 @@ flex-direction: column;
 gap: 8px;
 }
 .currentlyViewing {
-background-color: white;
-padding: 8px;
-border-radius: 0px 0px 5px 5px;
+background-color: rgba(0, 0, 0, 0.6);
+color: white;padding: 8px;
+border-radius: 5px;
 font-size: 0.9rem;
-color: #1F1B17;
 font-weight: 500;
 position: absolute;
-left: 16%;
+left: 5px;
+top: 5px;
 z-index: 10;
 }
 .previewImage {
@@ -919,7 +920,7 @@ border-radius: 8px;
 position: absolute;
 top: 50%;
 left: -8px;
-width: 101.6%;
+width: 100%;
 display: flex;
 justify-content: space-between;
 z-index: 2;
@@ -935,9 +936,12 @@ align-items: center;
 cursor: pointer;
 transition: all 0.2s ease;
 }
+.slideshowButtonNext {
+  margin-right: -14px;
+}
 .slideshowButtonPrev img,
 .slideshowButtonNext img {
-width: 25px;
+width: 30px;
 }
 .slideshowProgressFirst {
 position: absolute;
