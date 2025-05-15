@@ -393,7 +393,7 @@ const filterVenues = (venues) => {
           onChange={(e) => setNewBanner(e.target.value)}
         />
       </label>
-      <div className={styles.actionBtns}>
+      <div className={styles.editButtons}>
         <Buttons type="submit" size="small" version="v1">Save Changes</Buttons>
       </div>
     </form>
@@ -518,7 +518,7 @@ const filterVenues = (venues) => {
                   </div>
                   
                   <div className={styles.signOutBtnWrapper}>
-                    <Buttons size="small" version="v1" onClick={handleSignOut}>Sign out</Buttons>
+                    <Buttons size="small" version="v2" onClick={handleSignOut}>Sign out</Buttons>
                   </div>
                 </div>
               </div>

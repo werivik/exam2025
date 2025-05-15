@@ -11,6 +11,9 @@
 .button:hover {
     transition: 0.25s;
     background-color: #6B7A3A;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.387);
+    margin-top: -5px;
+    margin-bottom: 5px;
 }
 
 .closeButton {
@@ -43,6 +46,7 @@
     cursor: pointer;
     transition: 0.25s;
     background-color: #6B7A3A;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.387);
 }
 
 .small {
@@ -123,6 +127,7 @@
 
 .mediumv3:hover {
     color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.387);
 }
 
 .largev1 {
@@ -133,6 +138,7 @@
 .largev1:hover {
     background-color: #1F1B17;
     color: #F3F0EB;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.387);
 }
 
 .largev2 {
@@ -154,6 +160,7 @@
 
 .clearFilter:hover {
     background-color: #6B7A3A;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.387);
 }
 
 @media (max-width:650px) {

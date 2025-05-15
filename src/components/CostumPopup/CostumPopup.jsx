@@ -1,4 +1,3 @@
-// CustomPopup.jsx
 import React, { useEffect } from 'react';
 import styles from './CostumPopup.module.css';
 

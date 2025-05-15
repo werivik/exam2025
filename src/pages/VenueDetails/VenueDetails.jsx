@@ -221,7 +221,7 @@ if (result.data?.owner) {
       return;
     }
 
-    setPopupMessage('Booking Confirmed!');
+    setPopupMessage('Booking Confirmed, View it in your Profile');
     setShowBookingPopup(true);
     await handleBookingSubmit(
       formattedCheckInDate, 
@@ -574,7 +574,8 @@ if (result.data?.owner) {
       {showBookingPopup && (
         <CostumPopup 
           message={popupMessage} 
-          onClose={() => setShowBookingPopup(false)} 
+          onClose={() => setShowBookingPopup(false)}
+          showButtons = {false}  
         />
       )}
     </motion.div>

@@ -197,7 +197,7 @@
   flex-direction: column;
   gap: 10px;
 }
-.editActions {
+.editButtons {
   display: flex;
   width: 100%;
   align-items: flex-end;
@@ -277,7 +277,8 @@
 .linkGroup {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
+  padding-bottom: 15px;
 }
 .linkGroup button {
   background-color: transparent;

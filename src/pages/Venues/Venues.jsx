@@ -1,11 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { VENUES } from '../../constants.js';
 import { headers } from '../../headers.js';
 import { motion } from "framer-motion";
 import styles from './Venues.module.css';
 import { useSearchParams } from 'react-router-dom';
 import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType.jsx';
-import debounce from 'lodash.debounce';
 import Buttons from '../../components/Buttons/Buttons.jsx';
 import Searchbar from '../../components/Searchbar/Searchbar.jsx';
 import Sidebar from '../../components/Sidebar/Sidebar.jsx';
@@ -18,67 +17,47 @@ const pageVariants = {
 
 const normalizeString = (str) => {
   return str
-    .toLowerCase()
+    ?.toLowerCase()
     .replace(/[-_]/g, ' ')
     .replace(/\s+/g, ' ')
-    .trim();
+    .trim() || '';
 };
 
 const formatSuggestion = (str) => {
   return str
-    .toLowerCase()
+    ?.toLowerCase()
     .replace(/[-_]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
     .split(' ')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .join(' ') || '';
 };
+
+const PAGE_SIZE = 20;
 
 const Venues = () => {
   const [venues, setVenues] = useState([]);
   const [filteredVenues, setFilteredVenues] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filtersVisible, setFiltersVisible] = useState(true);
   const [visibleCount, setVisibleCount] = useState(18);
   const [noMatches, setNoMatches] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchResults, setSearchResults] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
   const [metaFilters, setMetaFilters] = useState([]);
-  const [availableRatings, setAvailableRatings] = useState([1, 2, 3, 4, 5]);
+  const [availableRatings, setAvailableRatings] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
   const [sortOption, setSortOption] = useState("all");
-
-  const [continents, setContinents] = useState([]);
-  const [countries, setCountries] = useState([]);
-  const [cities, setCities] = useState([]);
-
   const [searchQuery, setSearchQuery] = useState('');
-const topRef = useRef(null);
-
-  const PAGE_SIZE = filtersVisible ? 20 : 20;
+  const topRef = useRef(null);
 
   const inputRefs = {
     continent: useRef(null),
     country: useRef(null),
     city: useRef(null),
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      Object.entries(inputRefs).forEach(([key, ref]) => {
-        if (ref.current && !ref.current.contains(event.target)) {
-          setShowSuggestions(prev => ({ ...prev, [key]: false }));
-        }
-      });
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const [filters, setFilters] = useState({
     continent: '',
@@ -112,32 +91,41 @@ const topRef = useRef(null);
     city: '',
   });
 
-  useEffect(() => {
-    const normalizeAndCollect = (key) => {
-      const unique = new Map();
+  const extractLocationSuggestions = useCallback((venuesData) => {
+    const continents = new Map();
+    const countries = new Map();
+    const cities = new Map();
   
-      venues.forEach(venue => {
-        const raw = venue.location?.[key];
-        if (raw) {
-          const normalized = normalizeString(raw);
-          const formatted = formatSuggestion(raw);
-          if (!unique.has(normalized)) {
-            unique.set(normalized, formatted);
-          }
-        }
-      });
-  
-      return Array.from(unique.values());
-    };
-  
-    setLocationSuggestionList({
-      continent: normalizeAndCollect('continent'),
-      country: normalizeAndCollect('country'),
-      city: normalizeAndCollect('city'),
+    venuesData.forEach(venue => {
+      const location = venue.location || {};
+      
+      if (location.continent) {
+        const normalized = normalizeString(location.continent);
+        const formatted = formatSuggestion(location.continent);
+        continents.set(normalized, formatted);
+      }
+      
+      if (location.country) {
+        const normalized = normalizeString(location.country);
+        const formatted = formatSuggestion(location.country);
+        countries.set(normalized, formatted);
+      }
+      
+      if (location.city) {
+        const normalized = normalizeString(location.city);
+        const formatted = formatSuggestion(location.city);
+        cities.set(normalized, formatted);
+      }
     });
-  }, [venues]);    
+  
+    return {
+      continent: Array.from(continents.values()),
+      country: Array.from(countries.values()),
+      city: Array.from(cities.values()),
+    };
+  }, []);
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setFilters({
       continent: '',
       country: '',
@@ -152,9 +140,14 @@ const topRef = useRef(null);
       priceMax: maxPrice
     });
     setSearchQuery('');
-  };
+    setInputValues({
+      continent: '',
+      country: '',
+      city: '',
+    });
+  }, [minPrice, maxPrice]);
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
 
     if (['continent', 'country', 'city'].includes(name)) {
@@ -169,7 +162,6 @@ const topRef = useRef(null);
         return { ...prev, ratings: newRatings };
       });
     } 
-    
     else if (type === 'checkbox') {
       setFilters(prev => ({
         ...prev,
@@ -179,50 +171,45 @@ const topRef = useRef(null);
         }
       }));
     } 
-    
     else {
       setFilters(prev => ({
         ...prev,
         [name]: value
       }));
     }
-  };
+  }, []);
   
-  const toggleSidebar = () => setShowSidebar(prev => !prev);
+  const toggleSidebar = useCallback(() => {
+    setShowSidebar(prev => !prev);
+  }, []);
 
-  const handleSearchInputChange = (e) => {
+  const handleSearchInputChange = useCallback((e) => {
     const value = e.target.value;
     setSearchQuery(value);
 
     if (value.trim()) {
       const searchTerm = value.toLowerCase();
       const filtered = venues.filter(venue => {
-      const nameMatch = venue.name?.toLowerCase().startsWith(searchTerm);
-      const cityMatch = venue.location?.city?.toLowerCase().startsWith(searchTerm);
-      const countryMatch = venue.location?.country?.toLowerCase().startsWith(searchTerm);
-      const ownerMatch = venue.owner?.name?.toLowerCase().startsWith(searchTerm);
+        const nameMatch = venue.name?.toLowerCase().startsWith(searchTerm);
+        const cityMatch = venue.location?.city?.toLowerCase().startsWith(searchTerm);
+        const countryMatch = venue.location?.country?.toLowerCase().startsWith(searchTerm);
+        const ownerMatch = venue.owner?.name?.toLowerCase().startsWith(searchTerm);
 
         return nameMatch || cityMatch || countryMatch || ownerMatch;
       });
       setFilteredVenues(filtered);
       setNoMatches(filtered.length === 0);
     } 
-    
     else {
       setFilteredVenues(venues);
       setNoMatches(false);
     }
-  };
-
-  const handleSuggestionClick = (result) => {
-    setSearchQuery(result.name);
-    setSearchResults([]);
-  };
+  }, [venues]);
 
   useEffect(() => {
     const fetchVenues = async () => {
       try {
-        const response = await fetch(`${VENUES}`, {
+        const response = await fetch(VENUES, {
           method: 'GET',
           headers: headers(),
         });
@@ -232,38 +219,20 @@ const topRef = useRef(null);
         const data = await response.json();
         const venuesData = data.data || [];
 
-        const shuffledVenues = shuffleArray(venuesData);
-
-        const normalizedVenues = venuesData.map(venue => ({
-          ...venue,
-          city: venue.location?.city || '',
-          country: venue.location?.country || '',
-          continent: venue.location?.continent || ''
-        }));
-
-        const continentsSet = new Set();
-        const countriesSet = new Set();
-        const citiesSet = new Set();
-
         setVenues(venuesData);
         setFilteredVenues(venuesData);
 
         const prices = venuesData.map(venue => venue.price || 0);
-        setMinPrice(Math.min(...prices));
-        setMaxPrice(Math.max(...prices));
-
         const min = Math.min(...prices);
+        const max = Math.max(...prices);
 
-const max = Math.max(...prices);
-
-setMinPrice(min);
-setMaxPrice(max);
-
-setFilters(prev => ({
-  ...prev,
-  priceMin: min,
-  priceMax: max
-}));
+        setMinPrice(min);
+        setMaxPrice(max);
+        setFilters(prev => ({
+          ...prev,
+          priceMin: min,
+          priceMax: max
+        }));
 
         const metaKeys = new Set();
         venuesData.forEach(venue => {
@@ -271,49 +240,30 @@ setFilters(prev => ({
             Object.keys(venue.meta).forEach(key => metaKeys.add(key));
           }
         });
-
         setMetaFilters(Array.from(metaKeys));
 
         const ratingsSet = new Set();
         venuesData.forEach(venue => {
           if (venue.rating) ratingsSet.add(Math.floor(venue.rating));
         });
-
         setAvailableRatings(Array.from(ratingsSet).sort((a, b) => a - b));
 
-        venuesData.forEach(venue => {
-          const loc = venue.location || {};
-          if (loc.continent) continentsSet.add(loc.continent);
-          if (loc.country) countriesSet.add(loc.country);
-          if (loc.city) citiesSet.add(loc.city);
-        });
-
-        setContinents([...continentsSet]);
-        setCountries([...countriesSet]);
-        setCities([...citiesSet]);
+        setLocationSuggestionList(extractLocationSuggestions(venuesData));
       } 
-      
       catch (error) {
         console.error("Error fetching venues:", error);
       } 
-      
       finally {
         setLoading(false);
       }
     };
 
     fetchVenues();
-  }, []);
-
-  const shuffleArray = (array) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };  
+  }, [extractLocationSuggestions]);
 
   useEffect(() => {
+    if (!metaFilters.length) return;
+    
     const parsedFilters = {
       continent: searchParams.get("continent") || '',
       country: searchParams.get("country") || '',
@@ -333,7 +283,13 @@ setFilters(prev => ({
 
     setFilters(prev => ({ ...prev, ...parsedFilters }));
     setCurrentPage(parseInt(searchParams.get("page")) || 1);
-  }, [metaFilters.length]);
+    
+    setInputValues({
+      continent: parsedFilters.continent,
+      country: parsedFilters.country,
+      city: parsedFilters.city
+    });
+  }, [metaFilters, searchParams]);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -350,121 +306,77 @@ setFilters(prev => ({
     params.set("page", currentPage);
 
     setSearchParams(params);
-  }, [filters, currentPage]);
+  }, [filters, currentPage, setSearchParams]);
 
-useEffect(() => {
-  const filtered = venues.filter(venue => {
-    const normalizeString = (str) =>
-      str.toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
+  useEffect(() => {
+    if (!venues.length) return;
     
-    const matchesContinent = filters.continent
-      ? normalizeString(venue.location?.continent || '').startsWith(normalizeString(filters.continent))
-      : true;
-    
-    const matchesCountry = filters.country
-      ? normalizeString(venue.location?.country || '').startsWith(normalizeString(filters.country))
-      : true;
-    
-    const matchesCity = filters.city
-      ? normalizeString(venue.location?.city || '').startsWith(normalizeString(filters.city))
-      : true;       
+    const filtered = venues.filter(venue => {
+      const matchesContinent = !filters.continent || 
+        normalizeString(venue.location?.continent).startsWith(normalizeString(filters.continent));
+      
+      const matchesCountry = !filters.country || 
+        normalizeString(venue.location?.country).startsWith(normalizeString(filters.country));
+      
+      const matchesCity = !filters.city || 
+        normalizeString(venue.location?.city).startsWith(normalizeString(filters.city));       
 
-    const totalGuests = (filters.adults || 0) + (filters.children || 0) + (filters.assisted || 0);
-    const matchesGuests = venue.maxGuests >= totalGuests;
+      const totalGuests = (filters.adults || 0) + (filters.children || 0) + (filters.assisted || 0);
+      const matchesGuests = venue.maxGuests >= totalGuests;
 
-    const matchesRating = filters.ratings.length > 0
-    ? filters.ratings.includes(Math.floor(venue.rating || 0))
-    : true;       
+      const matchesRating = filters.ratings.length === 0 || 
+        filters.ratings.includes(Math.floor(venue.rating || 0));
 
-    const matchesMeta = Object.keys(filters.meta).every(metaKey => {
-      return filters.meta[metaKey] === false || venue.meta?.[metaKey] === true;
+      const matchesMeta = Object.entries(filters.meta).every(([key, value]) => 
+        !value || venue.meta?.[key] === true);
+
+      const matchesPrice =
+        (filters.priceMin === 0 || venue.price >= filters.priceMin) &&
+        (filters.priceMax === 0 || venue.price <= filters.priceMax);
+
+      return (
+        matchesContinent &&
+        matchesCountry &&
+        matchesCity &&
+        matchesGuests &&
+        matchesRating &&
+        matchesMeta &&
+        matchesPrice
+      );
     });
 
-    const matchesPrice =
-      (filters.priceMin === 0 || venue.price >= filters.priceMin) &&
-      (filters.priceMax === 0 || venue.price <= filters.priceMax);
+    let sorted = [...filtered];
+    switch (sortOption) {
+      case "az":
+        sorted.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        break;
+      case "priceLowHigh":
+        sorted.sort((a, b) => (a.price || 0) - (b.price || 0));
+        break;
+      case "priceHighLow":
+        sorted.sort((a, b) => (b.price || 0) - (a.price || 0));
+        break;
+      case "ratingLowHigh":
+        sorted.sort((a, b) => (a.rating || 0) - (b.rating || 0));
+        break;
+      case "ratingHighLow":
+        sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        break;
+      default:
+        break;
+    }
 
-    return (
-      matchesContinent &&
-      matchesCountry &&
-      matchesCity &&
-      matchesGuests &&
-      matchesRating &&
-      matchesMeta &&
-      matchesPrice
-    );
-  });
+    setFilteredVenues(sorted);
+    setNoMatches(filtered.length === 0);
+  }, [filters, venues, sortOption]);
 
-  let sorted = [...filtered];
+  useEffect(() => {
+    document.body.style.overflow = showSidebar ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showSidebar]);
 
-  if (sortOption === "az") {
-    sorted.sort((a, b) => a.name.localeCompare(b.name));
-  } 
-  else if (sortOption === "priceLowHigh") {
-    sorted.sort((a, b) => (a.price || 0) - (b.price || 0));
-  } 
-  else if (sortOption === "priceHighLow") {
-    sorted.sort((a, b) => (b.price || 0) - (a.price || 0));
-  }
-  else if (sortOption === "ratingLowHigh") {
-    sorted.sort((a, b) => (a.rating || 0) - (b.rating || 0));
-  }
-  else if (sortOption === "ratingHighLow") {
-    sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-  } 
-  else if (sortOption === "all") {
-    sorted = [...filtered];
-  }
-
-  setFilteredVenues(sorted);
-  setNoMatches(filtered.length === 0);
-}, [filters, venues, sortOption]);
-
-const scrollToTop = () => {
-  topRef.current?.scrollIntoView({ behavior: 'smooth' });
-};
-
-  const loadMore = () => {
-    setVisibleCount(prev => Math.min(prev + 10, filteredVenues.length));
-  };
-
-  const handlePageClick = (pageNum) => {
-    setCurrentPage(pageNum);
-    scrollToTop();
-  };
-
-  const goToNextPage = () => {
-    if (currentPage < pageTotal) setCurrentPage(prev => prev + 1);
-    scrollToTop();
-  };
-
-  const goToPrevPage = () => {
-    if (currentPage > 1) setCurrentPage(prev => prev - 1);
-    scrollToTop();
-  };
-
-  const [showSuggestions, setShowSuggestions] = useState({
-    continent: false,
-    country: false,
-    city: false,
-  });  
-
-  const getSuggestions = (type) => {
-    const input = inputValues[type]?.toLowerCase().replace(/[-_]/g, ' ').trim();
-    if (!input) return [];
-  
-    return locationSuggestionList[type].filter(item => {
-      const normalizedItem = normalizeString(item);
-      return normalizedItem.includes(input);
-    });
-  };
-  
-  const handleLocationSuggestionClick = (type, value) => {
-    setFilters(prev => ({ ...prev, [type]: value }));
-    setInputValues(prev => ({ ...prev, [type]: value }));
-    setShowLocationSuggestions(prev => ({ ...prev, [type]: false }));
-  };
-  
   useEffect(() => {
     const handleClickOutside = (event) => {
       Object.entries(inputRefs).forEach(([key, ref]) => {
@@ -476,22 +388,64 @@ const scrollToTop = () => {
   
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);    
+  }, []);
 
-  const pageTotal = Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE));
+  const pageTotal = useMemo(() => 
+    Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE)),
+  [filteredVenues.length]);
 
-  useEffect(() => {
-    if (showSidebar) {
-      document.body.style.overflow = 'hidden';
-    } 
-    
-    else {
-      document.body.style.overflow = '';
+  const scrollToTop = useCallback(() => {
+    topRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
+  const loadMore = useCallback(() => {
+    setVisibleCount(prev => Math.min(prev + 10, filteredVenues.length));
+  }, [filteredVenues.length]);
+
+  const handlePageClick = useCallback((pageNum) => {
+    setCurrentPage(pageNum);
+    scrollToTop();
+  }, [scrollToTop]);
+
+  const goToNextPage = useCallback(() => {
+    if (currentPage < pageTotal) {
+      setCurrentPage(prev => prev + 1);
+      scrollToTop();
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [showSidebar]);  
+  }, [currentPage, pageTotal, scrollToTop]);
+
+  const goToPrevPage = useCallback(() => {
+    if (currentPage > 1) {
+      setCurrentPage(prev => prev - 1);
+      scrollToTop();
+    }
+  }, [currentPage, scrollToTop]);
+
+  const getSuggestions = useCallback((type) => {
+    const input = inputValues[type]?.toLowerCase().replace(/[-_]/g, ' ').trim();
+    if (!input) return [];
+  
+    return locationSuggestionList[type].filter(item => 
+      normalizeString(item).includes(input)
+    );
+  }, [inputValues, locationSuggestionList]);
+  
+  const handleLocationSuggestionClick = useCallback((type, value) => {
+    setFilters(prev => ({ ...prev, [type]: value }));
+    setInputValues(prev => ({ ...prev, [type]: value }));
+    setShowLocationSuggestions(prev => ({ ...prev, [type]: false }));
+  }, []);
+
+  const visibleVenues = useMemo(() => {
+    const isMobile = window.innerWidth < 1024;
+    
+    if (isMobile) {
+      return filteredVenues.slice(0, visibleCount);
+    } 
+    else {
+      return filteredVenues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+    }
+  }, [filteredVenues, currentPage, visibleCount]);
 
   return (
     <motion.div
@@ -503,24 +457,27 @@ const scrollToTop = () => {
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       {showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
+      
       <Sidebar
-  showSidebar={showSidebar}
-  toggleSidebar={toggleSidebar}
-  inputValues={inputValues}
-  handleFilterChange={handleFilterChange}
-  getSuggestions={getSuggestions}
-  handleSuggestionClickSecond={handleLocationSuggestionClick}
-  filters={filters}
-  minPrice={minPrice}
-  maxPrice={maxPrice}
-  metaFilters={metaFilters}
-  clearFilters={clearFilters}
-  setShowSuggestions={setShowSuggestions}
-  venues={venues}
-  setFilteredVenues={setFilteredVenues}
-  setNoMatches={setNoMatches}
-/>
-<div ref={topRef} />
+        showSidebar={showSidebar}
+        toggleSidebar={toggleSidebar}
+        inputValues={inputValues}
+        handleFilterChange={handleFilterChange}
+        getSuggestions={getSuggestions}
+        handleSuggestionClickSecond={handleLocationSuggestionClick}
+        filters={filters}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        metaFilters={metaFilters}
+        clearFilters={clearFilters}
+        setShowSuggestions={setShowLocationSuggestions}
+        venues={venues}
+        setFilteredVenues={setFilteredVenues}
+        setNoMatches={setNoMatches}
+      />
+      
+      <div ref={topRef} />
+      
       <section className={styles.rightSection}>
         <div className={styles.rightBorder}>
           <div className={styles.rightTitles}>
@@ -529,31 +486,31 @@ const scrollToTop = () => {
           </div>
 
           <div className={styles.filterTopSection}>
-          <div className={styles.topSearchbar}>
-          <Searchbar
-    filters={filters}
-    setFilters={setFilters}
-    venues={venues}
-    setSearchQuery={setSearchQuery}
-    setFilteredVenues={setFilteredVenues}
-    setNoMatches={setNoMatches}
-  />
-  <div className={styles.sortDropdown}>
-  <label htmlFor="sort">Sort by:</label>
-  <select
-    id="sort"
-    value={sortOption}
-    onChange={(e) => setSortOption(e.target.value)}
-  >
-    <option value="all">All</option>
-    <option value="az">A - Z</option>
-    <option value="priceLowHigh">Price: Low to High</option>
-    <option value="priceHighLow">Price: High to Low</option>
-    <option value="ratingLowHigh">Rating: Low to High</option>
-    <option value="ratingHighLow">Rating: High to Low</option>
-  </select>
-</div>
-          </div>
+            <div className={styles.topSearchbar}>
+              <Searchbar
+                filters={filters}
+                setFilters={setFilters}
+                venues={venues}
+                setSearchQuery={setSearchQuery}
+                setFilteredVenues={setFilteredVenues}
+                setNoMatches={setNoMatches}
+              />
+              <div className={styles.sortDropdown}>
+                <label htmlFor="sort">Sort by:</label>
+                <select
+                  id="sort"
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                >
+                  <option value="all">All</option>
+                  <option value="az">A - Z</option>
+                  <option value="priceLowHigh">Price: Low to High</option>
+                  <option value="priceHighLow">Price: High to Low</option>
+                  <option value="ratingLowHigh">Rating: Low to High</option>
+                  <option value="ratingHighLow">Rating: High to Low</option>
+                </select>
+              </div>
+            </div>
             <Buttons size='medium' version='v1' onClick={toggleSidebar}>
               Filters
             </Buttons>
@@ -570,43 +527,40 @@ const scrollToTop = () => {
           ) : (
             <>
               <div className={styles.allHotels}>
-              {(window.innerWidth >= 1024
-  ? filteredVenues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
-  : filteredVenues.slice(0, visibleCount)
-).map(venue => (
-  <VenueCardSecondType key={venue.id} venue={venue} />
-))}
+                {visibleVenues.map(venue => (
+                  <VenueCardSecondType key={venue.id} venue={venue} />
+                ))}
               </div>
 
-<div className={styles.paginationWrapper}>
-  {pageTotal > 1 && (
-    <div className={styles.pagination}>
-      {currentPage > 1 && (
-        <button onClick={goToPrevPage} className={styles.page}>Prev</button>
-      )}
-      {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
-        <button
-          key={p}
-          onClick={() => handlePageClick(p)}
-          className={p === currentPage ? styles.pageActive : styles.page}
-        >
-          {p}
-        </button>
-      ))}
-      {currentPage < pageTotal && (
-        <button onClick={goToNextPage} className={styles.page}>Next</button>
-      )}
-    </div>
-  )}
-</div>
+              {window.innerWidth >= 1024 && pageTotal > 1 && (
+                <div className={styles.paginationWrapper}>
+                  <div className={styles.pagination}>
+                    {currentPage > 1 && (
+                      <button onClick={goToPrevPage} className={styles.page}>Prev</button>
+                    )}
+                    {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
+                      <button
+                        key={p}
+                        onClick={() => handlePageClick(p)}
+                        className={p === currentPage ? styles.pageActive : styles.page}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                    {currentPage < pageTotal && (
+                      <button onClick={goToNextPage} className={styles.page}>Next</button>
+                    )}
+                  </div>
+                </div>
+              )}
 
-<div className={styles.loadMoreWrapper}>
-  {visibleCount < filteredVenues.length && (
-    <button className={styles.loadMoreButton} onClick={loadMore}>
-      Load More
-    </button>
-  )}
-</div>
+              {window.innerWidth < 1024 && visibleCount < filteredVenues.length && (
+                <div className={styles.loadMoreWrapper}>
+                  <button className={styles.loadMoreButton} onClick={loadMore}>
+                    Load More
+                  </button>
+                </div>
+              )}
             </>
           )}
         </div>
