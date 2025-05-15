@@ -1,0 +1,201 @@
+.container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+.container button, 
+.container input, 
+.container label {
+  font-family: "Playfair Display", serif;
+}
+.profilePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin: 75px auto 0;
+  gap: 50px;
+}
+.divider {
+  height: 0.5px;
+  width: 100%;
+  background-color: #1F1B17;
+  border-radius: 99px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.rating {
+  margin-top: 0px;
+  font-size: 1.125rem;
+}
+.rating span {
+  opacity: 75%;
+  font-size: 0.9rem;
+}
+.rating img {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+  margin-right: 5px;
+  border: none;
+}
+.mobileProfile {
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  display: none;
+}
+.profileTop {
+  height: 350px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.bannerWrapper {
+  height: 400px;
+  width: 100%;
+  z-index: 1;
+  border-radius: 25px;
+}
+.bannerWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 25px;
+}
+.avatarWrapper {
+  position: relative;
+}
+.avatar {
+  position: absolute;
+  height: 125px;
+  width: 125px;
+  z-index: 2;
+  bottom: -10px;
+  margin-left: 15px;
+  border-radius: 99px 99px 15px 15px;
+  object-fit: cover;
+}
+.edgeLeft, 
+.edgeRight {
+  width: 15px;
+  position: absolute;
+  bottom: 0;
+  z-index: 3;
+}
+.edgeRight {
+  left: 140px;
+  transform: scaleX(-1);
+}
+.profileInfo {
+  margin-top: 10px;
+  margin-left: 15px;
+}
+.profileInfo h2 {
+  margin: 25px 0 0;
+  font-size: 1.5rem;
+  padding: 0;
+}
+.profileInfo p {
+  font-size: 1.125rem;
+  margin-top: 5px;
+  font-style: italic;
+}
+.sectionHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 15px;
+}
+.sectionHeader h3 {
+  font-size: 1.75rem;
+  margin: 0;
+}
+.venuesSection {
+  margin-top: 50px;
+  scroll-margin-top: 100px;
+}
+.venueGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-auto-rows: 1fr;
+  max-width: 100%;
+  gap: 25px;
+  position: relative;
+  align-items: start;
+  height: 100%;
+}
+.venueGrid > * {
+  aspect-ratio: 3 / 4;
+  max-width: 400px;
+  width: 100%;
+  height: 100%;
+  justify-self: center;
+}
+
+.tabletProfile {
+  display: block;
+  width: 100%;
+}
+.profileHeader {
+  height: 550px;
+  width: 100%;
+  position: relative;
+}
+.avatarContainer {
+  position: relative;
+}
+.tabletContent {
+  width: 95%;
+  margin: 0 25px;
+  position: relative;
+  display: block;
+  flex-grow: 1;
+}
+.contentContainer {
+  width: 100%;
+  height: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+
+@media (max-width: 1025px) {
+  .profilePage {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  .contentContainer h2 {
+    font-size: 2.5rem;
+  }
+}
+@media (max-width: 725px) {
+  .profilePage {
+    width: 95%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+  }
+}
+@media (max-width: 425px) {
+  .tabletProfile {
+    display: none;
+  }
+
+  .profilePage {
+    margin: 0;
+    width: 100%;
+    padding: 0;
+  }
+
+  .mobileProfile {
+    display: block;
+  }
+}

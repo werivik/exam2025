@@ -15,6 +15,7 @@ import CostumerProfile from './pages/CostumerProfile/CostumerProfile';
 import AdminProfile from './pages/AdminProfile/AdminProfile';
 import CreateVenue from './pages/CreateVenue/CreateVenue';
 import EditVenue from './pages/EditVenue/EditVenue';
+import ViewProfile from './pages/ViewProfile/ViewProfile';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -39,6 +40,7 @@ const AnimatedRoutes = () => {
         <Route path="/admin-profile" element={<AdminProfile />} />
         <Route path="/create-venue" element={<CreateVenue />} />
         <Route path="/edit-venue/:id" element={<EditVenue />} />
+        <Route path="/view-profile/:id" element={<ViewProfile />}></Route>
       </Routes>
     </AnimatePresence>
   );

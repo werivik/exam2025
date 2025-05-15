@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import styles from './VenueDetails.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -403,13 +403,13 @@ if (result.data?.owner) {
             <div className={styles.venueOwner}>
               <h3>Venue Manager</h3>
 {owner && (
-  <div className={styles.venueProfileName}>
+  <Link to={`/view-profile/${owner.name}`} className={styles.venueProfileName}>
     <img
       src={owner.avatar?.url || '/media/images/mdefault.jpg'}
       alt={owner.avatar?.alt || 'Venue owner'}
     />
     <p>{owner.name || 'Unknown Owner'}</p>
-  </div>
+  </Link>
 )}
 </div>
             <div className={styles.venueInfo}>
