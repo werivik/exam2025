@@ -837,7 +837,7 @@
 /* VenueDetails.module.css */
 .pageContent {
   margin-top: 75px;
-  padding: 20px;
+  padding-bottom: 100px;
   display: flex;
   justify-content: center;
 }
@@ -847,7 +847,7 @@ border-radius: 15px;
 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 margin-bottom: 40px;
 transition: filter 0.3s ease;
-width: 82%;
+width: 80%;
 }
 .blurred {
 filter: blur(4px);
