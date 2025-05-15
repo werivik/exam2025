@@ -1,86 +1,78 @@
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
+import { getToken } from '../../auth/auth';
 
 export const RatingService = {
+  getUserRating: (venueId) => {
+    try {
+      const storedRatings = sessionStorage.getItem('userVenueRatings');
+      if (storedRatings) {
+        const ratings = JSON.parse(storedRatings);
+        return ratings[venueId] || 0;
+      }
+      return 0;
+    } 
+    catch (error) {
+      console.error('Error retrieving user rating:', error);
+      return 0;
+    }
+  },
+
+  saveUserRating: (venueId, rating) => {
+    try {
+      const storedRatings = sessionStorage.getItem('userVenueRatings') || '{}';
+      const ratings = JSON.parse(storedRatings);
+      ratings[venueId] = rating;
+      sessionStorage.setItem('userVenueRatings', JSON.stringify(ratings));
+    } 
+    catch (error) {
+      console.error('Error saving user rating locally:', error);
+    }
+  },
+
   submitRating: async (venueId, rating) => {
     if (!venueId || rating < 0 || rating > 5) {
       throw new Error('Invalid rating parameters');
-    }    
-    const authToken = localStorage.getItem('token');
-    if (!authToken) {
-      throw new Error('User not authenticated');
     }
-    
+
+    const authToken = getToken();
+    if (!authToken) {
+      throw new Error('User not authenticated. Please log in.');
+    }
+
     try {
-      const venueResponse = await fetch(`${VENUES}/${venueId}`, {
-        method: 'GET',
-        headers: headers(),
+      const response = await fetch(`${VENUES}/${venueId}`, {
+        method: 'PUT',
+        headers: {
+          ...headers(),
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          rating: rating,
+        }),
       });
-      
-      if (!venueResponse.ok) {
-        throw new Error(`Failed to fetch venue data: ${venueResponse.status}`);
+
+      if (!response.ok) {
+        throw new Error(`Failed to update venue rating: ${response.status}`);
       }
+
+      const venueData = await response.json();
+      console.log(`Rating for venue ${venueId} updated to ${rating}`);
       
-      const venueData = await venueResponse.json();
-      const currentVenue = venueData.data;
-      
-      const userRatings = JSON.parse(localStorage.getItem('userVenueRatings') || '{}');
-      userRatings[venueId] = rating;
-      localStorage.setItem('userVenueRatings', JSON.stringify(userRatings));
-      
-      console.log(`Rating for venue ${venueId} saved locally as ${rating}`);
-      
+      RatingService.saveUserRating(venueId, rating);
+
       return {
         success: true,
-        data: {
-          ...currentVenue,
-          rating: rating,
-        },
-        message: 'Rating saved locally',
+        data: venueData.data,
+        message: 'Rating successfully updated.',
       };
     } 
     catch (error) {
       console.error('Error in submitRating:', error);
-      
-      const userRatings = JSON.parse(localStorage.getItem('userVenueRatings') || '{}');
-      userRatings[venueId] = rating;
-      localStorage.setItem('userVenueRatings', JSON.stringify(userRatings));
-      
       throw error;
     }
   },
-  
-  getUserRating: (venueId) => {
-    try {
-      const userRatings = JSON.parse(localStorage.getItem('userVenueRatings') || '{}');
-      return userRatings[venueId] || null;
-    } 
-    catch (error) {
-      console.error('Error retrieving user rating:', error);
-      return null;
-    }
-  },
-  
-  hasUserRated: (venueId) => {
-    try {
-      const userRatings = JSON.parse(localStorage.getItem('userVenueRatings') || '{}');
-      return userRatings.hasOwnProperty(venueId);
-    } 
-    catch (error) {
-      console.error('Error checking if user rated venue:', error);
-      return false;
-    }
-  },
-  
-  getAllUserRatings: () => {
-    try {
-      return JSON.parse(localStorage.getItem('userVenueRatings') || '{}');
-    } 
-    catch (error) {
-      console.error('Error retrieving all user ratings:', error);
-      return {};
-    }
-  }
 };
 
 export default RatingService;

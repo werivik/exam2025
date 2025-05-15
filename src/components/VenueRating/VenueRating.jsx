@@ -26,7 +26,7 @@ const VenueRating = ({
   useEffect(() => {
     if (userLoggedIn && venueId) {
       const savedRating = RatingService.getUserRating(venueId);
-      if (savedRating !== null) {
+      if (savedRating !== null && savedRating > 0) {
         setUserRating(savedRating);
       }
     }
@@ -49,27 +49,45 @@ const VenueRating = ({
     
     try {
       setUserRating(selectedRating);
+      
+      RatingService.saveUserRating(venueId, selectedRating);
     
-      await RatingService.submitRating(venueId, selectedRating);      
-      const newAverageRating = RatingAverageService.addRating(venueId, selectedRating);
+      const response = await RatingService.submitRating(venueId, selectedRating);
       
-      setDisplayRating(newAverageRating);
+      setDisplayRating(response.data?.rating || selectedRating);
       
-      setMessage('Thank you for rating!');
+      setMessage('Rating submitted successfully!');
       setMessageType('success');
       
-      if (onRatingUpdate) {
-        onRatingUpdate(newAverageRating);
+      if (onRatingUpdate && response.data?.rating) {
+        onRatingUpdate(response.data.rating);
       }
     } 
     catch (error) {
       console.error('Error submitting rating:', error);
       
-      setMessage('Error saving rating. Please try again.');
-      setMessageType('error');
+      if (error.message.includes('not authenticated')) {
+        setMessage('Please log in to submit your rating');
+        setMessageType('error');
+      } 
+      else {
+        setMessage('Rating saved locally. Server update failed.');
+        setMessageType('warning');
+        
+        setDisplayRating((prev) => {
+          const newAvg = userRating > 0 
+            ? (prev + selectedRating) / 2
+            : selectedRating;
+          return Math.round(newAvg * 10) / 10;
+        });
+        
+        if (onRatingUpdate) {
+          onRatingUpdate(selectedRating);
+        }
+      }
     } 
     finally {
-      setIsSubmitting(false);      
+      setIsSubmitting(false);
       setTimeout(() => setMessage(''), 3000);
     }
   };
