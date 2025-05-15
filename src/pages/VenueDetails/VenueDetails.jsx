@@ -401,21 +401,28 @@ if (result.data?.owner) {
             <div className={styles.dividerLine}></div>
 
             <div className={styles.venueOwner}>
+              <h3>Venue Manager</h3>
 {owner && (
   <div className={styles.venueProfileName}>
-    <img src={owner.avatar?.url || '/media/images/mdefault.jpg'} alt={owner.avatar?.alt || 'Owner avatar'} />
-    <p>{owner.name}</p>
+    <img
+      src={owner.avatar?.url || '/media/images/mdefault.jpg'}
+      alt={owner.avatar?.alt || 'Venue owner'}
+    />
+    <p>{owner.name || 'Unknown Owner'}</p>
   </div>
 )}
 </div>
-            <div className={styles.venueCreationDates}>
-              <div className={styles.venueDates}>
+            <div className={styles.venueInfo}>
+                <h3>Venue Info</h3>
+              <div className={styles.venueCreationDates}>
+                <div className={styles.venueDates}>
                 <p>Created</p>
                 <span>{formatDate(venue.created)}</span>
               </div>
               <div className={styles.venueDates}>
                 <p>Updated</p>
                 <span>{formatDate(venue.updated)}</span>
+              </div>
               </div>
             </div>
           </div>

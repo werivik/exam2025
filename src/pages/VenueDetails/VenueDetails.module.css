@@ -245,6 +245,7 @@
     min-width: 75px;
     font-size: 1.25rem;
     text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 .notIncluded, .included {
     margin-bottom: 15px;
@@ -277,15 +278,16 @@
 .venueProfileName {
     display: flex;
     flex-direction: row;
-    gap: 10px;
-    font-size: 1.25rem;
+    gap: 15px;
+    font-size: 1.5rem;
     align-items: center;
 }
 .venueProfileName img {
-    width: 35px;
-    height: 35px;
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
     border-radius: 999px;
-    border: solid #1F1B17 2px;
+    border: solid #1F1B17 1px;
     background-color: white;
 }
 .hotelInfoRight {
@@ -585,13 +587,11 @@
 .venueDates span {
   font-size: 1.25rem;
 }
-
 .venueRatingComponent {
   margin: 20px 0;
   width: 100%;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
-
 @media (max-width:1250px) {
   .hotelInfoBottom {
     flex-direction: column;
