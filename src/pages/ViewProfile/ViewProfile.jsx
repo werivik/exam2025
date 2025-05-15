@@ -31,6 +31,7 @@ const ViewProfile = () => {
   const [averageRating, setAverageRating] = useState(0);
   const [totalReviews, setTotalReviews] = useState(0);
   const navigate = useNavigate();
+  const [sortOption, setSortOption] = useState("default");
 
   const { id } = useParams();
 
@@ -125,6 +126,30 @@ const handleVenueClick = (venue) => {
     </div>
   );
 
+  useEffect(() => {
+  let sorted = [...assignedVenues];
+
+  switch (sortOption) {
+    case "ratingHigh":
+      sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      break;
+    case "ratingLow":
+      sorted.sort((a, b) => (a.rating || 0) - (b.rating || 0));
+      break;
+    case "priceHigh":
+      sorted.sort((a, b) => (b.price || 0) - (a.price || 0));
+      break;
+    case "priceLow":
+      sorted.sort((a, b) => (a.price || 0) - (b.price || 0));
+      break;
+    default:
+      sorted = [...assignedVenues];
+  }
+
+  setFilteredVenues(sorted);
+}, [sortOption, assignedVenues]);
+
+
   return (
     <motion.div
       className={styles.container}
@@ -162,6 +187,17 @@ const handleVenueClick = (venue) => {
           <div className={styles.venuesSection} ref={mobileRefs.venues}>
             <div className={styles.sectionHeader}>
               <h3>Venues</h3>
+              <select
+  value={sortOption}
+  onChange={(e) => setSortOption(e.target.value)}
+  className={styles.sortDropdown}
+>
+  <option value="default">All</option>
+  <option value="ratingHigh">Rating: High to Low</option>
+  <option value="ratingLow">Rating: Low to High</option>
+  <option value="priceHigh">Price: High to Low</option>
+  <option value="priceLow">Price: Low to High</option>
+</select>
             </div>
 
             {filteredVenues.length > 0 ? (
@@ -206,6 +242,17 @@ const handleVenueClick = (venue) => {
           <div className={styles.venuesSection} ref={mobileRefs.venues}>
             <div className={styles.sectionHeader}>
               <h3>Venues</h3>
+<select
+  value={sortOption}
+  onChange={(e) => setSortOption(e.target.value)}
+  className={styles.sortDropdown}
+>
+  <option value="default">All</option>
+  <option value="ratingHigh">Rating: High to Low</option>
+  <option value="ratingLow">Rating: Low to High</option>
+  <option value="priceHigh">Price: High to Low</option>
+  <option value="priceLow">Price: Low to High</option>
+</select>
             </div>
 
             {filteredVenues.length > 0 ? (

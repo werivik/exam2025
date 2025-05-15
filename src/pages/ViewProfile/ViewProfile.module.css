@@ -239,7 +239,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 95%;
+  width: 100%;
   margin-bottom: 50px;
 }
 .tabletProfile .sectionHeader h3 {
@@ -272,6 +272,18 @@
   justify-self: center;
   margin-bottom: 50px;
 }
+
+.sortDropdown {
+  font-size: 1rem;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-family: "Playfair Display", serif;
+  background-color: #fffefb;
+  cursor: pointer;
+  margin: 0;
+}
+
 
 @media (max-width: 1025px) {
   .profilePage {
