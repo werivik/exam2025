@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import styles from './VenueDetails.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import Buttons from '../../components/Buttons/Buttons';
@@ -21,15 +21,6 @@ const pageVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
-};
-
-const handleRatingUpdate = (newRating) => {
-  if (venue) {
-    setVenue({
-      ...venue,
-      rating: newRating
-    });
-  }
 };
 
 const getValidMedia = (mediaArray) => {
@@ -70,6 +61,15 @@ const VenueDetails = () => {
   const [popupMessage, setPopupMessage] = useState('');
 
   const dropdownRef = useRef(null);
+
+  const handleRatingUpdate = (newRating) => {
+  if (venue) {
+    setVenue({
+      ...venue,
+      rating: newRating
+    });
+  }
+};
 
   useEffect(() => {
     const handleAuthChange = () => setUserLoggedIn(isLoggedIn());

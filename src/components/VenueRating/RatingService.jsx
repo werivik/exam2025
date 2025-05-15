@@ -7,35 +7,60 @@ export const RatingService = {
       throw new Error('Invalid rating parameters');
     }
     
-    const venueResponse = await fetch(`${VENUES}/${venueId}`, {
-      method: 'GET',
-      headers: headers(),
-    });
-    
-    if (!venueResponse.ok) {
-      throw new Error('Failed to fetch venue data');
+    const authToken = localStorage.getItem('token');
+    if (!authToken) {
+      throw new Error('User not authenticated');
     }
     
-    const venueData = await venueResponse.json();
-    const currentVenue = venueData.data;
-    
-    const userRatings = JSON.parse(localStorage.getItem('userVenueRatings') || '{}');
-    userRatings[venueId] = rating;
-    localStorage.setItem('userVenueRatings', JSON.stringify(userRatings));
-    
-    const updateResponse = await fetch(`${VENUES}/${venueId}`, {
-      method: 'PUT',
-      headers: headers(),
-      body: JSON.stringify({
-        rating: rating,
-      }),
-    });
-    
-    if (!updateResponse.ok) {
-      throw new Error('Failed to update venue rating');
+    try {
+      const venueResponse = await fetch(`${VENUES}/${venueId}`, {
+        method: 'GET',
+        headers: headers(),
+      });
+      
+      if (!venueResponse.ok) {
+        throw new Error(`Failed to fetch venue data: ${venueResponse.status}`);
+      }
+      
+      const venueData = await venueResponse.json();
+      const currentVenue = venueData.data;
+      
+      const userRatings = JSON.parse(localStorage.getItem('userVenueRatings') || '{}');
+      userRatings[venueId] = rating;
+      localStorage.setItem('userVenueRatings', JSON.stringify(userRatings));
+      
+      const updateResponse = await fetch(`${VENUES}/${venueId}`, {
+        method: 'POST',
+        headers: headers(),
+        body: JSON.stringify({
+          rating: rating,
+        }),
+      });
+      
+      if (!updateResponse.ok) {
+        console.warn(`Server rating update failed: ${updateResponse.status}. Using locally stored rating.`);
+        
+        return {
+          success: false,
+          data: {
+            ...currentVenue,
+            rating: rating,
+          },
+          message: 'Rating saved locally only',
+        };
+      }
+      
+      return updateResponse.json();
+    } 
+    catch (error) {
+      console.error('Error in submitRating:', error);
+      
+      const userRatings = JSON.parse(localStorage.getItem('userVenueRatings') || '{}');
+      userRatings[venueId] = rating;
+      localStorage.setItem('userVenueRatings', JSON.stringify(userRatings));
+      
+      throw error;
     }
-    
-    return updateResponse.json();
   },
   
   getUserRating: (venueId) => {

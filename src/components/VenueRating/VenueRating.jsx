@@ -45,23 +45,38 @@ const VenueRating = ({
     setMessageType('info');
     
     try {
-      const result = await RatingService.submitRating(venueId, selectedRating);
       setUserRating(selectedRating);
-      setMessage('Thank you for rating!');
-      setMessageType('success');
+      
+      const result = await RatingService.submitRating(venueId, selectedRating);
+      
+      if (result?.success === false) {
+        setMessage('Rating saved locally. Server update failed.');
+        setMessageType('warning');
+      } 
+      else {
+        setMessage('Thank you for rating!');
+        setMessageType('success');
+      }
       
       if (onRatingUpdate && result?.data?.rating) {
         onRatingUpdate(result.data.rating);
+      } 
+      else if (onRatingUpdate) {
+        onRatingUpdate(selectedRating);
       }
     } 
     catch (error) {
       console.error('Error submitting rating:', error);
-      setMessage('Failed to submit rating. Please try again.');
-      setMessageType('error');
+      
+      setMessage('Could not submit to server, but your rating is saved locally.');
+      setMessageType('warning');
+      
+      if (onRatingUpdate) {
+        onRatingUpdate(selectedRating);
+      }
     } 
     finally {
-      setIsSubmitting(false);
-      
+      setIsSubmitting(false);      
       setTimeout(() => setMessage(''), 3000);
     }
   };
