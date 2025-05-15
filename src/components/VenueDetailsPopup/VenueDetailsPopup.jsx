@@ -262,16 +262,16 @@ if (!selectedVenue) return null;
                   {selectedVenue.media.length > 1 && (
                     <>
                       <button 
-                        className={styles.prevButton} 
-                        onClick={() => handlePrevImage(selectedVenue.media.length)}
-                      >
-                        <img src={slideshowPrev} alt="Previous"></img>
-                      </button>
-                      <button 
                         className={styles.nextButton} 
                         onClick={() => handleNextImage(selectedVenue.media.length)}
                       >
                         <img src={slideshowNext} alt="Next"></img>
+                      </button>
+                      <button 
+                        className={styles.prevButton} 
+                        onClick={() => handlePrevImage(selectedVenue.media.length)}
+                      >
+                        <img src={slideshowPrev} alt="Previous"></img>
                       </button>
                     </>
                   )}
