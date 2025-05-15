@@ -207,12 +207,15 @@
 .desktopProfile {
   width: 100%;
   display: flex;
+  position: relative;
   flex-direction: row;
   justify-content: space-between;
   gap: 50px;
 }
 .sidebar {
+  position: sticky;
   left: 0;
+  top: 75px;
   height: 90vh;
   width: 300px;
   margin-bottom: 50px;
