@@ -84,7 +84,7 @@ const VenueDetails = () => {
   useEffect(() => {
     const fetchVenue = async () => {
       try {
-        const response = await fetch(`${VENUES}/${id}`, {
+        const response = await fetch(`${VENUES}/${id}?_owner=true&_bookings=true`, {
           method: 'GET',
           headers: headers(),
         });
@@ -93,6 +93,8 @@ const VenueDetails = () => {
 
         const result = await response.json();
         setVenue(result.data);
+
+        console.log("Venue Owner Data:", result.data.owner);
 
         const mediaArray = getValidMedia(result.data.media);
         setLeftImages(mediaArray.slice(0, 3));
@@ -111,19 +113,9 @@ const VenueDetails = () => {
         catch (err) {
           console.error("Failed to fetch user profile:", err);
         }
-
-        if (result.data?.owner?.name) {
-          try {
-            const ownerRes = await fetch(`${VENUES}/../profiles/${result.data.owner.name}?_owner=true&_bookings=true`, {
-              headers: headers(),
-            });
-            const ownerJson = await ownerRes.json();
-            setOwner(ownerJson.data);
-          } 
-          catch (ownerErr) {
-            console.error("Failed to fetch owner profile:", ownerErr);
-          }
-        }
+if (result.data?.owner) {
+  setOwner(result.data.owner);
+}
         try {
           const bookingsResponse = await fetch(`${VENUES}/${id}/bookings`, { 
             headers: headers() 
@@ -139,16 +131,6 @@ const VenueDetails = () => {
         } 
         catch (err) {
           console.error("Failed to fetch bookings:", err);
-        }
-
-        if (!owner) {
-          setOwner({
-            name: "Test Owner",
-            avatar: {
-              url: "/media/images/mdefault.jpg",
-              alt: "Placeholder",
-            },
-          });
         }
       } 
       catch (error) {
@@ -414,25 +396,18 @@ const VenueDetails = () => {
                   )}
                 </ul>
               </div>
-            )}
-            
-            {owner && (
-              <div className={styles.venueOwner}>
-                <p><strong>Venue Host</strong></p>
-                <div className={styles.venueProfileName}>
-                  {owner.avatar?.url && (
-                    <img
-                      src={owner.avatar.url}
-                      alt={owner.avatar.alt || `${owner.name}'s avatar`}
-                    />
-                  )}
-                  <p>{owner.name}</p>
-                </div>
-              </div>
-            )}
+            )}            
             
             <div className={styles.dividerLine}></div>
-            
+
+            <div className={styles.venueOwner}>
+{owner && (
+  <div className={styles.venueProfileName}>
+    <img src={owner.avatar?.url || '/media/images/mdefault.jpg'} alt={owner.avatar?.alt || 'Owner avatar'} />
+    <p>{owner.name}</p>
+  </div>
+)}
+</div>
             <div className={styles.venueCreationDates}>
               <div className={styles.venueDates}>
                 <p>Created</p>
