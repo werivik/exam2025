@@ -142,12 +142,6 @@
   margin: 0;
   padding: 0;
 }
-.bookingsFilter {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 15px;
-}
 .bookingsSection {
   margin-top: 50px;
   scroll-margin-top: 100px;
@@ -373,6 +367,16 @@
 }
 body.modal-open {
   overflow: hidden;
+}
+.sortDropdown {
+  font-size: 1rem;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-family: "Playfair Display", serif;
+  background-color: #fffefb;
+  cursor: pointer;
+  margin: 0;
 }
 @media (max-width: 1125px) {
   .tabletProfile {

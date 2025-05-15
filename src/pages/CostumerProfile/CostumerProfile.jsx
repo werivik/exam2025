@@ -39,6 +39,7 @@ const CostumerProfile = () => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [sortOption, setSortOption] = useState("default");
   
   const mobileRefs = {
     profile: useRef(null),
@@ -284,16 +285,29 @@ const CostumerProfile = () => {
 
   const today = new Date();
 
-  const filterVenues = (venues) => {
-    switch (filter) {
-      case 'Future':
-        return venues.filter((venue) => venue.dateFrom >= today);
-      case 'Previous':
-        return venues.filter((venue) => venue.dateFrom < today);
-      default:
-        return venues;
-    }
-  };
+const filterVenues = (venues) => {
+  let filtered = [];
+
+  switch (filter) {
+    case 'Future':
+      filtered = venues.filter((venue) => venue.dateFrom >= today);
+      break;
+    case 'Previous':
+      filtered = venues.filter((venue) => venue.dateFrom < today);
+      break;
+    default:
+      filtered = [...venues];
+  }
+
+  switch (sortOption) {
+    case 'nearestFuture':
+      return [...filtered].sort((a, b) => a.dateFrom - b.dateFrom);
+    case 'recentPast':
+      return [...filtered].sort((a, b) => b.dateFrom - a.dateFrom);
+    default:
+      return filtered;
+  }
+};
 
   const filteredVenues = filterVenues(bookedVenues);
 
@@ -519,9 +533,17 @@ const CostumerProfile = () => {
                 <div className={styles.sectionHeader}>
                   <h2>My Bookings</h2>
                   <div className={styles.bookingsFilter}>
-                    <Buttons size="medium" version="v3" onClick={() => setFilter('All')}>All</Buttons>
-                    <Buttons size="medium" version="v2" onClick={() => setFilter('Future')}>Future</Buttons>
-                    <Buttons size="medium" version="v1" onClick={() => setFilter('Previous')}>Previous</Buttons>
+                    <label>Sort By:</label>
+<select
+  value={sortOption}
+  onChange={(e) => setSortOption(e.target.value)}
+  className={styles.sortDropdown}
+>
+  <option value="default">All</option>
+  <option value="nearestFuture">Nearest Future</option>
+  <option value="recentPast">Previous</option>
+</select>
+
                   </div>
                 </div>
                 

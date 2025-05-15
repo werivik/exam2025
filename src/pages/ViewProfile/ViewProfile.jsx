@@ -40,6 +40,10 @@ const ViewProfile = () => {
     venues: useRef(null),
   };
 
+  const goBack = () => {
+    navigate(-1);
+  };
+
   useEffect(() => {
     fetchUserData();
   }, []);
@@ -149,7 +153,6 @@ const handleVenueClick = (venue) => {
   setFilteredVenues(sorted);
 }, [sortOption, assignedVenues]);
 
-
   return (
     <motion.div
       className={styles.container}
@@ -234,6 +237,10 @@ const handleVenueClick = (venue) => {
             <h2>{capitalizeFirstLetter(userData.name) || 'User'}</h2>
             <p>Venue Manager</p>
             <RatingDisplay />
+<div className={styles.gobackBtn}>
+  <button onClick={goBack}>Go Back</button>
+</div>
+
           </div>
           </div>
 
@@ -242,6 +249,8 @@ const handleVenueClick = (venue) => {
           <div className={styles.venuesSection} ref={mobileRefs.venues}>
             <div className={styles.sectionHeader}>
               <h3>Venues</h3>
+              <div>
+                <label>Sort By:</label>
 <select
   value={sortOption}
   onChange={(e) => setSortOption(e.target.value)}
@@ -253,6 +262,7 @@ const handleVenueClick = (venue) => {
   <option value="priceHigh">Price: High to Low</option>
   <option value="priceLow">Price: Low to High</option>
 </select>
+              </div>
             </div>
 
             {filteredVenues.length > 0 ? (
