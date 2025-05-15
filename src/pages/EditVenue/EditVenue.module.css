@@ -330,9 +330,9 @@ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 padding: 40px;
 transition: all 0.3s ease;
 }
-.pageContent h2 {
+.pageContent h1 {
 margin: 0 0 30px 0;
-font-size: 2.2rem;
+font-size: 3rem;
 font-weight: 700;
 color: #1F1B17;
 text-align: center;
@@ -350,6 +350,7 @@ margin-bottom: 25px;
 }
 .fieldGroup > label {
 font-weight: 500;
+font-size: 1.5rem;
 color: #1F1B17;
 }
 .fieldGroup input[type="text"],
@@ -441,8 +442,7 @@ transition: all 0.2s ease;
 background-color: rgba(93, 107, 47, 0.2);
 }
 .submitButton {
-margin-top: 20px;
-padding: 14px 24px;
+padding: 10px 17px;
 background-color: #B88A44;
 color: white;
 border: none;
@@ -455,6 +455,27 @@ align-self: center;
 }
 .submitButton:hover {
 background-color: #9e7438;
+}
+
+.editButtons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: center;
+  justify-content: space-between;
+}
+.cancelButton {
+  padding: 10px 17px;
+background-color: #1F1B17;
+color: white;
+border: none;
+border-radius: 6px;
+font-weight: 500;
+font-size: 1rem;
+cursor: pointer;
+transition: background-color 0.2s ease;
+align-self: center;
 }
 @media (max-width: 1024px) {
 .pageContent {
