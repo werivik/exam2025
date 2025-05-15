@@ -281,6 +281,21 @@
     gap: 15px;
     font-size: 1.5rem;
     align-items: center;
+    background-color: #f9f9f9;
+    width: fit-content;
+    padding: 5px 15px 5px 5px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #1F1B17;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: 0.25s;
+}
+.venueProfileName:hover {
+  cursor: pointer;
+  transition: 0.25s;
+  margin-top: -5px;
+  margin-bottom: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.387);
 }
 .venueProfileName img {
     width: 75px;

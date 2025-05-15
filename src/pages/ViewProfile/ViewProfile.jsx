@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from './ViewProfile.module.css';
 import { motion } from "framer-motion";
 import { PROFILES_SINGLE, PROFILES_SINGLE_BY_VENUES } from '../../constants';
@@ -30,6 +30,7 @@ const ViewProfile = () => {
   const [filteredVenues, setFilteredVenues] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
   const [totalReviews, setTotalReviews] = useState(0);
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -106,16 +107,16 @@ const ViewProfile = () => {
       const avg = totalRating / reviewCount;
       setAverageRating(Math.min(5, parseFloat(avg.toFixed(1))));
       setTotalReviews(reviewCount);
-    } else {
+    } 
+    else {
       setAverageRating(0);
       setTotalReviews(0);
     }
   };
 
-  const handleVenueClick = (venue) => {
-    setSelectedVenue(venue);
-    setIsModalVisible(true);
-  };
+const handleVenueClick = (venue) => {
+  navigate(`/venue-details/${venue.id}`);
+};
 
   const RatingDisplay = () => (
     <div className={styles.rating}>

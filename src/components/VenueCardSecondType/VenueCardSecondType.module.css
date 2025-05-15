@@ -21,6 +21,7 @@
     box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
     background-image: url(/media/logo/loadingScreen.png);
     background-position: center;
+    transition: 0.25s;
 }
 
 .starRating {
