@@ -1,0 +1,65 @@
+.pageStyle {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 150px;
+    padding-bottom: 100px;
+}
+
+.slideshowSection {
+background: linear-gradient(110deg, #bbb6b6 8%, #bbb6b6 18%, #bbb6b6 33%);
+ background-size: 200% 100%;
+animation: 1.5s shine linear infinite;
+width: 100%;
+height: 75vh;
+border-radius: 25px;
+}
+
+.skeletonBg {
+background: linear-gradient(110deg, #bbb6b6 8%, #bbb6b6 18%, #bbb6b6 33%);
+  background-size: 200% 100%;
+  animation: 1.5s shine linear infinite;
+  border-radius: 5px;
+  list-style: none;
+}
+
+.skeletonBgLight {
+  background: #f9f9f9;
+}
+
+.skeletonText {
+background: linear-gradient(110deg, #bbb6b6 8%, #bbb6b6 18%, #bbb6b6 33%);
+  background-size: 200% 100%;
+  animation: 1.5s shine linear infinite;
+  border-radius: 5px;
+}
+
+.skeletonCircle {
+background: linear-gradient(110deg, #bbb6b6 8%, #bbb6b6 18%, #bbb6b6 33%);
+  background-size: 200% 100%;
+  animation: 1.5s shine linear infinite;
+  border-radius: 50%;
+}
+
+.skeletonBtn {
+  background: rgba(236, 236, 236, 0.5);
+  width: 45px;
+  height: 99px;
+  border-radius: 5px;
+}
+
+.skeletonProgress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+.skeleton * {
+  pointer-events: none;
+}

@@ -16,6 +16,7 @@ import CustomCalender from '../../components/CostumCalender/CostumCalender';
 import CostumPopup from '../../components/CostumPopup/CostumPopup';
 
 import VenueRating from '../../components/VenueRating/VenueRating';
+import VenueDetailsSkeleton from '../../components/VenueDetailsSkeleton/VenueDetailsSkeleton';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -241,7 +242,7 @@ if (result.data?.owner) {
     checkForDoubleBooking
   ]);
 
-  if (loading) return <div className={styles.pageStyle}><p>Loading...</p></div>;
+  if (loading) return <VenueDetailsSkeleton />;
   
   if (!venue) return <div className={styles.pageStyle}><p>Venue not found.</p></div>;
 
