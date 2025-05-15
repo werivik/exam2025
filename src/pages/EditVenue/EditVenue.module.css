@@ -1,3 +1,4 @@
+/*
 .pageContent {
   min-height: 100vh;
   margin-top: 75px;
@@ -294,3 +295,200 @@ body.no-scroll {
   .popup p {
     font-size: 1.125rem;
   }
+  */
+
+
+
+
+
+.editVenueContainer {
+width: 100%;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+margin-bottom: 100px;
+}
+.blurWrapper {
+width: 100%;
+transition: filter 0.3s ease;
+}
+.blurred {
+filter: blur(4px);
+pointer-events: none;
+}
+.pageContent {
+margin-top: 75px;
+padding-bottom: 100px;
+width: 80%;
+max-width: 900px;
+margin-left: auto;
+margin-right: auto;
+background-color: #fff;
+border-radius: 15px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+padding: 40px;
+transition: all 0.3s ease;
+}
+.pageContent h2 {
+margin: 0 0 30px 0;
+font-size: 2.2rem;
+font-weight: 700;
+color: #1F1B17;
+text-align: center;
+}
+.form {
+display: flex;
+flex-direction: column;
+gap: 25px;
+}
+.fieldGroup {
+display: flex;
+flex-direction: column;
+gap: 10px;
+margin-bottom: 25px;
+}
+.fieldGroup > label {
+font-weight: 500;
+color: #1F1B17;
+}
+.fieldGroup input[type="text"],
+.fieldGroup input[type="url"],
+.fieldGroup input[type="number"],
+.fieldGroup textarea {
+width: 100%;
+padding: 12px;
+border: 1px solid #ddd;
+border-radius: 6px;
+font-size: 0.95rem;
+background-color: white;
+transition: border 0.2s ease;
+}
+.fieldGroup input[type="text"]:focus,
+.fieldGroup input[type="url"]:focus,
+.fieldGroup input[type="number"]:focus,
+.fieldGroup textarea:focus {
+border-color: #B88A44;
+outline: none;
+}
+.fieldGroup textarea {
+min-height: 120px;
+resize: vertical;
+}
+.fieldGroup > div {
+display: flex;
+flex-wrap: wrap;
+gap: 15px;
+}
+.fieldGroup > div label {
+display: flex;
+align-items: center;
+gap: 8px;
+background-color: rgba(243, 240, 235, 0.6);
+padding: 8px 12px;
+border-radius: 20px;
+font-size: 0.9rem;
+color: #1F1B17;
+cursor: pointer;
+transition: background-color 0.2s ease;
+}
+.fieldGroup > div label:hover {
+background-color: rgba(184, 138, 68, 0.1);
+}
+.fieldGroup > div input[type="checkbox"] {
+width: 16px;
+height: 16px;
+}
+.fieldGroup > div input[type="text"] {
+flex: 1;
+min-width: 150px;
+}
+.mediaField {
+display: flex;
+gap: 10px;
+margin-bottom: 15px;
+align-items: center;
+}
+.mediaField input {
+flex: 1;
+}
+.mediaField button {
+padding: 8px 12px;
+background-color: rgba(211, 47, 47, 0.1);
+color: #d32f2f;
+border: 1px solid #d32f2f;
+border-radius: 4px;
+cursor: pointer;
+font-size: 0.85rem;
+transition: all 0.2s ease;
+}
+.mediaField button:hover {
+background-color: rgba(211, 47, 47, 0.2);
+}
+.mediaButtons {
+  margin-top: -10px;
+}
+.mediaButtons button {
+padding: 8px 16px;
+background-color: rgba(93, 107, 47, 0.1);
+color: #5D6B2F;
+border: 1px solid #5D6B2F;
+border-radius: 4px;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+.mediaButtons button:hover {
+background-color: rgba(93, 107, 47, 0.2);
+}
+.submitButton {
+margin-top: 20px;
+padding: 14px 24px;
+background-color: #B88A44;
+color: white;
+border: none;
+border-radius: 6px;
+font-weight: 500;
+font-size: 1rem;
+cursor: pointer;
+transition: background-color 0.2s ease;
+align-self: center;
+}
+.submitButton:hover {
+background-color: #9e7438;
+}
+@media (max-width: 1024px) {
+.pageContent {
+width: 90%;
+padding: 30px;
+}
+}
+@media (max-width: 768px) {
+.pageContent {
+width: 95%;
+padding: 25px;
+}
+.fieldGroup > div {
+flex-direction: column;
+gap: 10px;
+}
+.mediaField {
+flex-direction: column;
+align-items: flex-start;
+}
+.mediaField button {
+margin-top: 10px;
+width: 100%;
+}
+}
+@media (max-width: 480px) {
+.pageContent {
+margin-top: 60px;
+padding: 20px 15px;
+}
+.pageContent h2 {
+font-size: 1.8rem;
+}
+.submitButton {
+width: 100%;
+}
+}

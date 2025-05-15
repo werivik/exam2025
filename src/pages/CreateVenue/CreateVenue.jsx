@@ -194,7 +194,7 @@ const CreateVenue = () => {
     const dataToSend = transformedFormData;
 
     try {
-      const response = await fetch(`${VENUE_CREATE}?_published=true`, {
+      const response = await fetch(`${VENUE_CREATE}?_published=true&_bookings=true`, {
         method: 'POST',
         headers: headers(token),
         body: JSON.stringify(dataToSend),
