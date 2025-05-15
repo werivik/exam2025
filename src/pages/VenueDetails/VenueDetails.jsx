@@ -15,10 +15,21 @@ import { headers } from '../../headers';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
 import CostumPopup from '../../components/CostumPopup/CostumPopup';
 
+import VenueRating from '../../components/VenueRating/VenueRating';
+
 const pageVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
+};
+
+const handleRatingUpdate = (newRating) => {
+  if (venue) {
+    setVenue({
+      ...venue,
+      rating: newRating
+    });
+  }
 };
 
 const getValidMedia = (mediaArray) => {
@@ -103,7 +114,7 @@ const VenueDetails = () => {
 
         if (result.data?.owner?.name) {
           try {
-            const ownerRes = await fetch(`${VENUES}/../profiles/${result.data.owner.name}?_venues=true`, {
+            const ownerRes = await fetch(`${VENUES}/../profiles/${result.data.owner.name}?_owner=true&_bookings=true`, {
               headers: headers(),
             });
             const ownerJson = await ownerRes.json();
@@ -346,6 +357,15 @@ const VenueDetails = () => {
               </div>
             </div>
             
+                          {userLoggedIn && (
+  <VenueRating 
+    venueId={venue.id} 
+    currentRating={venue.rating} 
+    onRatingUpdate={handleRatingUpdate}
+    className={styles.venueRatingComponent}
+  />
+)}
+
             <p className={styles.description}>
               <h3>Description</h3><br />
               {venue.description}

@@ -299,6 +299,7 @@
     padding: 15px;
     padding-bottom: 35px;
     border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 .dividerLine {
     height: 1px;
@@ -581,6 +582,13 @@
 .venueDates span {
   font-size: 1.25rem;
 }
+
+.venueRatingComponent {
+  margin: 20px 0;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
 @media (max-width:1250px) {
   .hotelInfoBottom {
     flex-direction: column;
