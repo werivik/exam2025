@@ -178,6 +178,7 @@ const ViewProfile = () => {
             )}
           </div>
         </section>
+
         <section className={styles.tabletProfile}>
           <div className={styles.profileTop}>
             <div className={styles.bannerWrapper}>
@@ -192,12 +193,11 @@ const ViewProfile = () => {
               />
               <img src={bannerEdge} className={styles.edgeRight} />
             </div>
-          </div>
-
-          <div className={styles.profileInfo}>
+            <div className={styles.profileInfo}>
             <h2>{capitalizeFirstLetter(userData.name) || 'User'}</h2>
             <p>Venue Manager</p>
             <RatingDisplay />
+          </div>
           </div>
 
           <div className={styles.divider}></div>
