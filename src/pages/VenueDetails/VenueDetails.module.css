@@ -295,7 +295,7 @@
     display: flex;
     flex-direction: column;
     gap: 50px;
-    background-color: white;
+    background-color: #f9f9f9;
     padding: 15px;
     padding-bottom: 35px;
     border-radius: 10px;
@@ -367,18 +367,21 @@
     font-size: 20px;
     font-family: "Playfair Display", serif;
     cursor: pointer;
+    background-color: white;
 }
 .bookDateStart input {
     width: 100%;
     border-radius: 25px 0px 0px 25px;
     border: solid 1px #1F1B17;
     border-right: none;
+    background-color: white;
 }
 .bookDateEnd input {
     border-radius: 0px 25px 25px 0px;
     width: 100%;
     border: solid 1px #1F1B17;
     border-left: none;
+    background-color: white;
 }
 .bookGuests {
     width: 100%;

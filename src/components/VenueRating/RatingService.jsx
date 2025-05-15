@@ -5,8 +5,7 @@ export const RatingService = {
   submitRating: async (venueId, rating) => {
     if (!venueId || rating < 0 || rating > 5) {
       throw new Error('Invalid rating parameters');
-    }
-    
+    }    
     const authToken = localStorage.getItem('token');
     if (!authToken) {
       throw new Error('User not authenticated');
@@ -29,28 +28,16 @@ export const RatingService = {
       userRatings[venueId] = rating;
       localStorage.setItem('userVenueRatings', JSON.stringify(userRatings));
       
-      const updateResponse = await fetch(`${VENUES}/${venueId}`, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify({
+      console.log(`Rating for venue ${venueId} saved locally as ${rating}`);
+      
+      return {
+        success: true,
+        data: {
+          ...currentVenue,
           rating: rating,
-        }),
-      });
-      
-      if (!updateResponse.ok) {
-        console.warn(`Server rating update failed: ${updateResponse.status}. Using locally stored rating.`);
-        
-        return {
-          success: false,
-          data: {
-            ...currentVenue,
-            rating: rating,
-          },
-          message: 'Rating saved locally only',
-        };
-      }
-      
-      return updateResponse.json();
+        },
+        message: 'Rating saved locally',
+      };
     } 
     catch (error) {
       console.error('Error in submitRating:', error);

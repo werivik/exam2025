@@ -15,6 +15,7 @@ const VenueRating = ({
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('success');
   const [userLoggedIn, setUserLoggedIn] = useState(isLoggedIn());
+  const [displayRating, setDisplayRating] = useState(currentRating);
   
   useEffect(() => {
     const handleAuthChange = () => setUserLoggedIn(isLoggedIn());
@@ -29,7 +30,9 @@ const VenueRating = ({
         setUserRating(savedRating);
       }
     }
-  }, [venueId, userLoggedIn]);
+    
+    setDisplayRating(currentRating);
+  }, [venueId, userLoggedIn, currentRating]);
   
   const handleRatingClick = async (selectedRating) => {
     if (!userLoggedIn) {
@@ -46,34 +49,24 @@ const VenueRating = ({
     
     try {
       setUserRating(selectedRating);
+    
+      await RatingService.submitRating(venueId, selectedRating);      
+      const newAverageRating = RatingAverageService.addRating(venueId, selectedRating);
       
-      const result = await RatingService.submitRating(venueId, selectedRating);
+      setDisplayRating(newAverageRating);
       
-      if (result?.success === false) {
-        setMessage('Rating saved locally. Server update failed.');
-        setMessageType('warning');
-      } 
-      else {
-        setMessage('Thank you for rating!');
-        setMessageType('success');
-      }
+      setMessage('Thank you for rating!');
+      setMessageType('success');
       
-      if (onRatingUpdate && result?.data?.rating) {
-        onRatingUpdate(result.data.rating);
-      } 
-      else if (onRatingUpdate) {
-        onRatingUpdate(selectedRating);
+      if (onRatingUpdate) {
+        onRatingUpdate(newAverageRating);
       }
     } 
     catch (error) {
       console.error('Error submitting rating:', error);
       
-      setMessage('Could not submit to server, but your rating is saved locally.');
-      setMessageType('warning');
-      
-      if (onRatingUpdate) {
-        onRatingUpdate(selectedRating);
-      }
+      setMessage('Error saving rating. Please try again.');
+      setMessageType('error');
     } 
     finally {
       setIsSubmitting(false);      
@@ -107,13 +100,21 @@ const VenueRating = ({
       <div className={styles.ratingHeader}>
         <h4>Rate this venue</h4>
         <div className={styles.venueRating}>
-          <span className={styles.currentRating}>{currentRating.toFixed(1)}</span>
+          <span className={styles.currentRating}>{displayRating.toFixed(1)}</span>
           <div className={styles.currentStars}>
-            {[1, 2, 3, 4, 5].map(position => (
-              <span key={position} className={`${styles.star} ${currentRating >= position ? styles.filled : ''}`}>
-                {currentRating >= position ? '★' : '☆'}
-              </span>
-            ))}
+            {[1, 2, 3, 4, 5].map(position => {
+              const filled = Math.floor(displayRating) >= position;
+              const halfFilled = !filled && Math.ceil(displayRating) === position;
+              
+              return (
+                <span 
+                  key={position} 
+                  className={`${styles.star} ${filled ? styles.filled : ''} ${halfFilled ? styles.halfFilled : ''}`}
+                >
+                  {filled ? '★' : (halfFilled ? '★' : '☆')}
+                </span>
+              );
+            })}
           </div>
         </div>
       </div>

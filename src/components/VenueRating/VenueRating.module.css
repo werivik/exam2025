@@ -125,6 +125,12 @@
   margin: 15px 0;
 }
 
+.halfFilled {
+  position: relative;
+  color: #f8c12c;
+  overflow: hidden;
+}
+
 @keyframes fadeInOut {
   0% { opacity: 0; }
   15% { opacity: 1; }
