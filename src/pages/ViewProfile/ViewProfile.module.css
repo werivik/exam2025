@@ -204,8 +204,8 @@
   width: 200px;
   z-index: 2;
   bottom: -10px;
-  margin-left: 25px;
-  border-radius: 99px 99px 15px 15px;
+  margin-left: 35px;
+  border-radius: 99px 99px 5px 5px;
   object-fit: cover;
 }
 .tabletProfile .edgeLeft, 
@@ -215,8 +215,11 @@
   bottom: 0;
   z-index: 3;
 }
+.tabletProfile .edgeLeft {
+  left: 10px;
+}
 .tabletProfile .edgeRight {
-  left: 200px;
+  left: 235px;
   transform: scaleX(-1);
 }
 .tabletProfile .profileInfo {
