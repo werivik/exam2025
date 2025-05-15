@@ -92,27 +92,27 @@ const ViewProfile = () => {
     }
   };
 
-  const calculateRatings = (venues) => {
-    let totalRating = 0;
-    let reviewCount = 0;
+const calculateRatings = (venues) => {
+  let totalRating = 0;
+  let ratedVenueCount = 0;
 
-    venues.forEach((venue) => {
-      if (venue.rating && venue.rating > 0 && venue._count?.reviews > 0) {
-        totalRating += venue.rating * venue._count.reviews;
-        reviewCount += venue._count.reviews;
-      }
-    });
-
-    if (reviewCount > 0) {
-      const avg = totalRating / reviewCount;
-      setAverageRating(Math.min(5, parseFloat(avg.toFixed(1))));
-      setTotalReviews(reviewCount);
-    } 
-    else {
-      setAverageRating(0);
-      setTotalReviews(0);
+  venues.forEach((venue) => {
+    if (venue.rating && venue.rating > 0) {
+      totalRating += venue.rating;
+      ratedVenueCount += 1;
     }
-  };
+  });
+
+  if (ratedVenueCount > 0) {
+    const avg = totalRating / ratedVenueCount;
+    setAverageRating(Math.min(5, parseFloat(avg.toFixed(1))));
+    setTotalReviews(ratedVenueCount);
+  } 
+  else {
+    setAverageRating(0);
+    setTotalReviews(0);
+  }
+};
 
 const handleVenueClick = (venue) => {
   navigate(`/venue-details/${venue.id}`);
