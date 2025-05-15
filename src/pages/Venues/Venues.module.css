@@ -1,3 +1,4 @@
+/*
 .pageContent {
   min-height: 100vh;
   margin-top: 75px;
@@ -263,3 +264,272 @@
   font-size: 1.125rem;
 }
   }
+*/
+
+
+
+
+
+
+
+
+.pageContent {
+  margin-top: 75px;
+  padding: 20px;
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  color: #1F1B17;
+  width: 100%;
+}
+
+.rightSection {
+  position: relative;
+  width: 100%;
+  height: inherit;
+  display: flex;
+  justify-content: center;
+}
+
+.rightBorder {
+  width: 82%;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  height: inherit;
+  color: #1F1B17;
+  position: relative;
+  padding: 20px;
+  margin-bottom: 40px;
+  padding-bottom: 75px;
+}
+
+.rightTitles {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 75px;
+}
+
+.rightTitles h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1F1B17;
+  margin: 0;
+  padding: 0;
+}
+
+.rightTitles p {
+  font-size: 2rem;
+  font-style: italic;
+  color: #5D6B2F;
+  margin: 0;
+}
+
+.filterTopSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  gap: 50px;
+  width: 100%;
+  margin-bottom: 75px;
+}
+
+.filterTop {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.topSearchbar {
+  flex: 1;
+  min-width: 350px;
+  display: flex;
+  align-items: center;
+}
+
+.filterTopRight {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+}
+
+.sortDropdown {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sortDropdown label {
+  font-weight: 500;
+  color: #1F1B17;
+}
+
+.sortDropdown select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 0.95rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.sortDropdown select:hover {
+  border-color: #B88A44;
+}
+
+.allHotels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 35px;
+  margin-top: 20px;
+}
+
+.allHotels > * {
+  width: 100%;
+  height: 100%;
+  justify-self: center;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+}
+.paginationWrapper {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+.pagination {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.page, 
+.pageActive {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.page:hover {
+  background-color: rgba(243, 240, 235, 0.6);
+}
+.pageActive {
+  background-color: #1F1B17;
+  color: white;
+  border-color: #1F1B17;
+}
+.loadMoreWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+.loadMoreButton {
+  background-color: #1F1B17;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.loadMoreButton:hover {
+  background-color: #5D6B2F;
+}
+
+@media (max-width: 1024px) {
+  .rightBorder {
+    width: 90%;
+  }
+  
+  .rightTitles {
+    height: 150px;
+  }
+  
+  .allHotels {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .rightTitles h1 {
+    font-size: 2rem;
+  }
+  
+  .rightTitles p {
+    font-size: 1.2rem;
+  }
+  
+  .filterTopSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  
+  .topSearchbar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 650px) {
+  .rightTitles {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    gap: 10px;
+  }
+  
+  .pagination {
+    margin-top: 30px;
+  }
+  
+  .page,
+  .pageActive {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageContent {
+    padding: 10px;
+  }
+  
+  .rightBorder {
+    padding: 15px;
+  }
+  
+  .rightTitles h1 {
+    font-size: 1.5rem;
+  }
+  
+  .rightTitles p {
+    font-size: 1rem;
+  }
+  
+  .allHotels {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+
+

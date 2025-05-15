@@ -486,7 +486,8 @@ const Venues = () => {
           </div>
 
           <div className={styles.filterTopSection}>
-            <div className={styles.topSearchbar}>
+            <div className={styles.filterTop}>
+              <div className={styles.topSearchbar}>
               <Searchbar
                 filters={filters}
                 setFilters={setFilters}
@@ -495,6 +496,11 @@ const Venues = () => {
                 setFilteredVenues={setFilteredVenues}
                 setNoMatches={setNoMatches}
               />
+            </div>
+              <Buttons size='small' version='v2' onClick={toggleSidebar}>
+              All Filters
+            </Buttons>
+            </div>
               <div className={styles.sortDropdown}>
                 <label htmlFor="sort">Sort by:</label>
                 <select
@@ -510,10 +516,6 @@ const Venues = () => {
                   <option value="ratingHighLow">Rating: High to Low</option>
                 </select>
               </div>
-            </div>
-            <Buttons size='medium' version='v1' onClick={toggleSidebar}>
-              Filters
-            </Buttons>
           </div>
 
           {loading ? (
