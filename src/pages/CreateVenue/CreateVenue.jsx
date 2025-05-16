@@ -16,24 +16,11 @@ const CreateVenue = () => {
     maxGuests: 0,
     rating: 0,
     media: [{ url: '', alt: '' }],
-    meta: {
-      wifi: false,
-      parking: false,
-      breakfast: false,
-      pets: false
-    },
-    location: {
-      address: '',
-      city: '',
-      zip: '',
-      country: '',
-      continent: '',
-      lat: 0,
-      lng: 0
-    },
+    meta: { wifi: false, parking: false, breakfast: false, pets: false },
+    location: { address: '', city: '', zip: '', country: '', continent: '', lat: 0, lng: 0 },
     isPublic: true,
     bookings: true,
-    status: 'published', 
+    status: 'published',
     termsAccepted: false,
   });
 
@@ -50,7 +37,7 @@ const CreateVenue = () => {
     meta: null,
     media: null,
     location: null,
-  });  
+  });
 
   const [popup, setPopup] = useState({ isVisible: false, message: '', type: '' });
   const [isTermsPopupVisible, setIsTermsPopupVisible] = useState(false);
@@ -60,12 +47,12 @@ const CreateVenue = () => {
       if (!url.trim()) return true;
       try {
         return Boolean(new URL(url));
-      } 
+      }
       catch {
         return false;
       }
     };
-  
+
     setFieldStatus({
       name: updatedFormData.name.trim().length > 2,
       description: updatedFormData.description.trim().length > 10,
@@ -81,12 +68,12 @@ const CreateVenue = () => {
         updatedFormData.location.continent,
       ].every(val => val.trim() !== '')
     });
-  };  
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     let updatedFormData;
-  
+
     if (name === 'meta') {
       const [metaKey, metaValue] = value.split('=');
       updatedFormData = {
@@ -96,19 +83,19 @@ const CreateVenue = () => {
           [metaKey]: metaValue === 'true' ? checked : !checked
         }
       };
-    } 
+    }
     else if (name.startsWith('media-')) {
       const parts = name.split('-');
       const index = parseInt(parts[1], 10);
       const field = parts[2];
       const newMedia = [...formData.media];
       newMedia[index][field] = value;
-  
+
       updatedFormData = {
         ...formData,
         media: newMedia
       };
-    } 
+    }
     else if (name.includes('location')) {
       const field = name.split('-')[1];
       updatedFormData = {
@@ -118,29 +105,29 @@ const CreateVenue = () => {
           [field]: value
         }
       };
-    } 
+    }
     else {
-      let newValue = value;    
+      let newValue = value;
       if (name === 'price' || name === 'maxGuests') {
         if (!/^\d*$/.test(newValue)) return;
         newValue = newValue.replace(/^0+(?!$)/, '');
-    
+
         updatedFormData = {
           ...formData,
           [name]: newValue === '' ? 0 : Number(newValue)
         };
-      } 
+      }
       else {
         updatedFormData = {
           ...formData,
           [name]: newValue
         };
       }
-    }    
+    }
     setFormData(updatedFormData);
     validateFields(updatedFormData);
   };
-  
+
   const totalFields = Object.keys(fieldStatus).length;
   const validFields = Object.values(fieldStatus).filter(val => val === true).length;
   const progressPercentage = Math.round((validFields / totalFields) * 100);
@@ -162,7 +149,7 @@ const CreateVenue = () => {
 
   const buildVenuePayload = (formData, username, avatar) => {
     const filteredMedia = formData.media.filter(item => item.url.trim() !== '');
-    
+
     const processedMedia = filteredMedia.map(item => ({
       url: item.url,
       alt: item.alt.trim() !== '' ? item.alt : 'Venue image'
@@ -231,19 +218,13 @@ const CreateVenue = () => {
     const venuePayload = buildVenuePayload(formData, username, avatar);
 
     try {
-      console.log('API Request URL:', VENUE_CREATE);
-      console.log('API Request Headers:', headers(token));
-      console.log('API Request Body:', JSON.stringify(venuePayload));
-      
       const response = await fetch(VENUE_CREATE, {
         method: 'POST',
         headers: headers(token),
         body: JSON.stringify(venuePayload),
       });
 
-      console.log('API Response Status:', response.status);
       const data = await response.json();
-      console.log('API Response:', data);
 
       if (response.ok && data.data && data.data.id) {
         setPopup({
@@ -254,27 +235,25 @@ const CreateVenue = () => {
         setTimeout(() => {
           navigate(`/venues/${data.data.id}`);
         }, 2000);
-      } 
+      }
       else {
-        const errorMsg = data.errors 
-          ? data.errors.map(err => err.message).join(', ') 
+        const errorMsg = data.errors
+          ? data.errors.map(err => err.message).join(', ')
           : data.message || 'Failed to create the venue';
-          
         setPopup({
           isVisible: true,
           message: `Error: ${errorMsg}`,
           type: 'error'
         });
       }
-    } 
+    }
     catch (error) {
-      console.error('Error creating venue:', error);
       setPopup({
         isVisible: true,
         message: 'An unexpected error occurred. Please try again.',
         type: 'error'
       });
-    } 
+    }
     finally {
       setLoading(false);
     }
@@ -283,7 +262,7 @@ const CreateVenue = () => {
   useEffect(() => {
     if (popup.isVisible || isTermsPopupVisible) {
       document.body.style.overflow = 'hidden';
-    } 
+    }
     else {
       document.body.style.overflow = '';
     }
@@ -310,10 +289,10 @@ const CreateVenue = () => {
         setPopup({ isVisible: false, message: '', type: '' });
         navigate('/admin-profile');
       }, 2000);
-  
+
       return () => clearTimeout(timer);
     }
-  }, [popup, navigate]);  
+  }, [popup, navigate]);
 
   return (
     <motion.div
