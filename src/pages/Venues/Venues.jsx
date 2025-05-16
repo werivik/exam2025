@@ -226,7 +226,6 @@ useEffect(() => {
 
         const data = await response.json();
         
-        // Use all venues from the API response without any deduplication
         const venuesData = data.data || [];
 
         if (venuesData.length === 0) break;
@@ -401,12 +400,6 @@ useEffect(() => {
   }, [filters, venues, sortOption, searchQuery]);
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [filters.continent, filters.country, filters.city, filters.adults, 
-      filters.children, filters.assisted, filters.ratings, filters.meta, 
-      filters.priceMin, filters.priceMax, searchQuery, sortOption]);
-
-  useEffect(() => {
     document.body.style.overflow = showSidebar ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
@@ -455,6 +448,15 @@ const getPageNumbers = (currentPage, totalPages) => {
     topRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+
   const loadMore = useCallback(() => {
     setVisibleCount(prev => Math.min(prev + 10, filteredVenues.length));
   }, [filteredVenues.length]);
@@ -493,16 +495,20 @@ const getPageNumbers = (currentPage, totalPages) => {
     setShowLocationSuggestions(prev => ({ ...prev, [type]: false }));
   }, []);
 
-  const visibleVenues = useMemo(() => {
-    const isMobile = window.innerWidth < 1024;
-    
-    if (isMobile) {
-      return filteredVenues.slice(0, visibleCount);
-    } 
-    else {
-      return filteredVenues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-    }
-  }, [filteredVenues, currentPage, visibleCount]);
+const visibleVenues = useMemo(() => {
+  if (isMobile) {
+    return filteredVenues.slice(0, visibleCount);
+  } 
+  else {
+    return filteredVenues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  }
+}, [filteredVenues, currentPage, visibleCount, isMobile]);
+
+useEffect(() => {
+  console.log("Current page:", currentPage);
+  console.log("Visible venues:", visibleVenues.length);
+}, [currentPage, visibleVenues]);
+
 
   return (
     <motion.div
