@@ -209,6 +209,9 @@ const Venues = () => {
   useEffect(() => {
     const fetchVenues = async () => {
       try {
+        setLoading(true);
+        
+        // Fetch all venues from the API
         const response = await fetch(VENUES, {
           method: 'GET',
           headers: headers(),
@@ -217,10 +220,16 @@ const Venues = () => {
         if (!response.ok) throw new Error("Failed to fetch venues");
 
         const data = await response.json();
+        
+        // Use all venues from the API response without any deduplication
         const venuesData = data.data || [];
-
+        
+        // Important: We're using all venues from the API as-is
+        // without filtering out any duplicates by name, location, etc.
         setVenues(venuesData);
         setFilteredVenues(venuesData);
+
+        console.log(`Fetched ${venuesData.length} venues from API`);
 
         const prices = venuesData.map(venue => venue.price || 0);
         const min = Math.min(...prices);

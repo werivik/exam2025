@@ -203,7 +203,7 @@ const EditVenue = () => {
       if (response.ok) {
         setPopupMessage(
           <>
-            <h2>Successfully Edited the "{formData.name}"</h2>
+            <h2>Successfully Edited "{formData.name}"</h2>
             <p>Redirecting to Profile Page.</p>
           </>
         );

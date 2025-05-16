@@ -145,40 +145,50 @@ const CreateVenue = () => {
     }
   };
 
-  const buildVenuePayload = (formData, username, avatar) => {
-    const filteredMedia = formData.media.filter(item => item.url.trim() !== '');
+const buildVenuePayload = (formData, username, avatar) => {
+  const filteredMedia = formData.media.filter(item => item.url.trim() !== '');
 
-    const processedMedia = filteredMedia.map(item => ({
-      url: item.url,
-      alt: item.alt || 'Venue image'
-    }));
+  const processedMedia = filteredMedia.map(item => ({
+    url: item.url,
+    alt: item.alt || 'Venue image'
+  }));
 
-    return {
-      name: formData.name,
-      description: formData.description,
-      price: Number(formData.price),
-      maxGuests: Number(formData.maxGuests),
-      rating: Number(formData.rating || 0),
-      media: processedMedia,
-      meta: formData.meta,
-      location: {
-        address: formData.location.address,
-        city: formData.location.city,
-        zip: formData.location.zip,
-        country: formData.location.country,
-        continent: formData.location.continent,
-        lat: Number(formData.location.lat || 0),
-        lng: Number(formData.location.lng || 0)
-      },
-      owner: {
-        name: username || "",
-        avatar: avatar || ""
-      },
-      isPublic: formData.isPublic,
-      bookings: formData.bookings,
-      status: formData.status
-    };
+  return {
+    name: formData.name,
+    description: formData.description,
+    price: Number(formData.price),
+    maxGuests: Number(formData.maxGuests),
+    rating: Number(formData.rating || 0),
+    media: processedMedia,
+    meta: formData.meta,
+    location: {
+      address: formData.location.address,
+      city: formData.location.city,
+      zip: formData.location.zip,
+      country: formData.location.country,
+      continent: formData.location.continent,
+      lat: Number(formData.location.lat || 0),
+      lng: Number(formData.location.lng || 0)
+    },
+    owner: {
+      name: username || "",
+      avatar: avatar || ""
+    },
+    isPublic: formData.isPublic === false ? false : true,
+    bookings: formData.bookings === false ? false : true,
+    status: formData.status || "published"
   };
+};
+
+function normalizeTitle(title) {
+  return title.trim().replace(/\s+/g, ' ');
+}
+
+function isValidVenueTitle(title) {
+  const cleaned = title.trim();
+  const valid = /^[a-zA-Z0-9\s\-_'",\.&!?()]+$/.test(cleaned);
+  return valid && cleaned.length > 0;
+}
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -192,6 +202,13 @@ const CreateVenue = () => {
         type: 'error',
       });
       setLoading(false);
+      return;
+    }
+
+    const cleanedTitle = normalizeTitle(formData.name);
+
+    if (!isValidVenueTitle(cleanedTitle)) {
+      alert("Venue title can only contain letters and spaces.");
       return;
     }
 
