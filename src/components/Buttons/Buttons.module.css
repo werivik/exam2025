@@ -1,3 +1,4 @@
+/*
 .button {
     display: flex;
     align-items: center;
@@ -221,3 +222,146 @@
         margin-right: 0;
     }
 }
+
+*/
+
+
+
+
+.button {
+  font-family: "Playfair Display", serif;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  text-align: center;
+}
+
+.small {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+}
+
+.medium {
+  font-size: 1.1rem;
+  padding: 10px 18px;
+}
+
+.large {
+  font-size: 1.25rem;
+  padding: 12px 24px;
+}
+
+.smallv1 {
+  background-color: #f9f9f9;
+  color: #1F1B17;
+}
+
+.mediumv1 {
+  background-color: #f9f9f9;
+  color: #1F1B17;
+}
+
+.largev1 {
+  background-color: #f9f9f9;
+  color: #1F1B17;
+}
+
+.smallv2 {
+  background-color: #1F1B17;
+  color: white;
+}
+
+.mediumv2 {
+  background-color: #1F1B17;
+  color: white;
+}
+
+.largev2 {
+  background-color: #1F1B17;
+  color: white;
+}
+
+.smallv3 {
+  background-color: #B88A44;
+  color: #1F1B17;
+}
+
+.mediumv3 {
+  background-color: #B88A44;
+  color: #1F1B17;
+}
+
+.largev3 {
+  background-color: #B88A44;
+  color: #1F1B17;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #6B7A3A;
+  color: #f9f9f9;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #f9f9f9;
+  color: #1F1B17;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border: none;
+}
+
+.close:hover {
+  background-color: #1F1B17;
+  color: white;
+  transform: rotate(90deg);
+}
+
+.smallv3, .mediumv3, .largev3 {
+  background-color: transparent;
+  color: #1F1B17;
+  border: 1px solid #1F1B17;
+}
+
+.smallv3:hover, .mediumv3:hover, .largev3:hover {
+  background-color: #1F1B17;
+  color: white;
+}
+
+@media (max-width: 650px) {
+  .medium {
+    font-size: 1rem;
+    padding: 8px 16px;
+  }
+  
+  .large {
+    font-size: 1.15rem;
+    padding: 10px 20px;
+  }
+  
+  .close {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+}
+
+
+
