@@ -496,13 +496,18 @@ const getPageNumbers = (currentPage, totalPages) => {
   }, []);
 
 const visibleVenues = useMemo(() => {
+  if (searchQuery) {
+    return filteredVenues;
+  }
+
   if (isMobile) {
     return filteredVenues.slice(0, visibleCount);
   } 
   else {
     return filteredVenues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   }
-}, [filteredVenues, currentPage, visibleCount, isMobile]);
+}, [filteredVenues, currentPage, visibleCount, isMobile, searchQuery]);
+
 
 useEffect(() => {
   console.log("Current page:", currentPage);
