@@ -24,6 +24,7 @@ const VenueDetailsPopup = ({
   const [bookingData, setBookingData] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isConfirmCancelVisible, setIsConfirmCancelVisible] = useState(false);
+  const [isConfirmDeleteVisible, setIsConfirmDeleteVisible] = useState(false);
   const [editedVenue, setEditedVenue] = useState(selectedVenue);
   const [isEditing, setIsEditing] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
@@ -262,16 +263,16 @@ if (!selectedVenue) return null;
                   {selectedVenue.media.length > 1 && (
                     <>
                       <button 
-                        className={styles.prevButton} 
-                        onClick={() => handlePrevImage(selectedVenue.media.length)}
-                      >
-                        <img src={slideshowPrev} alt="Previous"></img>
-                      </button>
-                      <button 
                         className={styles.nextButton} 
                         onClick={() => handleNextImage(selectedVenue.media.length)}
                       >
                         <img src={slideshowNext} alt="Next"></img>
+                      </button>
+                      <button 
+                        className={styles.prevButton} 
+                        onClick={() => handlePrevImage(selectedVenue.media.length)}
+                      >
+                        <img src={slideshowPrev} alt="Previous"></img>
                       </button>
                     </>
                   )}
@@ -390,7 +391,18 @@ if (!selectedVenue) return null;
             onConfirm={handleCancelBookingConfirm}
             onCancel={closeCancelConfirmation}
             disableAutoClose={true}
-            hideBars = {true}
+            hideBars={true}
+          />
+        )}
+
+        {isConfirmDeleteVisible && (
+          <CustomPopup
+            message="Are you sure you want to delete this venue?"
+            onClose={closeDeleteConfirmation}
+            onConfirm={handleDeleteConfirm}
+            onCancel={closeDeleteConfirmation}
+            disableAutoClose={true}
+            hideBars={true}
           />
         )}
       </motion.div>

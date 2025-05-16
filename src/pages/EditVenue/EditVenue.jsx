@@ -203,7 +203,7 @@ const EditVenue = () => {
       if (response.ok) {
         setPopupMessage(
           <>
-            <h2>Successfully Edited the "{formData.name}"</h2>
+            <h2>Successfully Edited "{formData.name}"</h2>
             <p>Redirecting to Profile Page.</p>
           </>
         );
@@ -255,7 +255,7 @@ const EditVenue = () => {
     >
       <div className={`${styles.blurWrapper} ${showPopup ? styles.blurred : ''}`}>
       <section className={styles.pageContent}>
-        <h2>Edit Venue</h2>
+        <h1>Edit Venue</h1>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.fieldGroup}>
             <label>Name</label>
@@ -415,10 +415,15 @@ const EditVenue = () => {
               />
             </div>
           </div>
+          <div className={styles.editButtons}>
+            <button className={styles.cancelButton}>
+              Cancel Editing
+            </button>
 
-          <button type="submit" className={styles.submitButton}>
-            Save Changes
-          </button>
+            <button type="submit" className={styles.submitButton}>
+              Save Changes
+            </button>
+          </div>
         </form>
       </section>
       </div>

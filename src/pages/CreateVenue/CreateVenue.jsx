@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CreateVenue.module.css';
-import { headers } from '../../headers';
 import { motion } from "framer-motion";
-import { VENUE_CREATE } from "../../constants";
 import Buttons from '../../components/Buttons/Buttons';
 import CostumPopup from '../../components/CostumPopup/CostumPopup';
+import { headers } from '../../headers';
+import { VENUE_CREATE } from '../../constants';
+import { getToken, isLoggedIn } from '../../auth/auth';
 
 const CreateVenue = () => {
   const [formData, setFormData] = useState({
@@ -15,52 +16,47 @@ const CreateVenue = () => {
     maxGuests: 0,
     rating: 0,
     media: [{ url: '', alt: '' }],
-    meta: {
-      wifi: false,
-      parking: false,
-      breakfast: false,
-      pets: false
-    },
-    location: {
-      address: '',
-      city: '',
-      zip: '',
-      country: '',
-      continent: '',
-      lat: 0,
-      lng: 0
-    },
+    meta: { wifi: false, parking: false, breakfast: false, pets: false },
+    location: { address: '', city: '', zip: '', country: '', continent: '', lat: 0, lng: 0 },
+    isPublic: true,
+    bookings: true,
+    status: 'published',
     termsAccepted: false,
   });
 
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const username = localStorage.getItem("username");
+  const avatar = JSON.parse(localStorage.getItem("userProfile") || "{}").avatar;
 
   const [fieldStatus, setFieldStatus] = useState({
     name: null,
     description: null,
     price: null,
     maxGuests: null,
-    meta: null,
     media: null,
     location: null,
-  });  
+  });
+
+  const [popup, setPopup] = useState({ isVisible: false, message: '', type: '' });
+  const [isTermsPopupVisible, setIsTermsPopupVisible] = useState(false);
 
   const validateFields = (updatedFormData) => {
     const isValidUrl = (url) => {
+      if (!url.trim()) return true;
       try {
         return Boolean(new URL(url));
-      } 
+      }
       catch {
         return false;
       }
     };
-  
+
     setFieldStatus({
       name: updatedFormData.name.trim().length > 2,
       description: updatedFormData.description.trim().length > 10,
       price: updatedFormData.price > 0,
       maxGuests: updatedFormData.maxGuests > 0,
-      meta: Object.values(updatedFormData.meta).some(Boolean),
       media: updatedFormData.media.every(item => isValidUrl(item.url)),
       location: [
         updatedFormData.location.address,
@@ -70,15 +66,12 @@ const CreateVenue = () => {
         updatedFormData.location.continent,
       ].every(val => val.trim() !== '')
     });
-  };  
-
-  const [popup, setPopup] = useState({ isVisible: false, message: '', type: '' });
-  const [isTermsPopupVisible, setIsTermsPopupVisible] = useState(false);
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     let updatedFormData;
-  
+
     if (name === 'meta') {
       const [metaKey, metaValue] = value.split('=');
       updatedFormData = {
@@ -88,19 +81,19 @@ const CreateVenue = () => {
           [metaKey]: metaValue === 'true' ? checked : !checked
         }
       };
-    } 
+    }
     else if (name.startsWith('media-')) {
       const parts = name.split('-');
       const index = parseInt(parts[1], 10);
       const field = parts[2];
       const newMedia = [...formData.media];
       newMedia[index][field] = value;
-  
+
       updatedFormData = {
         ...formData,
         media: newMedia
       };
-    } 
+    }
     else if (name.includes('location')) {
       const field = name.split('-')[1];
       updatedFormData = {
@@ -110,29 +103,29 @@ const CreateVenue = () => {
           [field]: value
         }
       };
-    } 
+    }
     else {
-      let newValue = value;    
+      let newValue = value;
       if (name === 'price' || name === 'maxGuests') {
         if (!/^\d*$/.test(newValue)) return;
         newValue = newValue.replace(/^0+(?!$)/, '');
-    
+
         updatedFormData = {
           ...formData,
           [name]: newValue === '' ? 0 : Number(newValue)
         };
-      } 
+      }
       else {
         updatedFormData = {
           ...formData,
           [name]: newValue
         };
       }
-    }    
+    }
     setFormData(updatedFormData);
     validateFields(updatedFormData);
   };
-  
+
   const totalFields = Object.keys(fieldStatus).length;
   const validFields = Object.values(fieldStatus).filter(val => val === true).length;
   const progressPercentage = Math.round((validFields / totalFields) * 100);
@@ -152,12 +145,70 @@ const CreateVenue = () => {
     }
   };
 
+const buildVenuePayload = (formData, username, avatar) => {
+  const filteredMedia = formData.media.filter(item => item.url.trim() !== '');
+
+  const processedMedia = filteredMedia.map(item => ({
+    url: item.url,
+    alt: item.alt || 'Venue image'
+  }));
+
+  return {
+    name: formData.name,
+    description: formData.description,
+    price: Number(formData.price),
+    maxGuests: Number(formData.maxGuests),
+    rating: Number(formData.rating || 0),
+    media: processedMedia,
+    meta: formData.meta,
+    location: {
+      address: formData.location.address,
+      city: formData.location.city,
+      zip: formData.location.zip,
+      country: formData.location.country,
+      continent: formData.location.continent,
+      lat: Number(formData.location.lat || 0),
+      lng: Number(formData.location.lng || 0)
+    },
+    owner: {
+      name: username || "",
+      avatar: avatar || ""
+    },
+    isPublic: formData.isPublic === false ? false : true,
+    bookings: formData.bookings === false ? false : true,
+    status: formData.status || "published"
+  };
+};
+
+function normalizeTitle(title) {
+  return title.trim().replace(/\s+/g, ' ');
+}
+
+function isValidVenueTitle(title) {
+  const cleaned = title.trim();
+  const valid = /^[a-zA-Z0-9\s\-_'",\.&!?()]+$/.test(cleaned);
+  return valid && cleaned.length > 0;
+}
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      console.error('Token is required!');
+    const token = getToken();
+    if (!isLoggedIn() || !token) {
+      setPopup({
+        isVisible: true,
+        message: 'Authentication token not found. Please log in again.',
+        type: 'error',
+      });
+      setLoading(false);
+      return;
+    }
+
+    const cleanedTitle = normalizeTitle(formData.name);
+
+    if (!isValidVenueTitle(cleanedTitle)) {
+      alert("Venue title can only contain letters and spaces.");
       return;
     }
 
@@ -167,71 +218,69 @@ const CreateVenue = () => {
         message: 'You must agree to the terms of service before submitting.',
         type: 'error',
       });
+      setLoading(false);
       return;
     }
-    const transformedFormData = {
-      name: formData.name,
-      description: formData.description,
-      price: formData.price,
-      rating: formData.rating,
-      maxGuests: formData.maxGuests,
-      media: formData.media
-  .filter(item => item.url.trim() !== '')
-  .map(item => ({
-    url: item.url,
-    alt: item.alt && item.alt.trim() !== '' ? item.alt : 'Venue image'
-  })),
-      meta: formData.meta,
-      location: {
-        address: formData.location.address,
-        city: formData.location.city,
-        zip: formData.location.zip,
-        country: formData.location.country,
-        continent: formData.location.continent,
-      },
-    };    
 
-    const dataToSend = transformedFormData;
+    const allFieldsValid = Object.values(fieldStatus).every(status => status === true);
+    if (!allFieldsValid) {
+      setPopup({
+        isVisible: true,
+        message: 'Please fill in all required fields correctly.',
+        type: 'error',
+      });
+      setLoading(false);
+      return;
+    }
+
+    const venuePayload = buildVenuePayload(formData, username, avatar);
 
     try {
-      const response = await fetch(`${VENUE_CREATE}?_published=true`, {
+      const response = await fetch(VENUE_CREATE, {
         method: 'POST',
         headers: headers(token),
-        body: JSON.stringify(dataToSend),
+        body: JSON.stringify(venuePayload),
       });
 
       const data = await response.json();
-      console.log('Created Venue Response:', data);
 
-      if (response.ok) {
+      if (response.ok && data.data && data.data.id) {
         setPopup({
           isVisible: true,
           message: 'Venue created successfully!',
           type: 'success'
         });
-      } 
+        setTimeout(() => {
+          navigate(`/venues/${data.data.id}`);
+        }, 2000);
+      }
       else {
+        const errorMsg = data.errors
+          ? data.errors.map(err => err.message).join(', ')
+          : data.message || 'Failed to create the venue';
         setPopup({
           isVisible: true,
-          message: `Error creating venue: ${data.message}`,
+          message: `Error: ${errorMsg}`,
           type: 'error'
         });
       }
-    } 
+    }
     catch (error) {
-      console.error('Error creating venue:', error);
       setPopup({
         isVisible: true,
-        message: 'Something went wrong. Please try again.',
+        message: 'An unexpected error occurred. Please try again.',
         type: 'error'
       });
-    }    
+    }
+    finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     if (popup.isVisible || isTermsPopupVisible) {
       document.body.style.overflow = 'hidden';
-    } 
+    }
     else {
       document.body.style.overflow = '';
     }
@@ -258,10 +307,10 @@ const CreateVenue = () => {
         setPopup({ isVisible: false, message: '', type: '' });
         navigate('/admin-profile');
       }, 2000);
-  
+
       return () => clearTimeout(timer);
     }
-  }, [popup, navigate]);  
+  }, [popup, navigate]);
 
   return (
     <motion.div
@@ -277,21 +326,21 @@ const CreateVenue = () => {
             <div className={styles.leftBorder}>
             <h2>Progress:</h2>
             <div className={styles.progressDivs}>
-            <div className={`${styles.step} ${fieldStatus.name === true ? styles.valid : fieldStatus.name === false ? styles.invalid : ''}`}>Venue Name</div>
-<div className={`${styles.step} ${fieldStatus.description === true ? styles.valid : fieldStatus.description === false ? styles.invalid : ''}`}>Venue Description</div>
-<div className={`${styles.step} ${fieldStatus.price === true ? styles.valid : fieldStatus.price === false ? styles.invalid : ''}`}>Price per Night</div>
-<div className={`${styles.step} ${fieldStatus.maxGuests === true ? styles.valid : fieldStatus.maxGuests === false ? styles.invalid : ''}`}>Max Guests</div>
-<div className={`${styles.step} ${fieldStatus.meta === true ? styles.valid : fieldStatus.meta === false ? styles.invalid : ''}`}>Meta Tags</div>
-<div className={`${styles.step} ${fieldStatus.media === true ? styles.valid : fieldStatus.media === false ? styles.invalid : ''}`}>Venue Media</div>
-<div className={`${styles.step} ${fieldStatus.location === true ? styles.valid : fieldStatus.location === false ? styles.invalid : ''}`}>Location</div>
+              <div className={`${styles.step} ${fieldStatus.name === true ? styles.valid : fieldStatus.name === false ? styles.invalid : ''}`}>Venue Name</div>
+              <div className={`${styles.step} ${fieldStatus.description === true ? styles.valid : fieldStatus.description === false ? styles.invalid : ''}`}>Venue Description</div>
+              <div className={`${styles.step} ${fieldStatus.price === true ? styles.valid : fieldStatus.price === false ? styles.invalid : ''}`}>Price per Night</div>
+              <div className={`${styles.step} ${fieldStatus.maxGuests === true ? styles.valid : fieldStatus.maxGuests === false ? styles.invalid : ''}`}>Max Guests</div>
+              <div className={`${styles.step} ${styles.valid}`}>Meta Tags (Optional)</div>
+              <div className={`${styles.step} ${fieldStatus.media === true ? styles.valid : fieldStatus.media === false ? styles.invalid : ''}`}>Venue Media</div>
+              <div className={`${styles.step} ${fieldStatus.location === true ? styles.valid : fieldStatus.location === false ? styles.invalid : ''}`}>Location</div>
             </div>
 
-<div className={styles.progressBarContainer}>
-  <div className={styles.progressBar} style={{ width: `${progressPercentage}%` }}></div>
-</div>
+            <div className={styles.progressBarContainer}>
+              <div className={styles.progressBar} style={{ width: `${progressPercentage}%` }}></div>
+            </div>
             </div>
           </div>
-          <div  className={styles.createFormContent}>
+          <div className={styles.createFormContent}>
           <h1>Create a New Venue</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formRowFirst}>
@@ -308,24 +357,24 @@ const CreateVenue = () => {
           <div className={styles.fieldGroupPrice}>
           <label>Price Per Night</label>
           <input
-  type="text"
-  name="price"
-  value={formData.price.toString()}
-  onChange={handleChange}
-  required
-  inputMode="numeric"
-/>
+            type="text"
+            name="price"
+            value={formData.price.toString()}
+            onChange={handleChange}
+            required
+            inputMode="numeric"
+          />
         </div>
                 <div className={styles.fieldGroupGuests}>
           <label>Guest Limit</label>
           <input
-  type="text"
-  name="maxGuests"
-  value={formData.maxGuests.toString()}
-  onChange={handleChange}
-  required
-  inputMode="numeric"
-/>
+            type="text"
+            name="maxGuests"
+            value={formData.maxGuests.toString()}
+            onChange={handleChange}
+            required
+            inputMode="numeric"
+          />
         </div>
         </div>
         <div className={styles.formRowSecond}>
@@ -339,7 +388,7 @@ const CreateVenue = () => {
           />
         </div>
         <div className={styles.fieldGroupMeta}>
-          <label>Meta Tags</label>
+          <label>Meta Tags (Optional)</label>
           <div className={styles.metaTags}>
             <label>
               <input
@@ -394,7 +443,7 @@ const CreateVenue = () => {
                   placeholder="Image URL"
                   value={media.url}
                   onChange={handleChange}
-                  required
+                  required={index === 0}
                 />
                 <input
                   type="text"
@@ -425,6 +474,7 @@ const CreateVenue = () => {
               placeholder="Address"
               value={formData.location.address}
               onChange={handleChange}
+              required
             />
             <input
               type="text"
@@ -432,6 +482,7 @@ const CreateVenue = () => {
               placeholder="ZIP"
               value={formData.location.zip}
               onChange={handleChange}
+              required
             />
             <input
               type="text"
@@ -439,6 +490,7 @@ const CreateVenue = () => {
               placeholder="City"
               value={formData.location.city}
               onChange={handleChange}
+              required
             />
             <input
               type="text"
@@ -446,6 +498,7 @@ const CreateVenue = () => {
               placeholder="Country"
               value={formData.location.country}
               onChange={handleChange}
+              required
             />
             <input
               type="text"
@@ -453,32 +506,33 @@ const CreateVenue = () => {
               placeholder="Continent"
               value={formData.location.continent}
               onChange={handleChange}
+              required
             />
           </div>
         </div>
 
         <div className={styles.fieldGroupTerms}>
-  <input
-    type="checkbox"
-    id="termsAccepted"
-    name="termsAccepted"
-    checked={formData.termsAccepted}
-    onChange={(e) =>
-      setFormData({ ...formData, termsAccepted: e.target.checked })
-    }
-  />
-  <label htmlFor="termsAccepted">
-    I agree to the <span className={styles.termsLink} onClick={openTermsPopup}>Terms of Service.</span>
-  </label>
-</div>
+          <input
+            type="checkbox"
+            id="termsAccepted"
+            name="termsAccepted"
+            checked={formData.termsAccepted}
+            onChange={(e) =>
+              setFormData({ ...formData, termsAccepted: e.target.checked })
+            }
+          />
+          <label htmlFor="termsAccepted">
+            I agree to the <span className={styles.termsLink} onClick={openTermsPopup}>Terms of Service.</span>
+          </label>
+        </div>
         <Buttons
-        size='medium'
-        version='v4'
-        type="submit"
+          size='medium'
+          version='v4'
+          type="submit"
+          disabled={loading}
         >
-          Create Venue
+          {loading ? 'Creating...' : 'Create Venue'}
         </Buttons>
-
       </form>
           </div>
         </div>

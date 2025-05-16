@@ -227,7 +227,9 @@
   gap: 50px;
 }
 .sidebar {
+  position: sticky;
   left: 0;
+  top: 75px;
   height: 90vh;
   width: 300px;
   margin-bottom: 50px;

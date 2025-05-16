@@ -354,7 +354,7 @@ if (result.data?.owner) {
               {venue.description}
             </p>
             
-            <p>$ {venue.price} <span className={styles.pricepernight}>/per night</span></p>
+            <p className={styles.pricepernight}>$ {venue.price} <span>/per night</span></p>
             
             <div className={styles.dividerLine}></div>
             
@@ -531,7 +531,7 @@ if (result.data?.owner) {
                       <span>/ ${venue.price} per night</span>
                     </p>
 
-                    <Buttons size="large" version="v2" onClick={handleSubmit}>
+                    <Buttons size="small" version="v1" onClick={handleSubmit}>
                       Book Room
                     </Buttons>
                   </div>  
