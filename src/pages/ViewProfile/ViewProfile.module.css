@@ -6,21 +6,21 @@
   justify-content: center;
   margin-bottom: 50px;
 }
-.container button, 
-.container input, 
-.container label {
-  font-family: "Playfair Display", serif;
-}
+
 .profilePage {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: fit-content;
   width: 80%;
   margin-top: 75px;
   padding-bottom: 100px;
   gap: 50px;
+  background-color: white;
+  border-radius: 10px;
 }
-.mobileProfile .divider {
+
+.divider {
   height: 0.5px;
   width: 100%;
   background-color: #1F1B17;
@@ -28,50 +28,52 @@
   margin-top: 50px;
   margin-bottom: 50px;
 }
-.mobileProfile .rating {
+
+.rating {
   margin-top: 0px;
   font-size: 1.125rem;
 }
-.mobileProfile .rating span {
+
+.rating span {
   opacity: 75%;
   font-size: 0.9rem;
 }
-.mobileProfile .rating img {
+
+.rating img {
   width: 15px;
   height: 15px;
   object-fit: contain;
   margin-right: 5px;
   border: none;
 }
-.mobileProfile {
-  height: 100%;
-  min-height: 100vh;
-  width: 100%;
-  display: none;
-}
-.mobileProfile .profileTop {
+
+.profileTop {
   height: 350px;
   width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
 }
-.mobileProfile .bannerWrapper {
+
+.bannerWrapper {
   height: 400px;
   width: 100%;
   z-index: 1;
   border-radius: 25px;
 }
-.mobileProfile .bannerWrapper img {
+
+.bannerWrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 25px;
 }
-.mobileProfile .avatarWrapper {
+
+.avatarWrapper {
   position: relative;
 }
-.mobileProfile .avatar {
+
+.avatar {
   position: absolute;
   height: 125px;
   width: 125px;
@@ -81,32 +83,43 @@
   border-radius: 99px 99px 15px 15px;
   object-fit: cover;
 }
-.mobileProfile .edgeLeft, 
-.mobileProfile .edgeRight {
+
+.edgeLeft, 
+.edgeRight {
   width: 15px;
   position: absolute;
   bottom: 0;
   z-index: 3;
 }
-.mobileProfile .edgeRight {
+
+.edgeRight {
   left: 140px;
   transform: scaleX(-1);
 }
-.mobileProfile .profileInfo {
+
+.profileInfo {
   margin-top: 10px;
   margin-left: 15px;
 }
-.mobileProfile .profileInfo h2 {
+
+.profileInfo h2 {
   margin: 25px 0 0;
   font-size: 1.5rem;
   padding: 0;
 }
-.mobileProfile .profileInfo p {
+
+.profileInfo p {
   font-size: 1.125rem;
   margin-top: 5px;
   font-style: italic;
 }
-.mobileProfile .sectionHeader {
+
+.venuesSection {
+  margin-top: 50px;
+  scroll-margin-top: 100px;
+}
+
+.sectionHeader {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -114,15 +127,13 @@
   width: 100%;
   margin-bottom: 15px;
 }
-.mobileProfile .sectionHeader h3 {
+
+.sectionHeader h3 {
   font-size: 1.75rem;
   margin: 0;
 }
-.mobileProfile .venuesSection {
-  margin-top: 50px;
-  scroll-margin-top: 100px;
-}
-.mobileProfile .venueGrid {
+
+.venueGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-auto-rows: 1fr;
@@ -132,148 +143,13 @@
   align-items: start;
   height: 100%;
 }
-.mobileProfile .venueGrid > * {
+
+.venueGrid > * {
   aspect-ratio: 3 / 4;
   max-width: 400px;
   width: 100%;
   height: 100%;
   justify-self: center;
-}
-
-
-
-
-
-.tabletProfile {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.tabletProfile .divider {
-  height: 0.5px;
-  width: calc(100%-50px);
-  background-color: #1F1B17;
-  border-radius: 99px;
-  margin-top: 50px;
-  margin-bottom: 25px;
-  margin-left: 25px;
-  margin-right: 25px;
-}
-.tabletProfile .rating {
-  margin-top: 0px;
-  font-size: 1.125rem;
-}
-.tabletProfile .rating span {
-  opacity: 75%;
-  font-size: 0.9rem;
-}
-.tabletProfile .rating img {
-  width: 15px;
-  height: 15px;
-  object-fit: contain;
-  margin-right: 5px;
-  border: none;
-}
-.tabletProfile .profileTop {
-  height: 550px;
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-.tabletProfile .bannerWrapper {
-  height: 400px;
-  width: 100%;
-  z-index: 1;
-  border-radius: 25px;
-}
-.tabletProfile .bannerWrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 15px;
-}
-.tabletProfile .avatarWrapper {
-  position: relative;
-}
-.tabletProfile .avatar {
-  position: absolute;
-  height: 200px;
-  width: 200px;
-  z-index: 2;
-  bottom: -10px;
-  margin-left: 35px;
-  border-radius: 99px 99px 5px 5px;
-  object-fit: cover;
-}
-.tabletProfile .edgeLeft, 
-.tabletProfile .edgeRight {
-  width: 25px;
-  position: absolute;
-  bottom: 0;
-  z-index: 3;
-}
-.tabletProfile .edgeLeft {
-  left: 10px;
-}
-.tabletProfile .edgeRight {
-  left: 235px;
-  transform: scaleX(-1);
-}
-.tabletProfile .profileInfo {
-  margin-top: 5px;
-  margin-left: 25px;
-}
-.tabletProfile .profileInfo h2 {
-  margin: 25px 0 0;
-  font-size: 2.5rem;
-  padding: 0;
-  width: 100%;
-}
-.tabletProfile .profileInfo p {
-  font-size: 1.125rem;
-  margin-top: 5px;
-  font-style: italic;
-}
-.tabletProfile .sectionHeader {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 50px;
-}
-.tabletProfile .sectionHeader h3 {
-  font-size: 2.5rem;
-  margin: 0;
-}
-.tabletProfile .venuesSection {
-  margin-top: 50px;
-  height: fit-content;
-  padding-bottom: 25px;
-  scroll-margin-top: 100px;
-  margin-left: 25px;
-  margin-right: 25px;
-}
-.tabletProfile .venueGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-auto-rows: 1fr;
-  max-width: 100%;
-  gap: 25px;
-  position: relative;
-  align-items: start;
-  height: fit-content;
-}
-.tabletProfile .venueGrid > * {
-  aspect-ratio: 3 / 4;
-  max-width: 400px;
-  width: 100%;
-  height: 100%;
-  justify-self: center;
-  margin-bottom: 50px;
 }
 
 .sortDropdown {
@@ -299,6 +175,7 @@
   top: 475px;
   font-size: 1rem;
 }
+
 .gobackBtn button:hover {
   transition: 0.25s;
   cursor: pointer;
@@ -306,15 +183,93 @@
   color: #fffefb;
 }
 
+.mobileProfile {
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  display: none;
+}
+
+.tabletProfile {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabletProfile .divider {
+  height: 0.5px;
+  width: calc(100% - 50px);
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-bottom: 25px;
+}
+
+.tabletProfile .profileTop {
+  height: 550px;
+}
+
+.tabletProfile .bannerWrapper img {
+  border-radius: 15px;
+}
+
+.tabletProfile .avatar {
+  height: 200px;
+  width: 200px;
+  margin-left: 35px;
+  border-radius: 99px 99px 5px 5px;
+}
+
+.tabletProfile .edgeLeft, 
+.tabletProfile .edgeRight {
+  width: 25px;
+}
+
+.tabletProfile .edgeLeft {
+  left: 10px;
+}
+
+.tabletProfile .edgeRight {
+  left: 235px;
+}
+
+.tabletProfile .profileInfo {
+  margin-left: 25px;
+}
+
+.tabletProfile .profileInfo h2 {
+  font-size: 2.5rem;
+  width: 100%;
+}
+
+.tabletProfile .sectionHeader {
+  margin-bottom: 50px;
+}
+
+.tabletProfile .sectionHeader h3 {
+  font-size: 2.5rem;
+}
+
+.tabletProfile .venuesSection {
+  margin-left: 25px;
+  margin-right: 25px;
+  height: fit-content;
+  padding-bottom: 25px;
+}
+
+.tabletProfile .venueGrid {
+  height: fit-content;
+}
+
+.tabletProfile .venueGrid > * {
+  margin-bottom: 50px;
+}
 
 @media (max-width: 1025px) {
   .profilePage {
     width: 90%;
     margin-left: 5%;
     margin-right: 5%;
-  }
-  .contentContainer h2 {
-    font-size: 2.5rem;
   }
 }
 @media (max-width: 725px) {

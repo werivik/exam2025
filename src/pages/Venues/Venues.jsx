@@ -209,6 +209,9 @@ const Venues = () => {
   useEffect(() => {
     const fetchVenues = async () => {
       try {
+        setLoading(true);
+        
+        // Fetch all venues from the API
         const response = await fetch(VENUES, {
           method: 'GET',
           headers: headers(),
@@ -217,10 +220,16 @@ const Venues = () => {
         if (!response.ok) throw new Error("Failed to fetch venues");
 
         const data = await response.json();
+        
+        // Use all venues from the API response without any deduplication
         const venuesData = data.data || [];
-
+        
+        // Important: We're using all venues from the API as-is
+        // without filtering out any duplicates by name, location, etc.
         setVenues(venuesData);
         setFilteredVenues(venuesData);
+
+        console.log(`Fetched ${venuesData.length} venues from API`);
 
         const prices = venuesData.map(venue => venue.price || 0);
         const min = Math.min(...prices);
@@ -486,7 +495,8 @@ const Venues = () => {
           </div>
 
           <div className={styles.filterTopSection}>
-            <div className={styles.topSearchbar}>
+            <div className={styles.filterTop}>
+              <div className={styles.topSearchbar}>
               <Searchbar
                 filters={filters}
                 setFilters={setFilters}
@@ -495,6 +505,11 @@ const Venues = () => {
                 setFilteredVenues={setFilteredVenues}
                 setNoMatches={setNoMatches}
               />
+            </div>
+              <Buttons size='small' version='v2' onClick={toggleSidebar}>
+              All Filters
+            </Buttons>
+            </div>
               <div className={styles.sortDropdown}>
                 <label htmlFor="sort">Sort by:</label>
                 <select
@@ -510,10 +525,6 @@ const Venues = () => {
                   <option value="ratingHighLow">Rating: High to Low</option>
                 </select>
               </div>
-            </div>
-            <Buttons size='medium' version='v1' onClick={toggleSidebar}>
-              Filters
-            </Buttons>
           </div>
 
           {loading ? (
