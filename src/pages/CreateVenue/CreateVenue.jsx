@@ -34,7 +34,6 @@ const CreateVenue = () => {
     description: null,
     price: null,
     maxGuests: null,
-    meta: null,
     media: null,
     location: null,
   });
@@ -58,7 +57,6 @@ const CreateVenue = () => {
       description: updatedFormData.description.trim().length > 10,
       price: updatedFormData.price > 0,
       maxGuests: updatedFormData.maxGuests > 0,
-      meta: Object.values(updatedFormData.meta).some(Boolean),
       media: updatedFormData.media.every(item => isValidUrl(item.url)),
       location: [
         updatedFormData.location.address,
@@ -152,7 +150,7 @@ const CreateVenue = () => {
 
     const processedMedia = filteredMedia.map(item => ({
       url: item.url,
-      alt: item.alt.trim() !== '' ? item.alt : 'Venue image'
+      alt: item.alt || 'Venue image'
     }));
 
     return {
@@ -175,7 +173,10 @@ const CreateVenue = () => {
       owner: {
         name: username || "",
         avatar: avatar || ""
-      }
+      },
+      isPublic: formData.isPublic,
+      bookings: formData.bookings,
+      status: formData.status
     };
   };
 
@@ -312,7 +313,7 @@ const CreateVenue = () => {
               <div className={`${styles.step} ${fieldStatus.description === true ? styles.valid : fieldStatus.description === false ? styles.invalid : ''}`}>Venue Description</div>
               <div className={`${styles.step} ${fieldStatus.price === true ? styles.valid : fieldStatus.price === false ? styles.invalid : ''}`}>Price per Night</div>
               <div className={`${styles.step} ${fieldStatus.maxGuests === true ? styles.valid : fieldStatus.maxGuests === false ? styles.invalid : ''}`}>Max Guests</div>
-              <div className={`${styles.step} ${fieldStatus.meta === true ? styles.valid : fieldStatus.meta === false ? styles.invalid : ''}`}>Meta Tags</div>
+              <div className={`${styles.step} ${styles.valid}`}>Meta Tags (Optional)</div>
               <div className={`${styles.step} ${fieldStatus.media === true ? styles.valid : fieldStatus.media === false ? styles.invalid : ''}`}>Venue Media</div>
               <div className={`${styles.step} ${fieldStatus.location === true ? styles.valid : fieldStatus.location === false ? styles.invalid : ''}`}>Location</div>
             </div>
@@ -370,7 +371,7 @@ const CreateVenue = () => {
           />
         </div>
         <div className={styles.fieldGroupMeta}>
-          <label>Meta Tags</label>
+          <label>Meta Tags (Optional)</label>
           <div className={styles.metaTags}>
             <label>
               <input
