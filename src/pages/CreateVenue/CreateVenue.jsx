@@ -176,11 +176,11 @@ const CreateVenue = () => {
       rating: formData.rating,
       maxGuests: formData.maxGuests,
       media: formData.media
-  .filter(item => item.url.trim() !== '')
-  .map(item => ({
-    url: item.url,
-    alt: item.alt && item.alt.trim() !== '' ? item.alt : 'Venue image'
-  })),
+        .filter(item => item.url.trim() !== '')
+        .map(item => ({
+          url: item.url,
+          alt: item.alt && item.alt.trim() !== '' ? item.alt : 'Venue image'
+        })),
       meta: formData.meta,
       location: {
         address: formData.location.address,
@@ -191,29 +191,49 @@ const CreateVenue = () => {
       },
     };    
 
-    const dataToSend = transformedFormData;
-
     try {
-      const response = await fetch(`${VENUE_CREATE}?_published=true&_bookings=true`, {
+      const response = await fetch(VENUE_CREATE, {
         method: 'POST',
         headers: headers(token),
-        body: JSON.stringify(dataToSend),
+        body: JSON.stringify(transformedFormData),
       });
 
       const data = await response.json();
       console.log('Created Venue Response:', data);
 
-      if (response.ok) {
-        setPopup({
-          isVisible: true,
-          message: 'Venue created successfully!',
-          type: 'success'
+      if (response.ok && data.data && data.data.id) {
+        const venueId = data.data.id;
+        const updateResponse = await fetch(`${VENUE_CREATE}/${venueId}?published_true`, {
+          method: 'PUT',
+          headers: headers(token),
+          body: JSON.stringify({
+            ...transformedFormData,
+            id: venueId
+          }),
         });
+
+        const updateData = await updateResponse.json();
+        console.log('Updated Venue Response:', updateData);
+
+        if (updateResponse.ok) {
+          setPopup({
+            isVisible: true,
+            message: 'Venue created and published successfully!',
+            type: 'success'
+          });
+        } 
+        else {
+          setPopup({
+            isVisible: true,
+            message: `Error publishing venue: ${updateData.message || 'Unknown error'}`,
+            type: 'error'
+          });
+        }
       } 
       else {
         setPopup({
           isVisible: true,
-          message: `Error creating venue: ${data.message}`,
+          message: `Error creating venue: ${data.message || 'Unknown error'}`,
           type: 'error'
         });
       }
