@@ -206,10 +206,15 @@ const Venues = () => {
     }
   }, [venues]);
 
-  useEffect(() => {
-    const fetchVenues = async () => {
-      try {
-        const response = await fetch(VENUES, {
+useEffect(() => {
+  const fetchVenues = async () => {
+    try {
+      const allVenues = [];
+      let page = 1;
+      let hasMore = true;
+      
+      while (hasMore) {
+        const response = await fetch(`${VENUES}?page=${page}`, {
           method: 'GET',
           headers: headers(),
         });
@@ -219,47 +224,59 @@ const Venues = () => {
         const data = await response.json();
         const venuesData = data.data || [];
 
-        setVenues(venuesData);
-        setFilteredVenues(venuesData);
+        allVenues.push(...venuesData);
 
-        const prices = venuesData.map(venue => venue.price || 0);
-        const min = Math.min(...prices);
-        const max = Math.max(...prices);
-
-        setMinPrice(min);
-        setMaxPrice(max);
-        setFilters(prev => ({
-          ...prev,
-          priceMin: min,
-          priceMax: max
-        }));
-
-        const metaKeys = new Set();
-        venuesData.forEach(venue => {
-          if (venue.meta) {
-            Object.keys(venue.meta).forEach(key => metaKeys.add(key));
-          }
-        });
-        setMetaFilters(Array.from(metaKeys));
-
-        const ratingsSet = new Set();
-        venuesData.forEach(venue => {
-          if (venue.rating) ratingsSet.add(Math.floor(venue.rating));
-        });
-        setAvailableRatings(Array.from(ratingsSet).sort((a, b) => a - b));
-
-        setLocationSuggestionList(extractLocationSuggestions(venuesData));
-      } 
-      catch (error) {
-        console.error("Error fetching venues:", error);
-      } 
-      finally {
-        setLoading(false);
+        if (venuesData.length < PAGE_SIZE) {
+          hasMore = false;
+        } 
+        else {
+          page++;
+        }
       }
-    };
 
-    fetchVenues();
-  }, [extractLocationSuggestions]);
+      setVenues(allVenues);
+      setFilteredVenues(allVenues);
+      console.log(allVenues); 
+
+      const prices = allVenues.map(venue => venue.price || 0);
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+
+      setMinPrice(min);
+      setMaxPrice(max);
+      setFilters(prev => ({
+        ...prev,
+        priceMin: min,
+        priceMax: max,
+      }));
+
+      const metaKeys = new Set();
+      allVenues.forEach(venue => {
+        if (venue.meta) {
+          Object.keys(venue.meta).forEach(key => metaKeys.add(key));
+        }
+      });
+      setMetaFilters(Array.from(metaKeys));
+
+      const ratingsSet = new Set();
+      allVenues.forEach(venue => {
+        if (venue.rating) ratingsSet.add(Math.floor(venue.rating));
+      });
+      setAvailableRatings(Array.from(ratingsSet).sort((a, b) => a - b));
+
+      setLocationSuggestionList(extractLocationSuggestions(allVenues));
+      
+    } 
+    catch (error) {
+      console.error("Error fetching venues:", error);
+    } 
+    finally {
+      setLoading(false);
+    }
+  };
+
+  fetchVenues();
+}, [extractLocationSuggestions]);
 
   useEffect(() => {
     if (!metaFilters.length) return;
@@ -390,9 +407,32 @@ const Venues = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const pageTotal = useMemo(() => 
-    Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE)),
-  [filteredVenues.length]);
+const pageTotal = useMemo(() => 
+  Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE)),
+[filteredVenues.length]);
+
+const getPageNumbers = (currentPage, totalPages) => {
+  const maxPageNumbers = Math.min(5, totalPages);
+  
+  let startPage;
+  
+  if (totalPages <= 5) {
+    startPage = 1;
+  } 
+  else {
+    if (currentPage <= 3) {
+      startPage = 1;
+    } 
+    else if (currentPage >= totalPages - 2) {
+      startPage = totalPages - 4;
+    } 
+    else {
+      startPage = currentPage - 2;
+    }
+  }
+
+  return Array.from({ length: maxPageNumbers }, (_, i) => startPage + i);
+};
 
   const scrollToTop = useCallback(() => {
     topRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -532,27 +572,29 @@ const Venues = () => {
                 ))}
               </div>
 
-              {window.innerWidth >= 1024 && pageTotal > 1 && (
-                <div className={styles.paginationWrapper}>
-                  <div className={styles.pagination}>
-                    {currentPage > 1 && (
-                      <button onClick={goToPrevPage} className={styles.page}>Prev</button>
-                    )}
-                    {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
-                      <button
-                        key={p}
-                        onClick={() => handlePageClick(p)}
-                        className={p === currentPage ? styles.pageActive : styles.page}
-                      >
-                        {p}
-                      </button>
-                    ))}
-                    {currentPage < pageTotal && (
-                      <button onClick={goToNextPage} className={styles.page}>Next</button>
-                    )}
-                  </div>
-                </div>
-              )}
+{window.innerWidth >= 1024 && pageTotal > 1 && (
+  <div className={styles.paginationWrapper}>
+    <div className={styles.pagination}>
+      {currentPage > 1 && (
+        <button onClick={goToPrevPage} className={styles.page}>Prev</button>
+      )}
+      
+      {getPageNumbers(currentPage, pageTotal).map(pageNum => (
+        <button
+          key={pageNum}
+          onClick={() => handlePageClick(pageNum)}
+          className={pageNum === currentPage ? styles.pageActive : styles.page}
+        >
+          {pageNum}
+        </button>
+      ))}
+      
+      {currentPage < pageTotal && (
+        <button onClick={goToNextPage} className={styles.page}>Next</button>
+      )}
+    </div>
+  </div>
+)}
 
               {window.innerWidth < 1024 && visibleCount < filteredVenues.length && (
                 <div className={styles.loadMoreWrapper}>
