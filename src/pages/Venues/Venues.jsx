@@ -225,6 +225,8 @@ useEffect(() => {
         if (!response.ok) throw new Error("Failed to fetch venues");
 
         const data = await response.json();
+        
+        // Use all venues from the API response without any deduplication
         const venuesData = data.data || [];
 
         if (venuesData.length === 0) break;
