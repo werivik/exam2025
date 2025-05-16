@@ -145,6 +145,7 @@ const Venues = () => {
       country: '',
       city: '',
     });
+    setCurrentPage(1);
   }, [minPrice, maxPrice]);
 
   const handleFilterChange = useCallback((e) => {
@@ -190,15 +191,16 @@ const Venues = () => {
     if (value.trim()) {
       const searchTerm = value.toLowerCase();
       const filtered = venues.filter(venue => {
-        const nameMatch = venue.name?.toLowerCase().startsWith(searchTerm);
-        const cityMatch = venue.location?.city?.toLowerCase().startsWith(searchTerm);
-        const countryMatch = venue.location?.country?.toLowerCase().startsWith(searchTerm);
-        const ownerMatch = venue.owner?.name?.toLowerCase().startsWith(searchTerm);
+        const nameMatch = venue.name?.toLowerCase().includes(searchTerm);
+        const cityMatch = venue.location?.city?.toLowerCase().includes(searchTerm);
+        const countryMatch = venue.location?.country?.toLowerCase().includes(searchTerm);
+        const ownerMatch = venue.owner?.name?.toLowerCase().includes(searchTerm);
 
         return nameMatch || cityMatch || countryMatch || ownerMatch;
       });
       setFilteredVenues(filtered);
       setNoMatches(filtered.length === 0);
+      setCurrentPage(1);
     } 
     else {
       setFilteredVenues(venues);
@@ -351,6 +353,12 @@ useEffect(() => {
         (filters.priceMin === 0 || venue.price >= filters.priceMin) &&
         (filters.priceMax === 0 || venue.price <= filters.priceMax);
 
+      const matchesSearch = !searchQuery || 
+        venue.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        venue.location?.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        venue.location?.country?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        venue.owner?.name?.toLowerCase().includes(searchQuery.toLowerCase());
+
       return (
         matchesContinent &&
         matchesCountry &&
@@ -358,7 +366,8 @@ useEffect(() => {
         matchesGuests &&
         matchesRating &&
         matchesMeta &&
-        matchesPrice
+        matchesPrice &&
+        matchesSearch
       );
     });
 
@@ -385,7 +394,9 @@ useEffect(() => {
 
     setFilteredVenues(sorted);
     setNoMatches(filtered.length === 0);
-  }, [filters, venues, sortOption]);
+    
+    setCurrentPage(1);
+  }, [filters, venues, sortOption, searchQuery]);
 
   useEffect(() => {
     document.body.style.overflow = showSidebar ? 'hidden' : '';
@@ -531,9 +542,11 @@ const getPageNumbers = (currentPage, totalPages) => {
                 filters={filters}
                 setFilters={setFilters}
                 venues={venues}
+                searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
                 setFilteredVenues={setFilteredVenues}
                 setNoMatches={setNoMatches}
+                setCurrentPage={setCurrentPage}
               />
               <div className={styles.sortDropdown}>
                 <label htmlFor="sort">Sort by:</label>
@@ -572,29 +585,32 @@ const getPageNumbers = (currentPage, totalPages) => {
                 ))}
               </div>
 
-{window.innerWidth >= 1024 && pageTotal > 1 && (
-  <div className={styles.paginationWrapper}>
-    <div className={styles.pagination}>
-      {currentPage > 1 && (
-        <button onClick={goToPrevPage} className={styles.page}>Prev</button>
-      )}
-      
-      {getPageNumbers(currentPage, pageTotal).map(pageNum => (
-        <button
-          key={pageNum}
-          onClick={() => handlePageClick(pageNum)}
-          className={pageNum === currentPage ? styles.pageActive : styles.page}
-        >
-          {pageNum}
-        </button>
-      ))}
-      
-      {currentPage < pageTotal && (
-        <button onClick={goToNextPage} className={styles.page}>Next</button>
-      )}
-    </div>
-  </div>
-)}
+              {window.innerWidth >= 1024 && pageTotal > 1 && (
+                <div className={styles.paginationWrapper}>
+                  <div className={styles.pagination}>
+                    {currentPage > 1 && (
+                      <button onClick={goToPrevPage} className={styles.page}>Prev</button>
+                    )}
+                    
+                    {getPageNumbers(currentPage, pageTotal).map(pageNum => (
+                      <button
+                        key={pageNum}
+                        onClick={() => handlePageClick(pageNum)}
+                        className={pageNum === currentPage ? styles.pageActive : styles.page}
+                      >
+                        {pageNum}
+                      </button>
+                    ))}
+                    
+                    {currentPage < pageTotal && (
+                      <button onClick={goToNextPage} className={styles.page}>Next</button>
+                    )}
+                  </div>
+                  <div className={styles.resultsInfo}>
+                    Showing {Math.min(PAGE_SIZE, filteredVenues.length - (currentPage - 1) * PAGE_SIZE)} of {filteredVenues.length} results
+                  </div>
+                </div>
+              )}
 
               {window.innerWidth < 1024 && visibleCount < filteredVenues.length && (
                 <div className={styles.loadMoreWrapper}>

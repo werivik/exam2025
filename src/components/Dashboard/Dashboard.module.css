@@ -1,86 +1,135 @@
-.filterSidebarContent {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: 25px;
-    height: 100%;
-    padding-bottom: 50px;
-    margin-left: 25px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    color: #1F1B17;
-  }
-
-  .divideLine {
-    height: 0.5px;
-    width: 100%;
-    border: 99px;
-    background-color: #1F1B17;
-  }
-
-  .filterSidebarContent {
-    overflow-y: scroll;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .filterSidebarContent::-webkit-scrollbar {
-    display: none;
-  }
-
-  .backdrop {
+.filterSidebar {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.3);
-    z-index: 1000;
-    animation: fadeIn 0.3s ease forwards;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  .filterSidebar {
-    position: fixed;
-    top: 0;
-    left: -500px;
-    width: 375px;
+    right: -350px;
+    width: 350px;
     height: 100vh;
     background-color: white;
+    z-index: 999;
+    overflow-y: auto;
+    transition: right 0.3s ease-in-out;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    font-family: "Playfair Display", serif;
     color: #1F1B17;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-    padding: 2rem 1.5rem;
+}
+.showDashboard {
+    right: 0;
+}
+.filterSidebarContent {
+    padding: 20px;
+    margin-left: 15px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    transition: all 0.4s ease;
-    z-index: 1100;
-    border-radius: 0px 25px 25px 0px;
-    font-size: 1rem;
-  }
-  
-  .showDashboard {
+    gap: 25px;
+    position: relative;
+}
+.filterSidebarContent h2 {
+    font-size: 2.5rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    pointer-events: none;
+}
+.filterSidebarContent h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    pointer-events: none;
+}
+.backdrop {
+    position: fixed;
+    top: 0;
     left: 0;
-  }
-  
- .dashboardLink {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  align-items: flex-start;
- }
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.093);
+    z-index: 998;
+    transition: 0.3s ease-in-out;
+}
+.dashboardLink {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+.dashboardLink button {
+    background-color: #f9f9f9;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 15px;
+    font-size: 1.25rem;
+    font-family: "Playfair Display", serif;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.25s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.dashboardLink button:hover {
+    background-color: #1F1B17;
+    color: white;
+    transition: 0.25s;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.dashboardLink .signOutBtn {
+  background-color: #1F1B17;
+  color: white;
+  margin-top: 15px;
+}
+.divideLine {
+    height: 1px;
+    width: 100%;
+    background-color: #1F1B17;
+    border-radius: 99px;
+    margin: 5px 0;
+}
 
-  @media (max-width:500px) {
-    .filterSidebar {
-      width: 100%;
-      border-radius: 0px;
+@media (max-width: 1024px) {
+    .filterSidebarContent h2 {
+        font-size: 2rem;
     }
-  }
+    
+    .filterSidebarContent h3 {
+        font-size: 1.5rem;
+    }
+    
+    .dashboardLink button {
+        font-size: 1.125rem;
+        padding: 10px 12px;
+    }
+}
+@media (max-width: 650px) {
+    .filterSidebar {
+        width: 100%;
+        right: 0;
+        top: 100%;
+        height: 75vh;
+        transition: top 0.3s ease-in-out;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }  
+    .showDashboard {
+        right: 0;
+        top: 25%;
+    }   
+    .filterSidebarContent {
+        margin-left: 0;
+        padding-bottom: 40px;
+    }
+    .filterSidebarContent h2 {
+        font-size: 1.5rem;
+    }
+    .filterSidebarContent h3 {
+        font-size: 1rem;
+        margin-top: -5px;
+    }
+    .dashboardLink button {
+        font-size: 0.9rem;
+    }
+}
+@media (max-width: 425px) {
+    .filterSidebar {
+        height: 80vh;
+    }
+    
+    .showDashboard {
+        top: 20%;
+    }
+}

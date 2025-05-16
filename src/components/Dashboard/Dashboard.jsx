@@ -53,7 +53,7 @@ const Dashboard = ({
 <div className={styles.divideLine}></div>
 
 <div className={styles.dashboardLink}>
-  <button onClick={onSignOut}>Sign out</button>
+  <button onClick={onSignOut} className={styles.signOutBtn}>Sign out</button>
 </div>
         </div>
       </div>
