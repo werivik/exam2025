@@ -587,15 +587,21 @@ cursor: pointer;
 color: #1F1B17;
 }
 @media (max-width: 1024px) {
+  .createPageContent {
+    width: 90%;
+  }
+}
+@media (max-width: 725px) {
 .createPageContent {
 flex-direction: column-reverse;
-width: 90%;
+gap: 0;
 }
 .leftSection {
 max-width: 100%;
 border-right: none;
 border-bottom: 1px solid #1f1b1732;
 padding-bottom: 20px;
+margin-top: -25px;
 }
 .leftBorder {
 position: static;

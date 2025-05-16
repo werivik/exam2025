@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CreateVenue.module.css';
-import { headers } from '../../headers';
 import { motion } from "framer-motion";
-import { VENUE_CREATE } from "../../constants";
 import Buttons from '../../components/Buttons/Buttons';
 import CostumPopup from '../../components/CostumPopup/CostumPopup';
+import { headers } from '../../headers';
+import { VENUE_CREATE } from '../../constants';
+import { getToken, isLoggedIn } from '../../auth/auth';
 
 const CreateVenue = () => {
   const [formData, setFormData] = useState({
@@ -30,11 +31,16 @@ const CreateVenue = () => {
       lat: 0,
       lng: 0
     },
+    isPublic: true,
+    bookings: true,
+    status: 'published', 
     termsAccepted: false,
   });
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const username = localStorage.getItem("username");
+  const avatar = JSON.parse(localStorage.getItem("userProfile") || "{}").avatar;
 
   const [fieldStatus, setFieldStatus] = useState({
     name: null,
@@ -46,8 +52,12 @@ const CreateVenue = () => {
     location: null,
   });  
 
+  const [popup, setPopup] = useState({ isVisible: false, message: '', type: '' });
+  const [isTermsPopupVisible, setIsTermsPopupVisible] = useState(false);
+
   const validateFields = (updatedFormData) => {
     const isValidUrl = (url) => {
+      if (!url.trim()) return true;
       try {
         return Boolean(new URL(url));
       } 
@@ -72,9 +82,6 @@ const CreateVenue = () => {
       ].every(val => val.trim() !== '')
     });
   };  
-
-  const [popup, setPopup] = useState({ isVisible: false, message: '', type: '' });
-  const [isTermsPopupVisible, setIsTermsPopupVisible] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -153,12 +160,44 @@ const CreateVenue = () => {
     }
   };
 
+  const buildVenuePayload = (formData, username, avatar) => {
+    const filteredMedia = formData.media.filter(item => item.url.trim() !== '');
+    
+    const processedMedia = filteredMedia.map(item => ({
+      url: item.url,
+      alt: item.alt.trim() !== '' ? item.alt : 'Venue image'
+    }));
+
+    return {
+      name: formData.name,
+      description: formData.description,
+      price: Number(formData.price),
+      maxGuests: Number(formData.maxGuests),
+      rating: Number(formData.rating || 0),
+      media: processedMedia,
+      meta: formData.meta,
+      location: {
+        address: formData.location.address,
+        city: formData.location.city,
+        zip: formData.location.zip,
+        country: formData.location.country,
+        continent: formData.location.continent,
+        lat: Number(formData.location.lat || 0),
+        lng: Number(formData.location.lng || 0)
+      },
+      owner: {
+        name: username || "",
+        avatar: avatar || ""
+      }
+    };
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
+    const token = getToken();
+    if (!isLoggedIn() || !token) {
       setPopup({
         isVisible: true,
         message: 'Authentication token not found. Please log in again.',
@@ -189,43 +228,22 @@ const CreateVenue = () => {
       return;
     }
 
-    const transformedFormData = {
-      name: formData.name,
-      description: formData.description,
-      price: Number(formData.price),
-      maxGuests: Number(formData.maxGuests),
-      rating: formData.rating || 0,
-      media: formData.media
-        .filter(item => item.url.trim() !== '')
-        .map(item => ({
-          url: item.url,
-          alt: item.alt && item.alt.trim() !== '' ? item.alt : 'Venue image'
-        })),
-      meta: formData.meta,
-      location: {
-        address: formData.location.address,
-        city: formData.location.city,
-        zip: formData.location.zip,
-        country: formData.location.country,
-        continent: formData.location.continent,
-      },
-    };
+    const venuePayload = buildVenuePayload(formData, username, avatar);
 
     try {
       console.log('API Request URL:', VENUE_CREATE);
       console.log('API Request Headers:', headers(token));
-      console.log('API Request Body:', JSON.stringify(transformedFormData));
-
+      console.log('API Request Body:', JSON.stringify(venuePayload));
+      
       const response = await fetch(VENUE_CREATE, {
         method: 'POST',
         headers: headers(token),
-        body: JSON.stringify(transformedFormData),
+        body: JSON.stringify(venuePayload),
       });
 
       console.log('API Response Status:', response.status);
-      
       const data = await response.json();
-      console.log('Created Venue Response:', data);
+      console.log('API Response:', data);
 
       if (response.ok && data.data && data.data.id) {
         setPopup({
@@ -233,15 +251,18 @@ const CreateVenue = () => {
           message: 'Venue created successfully!',
           type: 'success'
         });
-        
         setTimeout(() => {
           navigate(`/venues/${data.data.id}`);
         }, 2000);
       } 
       else {
+        const errorMsg = data.errors 
+          ? data.errors.map(err => err.message).join(', ') 
+          : data.message || 'Failed to create the venue';
+          
         setPopup({
           isVisible: true,
-          message: `Error creating venue: ${data.message || data.errors?.map(err => err.message).join(', ') || 'Unknown error'}`,
+          message: `Error: ${errorMsg}`,
           type: 'error'
         });
       }
@@ -250,7 +271,7 @@ const CreateVenue = () => {
       console.error('Error creating venue:', error);
       setPopup({
         isVisible: true,
-        message: 'Something went wrong. Please try again.',
+        message: 'An unexpected error occurred. Please try again.',
         type: 'error'
       });
     } 

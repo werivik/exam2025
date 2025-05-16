@@ -63,7 +63,6 @@ const fetchUserRole = async (username) => {
   }
 };
 
-/* Profile Update */
 export const updateProfile = async ({ username, newName, newAvatar }) => {
   try {
     const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
