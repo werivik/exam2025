@@ -145,6 +145,7 @@ const Venues = () => {
       country: '',
       city: '',
     });
+    setCurrentPage(1);
   }, [minPrice, maxPrice]);
 
   const handleFilterChange = useCallback((e) => {
@@ -190,15 +191,16 @@ const Venues = () => {
     if (value.trim()) {
       const searchTerm = value.toLowerCase();
       const filtered = venues.filter(venue => {
-        const nameMatch = venue.name?.toLowerCase().startsWith(searchTerm);
-        const cityMatch = venue.location?.city?.toLowerCase().startsWith(searchTerm);
-        const countryMatch = venue.location?.country?.toLowerCase().startsWith(searchTerm);
-        const ownerMatch = venue.owner?.name?.toLowerCase().startsWith(searchTerm);
+        const nameMatch = venue.name?.toLowerCase().includes(searchTerm);
+        const cityMatch = venue.location?.city?.toLowerCase().includes(searchTerm);
+        const countryMatch = venue.location?.country?.toLowerCase().includes(searchTerm);
+        const ownerMatch = venue.owner?.name?.toLowerCase().includes(searchTerm);
 
         return nameMatch || cityMatch || countryMatch || ownerMatch;
       });
       setFilteredVenues(filtered);
       setNoMatches(filtered.length === 0);
+      setCurrentPage(1);
     } 
     else {
       setFilteredVenues(venues);
@@ -206,69 +208,76 @@ const Venues = () => {
     }
   }, [venues]);
 
-  useEffect(() => {
-    const fetchVenues = async () => {
-      try {
-        setLoading(true);
-        
-        // Fetch all venues from the API
-        const response = await fetch(VENUES, {
+useEffect(() => {
+  const fetchVenues = async () => {
+    try {
+      setLoading(true);
+      let allVenues = [];
+      let currentPage = 1;
+      const pageSize = 100;
+
+      while (true) {
+        const response = await fetch(`${VENUES}?page=${currentPage}&pageSize=${pageSize}`, {
           method: 'GET',
           headers: headers(),
         });
-        
+
         if (!response.ok) throw new Error("Failed to fetch venues");
 
         const data = await response.json();
-        
-        // Use all venues from the API response without any deduplication
         const venuesData = data.data || [];
-        
-        // Important: We're using all venues from the API as-is
-        // without filtering out any duplicates by name, location, etc.
-        setVenues(venuesData);
-        setFilteredVenues(venuesData);
 
-        console.log(`Fetched ${venuesData.length} venues from API`);
+        if (venuesData.length === 0) break;
 
-        const prices = venuesData.map(venue => venue.price || 0);
-        const min = Math.min(...prices);
-        const max = Math.max(...prices);
-
-        setMinPrice(min);
-        setMaxPrice(max);
-        setFilters(prev => ({
-          ...prev,
-          priceMin: min,
-          priceMax: max
-        }));
-
-        const metaKeys = new Set();
-        venuesData.forEach(venue => {
-          if (venue.meta) {
-            Object.keys(venue.meta).forEach(key => metaKeys.add(key));
-          }
-        });
-        setMetaFilters(Array.from(metaKeys));
-
-        const ratingsSet = new Set();
-        venuesData.forEach(venue => {
-          if (venue.rating) ratingsSet.add(Math.floor(venue.rating));
-        });
-        setAvailableRatings(Array.from(ratingsSet).sort((a, b) => a - b));
-
-        setLocationSuggestionList(extractLocationSuggestions(venuesData));
-      } 
-      catch (error) {
-        console.error("Error fetching venues:", error);
-      } 
-      finally {
-        setLoading(false);
+        allVenues = allVenues.concat(venuesData);
+        currentPage++;
       }
-    };
 
-    fetchVenues();
-  }, [extractLocationSuggestions]);
+      setVenues(allVenues);
+      setFilteredVenues(allVenues);
+
+      setVenues(allVenues);
+      setFilteredVenues(allVenues);
+      console.log(allVenues); 
+
+      const prices = allVenues.map(venue => venue.price || 0);
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+
+      setMinPrice(min);
+      setMaxPrice(max);
+      setFilters(prev => ({
+        ...prev,
+        priceMin: min,
+        priceMax: max
+      }));
+
+      const metaKeys = new Set();
+      allVenues.forEach(venue => {
+        if (venue.meta) {
+          Object.keys(venue.meta).forEach(key => metaKeys.add(key));
+        }
+      });
+      setMetaFilters(Array.from(metaKeys));
+
+      const ratingsSet = new Set();
+      allVenues.forEach(venue => {
+        if (venue.rating) ratingsSet.add(Math.floor(venue.rating));
+      });
+      setAvailableRatings(Array.from(ratingsSet).sort((a, b) => a - b));
+
+      setLocationSuggestionList(extractLocationSuggestions(allVenues));
+    } 
+    catch (error) {
+      console.error("Error fetching venues:", error);
+    } 
+    finally {
+      setLoading(false);
+    }
+  };
+
+  fetchVenues();
+}, [extractLocationSuggestions]);
 
   useEffect(() => {
     if (!metaFilters.length) return;
@@ -343,6 +352,12 @@ const Venues = () => {
         (filters.priceMin === 0 || venue.price >= filters.priceMin) &&
         (filters.priceMax === 0 || venue.price <= filters.priceMax);
 
+      const matchesSearch = !searchQuery || 
+        venue.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        venue.location?.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        venue.location?.country?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        venue.owner?.name?.toLowerCase().includes(searchQuery.toLowerCase());
+
       return (
         matchesContinent &&
         matchesCountry &&
@@ -350,7 +365,8 @@ const Venues = () => {
         matchesGuests &&
         matchesRating &&
         matchesMeta &&
-        matchesPrice
+        matchesPrice &&
+        matchesSearch
       );
     });
 
@@ -377,7 +393,9 @@ const Venues = () => {
 
     setFilteredVenues(sorted);
     setNoMatches(filtered.length === 0);
-  }, [filters, venues, sortOption]);
+    
+    setCurrentPage(1);
+  }, [filters, venues, sortOption, searchQuery]);
 
   useEffect(() => {
     document.body.style.overflow = showSidebar ? 'hidden' : '';
@@ -399,9 +417,32 @@ const Venues = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const pageTotal = useMemo(() => 
-    Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE)),
-  [filteredVenues.length]);
+const pageTotal = useMemo(() => 
+  Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE)),
+[filteredVenues.length]);
+
+const getPageNumbers = (currentPage, totalPages) => {
+  const maxPageNumbers = Math.min(5, totalPages);
+  
+  let startPage;
+  
+  if (totalPages <= 5) {
+    startPage = 1;
+  } 
+  else {
+    if (currentPage <= 3) {
+      startPage = 1;
+    } 
+    else if (currentPage >= totalPages - 2) {
+      startPage = totalPages - 4;
+    } 
+    else {
+      startPage = currentPage - 2;
+    }
+  }
+
+  return Array.from({ length: maxPageNumbers }, (_, i) => startPage + i);
+};
 
   const scrollToTop = useCallback(() => {
     topRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -549,15 +590,17 @@ const Venues = () => {
                     {currentPage > 1 && (
                       <button onClick={goToPrevPage} className={styles.page}>Prev</button>
                     )}
-                    {Array.from({ length: pageTotal }, (_, i) => i + 1).map(p => (
+                    
+                    {getPageNumbers(currentPage, pageTotal).map(pageNum => (
                       <button
-                        key={p}
-                        onClick={() => handlePageClick(p)}
-                        className={p === currentPage ? styles.pageActive : styles.page}
+                        key={pageNum}
+                        onClick={() => handlePageClick(pageNum)}
+                        className={pageNum === currentPage ? styles.pageActive : styles.page}
                       >
-                        {p}
+                        {pageNum}
                       </button>
                     ))}
+                    
                     {currentPage < pageTotal && (
                       <button onClick={goToNextPage} className={styles.page}>Next</button>
                     )}

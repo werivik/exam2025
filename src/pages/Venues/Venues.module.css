@@ -409,6 +409,7 @@
 }
 .paginationWrapper {
   margin-top: 40px;
+  position: relative;
   display: flex;
   justify-content: center;
 }
@@ -453,6 +454,7 @@
   background-color: #5D6B2F;
 }
 
+
 @media (max-width: 1024px) {
   .rightBorder {
     width: 90%;
@@ -466,7 +468,6 @@
     gap: 20px;
   }
 }
-
 @media (max-width: 768px) {
   .rightTitles h1 {
     font-size: 2rem;
@@ -486,7 +487,6 @@
     width: 100%;
   }
 }
-
 @media (max-width: 650px) {
   .rightTitles {
     flex-direction: column;
@@ -505,7 +505,6 @@
     font-size: 0.9rem;
   }
 }
-
 @media (max-width: 480px) {
   .pageContent {
     padding: 10px;
