@@ -238,8 +238,6 @@ useEffect(() => {
       setVenues(allVenues);
       setFilteredVenues(allVenues);
 
-      setVenues(allVenues);
-      setFilteredVenues(allVenues);
       console.log(allVenues); 
 
       const prices = allVenues.map(venue => venue.price || 0);
@@ -301,8 +299,12 @@ useEffect(() => {
       }
     });
 
+    const pageParam = searchParams.get("page");
+    if (pageParam) {
+      setCurrentPage(parseInt(pageParam));
+    }
+    
     setFilters(prev => ({ ...prev, ...parsedFilters }));
-    setCurrentPage(parseInt(searchParams.get("page")) || 1);
     
     setInputValues({
       continent: parsedFilters.continent,
@@ -323,9 +325,9 @@ useEffect(() => {
     Object.keys(filters.meta).forEach(key => {
       if (filters.meta[key]) params.set(key, "true");
     });
-    params.set("page", currentPage);
+    params.set("page", currentPage.toString());
 
-    setSearchParams(params);
+    setSearchParams(params, { replace: true });
   }, [filters, currentPage, setSearchParams]);
 
   useEffect(() => {
@@ -399,8 +401,10 @@ useEffect(() => {
   }, [filters, venues, sortOption, searchQuery]);
 
   useEffect(() => {
-  setCurrentPage(1);
-}, [filters, searchQuery]);
+    setCurrentPage(1);
+  }, [filters.continent, filters.country, filters.city, filters.adults, 
+      filters.children, filters.assisted, filters.ratings, filters.meta, 
+      filters.priceMin, filters.priceMax, searchQuery, sortOption]);
 
   useEffect(() => {
     document.body.style.overflow = showSidebar ? 'hidden' : '';
@@ -427,26 +431,24 @@ const pageTotal = useMemo(() =>
 [filteredVenues.length]);
 
 const getPageNumbers = (currentPage, totalPages) => {
-  const maxPageNumbers = Math.min(5, totalPages);
+  const maxPageNumbers = 5;
   
   let startPage;
   
-  if (totalPages <= 5) {
+  if (totalPages <= maxPageNumbers) {
     startPage = 1;
   } 
+  else if (currentPage <= 3) {
+    startPage = 1;
+  } 
+  else if (currentPage >= totalPages - 2) {
+    startPage = totalPages - 4;
+  } 
   else {
-    if (currentPage <= 3) {
-      startPage = 1;
-    } 
-    else if (currentPage >= totalPages - 2) {
-      startPage = totalPages - 4;
-    } 
-    else {
-      startPage = currentPage - 2;
-    }
+    startPage = currentPage - 2;
   }
 
-  return Array.from({ length: maxPageNumbers }, (_, i) => startPage + i);
+  return Array.from({ length: Math.min(maxPageNumbers, totalPages) }, (_, i) => startPage + i);
 };
 
   const scrollToTop = useCallback(() => {
@@ -548,6 +550,8 @@ const getPageNumbers = (currentPage, totalPages) => {
                 setFilters={setFilters}
                 venues={venues}
                 setSearchQuery={setSearchQuery}
+                searchQuery={searchQuery}
+                handleSearchInputChange={handleSearchInputChange}
                 setFilteredVenues={setFilteredVenues}
                 setNoMatches={setNoMatches}
               />
