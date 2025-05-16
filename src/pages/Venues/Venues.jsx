@@ -396,8 +396,11 @@ useEffect(() => {
     setFilteredVenues(sorted);
     setNoMatches(filtered.length === 0);
     
-    setCurrentPage(1);
   }, [filters, venues, sortOption, searchQuery]);
+
+  useEffect(() => {
+  setCurrentPage(1);
+}, [filters, searchQuery]);
 
   useEffect(() => {
     document.body.style.overflow = showSidebar ? 'hidden' : '';
