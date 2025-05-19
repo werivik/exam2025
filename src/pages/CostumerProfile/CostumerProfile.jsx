@@ -32,7 +32,7 @@ const CostumerProfile = () => {
   const [newName, setNewName] = useState('');
   const [newAvatar, setNewAvatar] = useState('');
   const [newBanner, setNewBanner] = useState('');
-  const [usernameError, setUsernameError] = useState('');
+  const [nameError, setNameError] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [showSigningOffPopup, setShowSigningOffPopup] = useState(false);
   const [successPopupMessage, setSuccessPopupMessage] = useState('');
@@ -199,13 +199,21 @@ const CostumerProfile = () => {
     setIsModalVisible(true);
   };
 
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    setNewName(value);
+    if (nameError) {
+      setNameError('');
+    }
+  };
+
   const handleSaveProfile = async (e) => {
     if (e) e.preventDefault();
-    
-    if (/\s/.test(newName)) {
-      setUsernameError('Username cannot contain spaces');
+        if (/\s/.test(newName)) {
+      setNameError('Username cannot contain spaces');
       return;
     }
+    setNameError('');
 
     try {
       const token = localStorage.getItem('accessToken');
@@ -285,29 +293,29 @@ const CostumerProfile = () => {
 
   const today = new Date();
 
-const filterVenues = (venues) => {
-  let filtered = [];
+  const filterVenues = (venues) => {
+    let filtered = [];
 
-  switch (filter) {
-    case 'Future':
-      filtered = venues.filter((venue) => venue.dateFrom >= today);
-      break;
-    case 'Previous':
-      filtered = venues.filter((venue) => venue.dateFrom < today);
-      break;
-    default:
-      filtered = [...venues];
-  }
+    switch (filter) {
+      case 'Future':
+        filtered = venues.filter((venue) => venue.dateFrom >= today);
+        break;
+      case 'Previous':
+        filtered = venues.filter((venue) => venue.dateFrom < today);
+        break;
+      default:
+        filtered = [...venues];
+    }
 
-  switch (sortOption) {
-    case 'nearestFuture':
-      return [...filtered].sort((a, b) => a.dateFrom - b.dateFrom);
-    case 'recentPast':
-      return [...filtered].sort((a, b) => b.dateFrom - a.dateFrom);
-    default:
-      return filtered;
-  }
-};
+    switch (sortOption) {
+      case 'nearestFuture':
+        return [...filtered].sort((a, b) => a.dateFrom - b.dateFrom);
+      case 'recentPast':
+        return [...filtered].sort((a, b) => b.dateFrom - a.dateFrom);
+      default:
+        return filtered;
+    }
+  };
 
   const filteredVenues = filterVenues(bookedVenues);
 
@@ -366,16 +374,17 @@ const filterVenues = (venues) => {
   }, [isModalVisible, showDashboard]);
 
   const EditProfileForm = () => (
-    <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
+    <form className={styles.editForm} onSubmit={handleSaveProfile}>
       <label>
         Name:
         <input
           type="text"
           value={newName}
-          onChange={(e) => setNewName(e.target.value)}
+          onChange={handleNameChange}
           required
+          autoComplete="off"
         />
-        {usernameError && <span className={styles.error}>{usernameError}</span>}
+        {nameError && <span className={styles.error}>{nameError}</span>}
       </label>
       <label>
         Avatar URL:
@@ -383,6 +392,7 @@ const filterVenues = (venues) => {
           type="url"
           value={newAvatar}
           onChange={(e) => setNewAvatar(e.target.value)}
+          autoComplete="off"
         />
       </label>
       <label>
@@ -391,6 +401,7 @@ const filterVenues = (venues) => {
           type="url"
           value={newBanner}
           onChange={(e) => setNewBanner(e.target.value)}
+          autoComplete="off"
         />
       </label>
       <div className={styles.editButtons}>
@@ -534,16 +545,15 @@ const filterVenues = (venues) => {
                   <h2>My Bookings</h2>
                   <div className={styles.bookingsFilter}>
                     <label>Sort By:</label>
-<select
-  value={sortOption}
-  onChange={(e) => setSortOption(e.target.value)}
-  className={styles.sortDropdown}
->
-  <option value="default">All</option>
-  <option value="nearestFuture">Nearest Future</option>
-  <option value="recentPast">Previous</option>
-</select>
-
+                    <select
+                      value={sortOption}
+                      onChange={(e) => setSortOption(e.target.value)}
+                      className={styles.sortDropdown}
+                    >
+                      <option value="default">All</option>
+                      <option value="nearestFuture">Nearest Future</option>
+                      <option value="recentPast">Previous</option>
+                    </select>
                   </div>
                 </div>
                 
