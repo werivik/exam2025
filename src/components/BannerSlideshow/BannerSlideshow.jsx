@@ -5,6 +5,7 @@ import img1 from "/media/images/homeBanner.png";
 import img2 from "/media/images/spainBanner2.png";
 import img3 from "/media/images/irelandBanner2.png";
 import img4 from "/media/images/parisBanner.jpg";
+import img5 from "/media/images/japanBanner.png";
 
 const slides = [
   {
@@ -27,6 +28,12 @@ const slides = [
   {
     img: img3,
     h2: "Ireland",
+    h3: "Travel to",
+    p: "...with Holidaze"
+  },
+    {
+    img: img5,
+    h2: "Japan",
     h3: "Travel to",
     p: "...with Holidaze"
   }
@@ -163,6 +170,14 @@ export default function BannerSlideshow() {
                 <h3>{slides[3].h3}</h3>
                 <h2>{slides[3].h2}</h2>
                 <p>{slides[3].p}</p>
+              </>
+            )}
+
+            {index === 4 && (
+              <>
+                <h3>{slides[4].h3}</h3>
+                <h2>{slides[4].h2}</h2>
+                <p>{slides[4].p}</p>
               </>
             )}
           </div>
