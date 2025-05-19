@@ -62,6 +62,7 @@ const VenueDetails = () => {
   const [popupMessage, setPopupMessage] = useState('');
 
   const dropdownRef = useRef(null);
+  const [profileError, setProfileError] = useState('');
 
   const handleRatingUpdate = (newRating) => {
   if (venue) {
@@ -232,6 +233,7 @@ if (result.data?.owner) {
       setShowBookingPopup, 
       setPopupMessage
     );
+      window.location.reload();
   }, [
     checkInDate, 
     checkOutDate, 
@@ -400,18 +402,36 @@ if (result.data?.owner) {
             )}            
             
             <div className={styles.dividerLine}></div>
-
-            <div className={styles.venueOwner}>
-              <h3>Venue Manager</h3>
-{owner && (
-  <Link to={`/view-profile/${owner.name}`} className={styles.venueProfileName}>
-    <img
-      src={owner.avatar?.url || '/media/images/mdefault.jpg'}
-      alt={owner.avatar?.alt || 'Venue owner'}
-    />
-    <p>{owner.name || 'Unknown Owner'}</p>
-  </Link>
-)}
+<div className={styles.venueOwner}>
+  <h3>Venue Manager</h3>
+  {owner ? (
+    <div className={styles.ownerWrapper}>
+      <Link
+        to={`/view-profile/${owner.name}`}
+        className={styles.venueProfileName}
+        onClick={(e) => {
+          if (!userLoggedIn) {
+            e.preventDefault();
+            setProfileError('Only logged in users can view Profiles');
+            
+            setTimeout(() => {
+              setProfileError('');
+            }, 5000);
+          }
+        }}
+      >
+        <img
+          src={owner.avatar?.url || '/media/images/mdefault.jpg'}
+          alt={owner.avatar?.alt || 'Venue owner'}
+        />
+        <p>{owner.name || 'Unknown Owner'}</p>
+      </Link>
+      
+      {profileError && <p className={styles.profileError}>{profileError}</p>}
+    </div>
+  ) : (
+    <p>Owner information not available</p>
+  )}
 </div>
             <div className={styles.venueInfo}>
                 <h3>Venue Info</h3>
