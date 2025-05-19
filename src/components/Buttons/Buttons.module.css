@@ -258,17 +258,17 @@
 }
 
 .smallv1 {
-  background-color: #f9f9f9;
-  color: #1F1B17;
+  background-color: #B88A44;
+  color: #f9f9f9;
 }
 
 .mediumv1 {
-  background-color: #f9f9f9;
+  background-color: #B88A44;
   color: #1F1B17;
 }
 
 .largev1 {
-  background-color: #f9f9f9;
+  background-color: #B88A44;
   color: #1F1B17;
 }
 
@@ -287,11 +287,6 @@
   color: white;
 }
 
-.smallv3 {
-  background-color: #B88A44;
-  color: #1F1B17;
-}
-
 .mediumv3 {
   background-color: #B88A44;
   color: #1F1B17;
@@ -303,7 +298,6 @@
 }
 
 .button:hover {
-  transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #6B7A3A;
   color: #f9f9f9;
@@ -313,11 +307,11 @@
   position: absolute;
   top: 20px;
   right: 20px;
-  width: 36px;
-  height: 36px;
+  width: 27px;
+  height: 27px;
   border-radius: 50%;
-  background-color: #f9f9f9;
-  color: #1F1B17;
+  background-color: #1F1B17;
+  color:#f9f9f9;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
@@ -329,21 +323,11 @@
 }
 
 .close:hover {
-  background-color: #1F1B17;
+  background-color: #B88A44;
   color: white;
   transform: rotate(90deg);
 }
 
-.smallv3, .mediumv3, .largev3 {
-  background-color: transparent;
-  color: #1F1B17;
-  border: 1px solid #1F1B17;
-}
-
-.smallv3:hover, .mediumv3:hover, .largev3:hover {
-  background-color: #1F1B17;
-  color: white;
-}
 
 @media (max-width: 650px) {
   .medium {

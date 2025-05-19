@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import styles from './CostumPopup.module.css';
+import Buttons from '../Buttons/Buttons';
 
 const CustomPopup = ({ 
   message, 
@@ -35,8 +36,8 @@ const CustomPopup = ({
       <p>{message}</p>
       {showButtons && (
         <div className={styles.popupActions}>
-          <button className={styles.yesButton} onClick={onConfirm}>Yes</button>
-          <button className={styles.noButton} onClick={onCancel}>No</button>
+          <Buttons size='small' version='v1' className={styles.yesButton} onClick={onConfirm}>Yes</Buttons>
+          <Buttons size='small' version='v2' className={styles.noButton} onClick={onCancel}>No</Buttons>
         </div>
       )}
     </div>

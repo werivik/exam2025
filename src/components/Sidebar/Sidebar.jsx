@@ -74,7 +74,7 @@ const Sidebar = ({
       {showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
       <div className={`${styles.filterSidebar} ${showSidebar ? styles.showSidebar : ''}`}>
         <div className={styles.filterSidebarContent}>
-          <Buttons size='closeButton'
+          <Buttons size='close'
           onClick={toggleSidebar}
           >
           &times;
@@ -218,9 +218,11 @@ const Sidebar = ({
 
           <div className={styles.divideLine}></div>
 
-          <Buttons size='clearFilter' 
+          <Buttons size='small'
+          version='v2' 
           onClick={clearFilters} 
-          className={styles.clearFilterButton}>
+          className={styles.clearFilterButton}
+          >
             Clear Filters
           </Buttons>
 
