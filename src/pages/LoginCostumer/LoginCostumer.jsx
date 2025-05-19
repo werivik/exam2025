@@ -101,9 +101,14 @@ const LoginCostumer = () => {
               />
               </div>
 
-              <Buttons size='medium' version='v1' type="submit" disabled={!isFormValid || isSubmitting}>
-                {isSubmitting ? 'Logging in...' : 'Login'}
-              </Buttons>
+<Buttons 
+  size='medium' 
+  version={isFormValid ? 'v1' : 'v2'} 
+  type="submit" 
+  disabled={!isFormValid || isSubmitting}
+>
+  {isSubmitting ? 'Logging in...' : 'Login'}
+</Buttons>
   
               {error && <p className={styles.error}>{error}</p>}
             </form>

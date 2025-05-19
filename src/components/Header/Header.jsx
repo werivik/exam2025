@@ -146,7 +146,7 @@ const SidebarMenu = memo(({
 ));
 
 function Header() {
-  const loginOrRegisterRoutes = ['/login-costumer', '/register-costumer'];
+  const loginOrRegisterRoutes = ['/login-costumer', '/register-costumer', '/login-admin', '/register-admin'];
   const [isHovered, setIsHovered] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [venues, setVenues] = useState([]);

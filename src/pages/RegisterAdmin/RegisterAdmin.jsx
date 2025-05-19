@@ -107,7 +107,7 @@ const RegisterAdmin = () => {
             <div className={styles.inputFormInputs}>
               <input
                 type="text"
-                placeholder="Venue Name"
+                placeholder="Username"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -130,15 +130,19 @@ const RegisterAdmin = () => {
                 className={styles.input}
               />
             </div>
-
-            <Buttons size='medium' version='v2' type="submit" disabled={!isFormValid || isSubmitting}>
-              {isSubmitting ? 'Registering...' : 'Register'}
-            </Buttons>
+<Buttons 
+  size='medium' 
+  version={isFormValid ? 'v1' : 'v2'} 
+  type="submit" 
+  disabled={!isFormValid || isSubmitting}
+>
+  {isSubmitting ? 'Logging in...' : 'Login'}
+</Buttons>
             {error && <p className={styles.error}>{error}</p>}
           </form>
           <div className={styles.BottomOptions}>
-            <p>Already have an account? <Link to="/login-admin">Login here</Link></p>
-            <p>Are you a Costumer? <Link to="/login-costumer">Login here</Link></p>
+            <p>Already have an account? Login <Link to="/login-admin">here</Link></p>
+            <p>Are you a Costumer? Login <Link to="/login-costumer">here</Link></p>
           </div>
         </div>
       </div>
