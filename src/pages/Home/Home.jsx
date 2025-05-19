@@ -19,6 +19,11 @@ import VenueCardFirstType from '../../components/VenueCardFirstType/VenueCardFir
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
 import BannerSlideshow from '../../components/BannerSlideshow/BannerSlideshow';
 
+import paris from '../../../media/images/parisDestination.jpeg';
+import greece from '../../../media/images/greeceDestination.jpeg';
+import japan from '../../../media/images/tokyoDestination.jpeg';
+import america from '../../../media/images/yorkDestination.jpeg';
+
 const pageVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
@@ -470,6 +475,37 @@ const applyFilters = () => {
     </div>
   );
 
+  const POPULAR_DESTINATIONS = [
+  {
+    id: 1,
+    name: "Paris",
+    country: "France",
+    description: "City of Lights",
+    image: paris,
+  },
+  {
+    id: 2,
+    name: "Santorini",
+    country: "Greece",
+    description: "Breathtaking Island Views",
+    image: greece,
+  },
+  {
+    id: 3,
+    name: "Tokyo",
+    country: "Japan",
+    description: "Mix of Tradition & Innovation",
+    image: japan,
+  },
+  {
+    id: 4,
+    name: "New York",
+    country: "USA",
+    description: "The City That Never Sleeps",
+    image: america,
+  }
+];
+
   return (
     <>
       <motion.div
@@ -530,7 +566,8 @@ const applyFilters = () => {
         )}        
         <section className={styles.secondSection}>
           <div className={styles.secondBorder}>
-            <div className={styles.typeTitle}>
+            
+            <div className={styles.metaTitle}>
               <h2>Choose your perfect Stay</h2>
               <p>"A journey of a thousand miles begins<br />with a single step."</p>
             </div>
@@ -539,7 +576,7 @@ const applyFilters = () => {
               <i className={`fa-solid fa-chevron-down ${styles.bounceIcon}`}></i>
             </div>
 
-            <div className={styles.typeContent}>
+            <div className={styles.metaContent}>
               {venues.length === 0 ? (
                 <>
                   <VenueTypeSkeleton />
@@ -552,7 +589,7 @@ const applyFilters = () => {
                   {FEATURE_TYPES.map((type, idx) => (
                     <div
                       key={idx}
-                      className={styles.hotelType}
+                      className={styles.metaType}
                       onClick={() => navigate("/venues", { state: { filters: { meta: type.meta } } })}
                     >
                       <img src={type.image} alt={type.label} />
@@ -588,7 +625,7 @@ const applyFilters = () => {
                   <div className={styles.thirdInfo}>
                     <h2>Join Us and Start Your<br />Next Adventure today...</h2>
                     <p>Unlock Booking, Reservations and Discounts by Creating an Account with us today.</p>
-                    <Buttons size='large' version='v1'>
+                    <Buttons size='large' version='v2'>
                       Register
                     </Buttons>
                   </div>
@@ -599,8 +636,56 @@ const applyFilters = () => {
         </section>        
         <section className={styles.fourthSection}>
           <div className={styles.fourthBorder}>
-            <div className={styles.fourthContent}>
-              <div className={styles.fourthTitle}>
+      <div className={styles.DestinationContent}>
+      <div className={styles.DestinationTitle}>
+        <h2>Discover Our Most Loved Destinations</h2>
+        <p>"The world is a book and those who do not travel read only one page."</p>
+      </div>
+      
+      <div className={styles.destinationsWrapper}>
+        <div className={styles.destinationsContainer}>
+          {POPULAR_DESTINATIONS.map((destination) => (
+            <div 
+              key={destination.id} 
+              className={styles.destinationCard}
+              onClick={() => {
+                setFilters(prev => ({ 
+                  ...prev, 
+                  destination: `${destination.name}, ${destination.country}` 
+                }));
+                navigate("/venues", { 
+                  state: { 
+                    filters: { 
+                      city: destination.name, 
+                      country: destination.country 
+                    } 
+                  } 
+                });
+              }}
+            >
+              <div className={styles.destinationImageContainer}>
+                <img src={destination.image} alt={destination.name} />
+                <div className={styles.destinationOverlay}></div>
+              </div>
+              <div className={styles.destinationInfo}>
+                <h3>{destination.name}, <span>{destination.country}</span></h3>
+                <p>{destination.description}</p>
+                <div className={styles.exploreButton}>
+                  <span>Explore</span>
+                  <i className="fa-solid fa-arrow-right"></i>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+          </div>
+        </section>
+        <section className={styles.fifthSection}>
+  <div className={styles.fifthBorder}>
+                  <div className={styles.venuesContent}>
+              <div className={styles.venuesTitle}>
                 <h2>Explore Our Most Popular Hotels<br />for Every Traveler</h2>
                 <Link to="/venues" className={styles.browseAllLink}>Browse All</Link>
               </div>
@@ -613,8 +698,8 @@ const applyFilters = () => {
 
               <Link to="/venues" className={styles.browseAllLinkSecond}>Browse All</Link>
             </div>
-          </div>
-        </section>
+  </div>
+</section>
       </motion.div>
     </>
   );

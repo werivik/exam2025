@@ -23,7 +23,7 @@
 }
 
 .hotelInfo {
-    background-color: #B88A44;
+    background-color: #F3F0EB;
     position: absolute;
     bottom: 0;
     left: 50%;
@@ -34,7 +34,7 @@
     padding-left: 2.5%;
     padding-right: 2.5%;
     padding-top: 5%;
-    color: #F3F0EB;
+    color: #1F1B17;
     height: 25%;
     transition: 0.15s;
     overflow: hidden;
