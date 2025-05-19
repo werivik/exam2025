@@ -13,15 +13,21 @@ const CustomPopup = ({
   hideBars = false
 }) => {
 
-  useEffect(() => {
-    if (disableAutoClose) return;
-    
-    const timer = setTimeout(() => {
+useEffect(() => {
+  document.body.style.overflow = 'hidden';
+  
+  let timer;
+  if (!disableAutoClose) {
+    timer = setTimeout(() => {
       onClose();
     }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [onClose, disableAutoClose]);
+  }
+  
+  return () => {
+    document.body.style.overflow = 'auto';
+    if (timer) clearTimeout(timer);
+  };
+}, [onClose, disableAutoClose]);
 
   return (
 <div className={styles.popupOverlay}>

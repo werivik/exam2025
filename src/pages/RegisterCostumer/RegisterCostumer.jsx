@@ -166,11 +166,10 @@ const RegisterCostumer = () => {
 
           <div className={styles.BottomOptions}>
             <p>
-              Already have an account?{' '}
-              <Link to="/login-costumer">Login here</Link>
+              Already have an account? Login <Link to="/login-costumer">here</Link>
             </p>
             <p>
-              Are you a Venue Manager? <Link to="/login-admin">Login here</Link>
+              Are you a Venue Manager? Login <Link to="/login-admin">here</Link>
             </p>
           </div>
         </div>

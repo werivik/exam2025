@@ -113,7 +113,7 @@ const LoginCostumer = () => {
                 <Link to="/register-costumer">here</Link>
               </p>
               <p>
-                Are you a Manager? Login <Link to="/login-admin">Here</Link>
+                Are you a Manager? Login <Link to="/login-admin">here</Link>
               </p>
             </div>
           </div>
