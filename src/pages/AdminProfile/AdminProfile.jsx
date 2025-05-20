@@ -198,14 +198,6 @@ const calculateRatings = (venues) => {
       return;
     }
 
-    if (/\s/.test(newName)) {
-      setUsernameError('Username cannot contain spaces');
-      return;
-    }
-  
-    const updateData = {};
-    if (newName && newName !== userData.name) updateData.name = newName;
-
     const avatarData = newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName || username}'s avatar` } : undefined;
     if (avatarData) updateData.avatar = avatarData;
 
@@ -296,16 +288,6 @@ const calculateRatings = (venues) => {
   const EditProfileForm = () => (
     <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
       <label>
-        Name:
-        <input
-          type="text"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-          required
-        />
-        {usernameError && <span className={styles.error}>{usernameError}</span>}
-      </label>
-      <label>
         Avatar URL:
         <input
           type="url"
@@ -370,9 +352,7 @@ const calculateRatings = (venues) => {
               <h2>{capitalizeFirstLetter(userData.name) || 'User'}</h2>
               <p>Venue Manager</p>
               <RatingDisplay />
-              <div className={styles.dashBtn}>
-                <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
-              </div>
+              <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
             </div>
             
             <div className={styles.mobileContent}>
@@ -409,7 +389,6 @@ const calculateRatings = (venues) => {
               </div>
             </div>
           </section>
-
           <div className={styles.desktopProfile}>
             <section className={styles.sidebar}>
               <div className={styles.sidebarContent}>
@@ -490,7 +469,6 @@ const calculateRatings = (venues) => {
               </div>
             </section>
           </div>
-
           <div className={styles.tabletProfile}>
             <section className={styles.profileHeader} ref={desktopRefs.profile}>
               <div className={styles.bannerWrapper}>

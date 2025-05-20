@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import styles from './Dashboard.module.css';
 import Buttons from '../Buttons/Buttons';
 
@@ -17,14 +16,12 @@ const Dashboard = ({
       {showDashboard && <div className={styles.backdrop} onClick={toggleDashboard}></div>}
       <div className={`${styles.filterSidebar} ${showDashboard ? styles.showDashboard : ''}`}>
         <div className={styles.filterSidebarContent}>
-          <Buttons size='closeButton'
+          <Buttons size='close'
           onClick={toggleDashboard}
           >
           &times;
           </Buttons>
-
 <h2>Dashboard</h2>
-
 {userRole === 'admin' && (
   <div className={styles.dashboardLink}>
     <h3>Venues</h3>
@@ -33,7 +30,6 @@ const Dashboard = ({
     <button onClick={onScrollToVenues}>Edit Venue</button>
   </div>
 )}
-
 {userRole === 'customer' && (
   <div className={styles.dashboardLink}>
     <h3>Bookings</h3>
@@ -41,20 +37,16 @@ const Dashboard = ({
     <button onClick={() => scrollToSection(bookingsRef)}>Edit Bookings</button>
   </div>
 )}
-
 <div className={styles.divideLine}></div>
-
 <div className={styles.dashboardLink}>
   <h3>Profile</h3>
   <button onClick={onScrollToProfileTop}>View Profile</button>
   <button onClick={onScrollToProfileEdit}>Edit Profile</button>
 </div>
-
 <div className={styles.divideLine}></div>
-
-<div className={styles.dashboardLink}>
-  <button onClick={onSignOut} className={styles.signOutBtn}>Sign out</button>
-</div>
+  <Buttons size="medium" version="v2" onClick={onSignOut}>
+    Sign Out
+  </Buttons>
         </div>
       </div>
     </>

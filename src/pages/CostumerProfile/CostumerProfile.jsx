@@ -222,9 +222,6 @@ const CostumerProfile = () => {
         throw new Error('No access token found');
       }
 
-      const updateData = {};
-      if (newName && newName !== userData.name) updateData.name = newName;
-
       const avatarData = newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName || username}'s avatar` } : undefined;
       if (avatarData) updateData.avatar = avatarData;
 
@@ -242,10 +239,6 @@ const CostumerProfile = () => {
       if (response.ok) {
         setUserData(data.data);
         setIsEditing(false);
-
-        if (newName && newName !== userData.name) {
-          localStorage.setItem('username', newName);
-        }
         
         setSuccessPopupMessage('Profile updated successfully!');
         setShowSuccessPopup(true);
@@ -375,17 +368,6 @@ const CostumerProfile = () => {
 
   const EditProfileForm = () => (
     <form className={styles.editForm} onSubmit={handleSaveProfile}>
-      <label>
-        Name:
-        <input
-          type="text"
-          value={newName}
-          onChange={handleNameChange}
-          required
-          autoComplete="off"
-        />
-        {nameError && <span className={styles.error}>{nameError}</span>}
-      </label>
       <label>
         Avatar URL:
         <input

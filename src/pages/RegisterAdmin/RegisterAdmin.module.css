@@ -63,7 +63,6 @@
 }
 
 .registerContent p {
-  color: #a7bb6e;
   font-size: 1rem;
   margin: 0 0 30px 0;
 }
@@ -103,8 +102,13 @@
   background-color: #423c36;
 }
 
+.registerText {
+  color: white;
+}
+
 .error {
-  color: #ff6b6b;
+  text-align: center;
+  color: red;
   font-size: 0.9rem;
   margin: 8px 0;
   animation: fadeIn 0.3s ease;
@@ -157,6 +161,38 @@
     100% { transform: translateX(0); }
   }
 
+
+.securityCodeInputs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.codeInput {
+  width: 60px;
+  height: 70px;
+  font-size: 32px;
+  text-align: center;
+  border: none;
+  border-radius: 8px;
+  background-color: #1F1B17;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.codeInput:focus {
+  border-color: #B88A44;
+  outline: none;
+  box-shadow: 0 0 0 2px #b88a44b3;
+}
+
+
+
+
+
+
+
 @media (max-width: 768px) {
   .registerContent {
     padding: 30px 20px;
@@ -166,7 +202,6 @@
     font-size: 1.6rem;
   }
 }
-
 @media (max-width: 480px) {
   .registerContent {
     padding: 25px 15px;
@@ -189,7 +224,6 @@
     text-align: center;
   }
 }
-
 @media (max-width: 380px) {
 .input::placeholder {
   font-size: 0.8rem;

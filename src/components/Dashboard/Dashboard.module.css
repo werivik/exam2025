@@ -63,16 +63,11 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 .dashboardLink button:hover {
-    background-color: #1F1B17;
+    background-color: #B88A44;
     color: white;
     transition: 0.25s;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-.dashboardLink .signOutBtn {
-  background-color: #1F1B17;
-  color: white;
-  margin-top: 15px;
 }
 .divideLine {
     height: 1px;
