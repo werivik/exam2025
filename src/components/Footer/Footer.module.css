@@ -66,8 +66,7 @@ footer {
   flex-direction: row;
   justify-content: flex-end;
   height: 80%;
-  margin-top: 50px;
-  gap: 100px;
+  margin-top: 100px;
   width: 60%;
 }
 .footerRight a {
@@ -98,22 +97,40 @@ footer {
 .footerRight p {
   font-size: 1.125rem;
 }
-@media (max-width:1300px) {
- .footerTitles h2 {
+.divideLine {
+  height: 175px;
+  width: 0.5px;
+  background-color: #F3F0EB;
+  border-radius: 99px;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+.FooterLinks {
+  height: inherit;
+  width: fit-content;
+}
+@media (max-width:1180px) {
+.footerTitles h2 {
     font-size: 90px;
+    width: 370px;
 }
 .footerTitles p {
-    font-size: 18px;
-    width: 360px;
-} 
-.footerRight {
-  gap: 50px;
+  font-size: 20px;
+  width: 370px;
+}
+}
+@media (max-width:1024px) {
+  .footerBorder {
+    width: 85%;
 }
 .footerRight h3 {
   font-size: 1.25rem;
 }
 .footerRight p {
-  font-size: 1rem;
+  font-size: 0.9rem;
+}
+.divideLine {
+  height: 150px;
 }
 }
 @media (max-width:950px) {
@@ -123,18 +140,17 @@ footer {
 .footerBorder {
   gap: 25px;
 }
-.footerRight {
-  margin-top: 15%;
-}
 }
 @media (max-width:875px) {
 .footerBorder {
-  gap: 50px;
+  margin-top: 50px;
+  gap: 75px;
   flex-direction: column;
 }
 .footerRight {
   height: 400px;
   margin-top: 0px;
+  justify-content: center;
 }
 .footerTitles {
   width: 100%;
@@ -149,47 +165,5 @@ footer {
 }
 .footerRight {
   width: 100%;
-}
-}
-@media (max-width:500px) {
-  .footerTitles {
-    margin-top: 25px;
-  }
- .footerTitles h2 {
-    font-size: 50px;
-}
-.footerTitles p {
-    font-size: 14px;
-    margin-top: -5px;
-} 
-.footerRight h3 {
-  font-size: 1rem;
-}
-.footerRight p {
-  font-size: 0.9rem;
-}
-}
-@media (max-width:385px) {
-  .footerBorder {
-    height: 100%;
-    gap: 25px;
-    min-height: 100%;
-  }
-.footerRight {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 25px;
-  width: 100%;
-  height: inherit;
-}
-.footerTitles p {
-  width: 100%;
-  text-align: center;
-}
-footer {
-  height: 100%;
-  padding-bottom: 25px;
 }
 }

@@ -67,6 +67,7 @@ function Footer() {
               <Link to="/admin-profile"><p>My Venues</p></Link>
             )}
           </div>
+          <div className={styles.divideLine}></div>
           <div className={styles.FooterLinks}>
             <h3>Profile</h3>
             {isUserLoggedIn ? (
@@ -85,6 +86,7 @@ function Footer() {
               </>
             )}
           </div>
+          <div className={styles.divideLine}></div>
           <div className={styles.FooterLinks}>
             <Link to="/about"><h3>About Us</h3></Link>
             <Link to="/about"><p>About Us</p></Link>
