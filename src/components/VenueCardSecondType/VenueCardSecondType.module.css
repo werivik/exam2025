@@ -1,20 +1,22 @@
 .hotelCard {
     width: 100%;
     min-width: 100px;
-    height: 100%;
-    height: 415px;
-    margin-bottom: 15px;
+    height: 425px;
+    max-height: 425px;
     position: relative;
     border-radius: 25px 25px 5px 5px;
     transition: 0.25s;
     text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: transparent;
 }
 
 .hotelImage {
     width: 100%;
-    height: 60%;
+    height: 250px;
     object-fit: cover;
-    border-radius: 25px 25px 5px 5px;
     border-radius: 25px 25px 5px 5px;
     -webkit-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
     -moz-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
@@ -22,6 +24,7 @@
     background-image: url(/media/logo/loadingScreen.png);
     background-position: center;
     transition: 0.25s;
+    flex-shrink: 0;
 }
 
 .starRating {
@@ -39,6 +42,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
+  z-index: 1;
 }
 
 .starRating img {
@@ -58,97 +62,109 @@
     flex-direction: column;
     gap: 7.5px;
     transition: 0.25s;
+    padding: 15px 10px 10px 10px;
+    flex-grow: 1;
+    position: relative;
+    height: 200px;
 }
 
 .hotelInfo h3 {
     font-size: 22px;
-    margin-bottom: 0;
-    margin-top: 15px;
+    margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 30px;
 }
 
 .hotelLocation {
     font-size: 19px;
-    margin-top: 7.5px;
-    margin-bottom: 7.5px;
+    margin: 0;
     font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 25px;
 }
 
 .hotelPrice {
-    margin-top: -10px;
+    margin-top: 5px;
     font-size: 15px;
     font-style: normal;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 5px;
+    height: 25px;
 }
 
 .hotelPrice p {
   opacity: 75%;
   font-size: 14px;
+  margin: 0;
 }
 
-.hotelPrice span {
-    font-size: 18px;
+.hotelPrice strong {
     font-weight: 700;
     font-size: 18px;
     opacity: 100%;
 }
 
 .seeMore {
-    display: none;
     width: 95%;
-    margin-top: -10px;
     text-align: right;
     text-decoration: underline;
-    transition: 0.25s;
-    color: #1F1B17;
+    color: #B88A44;
     font-size: 18px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: opacity 0.25s;
 }
 
 .hotelCard:hover {
-    cursor: pointer;
-    transition: 0.25s;
-    background-color: white;
+  cursor: pointer;
+  height: 425px;
+  transition: 0.25s;
+  background-color: white;
+}
 
-    .hotelInfo {
-        transition: 0.25s;
-        padding-left: 5px;
-    }
+.hotelCard:hover .hotelInfo {
+  transition: 0.25s;
+}
 
-    .hotelImage {
-        height: 52.5%;
-        transition: 0.25s;
-    }
+.hotelCard:hover .seeMore {
+  opacity: 1;
+}
 
-    .seeMore {
-        display: block;
-    }
+.hotelCard:hover .hotelImage {
+  transition: 0.25s;
+  border-radius: 25px 25px 0px 0px;
+  height: 275px;
 }
 
 .loadingCard {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
   
-  .loadingImage {
-    background-color: #bbb6b6;
-    width: 100%;
-    height: 60%;
-    border-radius: 25px 25px 5px 5px;
-  }
+.loadingImage {
+  background-color: #bbb6b6;
+  width: 100%;
+  height: 250px;
+  border-radius: 25px 25px 5px 5px;
+}
   
   .loadingInfo {
     width: 100%;
     padding: 10px;
-    margin-left: -10px;
     border-radius: 15px 15px 0px 0px;
-    height: 40%;
+    flex-grow: 1;
     color: #bbb6b6;
     display: flex;
     flex-direction: column;
@@ -181,7 +197,8 @@
       background-color: white;
       margin-bottom: 50px;
     }
-    .hotelInfo {
-      margin-left: 5px;
+    
+    .hotelImage {
+      height: 200px;
     }
   }

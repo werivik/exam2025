@@ -16,6 +16,7 @@ import wifiImage from "/media/metaImages/wifi.jpeg";
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
 import VenueCardFirstType from '../../components/VenueCardFirstType/VenueCardFirstType';
+import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
 import BannerSlideshow from '../../components/BannerSlideshow/BannerSlideshow';
 
@@ -389,7 +390,7 @@ const applyFilters = () => {
         className={styles.startDateFilter}
         type="text"
         value={checkInDate}
-        placeholder="Start"
+        placeholder="Start Date"
         onClick={(e) => {
           e.stopPropagation();
           toggleCalendar('start');
@@ -408,7 +409,7 @@ const applyFilters = () => {
         className={styles.endDateFilter}
         type="text"
         value={checkOutDate}
-        placeholder="End"
+        placeholder="End Date"
         onClick={(e) => {
           e.stopPropagation();
           toggleCalendar('end');

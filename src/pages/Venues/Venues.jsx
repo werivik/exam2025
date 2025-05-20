@@ -548,12 +548,13 @@ useEffect(() => {
       
       <section className={styles.rightSection}>
         <div className={styles.rightBorder}>
-          <div className={styles.rightTitles}>
-            <h1>Find your Dream Stay</h1>
-            <p>...with Holidaze</p>
-          </div>
+          <div className={styles.topSection}>
+            <div className={styles.rightTitles}>
+              <h1>Find your Dream Stay</h1>
+              <p>...with Holidaze</p>
+            </div>
 
-          <div className={styles.filterTopSection}>
+            <div className={styles.filterTopSection}>
             <div className={styles.filterTop}>
               <div className={styles.topSearchbar}>
               <Searchbar
@@ -586,6 +587,7 @@ useEffect(() => {
                   <option value="ratingHighLow">Rating: High to Low</option>
                 </select>
               </div>
+          </div>
           </div>
 
           {loading ? (

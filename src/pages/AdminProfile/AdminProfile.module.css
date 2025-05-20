@@ -1,472 +1,488 @@
 .container {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding-bottom: 0;
-  margin-bottom: 50px;
+position: relative;
+height: 100%;
+width: 100%;
+display: flex;
+justify-content: center;
+padding-bottom: 0;
+margin-bottom: 50px;
 }
-.container button, 
-.container input, 
+.container button,
+.container input,
 .container label {
-  font-family: "Playfair Display", serif;
+font-family: "Playfair Display", serif;
 }
 .contentWrapper {
-  width: 100%;
-  height: 100%;
+width: 100%;
+height: 100%;
 }
 .blurred {
-  filter: blur(5px);
-  pointer-events: none;
-  user-select: none;
-  overflow: hidden;
-  scroll-behavior: none;
+filter: blur(5px);
+pointer-events: none;
+user-select: none;
+overflow: hidden;
+scroll-behavior: none;
 }
 .backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(31, 27, 23, 0.6);
-  z-index: 10;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(31, 27, 23, 0.6);
+z-index: 10;
 }
 .profilePage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 80%;
-  margin: 75px auto 0;
-  gap: 50px;
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 80%;
+margin: 75px auto 0;
+gap: 50px;
 }
 .divider {
-  height: 0.5px;
-  width: 100%;
-  background-color: #1F1B17;
-  border-radius: 99px;
-  margin-top: 50px;
-  margin-bottom: 50px;
-}
-.rating {
-  margin-top: 0px;
-  font-size: 1.125rem;
-  pointer-events: none;
-}
-.rating span {
-  opacity: 75%;
-  font-size: 0.9rem;
-}
-.rating img {
-  width: 15px;
-  height: 15px;
-  object-fit: contain;
-  margin-right: 5px;
-  border: none;
+height: 0.5px;
+width: 100%;
+background-color: #1F1B17;
+border-radius: 99px;
+margin-top: 50px;
+margin-bottom: 50px;
 }
 .mobileProfile {
-  height: 100%;
-  min-height: 100vh;
-  width: 100%;
-  display: none;
+height: 100%;
+min-height: 100vh;
+width: 100%;
+display: none;
 }
 .profileTop {
-  height: 350px;
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  pointer-events: none;
+height: 350px;
+width: 100%;
+position: relative;
+display: flex;
+flex-direction: column;
 }
 .bannerWrapper {
-  height: 400px;
-  width: 100%;
-  z-index: 1;
-  border-radius: 25px;
+height: 400px;
+width: 100%;
+z-index: 1;
+border-radius: 25px;
 }
 .bannerWrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 25px;
+width: 100%;
+height: 100%;
+object-fit: cover;
+border-radius: 25px;
 }
 .avatarWrapper {
-  position: relative;
+position: relative;
 }
 .avatar {
-  position: absolute;
-  height: 125px;
-  width: 125px;
-  z-index: 2;
-  bottom: -10px;
-  margin-left: 15px;
-  border-radius: 99px 99px 15px 15px;
-  object-fit: cover;
+position: absolute;
+height: 125px;
+width: 125px;
+z-index: 2;
+bottom: -10px;
+margin-left: 15px;
+border-radius: 99px 99px 15px 15px;
+object-fit: cover;
 }
-.edgeLeft, 
+.edgeLeft,
 .edgeRight {
-  width: 15px;
-  position: absolute;
-  bottom: 0;
-  z-index: 3;
+width: 15px;
+position: absolute;
+bottom: 0;
+z-index: 3;
 }
 .edgeRight {
-  left: 140px;
-  transform: scaleX(-1);
+left: 140px;
+transform: scaleX(-1);
 }
 .profileInfo {
-  margin-top: 10px;
-  margin-left: 15px;
+margin-top: 10px;
+margin-left: 15px;
 }
 .profileInfo h2 {
-  margin: 25px 0 0;
-  font-size: 1.5rem;
-  padding: 0;
-  pointer-events: none;
+margin: 25px 0 0;
+font-size: 1.5rem;
+padding: 0;
 }
 .profileInfo p {
-  font-size: 1.125rem;
-  margin-top: 5px;
-  font-style: italic;
-  pointer-events: none;
+font-size: 1.125rem;
+margin-top: 5px;
+font-style: italic;
 }
-.profileInfo button {
-  position: absolute;
-  bottom: 25px;
-  right: 15px;
+.dashBtn {
+width: 100%;
+right: 15px;
+display: flex;
+justify-content: flex-end;
+align-items: flex-end;
+position: absolute;
+top: 440px;
 }
 .mobileContent {
-  margin: 0 15px;
-  display: flex;
-  flex-direction: column;
+margin: 0 15px;
+display: flex;
+flex-direction: column;
 }
 .sectionHeader {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 15px;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+width: 100%;
+margin-bottom: 15px;
 }
 .sectionHeader h3 {
-  font-size: 1.75rem;
-  margin: 0;
-  pointer-events: none;
+font-size: 1.75rem;
+margin: 0;
 }
 .sectionHeader h2 {
-  font-size: 2.5rem;
-  margin: 0;
-  padding: 0;
-  pointer-events: none;
+font-size: 2.5rem;
+margin: 0;
+padding: 0;
 }
-.venuesSection {
-  margin-top: 50px;
-  scroll-margin-top: 100px;
+.bookingsSection {
+margin-top: 50px;
+scroll-margin-top: 100px;
 }
 .venueGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-auto-rows: 1fr;
-  max-width: 100%;
-  gap: 25px;
-  position: relative;
-  align-items: start;
-  height: 100%;
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+grid-auto-rows: 1fr;
+max-width: 100%;
+gap: 25px;
+position: relative;
+align-items: start;
+height: 100%;
 }
 .venueGrid > * {
-  aspect-ratio: 3 / 4;
-  max-width: 400px;
-  width: 100%;
-  height: 100%;
-  justify-self: center;
+aspect-ratio: 3 / 4;
+max-width: 400px;
+width: 100%;
+height: 100%;
+justify-self: center;
 }
-.venuesContent {
-  margin-top: 50px;
-  height: 100%;
+.bookingsContent {
+margin-top: 50px;
+height: 100%;
 }
 .editSection {
-  scroll-margin-top: 100px;
+scroll-margin-top: 100px;
 }
 .editContent {
-  margin-top: 50px;
-  height: 450px;
-  position: relative;
+margin-top: 50px;
+height: 450px;
+position: relative;
 }
 .editForm {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  width: 95%;
+display: flex;
+flex-direction: column;
+gap: 25px;
+width: 95%;
 }
 .editForm input {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  font-size: 1.125rem;
-  padding-left: 10px;
-  height: 35px;
-  border-radius: 15px;
-  border: none;
+width: 100%;
+display: flex;
+flex-direction: column;
+font-size: 1.125rem;
+padding-left: 10px;
+height: 35px;
+border-radius: 15px;
+border: none;
 }
 .editForm label {
-  font-size: 1.125rem;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+font-size: 1.125rem;
+display: flex;
+flex-direction: column;
+gap: 10px;
 }
-.editActions {
-  display: flex;
-  width: 100%;
-  align-items: flex-end;
-  justify-content: flex-end;
-  margin-top: 25px;
+.editButtons {
+display: flex;
+width: 100%;
+align-items: flex-end;
+justify-content: flex-end;
+margin-top: 25px;
 }
 .desktopProfile {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 50px;
-}
-.desktopProfile .rating img {
-  filter: invert(100%);
+width: 100%;
+display: flex;
+position: relative;
+flex-direction: row;
+justify-content: space-between;
+gap: 50px;
 }
 .sidebar {
-  position: sticky;
-  left: 0;
-  top: 75px;
-  height: 90vh;
-  width: 300px;
-  margin-bottom: 50px;
-  border-radius: 25px;
+position: sticky;
+left: 0;
+top: 75px;
+height: 90vh;
+width: 300px;
+margin-bottom: 50px;
+border-radius: 25px;
 }
 .sidebarContent {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 100%;
-  padding: 25px;
-  height: 100%;
-  background-color: #1F1B17;
-  border-radius: 25px;
-  color: #fffefb;
-  z-index: 2;
-  position: relative;
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+width: 100%;
+padding: 25px;
+height: 100%;
+background-color: #1F1B17;
+border-radius: 25px;
+color: #FFFFFF; 
+z-index: 2;
+position: relative;
 }
-.userInfo {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  align-items: center;
-  margin-bottom: 15px;
-}
-.userInfo .avatar {
-  width: 175px;
-  height: 175px;
-  border-radius: 999px;
-  border: solid #fffefb 1px;
-  object-fit: cover;
-  position: relative;
-  margin-left: 7.5px;
-  margin-right: 7.5px;
-}
-.userInfo h2, 
-.userInfo p, 
-.userInfo .profileRating {
-  width: 100%;
-  text-align: left;
-  pointer-events: none;
-}
-.profileRating {
+.sidebar .rating img {
   filter: invert(100%);
 }
+.userInfo {
+width: 100%;
+display: flex;
+flex-direction: column;
+gap: 0;
+align-items: center;
+margin-bottom: 15px;
+}
+.userInfo .avatar {
+width: 175px;
+height: 175px;
+border-radius: 999px;
+border: solid #FFFFFF 1px;
+object-fit: cover;
+position: relative;
+margin-left: 7.5px;
+margin-right: 7.5px;
+}
+.userInfo h2,
+.userInfo p,
+.userInfo .profileRating {
+width: 100%;
+text-align: left;
+}
 .userInfo h2 {
-  margin-bottom: 0;
-  pointer-events: none;
+margin-bottom: 0;
 }
 .userInfo h3 {
-  margin-bottom: 0;
-  padding: 0;
-  pointer-events: none;
-  pointer-events: none;
+margin-bottom: 0;
+padding: 0;
+pointer-events: none;
+color: #FFFFFF;
 }
 .userInfo p {
-  font-style: italic;
-  margin-top: 2.5px;
-  margin-bottom: 2.5px;
+font-style: italic;
+margin-top: 2.5px;
+margin-bottom: 2.5px;
 }
 .navLinks {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  height: auto;
+display: flex;
+flex-direction: column;
+gap: 0;
+height: auto;
+margin-top: -15px;
 }
 .linkGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+display: flex;
+flex-direction: column;
+gap: 15px;
+padding-bottom: 15px;
 }
 .linkGroup button {
-  background-color: transparent;
-  width: fit-content;
-  color: #fffefb;
-  font-size: 1rem;
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  position: relative;
-  transition: 0.25s;
+background-color: transparent;
+width: fit-content;
+color: #FFFFFF;
+font-size: 1rem;
+border: none;
+text-align: left;
+cursor: pointer;
+position: relative;
+transition: 0.25s;
 }
 .linkGroup button::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 0.5px;
-  background: white;
-  bottom: -5px;
-  border-radius: 99px;
-  left: 6px;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.25s ease-out;
+content: '';
+position: absolute;
+width: 100%;
+height: 0.5px;
+background: #FFFFFF;
+bottom: -5px;
+border-radius: 99px;
+left: 6px;
+transform: scaleX(0);
+transform-origin: left;
+transition: transform 0.25s ease-out;
 }
 .linkGroup button:hover::after {
-  transform: scaleX(1);
+transform: scaleX(1);
 }
 .signOutBtnWrapper {
-  position: absolute;
-  bottom: 25px;
-  left: 50%;
-  transform: translate(-50%);
+position: absolute;
+bottom: 25px;
+left: 50%;
+transform: translate(-50%);
 }
 .mainContent {
-  width: 100%;
-  position: relative;
-  z-index: 1;
-  height: fit-content;
+width: 100%;
+position: relative;
+z-index: 1;
+height: fit-content;
 }
 .tabletProfile {
-  display: none;
-  width: 100%;
+display: none;
+width: 100%;
 }
 .profileHeader {
-  height: 550px;
-  width: 100%;
-  position: relative;
+height: 550px;
+width: 100%;
+position: relative;
 }
 .avatarContainer {
-  position: relative;
+position: relative;
 }
 .tabletContent {
-  width: 95%;
-  margin: 0 25px;
-  position: relative;
-  flex-grow: 1;
+width: 95%;
+margin: 0 25px;
+position: relative;
+flex-grow: 1;
 }
 .contentContainer {
-  width: 100%;
-  height: auto;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 100px;
+width: 100%;
+height: auto;
+position: relative;
+display: flex;
+flex-direction: column;
+gap: 100px;
 }
-
-.desktopProfile 
+.desktopProfile
 .userInfo {
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+flex-direction: column;
+align-items: flex-start;
+justify-content: center;
 }
-
 .sidebarContent
 .divider {
-  background-color: #fffefb;
-  margin: 0;
-  margin-top: 15px;
-  margin-bottom: 15px;
+background-color: #FFFFFF;
+margin: 0;
+margin-top: 15px;
+margin-bottom: 15px;
 }
-
-.desktopProfile 
+.desktopProfile
 .mainContent
 .bannerWrapper {
-  margin-bottom: 75px;
+margin-bottom: 75px;
 }
-
 .no-scroll {
-  overflow: hidden;
+overflow: hidden;
 }
 body.modal-open {
-  overflow: hidden;
+overflow: hidden;
+}
+.sortDropdown {
+font-size: 1rem;
+padding: 5px 10px;
+border-radius: 10px;
+border: 1px solid #ccc;
+font-family: "Playfair Display", serif;
+background-color: #fffefb;
+cursor: pointer;
+margin: 0;
+}
+.no-scroll {
+overflow: hidden;
+}
+body.modal-open {
+overflow: hidden;
 }
 .mobileProfile .bannerWrapper {
-  border-radius: 0;
+border-radius: 0;
 }
 .mobileProfile .bannerWrapper img {
-  border-radius: 0;
+border-radius: 0;
 }
 .mobileProfile .profileInfo button {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  left: 0;
-  z-index: 777;
+position: fixed;
+bottom: 0;
+width: 100%;
+left: 0;
+z-index: 777;
 }
 .mobileProfile .venuesSection {
-  margin-top: 0;
+margin-top: 0;
+}
+.actionBtns {
+display: flex;
+justify-content: flex-end;
+gap: 10px;
+margin-top: 15px;
+}
+.rating {
+display: flex;
+align-items: center;
+gap: 5px;
+margin-top: 5px;
+}
+.rating img {
+height: 20px;
+width: auto;
+}
+.rating span {
+font-size: 0.875rem;
+opacity: 0.8;
 }
 @media (max-width: 1125px) {
-  .tabletProfile {
-    display: block;
-  }
-  
-  .desktopProfile {
-    display: none;
-  }
+.tabletProfile {
+display: block;
+}
+.desktopProfile {
+display: none;
+}
 }
 @media (max-width: 1025px) {
-  .profilePage {
-    width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
-  }
-  
-  .contentContainer h2 {
-    font-size: 2.5rem;
-  }
+.profilePage {
+width: 90%;
+margin-left: 5%;
+margin-right: 5%;
+}
+.contentContainer h2 {
+font-size: 2.5rem;
+}
 }
 @media (max-width: 725px) {
-  .profilePage {
-    width: 95%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-  }
+.profilePage {
+width: 95%;
+margin-left: 2.5%;
+margin-right: 2.5%;
+}
 }
 @media (max-width: 425px) {
-  .tabletProfile, 
-  .desktopProfile {
-    display: none;
-  }
-  
-  .profilePage {
-    margin: 0;
-    width: 100%;
-    padding: 0;
-  }
-  
-  .mobileProfile {
-    display: block;
-  }
+.tabletProfile,
+.desktopProfile {
+display: none;
+}
+.profilePage {
+margin: 0;
+width: 100%;
+padding: 0;
+}
+.mobileProfile {
+display: block;
+}
+}
+@media (max-width: 325px) {
+.dashBtn {
+width: 95%;
+display: flex;
+position: inherit;
+}
 }
 @media (max-width: 275px) {
-  .sectionHeader {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .sectionHeader button {
-    margin-left: 27%;
-    margin-top: 25px;
-    margin-bottom: 25px;
-  }
+.sectionHeader {
+flex-direction: column;
+align-items: flex-start;
+}
+.sectionHeader button {
+margin-left: 27%;
+margin-top: 25px;
+margin-bottom: 25px;
+}
 }
