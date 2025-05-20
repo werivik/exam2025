@@ -17,7 +17,7 @@
 
 .heroSection {
   width: 100%;
-  height: 40vh;
+  height: 42vh;
   background-image: url(/media/logo/loadingScreen.png);
   background-size: cover;
   background-position: center;
@@ -44,11 +44,13 @@
   font-weight: 700;
   margin-bottom: 1rem;
   color: white;
+    pointer-events: none;
 }
 
 .heroOverlay p {
   font-size: 1.2rem;
   color: white;
+    pointer-events: none;
 }
 
 .aboutContainer {
@@ -65,12 +67,14 @@
   font-weight: 700;
   color: #1F1B17;
   margin-bottom: 20px;
+  pointer-events: none;
 }
 
 .sectionContent p {
   line-height: 1.6;
   color: #1F1B17;
   margin-bottom: 20px;
+    pointer-events: none;
 }
 
 .missionSection,
@@ -95,6 +99,7 @@
 background-image: url(/media/logo/loadingScreen.png);
   background-size: cover;
   background-position: center;
+    pointer-events: none;
 }
 
 .dividerLine {
@@ -112,6 +117,7 @@ background-image: url(/media/logo/loadingScreen.png);
   font-weight: 700;
   color: #1F1B17;
   margin-bottom: 40px;
+    pointer-events: none;
 }
 
 .valuesGrid {
@@ -144,11 +150,13 @@ background-image: url(/media/logo/loadingScreen.png);
   font-weight: 600;
   margin-bottom: 10px;
   color: #1F1B17;
+    pointer-events: none;
 }
 
 .valueCard p {
   color: #1F1B17;
   line-height: 1.5;
+    pointer-events: none;
 }
 
 .teamSection {
@@ -161,6 +169,7 @@ background-image: url(/media/logo/loadingScreen.png);
   font-weight: 700;
   color: #1F1B17;
   margin-bottom: 20px;
+    pointer-events: none;
 }
 
 .teamIntro {
@@ -206,6 +215,7 @@ background-image: url(/media/logo/loadingScreen.png);
   font-weight: 600;
   margin-bottom: 5px;
   color: #1F1B17;
+    pointer-events: none;
 }
 
 .teamMemberRole {
@@ -233,6 +243,7 @@ background-image: url(/media/logo/loadingScreen.png);
   font-weight: 700;
   color: #1F1B17;
   margin-bottom: 20px;
+    pointer-events: none;
 }
 
 .joinUsContent p {
@@ -240,6 +251,7 @@ background-image: url(/media/logo/loadingScreen.png);
   margin: 0 auto 30px;
   color: #1F1B17;
   line-height: 1.6;
+    pointer-events: none;
 }
 
 .joinUsButtons {
@@ -256,22 +268,6 @@ background-image: url(/media/logo/loadingScreen.png);
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
-}
-
-.browseButton {
-  background-color: #B88A44;
-  color: white;
-}
-
-.registerButton {
-  background-color: #5D6B2F;
-  color: white;
-}
-
-.browseButton:hover,
-.registerButton:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
 }
 
 @media (max-width: 1024px) {
