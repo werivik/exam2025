@@ -161,36 +161,39 @@ function Header() {
   const [filters, setFilters] = useState({ destination: "" });
   const [userData, setUserData] = useState(null);
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      const token = localStorage.getItem('accessToken');
-      const username = localStorage.getItem('username');
-      
-      if (!token || !username) return;
+useEffect(() => {
+  const fetchUserRole = async () => {
+    const role = await getUserRole();
+    setUserRole(role);
+  };
 
-      try {
-        const response = await fetch(PROFILES_SINGLE.replace('<name>', username), {
-          method: 'GET',
-          headers: headers(token),
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setUserData(data.data);
-        } 
-        else {
-          console.error('Failed to fetch user profile');
-        }
-      } 
-      catch (error) {
-        console.error('Error fetching profile:', error);
-      }
-    };
+  if (isUserLoggedIn) {
+    fetchUserRole();
+  } 
+  else {
+    setUserRole(null);
+  }
 
-    if (isUserLoggedIn) {
-      fetchUserProfile();
+  const isLoginOrRegister = loginOrRegisterRoutes.includes(location.pathname);
+  const isHome = location.pathname === "/";
+
+  const handleScroll = () => {
+    if (isHome || isLoginOrRegister) {
+      const scrollThreshold = window.innerHeight * 0.025;
+      setScrolled(window.scrollY > scrollThreshold);
+    } 
+    else {
+      setScrolled(true);
     }
-  }, [isUserLoggedIn]);
-  
+  };
+
+  window.addEventListener("scroll", handleScroll);
+
+  setScrolled(!(isHome || isLoginOrRegister));
+
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [location.pathname, isUserLoggedIn]);
+
   useEffect(() => {
     const fetchUserRole = async () => {
       const role = await getUserRole();
@@ -204,7 +207,6 @@ function Header() {
       setUserRole(null);
     }
   
-    // Add scroll listener for all routes that need transparent-to-background transition
     const handleScroll = () => {
       const scrollThreshold = window.innerHeight * 0.025;
       setScrolled(window.scrollY > scrollThreshold);
@@ -212,8 +214,9 @@ function Header() {
   
     window.addEventListener("scroll", handleScroll);
     
-    // Initial state - start with transparent header
-    setScrolled(false);
+  const isLoginOrRegister = loginOrRegisterRoutes.includes(location.pathname);
+  const isHome = location.pathname === "/";
+  setScrolled(!(isLoginOrRegister || isHome));
     
     return () => window.removeEventListener("scroll", handleScroll);
   }, [location.pathname, isUserLoggedIn]);
@@ -309,7 +312,7 @@ function Header() {
     setIsSearchOpen(prev => !prev);
   }, []);
 
-  const isSimpleHeader = false; // Remove this special treatment for login/register pages
+  const isSimpleHeader = false;
 
   useEffect(() => {
     setIsUserLoggedIn(isLoggedIn());
