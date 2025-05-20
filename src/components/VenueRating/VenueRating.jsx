@@ -118,22 +118,11 @@ const VenueRating = ({
       <div className={styles.ratingHeader}>
         <h4>Rate this venue</h4>
         <div className={styles.venueRating}>
-          <span className={styles.currentRating}>{displayRating.toFixed(1)}</span>
-          <div className={styles.currentStars}>
-            {[1, 2, 3, 4, 5].map(position => {
-              const filled = Math.floor(displayRating) >= position;
-              const halfFilled = !filled && Math.ceil(displayRating) === position;
-              
-              return (
-                <span 
-                  key={position} 
-                  className={`${styles.star} ${filled ? styles.filled : ''} ${halfFilled ? styles.halfFilled : ''}`}
-                >
-                  {filled ? '★' : (halfFilled ? '★' : '☆')}
-                </span>
-              );
-            })}
-          </div>
+        {userLoggedIn && userRating > 0 && !message && (
+          <p className={styles.ratedMessage}>
+            You rated this venue {userRating} {userRating === 1 ? 'star' : 'stars'}
+          </p>
+        )}
         </div>
       </div>
       
@@ -151,12 +140,6 @@ const VenueRating = ({
         {!userLoggedIn && (
           <p className={styles.loginPrompt}>
             <a href="/login-costumer">Login</a> to rate this venue
-          </p>
-        )}
-        
-        {userLoggedIn && userRating > 0 && !message && (
-          <p className={styles.ratedMessage}>
-            You rated this venue {userRating} {userRating === 1 ? 'star' : 'stars'}
           </p>
         )}
       </div>
