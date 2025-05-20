@@ -26,7 +26,7 @@ footer {
 }
 .footerBorder {
   color: #F3F0EB;
-  width: 90%;
+  width: 80%;
   height: 90%;
 
   display: flex;
@@ -64,7 +64,7 @@ footer {
 .footerRight {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-end;
   height: 80%;
   margin-top: 50px;
   gap: 100px;
