@@ -440,6 +440,7 @@ transition: all 0.2s ease;
 }
 .mediaButtons button:hover {
 background-color: rgba(93, 107, 47, 0.2);
+color:  rgba(93, 107, 47, 0.2);
 }
 .submitButton {
 padding: 10px 17px;

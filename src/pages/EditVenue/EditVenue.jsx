@@ -5,6 +5,7 @@ import { headers } from '../../headers';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import CostumPopup from '../../components/CostumPopup/CostumPopup';
+import Buttons from "../../components/Buttons/Buttons";
 
 const EditVenue = () => {
   const { id } = useParams();
@@ -322,14 +323,20 @@ const EditVenue = () => {
       onChange={handleChange}
     />
     {index > 0 && (
-      <button type="button" onClick={() => handleDeleteMedia(index)}>
-        Remove
-      </button>
+      <Buttons 
+      size='removeMedia'
+      onClick={() => handleDeleteMedia(index)}>
+        Remove 
+      </Buttons>
     )}
   </div>
 ))}
 <div className={styles.mediaButtons}>
-  <button type="button" onClick={handleAddMedia}>+ Add Media</button>
+  <Buttons 
+    size='addMedia'
+    onClick={handleAddMedia}>
+    + Add Media      
+  </Buttons>
 </div>
           </div>
 

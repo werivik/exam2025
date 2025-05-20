@@ -382,6 +382,28 @@ body.modal-open {
   cursor: pointer;
   margin: 0;
 }
+.no-scroll {
+  overflow: hidden;
+}
+body.modal-open {
+  overflow: hidden;
+}
+.mobileProfile .bannerWrapper {
+  border-radius: 0;
+}
+.mobileProfile .bannerWrapper img {
+  border-radius: 0;
+}
+.mobileProfile .profileInfo button {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  z-index: 777;
+}
+.mobileProfile .venuesSection {
+  margin-top: 0;
+}
 @media (max-width: 1125px) {
   .tabletProfile {
     display: block;

@@ -328,6 +328,36 @@
   transform: rotate(90deg);
 }
 
+.addMedia {
+padding: 8px 16px;
+background-color: rgba(93, 107, 47, 0.1);
+color: #5D6B2F;
+border: 1px solid #5D6B2F;
+border-radius: 4px;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+
+.addMedia:hover {
+background-color: rgba(93, 107, 47, 0.2);
+color: #5D6B2F;
+}
+
+.removeMedia {
+padding: 8px 12px;
+background-color: rgba(211, 47, 47, 0.1);
+color: #d32f2f;
+border: 1px solid #d32f2f;
+border-radius: 4px;
+cursor: pointer;
+font-size: 0.85rem;
+transition: all 0.2s ease;
+}
+
+.removeMedia:hover {
+  background-color: rgba(211, 47, 47, 0.2);
+  color: #d32f2f;
+}
 
 @media (max-width: 650px) {
   .medium {

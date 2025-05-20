@@ -387,51 +387,55 @@ function isValidVenueTitle(title) {
             required
           />
         </div>
-        <div className={styles.fieldGroupMeta}>
-          <label>Meta Tags (Optional)</label>
-          <div className={styles.metaTags}>
-            <label>
-              <input
-                type="checkbox"
-                name="meta"
-                value="wifi=true"
-                onChange={handleChange}
-                checked={formData.meta.wifi}
-              />
-              Wifi
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="meta"
-                value="parking=true"
-                onChange={handleChange}
-                checked={formData.meta.parking}
-              />
-              Parking
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="meta"
-                value="breakfast=true"
-                onChange={handleChange}
-                checked={formData.meta.breakfast}
-              />
-              Breakfast
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="meta"
-                value="pets=true"
-                onChange={handleChange}
-                checked={formData.meta.pets}
-              />
-              Pets
-            </label>
-          </div>
-        </div>
+<div className={styles.fieldGroupMeta}>
+  <label>Meta Tags (Optional)</label>
+  <div className={styles.metaTags}>
+    <div>
+      <input
+        type="checkbox"
+        id="wifi"
+        name="meta"
+        value="wifi=true"
+        onChange={handleChange}
+        checked={formData.meta.wifi}
+      />
+      <label htmlFor="wifi">Wifi</label>
+    </div>    
+    <div>
+      <input
+        type="checkbox"
+        id="parking"
+        name="meta"
+        value="parking=true"
+        onChange={handleChange}
+        checked={formData.meta.parking}
+      />
+      <label htmlFor="parking">Parking</label>
+    </div>
+    <div>
+      <input
+        type="checkbox"
+        id="breakfast"
+        name="meta"
+        value="breakfast=true"
+        onChange={handleChange}
+        checked={formData.meta.breakfast}
+      />
+      <label htmlFor="breakfast">Breakfast</label>
+    </div>
+    <div>
+      <input
+        type="checkbox"
+        id="pets"
+        name="meta"
+        value="pets=true"
+        onChange={handleChange}
+        checked={formData.meta.pets}
+      />
+      <label htmlFor="pets">Pets</label>
+    </div>
+  </div>
+</div>
         </div>
         <div className={styles.fieldGroupMedia}>
             <label>Media (Images)</label>
@@ -453,21 +457,45 @@ function isValidVenueTitle(title) {
                   onChange={handleChange}
                 />
                 {index > 0 && (
-                  <Buttons size='small' version='v4' onClick={() => handleDeleteMedia(index)}>
+                  <Buttons size='removeMedia' onClick={() => handleDeleteMedia(index)}>
                     Remove
                   </Buttons>
                 )}
               </div>
             ))}
             <div className={styles.mediaButtons}>
-              <Buttons size='small' version='v5' onClick={handleAddMedia}>
-                +
+              <Buttons size='addMedia' onClick={handleAddMedia}>
+                + Add Media
               </Buttons>
             </div>
           </div>
         <div className={styles.fieldGroupLocation}>
           <label>Location</label>
           <div className={styles.locationInputs}>
+            <input
+              type="text"
+              name="location-continent"
+              placeholder="Continent"
+              value={formData.location.continent}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              name="location-country"
+              placeholder="Country"
+              value={formData.location.country}
+              onChange={handleChange}
+              required
+            />
+              <input
+              type="text"
+              name="location-city"
+              placeholder="City"
+              value={formData.location.city}
+              onChange={handleChange}
+              required
+            />
             <input
               type="text"
               name="location-address"
@@ -481,30 +509,6 @@ function isValidVenueTitle(title) {
               name="location-zip"
               placeholder="ZIP"
               value={formData.location.zip}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="location-city"
-              placeholder="City"
-              value={formData.location.city}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="location-country"
-              placeholder="Country"
-              value={formData.location.country}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="location-continent"
-              placeholder="Continent"
-              value={formData.location.continent}
               onChange={handleChange}
               required
             />
@@ -527,7 +531,7 @@ function isValidVenueTitle(title) {
         </div>
         <Buttons
           size='medium'
-          version='v4'
+          version='v1'
           type="submit"
           disabled={loading}
         >
@@ -563,7 +567,7 @@ function isValidVenueTitle(title) {
       <p>
         If you do not agree with any part of these terms, please do not use the platform.
       </p>
-      <button onClick={closeTermsPopup} className={styles.closeTermsButton}>X</button>
+      <Buttons size='close' onClick={closeTermsPopup}><i class="fa-solid fa-x"></i></Buttons>
     </div>
   </div>
 )}

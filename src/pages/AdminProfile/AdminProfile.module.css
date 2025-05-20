@@ -413,6 +413,9 @@ body.modal-open {
   left: 0;
   z-index: 777;
 }
+.mobileProfile .venuesSection {
+  margin-top: 0;
+}
 @media (max-width: 1125px) {
   .tabletProfile {
     display: block;
