@@ -9,6 +9,7 @@
   background-image: url(/media/images/homeBanner.png);
   background-position: center;
   background-size: cover;
+  overflow: hidden;
 }
 
 .blurWrapper {
@@ -160,7 +161,6 @@
     80% { transform: translateX(8px); }
     100% { transform: translateX(0); }
   }
-
 
 .securityCodeInputs {
   display: flex;

@@ -9,6 +9,7 @@
   background-image: url(/media/images/homeBanner.png);
   background-position: center;
   background-size: cover;
+  overflow: hidden;
 }
 
 .blurWrapper {

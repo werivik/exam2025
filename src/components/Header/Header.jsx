@@ -204,18 +204,18 @@ function Header() {
       setUserRole(null);
     }
   
-    if (location.pathname === "/") {
-      const handleScroll = () => {
-        const scrollThreshold = window.innerHeight * 0.025;
-        setScrolled(window.scrollY > scrollThreshold);
-      };
+    // Add scroll listener for all routes that need transparent-to-background transition
+    const handleScroll = () => {
+      const scrollThreshold = window.innerHeight * 0.025;
+      setScrolled(window.scrollY > scrollThreshold);
+    };
   
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    } 
-    else {
-      setScrolled(true);
-    }
+    window.addEventListener("scroll", handleScroll);
+    
+    // Initial state - start with transparent header
+    setScrolled(false);
+    
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [location.pathname, isUserLoggedIn]);
   
   useEffect(() => {
@@ -309,7 +309,7 @@ function Header() {
     setIsSearchOpen(prev => !prev);
   }, []);
 
-  const isSimpleHeader = loginOrRegisterRoutes.includes(location.pathname);
+  const isSimpleHeader = false; // Remove this special treatment for login/register pages
 
   useEffect(() => {
     setIsUserLoggedIn(isLoggedIn());
@@ -364,9 +364,7 @@ function Header() {
     setIsSidebarOpen(false);
   }, [location.pathname]);
 
-  const headerClassName = `${scrolled && !isSimpleHeader ? styles.scrolled : ""} ${
-    isSimpleHeader ? styles.simpleHeader : ""
-  }`;
+  const headerClassName = `${scrolled ? styles.scrolled : ""}`;
 
   return (
     <div ref={sidebarRef}>
