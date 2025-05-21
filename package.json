@@ -15,7 +15,6 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "firebase": "^11.5.0",
     "framer-motion": "^12.8.0",
     "lodash.debounce": "^4.0.8",
     "netlify-cli": "^20.1.1",
