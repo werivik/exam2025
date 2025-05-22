@@ -85,13 +85,40 @@
   gap: 15px;
   height: 30px;
 }
+
 .filtersColumns .filterCalender, .filtersColumns .filterPeople {
   width: 100%;
+  height: 40px;
 }
+.filtersColumns .filterDestination {
+  width: 100%;
+  height: 40px;
+}
+
 .filtersColumns .filterDestination input, .filtersColumns .filterCalender input, .filtersColumns .filterPeople input{
   width: 100%;
-  height: 30px;
+  height: 40px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 1.125rem;
+  color: #1F1B17;
+  cursor: pointer;
+  z-index: 996;
 }
+
+.filtersColumns .filterDestination input {
+  padding-left: 35px;
+  margin-left: -25px;
+}
+
+.filtersColumns .filterCalender input {
+  padding-left: 35px;
+  padding-right: 5px;
+  margin-left: -35px;
+  font-size: 0.9rem;
+}
+
 .allFilters {
   display: flex;
   flex-direction: row;
@@ -129,7 +156,6 @@
     object-fit: contain;
     background-color: transparent;
     color: #1f1b17e4;
-    border-radius: 999px;
     margin-right: -10px;
     z-index: 2;
     display: flex;
@@ -158,12 +184,12 @@
     left: 10%;
     border-radius: 10px;
     height: 100%;
-    padding-left: 40px;
+    padding-left: 35px;
     padding-right: 5px;
     margin-left: -35px;
     border: none;
     z-index: 1;
-    font-size: 1.125rem;
+    font-size: 0.9rem;
     color: #1F1B17;
     z-index: 996;
     cursor: pointer;
@@ -211,11 +237,14 @@
     display: flex;
     flex-direction: row;
     gap: 10px;
+    width: fit-content;
     position: relative;
   }
   .costumCalenderPosition {
     position: absolute;
     top: -465px;
+    min-width: 350px;
+    width: fit-content;
     transition: 0.25s;
   }
   .fa-calendar-days {
@@ -682,6 +711,146 @@
   top: 55%;
   transform: rotate(-90deg);
 }
+.fifthSection {
+  width: 100%;
+  height: 100%;
+  max-height: 850px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background-color: #B88A44;
+  margin-top: -25px;
+  color: #F3F0EB;
+}
+.fifthBorder {
+  width: 80%;
+  height: 100%;
+}
+.fifthContent {
+  width: 100%;
+  height: 100%;
+}
+.fifthTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 280px;
+    padding-top: 50px;
+    margin-bottom: 50px;
+}
+.fifthTitle h2 {
+    font-size: 3rem;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+.fifthTitle p {
+    font-size: 1.8rem;
+    font-style: italic;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+.DestinationContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 90vh;
+  align-items: center;
+  color: #1F1B17;
+}
+.destinationsWrapper {
+  width: 100%;
+  height: fit-content;
+  position: relative;
+}
+.destinationsContainer {
+  display: flex;
+  flex-direction: row;    
+  justify-content: space-between;
+  gap: 25px;
+  margin-top: 25px;
+}
+.destinationCard {
+  width: 300px;
+  height: 475px;
+  position: relative;
+  padding-bottom: 25px;
+  border-radius: 15px;
+  transition: 0.25s;
+}
+.destinationCard:hover {
+  cursor: pointer;
+  height: 525px;
+  transition: 0.25s;
+}
+.destinationCard:hover .exploreButton {
+  transition: 0.25s;
+  opacity: 1;
+}
+.destinationCard:hover .destinationInfo p {
+  display: none;
+  transition: 0.25s;
+}
+.destinationImageContainer {
+  height: 75%;
+  width: 100%;
+  position: relative;
+}
+.destinationImageContainer img {
+  border-radius: 15px 15px 5px 5px;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transition: 0.25s;
+    -webkit-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
+    -moz-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
+    box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
+}
+.destinationInfo {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.destinationInfo h3 {
+  font-size: 1.5rem;
+  padding: 0;
+  margin: 0;
+  margin-top: 10px;
+  transition: 0.25s;
+}
+.destinationInfo p {
+  font-style: italic;
+  font-size: 1.125rem;
+  transition: 0.25s;
+}
+.exploreButton {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+  opacity: 0;
+  transition: 0.25s;
+  color: #916b2d;;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+@media (max-width:1400px) {
+  .typeTitle {
+    height: 175px;
+    margin-top: 25px;
+  }
+  .typeTitle h2 {
+    font-size: 2.25rem;
+  }
+  .typeTitle p {
+    font-size: 1.4rem;
+  }
+}
 @media (max-width:1375px) {
   .typeTitle {
     height: 200px;
@@ -732,6 +901,11 @@ font-size: 1.75rem;
   }
   .pageContent {
     margin-bottom: 0px;
+  }
+}
+@media (max-width:1198px) {
+  .hotelType h3 {
+    font-size: 1.25rem;
   }
 }
 @media (max-width: 1185px) {
@@ -828,7 +1002,6 @@ font-size: 1.75rem;
   }
   .filterDestination i, .filterCalender i, .filterPeople i {
     font-size: 1rem;
-    border: solid 2px;
   }
   .filterDestination {
     min-width: 150px;
@@ -932,7 +1105,6 @@ font-size: 1.75rem;
   }
   .filterDestination i, .filterCalender i, .filterPeople i {
     font-size: 1rem;
-    border: solid 2px;
   }
   .filterDestination {
     min-width: 150px;
@@ -1033,18 +1205,6 @@ height: 75%;
   }
 }
 }
-@media (max-width:1400px) {
-  .typeTitle {
-    height: 175px;
-    margin-top: 25px;
-  }
-  .typeTitle h2 {
-    font-size: 2.25rem;
-  }
-  .typeTitle p {
-    font-size: 1.4rem;
-  }
-}
 @media (max-width:875px) {
   .typeTitle{
     height: 125px;
@@ -1073,11 +1233,6 @@ height: 75%;
 @media (max-width:433px) {
   .secondSection h2 {
     font-size: 1.75rem;
-  }
-}
-@media (max-width:1198px) {
-  .hotelType h3 {
-    font-size: 1.25rem;
   }
 }
 @media (max-width:845px) {
@@ -1123,147 +1278,4 @@ height: 75%;
   .thirdInfo p {
     font-size: 1rem;
   }
-}
-
-.fifthSection {
-  width: 100%;
-  height: 100%;
-  max-height: 850px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  background-color: #B88A44;
-  margin-top: -25px;
-  color: #F3F0EB;
-}
-.fifthBorder {
-  width: 80%;
-  height: 100%;
-}
-.fifthContent {
-  width: 100%;
-  height: 100%;
-}
-.fifthTitle {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 280px;
-    padding-top: 50px;
-    margin-bottom: 50px;
-}
-.fifthTitle h2 {
-    font-size: 3rem;
-    margin: 0;
-    padding: 0;
-    pointer-events: none;
-}
-.fifthTitle p {
-    font-size: 1.8rem;
-    font-style: italic;
-    font-weight: 400;
-    margin: 0;
-    padding: 0;
-    pointer-events: none;
-}
-
-
-.DestinationContent {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 90vh;
-  align-items: center;
-  color: #1F1B17;
-}
-
-.destinationsWrapper {
-  width: 100%;
-  height: fit-content;
-  position: relative;
-}
-
-.destinationsContainer {
-  display: flex;
-  flex-direction: row;    
-  justify-content: space-between;
-  gap: 25px;
-  margin-top: 25px;
-}
-
-.destinationCard {
-  width: 300px;
-  height: 475px;
-  position: relative;
-  padding-bottom: 25px;
-  border-radius: 15px;
-  transition: 0.25s;
-}
-
-.destinationCard:hover {
-  cursor: pointer;
-  height: 525px;
-  transition: 0.25s;
-}
-
-.destinationCard:hover .exploreButton {
-  transition: 0.25s;
-  opacity: 1;
-}
-
-.destinationCard:hover .destinationInfo p {
-  display: none;
-  transition: 0.25s;
-}
-
-.destinationImageContainer {
-  height: 75%;
-  width: 100%;
-  position: relative;
-}
-
-.destinationImageContainer img {
-  border-radius: 15px 15px 5px 5px;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  transition: 0.25s;
-    -webkit-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
-    -moz-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
-    box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
-}
-
-.destinationInfo {
-  width: 100%;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.destinationInfo h3 {
-  font-size: 1.5rem;
-  padding: 0;
-  margin: 0;
-  margin-top: 10px;
-  transition: 0.25s;
-}
-
-.destinationInfo p {
-  font-style: italic;
-  font-size: 1.125rem;
-  transition: 0.25s;
-}
-
-.exploreButton {
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  align-items: center;
-  opacity: 0;
-  transition: 0.25s;
-  color: #916b2d;;
-  font-size: 1rem;
-  margin-top: 5px;
 }

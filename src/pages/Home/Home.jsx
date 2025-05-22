@@ -38,6 +38,27 @@ const FEATURE_TYPES = [
   { image: animalImage, label: "Animal Friendly", meta: { pets: true } },
 ];
 
+const formatDateWithOrdinal = (dateString) => {
+  if (!dateString) return '';
+  
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.toLocaleDateString('en-US', { month: 'long' });
+  const year = date.getFullYear();
+  
+  const getOrdinalSuffix = (day) => {
+    if (day > 3 && day < 21) return 'th';
+    switch (day % 10) {
+      case 1: return 'st';
+      case 2: return 'nd';
+      case 3: return 'rd';
+      default: return 'th';
+    }
+  };
+  
+  return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
+};
+
 const Home = () => {
   const navigate = useNavigate();
   const username = localStorage.getItem("username");
@@ -231,27 +252,27 @@ const Home = () => {
     setFilters(prev => ({ ...prev, [type]: newValue }));
   };
 
-  const toggleCalendar = (type) => {
+  const toggleCalendar = useCallback((type) => {
     if (showCalendar && selectedDateType === type) {
       setShowCalendar(false);
       return;
     }  
     setSelectedDateType(type);
     setShowCalendar(true);
-  };
+  }, [showCalendar, selectedDateType]);
 
-  const handleDateChange = (newDate) => {
+  const handleDateChange = useCallback((newDate) => {
     if (selectedDateType === 'start') {
       setCheckInDate(newDate);
       setFilters(prev => ({ ...prev, startDate: newDate }));
 
-      if (checkOutDate && new Date(parseDate(newDate)) > new Date(parseDate(checkOutDate))) {
+      if (checkOutDate && new Date(newDate) >= new Date(checkOutDate)) {
         setCheckOutDate("");
         setFilters(prev => ({ ...prev, endDate: "" }));
       }
     } 
     else {
-      if (checkInDate && new Date(parseDate(newDate)) < new Date(parseDate(checkInDate))) {
+      if (checkInDate && new Date(newDate) < new Date(checkInDate)) {
         alert("End date cannot be before start date.");
         return;
       }
@@ -260,37 +281,8 @@ const Home = () => {
       setFilters(prev => ({ ...prev, endDate: newDate }));
     }
     
-    setTimeout(() => {
-      setShowCalendar(false);
-    }, 100);
-  };
-
-  const parseDate = (dateString) => {
-    if (!dateString) return null;
-    
-    try {
-      const parts = dateString.split(' ');
-      if (parts.length === 3) {
-        const day = parseInt(parts[0]);
-        const month = parts[1];
-        const year = parseInt(parts[2]);
-        
-        const monthNames = [
-          'January', 'February', 'March', 'April', 'May', 'June',
-          'July', 'August', 'September', 'October', 'November', 'December'
-        ];
-        const monthIndex = monthNames.findIndex(m => m === month);
-        
-        if (monthIndex !== -1) {
-          return new Date(year, monthIndex, day);
-        }
-      }
-    } 
-    catch (e) {
-      console.error("Error parsing date:", e);
-    }
-    return null;
-  };
+    setShowCalendar(false);
+  }, [selectedDateType, checkInDate, checkOutDate]);
 
   const renderGuestInfo = () => {
     const parts = [];
@@ -389,7 +381,7 @@ const applyFilters = () => {
       <input
         className={styles.startDateFilter}
         type="text"
-        value={checkInDate}
+        value={formatDateWithOrdinal(checkInDate)}
         placeholder="Start Date"
         onClick={(e) => {
           e.stopPropagation();
@@ -408,7 +400,7 @@ const applyFilters = () => {
       <input
         className={styles.endDateFilter}
         type="text"
-        value={checkOutDate}
+        value={formatDateWithOrdinal(checkOutDate)}
         placeholder="End Date"
         onClick={(e) => {
           e.stopPropagation();
@@ -420,9 +412,11 @@ const applyFilters = () => {
         {showCalendar && (
           <div ref={calendarRef}>
             <CustomCalender
-              key={`${selectedDateType}-${Date.now()}`}
               value={selectedDateType === 'start' ? checkInDate : checkOutDate}
               onDateChange={handleDateChange}
+              startDate={checkInDate}
+              endDate={checkOutDate}
+              isSelectingEnd={selectedDateType === 'end'}
             />
           </div>
         )}

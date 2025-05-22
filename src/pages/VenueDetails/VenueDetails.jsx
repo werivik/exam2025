@@ -35,6 +35,61 @@ const formatDate = (isoString) => {
   return new Date(isoString).toLocaleDateString(undefined, options);
 };
 
+// New function to format dates with ordinal suffix
+const formatDateWithOrdinal = (dateString) => {
+  if (!dateString) return '';
+  
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const month = date.toLocaleDateString('en-US', { month: 'long' });
+  const year = date.getFullYear();
+  
+  // Add ordinal suffix to day
+  const getOrdinalSuffix = (day) => {
+    if (day > 3 && day < 21) return 'th';
+    switch (day % 10) {
+      case 1: return 'st';
+      case 2: return 'nd';
+      case 3: return 'rd';
+      default: return 'th';
+    }
+  };
+  
+  return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
+};
+
+// New function to format guest display
+const formatGuestDisplay = (adults, children, disabled) => {
+  const parts = [];
+  
+  if (adults > 0) {
+    parts.push(`${adults} Adult${adults !== 1 ? 's' : ''}`);
+  }
+  
+  if (children > 0) {
+    parts.push(`${children} Child${children !== 1 ? 'ren' : ''}`);
+  }
+  
+  if (disabled > 0) {
+    parts.push(`${disabled} Assisted Guest${disabled !== 1 ? 's' : ''}`);
+  }
+  
+  if (parts.length === 0) {
+    return '0 Guests';
+  }
+  
+  if (parts.length === 1) {
+    return parts[0];
+  }
+  
+  if (parts.length === 2) {
+    return `${parts[0]}, ${parts[1]}`;
+  }
+  
+  // For 3 parts: "1 Adult, 2 Children, 1 Assisted Guest"
+  return `${parts[0]}, ${parts[1]}, ${parts[2]}`;
+};
+
 const MetaTooltip = ({ message, isVisible, position }) => {
   if (!isVisible) return null;
 
@@ -584,7 +639,7 @@ const VenueDetails = () => {
                       ></i>
                       <input
                         type="text"
-                        value={checkInDate}
+                        value={formatDateWithOrdinal(checkInDate)}
                         placeholder="Check-in Date"
                         onClick={() => toggleCalendar('start')}
                         readOnly
@@ -597,7 +652,7 @@ const VenueDetails = () => {
                       ></i>
                       <input
                         type="text"
-                        value={checkOutDate}
+                        value={formatDateWithOrdinal(checkOutDate)}
                         placeholder="Check-out Date"
                         onClick={() => toggleCalendar('end')}
                         readOnly
@@ -625,7 +680,7 @@ const VenueDetails = () => {
                       onClick={() => setShowGuestDropdown(prev => !prev)}
                       ref={dropdownRef}
                     >
-                      <p>{`${totalGuests} Guests`}</p>
+                      <p>{formatGuestDisplay(adults, children, disabled)}</p>
                       <div
                         className={`${styles.dropdownMenu} ${showGuestDropdown ? styles.open : ''}`}
                       >
