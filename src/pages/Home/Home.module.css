@@ -924,7 +924,7 @@
     margin: 0;
   }
 }
-@media (max-width: 700px) {
+@media (max-width:700px) {
   .firstSection {
     height: 70vh;
   }
@@ -957,10 +957,24 @@
     right: 25px;
     bottom: 50px;
   }
+  .venuesTitle {
+    height: 150px;
+    margin-top: 25px;
+    margin-bottom: -35px;
+  }
   .popularHotels {
     overflow-x: scroll;
     overflow-y: hidden;
-}
+    background-color: #f3f0eb68;
+    width: 111%;
+    margin-left: -5.5%;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+  }
+  .fifthSection {
+    max-height: 700px;
+  }
 }
 @media (max-width:600px) {
   .filterDestination i, .filterCalender i, .filterPeople i {
