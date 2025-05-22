@@ -465,12 +465,6 @@ margin-bottom: 20px;
   pointer-events: none;
 }
 
-
-
-
-
-
-
 .clickableMeta {
 cursor: pointer;
 position: relative;
@@ -527,14 +521,6 @@ to {
   transform: translateY(0);
 }
 }
-
-
-
-
-
-
-
-
 @media (max-width: 1024px) {
   .pageStyle {
     width: 90%;
@@ -620,4 +606,24 @@ font-size: 1.5rem;
     padding: 0;
     margin: 0;
   }
+}
+@media (max-width: 300px) {
+.slideshowSection {
+  height: 50vh;
+}
+.description h3 {
+  font-size: 1.125rem;
+  margin-top: 30px;
+  margin-bottom: -10px;
+}
+.venueOwner h3, .venueInfo h3 {
+  font-size: 1.125rem;
+}
+.hotelInfoRight {
+  padding: 7.5px;
+}
+.loginReminder {
+  width: 100%;
+  text-align: center;
+}
 }

@@ -165,9 +165,23 @@
 .loadMoreButton:hover {
   background-color: #5D6B2F;
 }
+@media (max-width: 1200px) {
+  .filterTop {
+    width: 100%;
+  }  
+  .filterTopSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+  }
+  .topSearchbar {
+    width: 100%;
+  }
+}
 @media (max-width: 1024px) {
   .rightBorder {
-    width: 94%;
+    width: 97.5%;
   }
   
   .rightTitles {
@@ -178,7 +192,7 @@
     gap: 20px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .rightTitles h1 {
     font-size: 2rem;
   }
@@ -186,29 +200,16 @@
   .rightTitles p {
     font-size: 1.2rem;
   }
-  
-  .filterTopSection {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-  }
-  
-  .topSearchbar {
-    width: 100%;
-  }
-}
-@media (max-width: 650px) {
-  .rightTitles {
+
+    .rightTitles {
     flex-direction: column;
     align-items: flex-start;
     height: auto;
-    gap: 10px;
+    gap: 10px; 
   }
-  
   .pagination {
     margin-top: 30px;
-  }
-  
+  } 
   .page,
   .pageActive {
     padding: 6px 12px;
