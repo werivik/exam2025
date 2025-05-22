@@ -334,6 +334,18 @@ const Home = () => {
   };
 
 const handleDestinationClick = (destination) => {
+  const navigationState = {
+    filters: {
+      country: destination.country,
+      city: destination.name,
+      adults: filters.adults,
+      children: filters.children,
+      assisted: filters.disabled,
+      startDate: filters.startDate,
+      endDate: filters.endDate,
+    }
+  };
+
   const queryParams = new URLSearchParams({
     country: destination.country,
     city: destination.name,
@@ -341,7 +353,7 @@ const handleDestinationClick = (destination) => {
     page: "1",
   });
 
-  navigate(`/venues?${queryParams.toString()}`);
+  navigate(`/venues?${queryParams.toString()}`, { state: navigationState });
 };
 
   const handleMetaFilterClick = (metaFilter) => {

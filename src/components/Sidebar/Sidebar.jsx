@@ -17,19 +17,41 @@ const Sidebar = ({
   setShowSuggestions,
   venues,
   setFilteredVenues,
-  setNoMatches
+  setNoMatches,
+  initialLocationFilters
 }) => {
 
   const [adults, setAdults] = useState('');
   const [children, setChildren] = useState('');
   const [assistedGuests, setAssistedGuests] = useState('');
 
-  // Initialize local state from filters prop
   useEffect(() => {
     setAdults(filters.adults || '');
     setChildren(filters.children || '');
     setAssistedGuests(filters.assisted || '');
   }, [filters.adults, filters.children, filters.assisted]);
+
+  useEffect(() => {
+    if (initialLocationFilters) {
+      if (initialLocationFilters.country) {
+        handleFilterChange({ 
+          target: { 
+            name: 'country', 
+            value: initialLocationFilters.country 
+          } 
+        });
+      }
+      
+      if (initialLocationFilters.city) {
+        handleFilterChange({ 
+          target: { 
+            name: 'city', 
+            value: initialLocationFilters.city 
+          } 
+        });
+      }
+    }
+  }, [initialLocationFilters, handleFilterChange]);
 
   const handleGuestChange = (e, type) => {
     const rawValue = e.target.value;
@@ -86,32 +108,49 @@ const Sidebar = ({
   };
 
   useEffect(() => {
-  if (!Array.isArray(venues)) return;
+    if (!Array.isArray(venues)) return;
 
-  const totalGuests = calculateTotalGuests();
-  const selectedPrice = filters.priceMax || maxPrice;
+    const totalGuests = calculateTotalGuests();
+    const selectedPrice = filters.priceMax || maxPrice;
 
-  const filtered = venues.filter((venue) => {
-    const matchesDestination =
-      (!filters.continent || venue.continent?.toLowerCase().includes(filters.continent.toLowerCase())) &&
-      (!filters.country || venue.country?.toLowerCase().includes(filters.country.toLowerCase())) &&
-      (!filters.city || venue.city?.toLowerCase().includes(filters.city.toLowerCase()));
+    const filtered = venues.filter((venue) => {
+      const matchesDestination = (() => {
+        if (filters.continent && venue.location?.continent) {
+          if (!venue.location.continent.toLowerCase().includes(filters.continent.toLowerCase())) {
+            return false;
+          }
+        }
+        
+        if (filters.country && venue.location?.country) {
+          if (!venue.location.country.toLowerCase().includes(filters.country.toLowerCase())) {
+            return false;
+          }
+        }
+        
+        if (filters.city && venue.location?.city) {
+          if (!venue.location.city.toLowerCase().includes(filters.city.toLowerCase())) {
+            return false;
+          }
+        }
+        
+        return true;
+      })();
 
-    const matchesGuests = venue.maxGuests >= totalGuests;
+      const matchesGuests = venue.maxGuests >= totalGuests;
 
-    const matchesPrice = venue.price <= selectedPrice;
+      const matchesPrice = venue.price <= selectedPrice;
 
-    const matchesMeta = Object.entries(filters.meta || {}).every(([key, value]) => {
-      if (!value) return true;
-      return venue.meta?.[key];
+      const matchesMeta = Object.entries(filters.meta || {}).every(([key, value]) => {
+        if (!value) return true;
+        return venue.meta?.[key];
+      });
+
+      return matchesDestination && matchesGuests && matchesPrice && matchesMeta;
     });
 
-    return matchesDestination && matchesGuests && matchesPrice && matchesMeta;
-  });
-
-  setFilteredVenues(filtered);
-  setNoMatches(filtered.length === 0);
-}, [filters, venues, maxPrice]);
+    setFilteredVenues(filtered);
+    setNoMatches(filtered.length === 0);
+  }, [filters, venues, maxPrice]);
 
   return (
     <>

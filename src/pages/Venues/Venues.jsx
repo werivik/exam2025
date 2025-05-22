@@ -56,10 +56,10 @@ const Venues = () => {
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const city = params.get('city');
-  const country = params.get('country');
-  const adults = params.get('adults');
- const page = params.get('page');
+  const initialLocationFilters = location.state?.filters ? {
+    country: location.state.filters.country,
+    city: location.state.filters.city
+  } : null;
 
   const inputRefs = {
     continent: useRef(null),
@@ -69,8 +69,8 @@ const Venues = () => {
 
   const [filters, setFilters] = useState({
     continent: '',
-    country: '',
-    city: '',
+    country: location.state?.filters?.country || '',
+    city: location.state?.filters?.city || '',
     adults: 1,
     children: 0,
     assisted: 0,
@@ -94,10 +94,10 @@ const Venues = () => {
   });  
   
   const [inputValues, setInputValues] = useState({
-    continent: '',
-    country: '',
-    city: '',
-  });
+  continent: '',
+  country: location.state?.filters?.country || '',
+  city: location.state?.filters?.city || '',
+});
 
   const extractLocationSuggestions = useCallback((venuesData) => {
     const continents = new Map();
@@ -483,6 +483,24 @@ const visibleVenues = useMemo(() => {
 useEffect(() => {
 }, [currentPage, visibleVenues]);
 
+useEffect(() => {
+  if (!initialFiltersApplied) return;
+  
+  const params = new URLSearchParams();
+  if (filters.continent) params.set("continent", filters.continent);
+  if (filters.country) params.set("country", filters.country);
+  if (filters.city) params.set("city", filters.city);
+  if (filters.adults > 0) params.set("adults", filters.adults);
+  if (filters.children > 0) params.set("children", filters.children);
+  if (filters.assisted > 0) params.set("assisted", filters.assisted);
+  filters.ratings.forEach(r => params.append("ratings", r));
+  Object.keys(filters.meta).forEach(key => {
+    if (filters.meta[key]) params.set(key, "true");
+  });
+  params.set("page", currentPage.toString());
+
+  setSearchParams(params, { replace: true });
+}, [filters, currentPage, setSearchParams, initialFiltersApplied]);
 
 useEffect(() => {
   if (!initialFiltersApplied && venues.length > 0) {
@@ -568,6 +586,24 @@ useEffect(() => {
       hasChanges = true;
     }
     
+    if (stateFilters.city) {
+      newFilters.city = stateFilters.city;
+      setInputValues(prev => ({ ...prev, city: stateFilters.city }));
+      hasChanges = true;
+    }
+    
+    if (stateFilters.country) {
+      newFilters.country = stateFilters.country;
+      setInputValues(prev => ({ ...prev, country: stateFilters.country }));
+      hasChanges = true;
+    }
+    
+    if (stateFilters.continent) {
+      newFilters.continent = stateFilters.continent;
+      setInputValues(prev => ({ ...prev, continent: stateFilters.continent }));
+      hasChanges = true;
+    }
+    
     const pageFromUrl = parseInt(urlParams.get('page')) || 1;
     if (pageFromUrl !== currentPage) {
       setCurrentPage(pageFromUrl);
@@ -628,6 +664,7 @@ useEffect(() => {
         venues={venues}
         setFilteredVenues={setFilteredVenues}
         setNoMatches={setNoMatches}
+        initialLocationFilters={initialLocationFilters}
       />
       
       <div ref={topRef} />
