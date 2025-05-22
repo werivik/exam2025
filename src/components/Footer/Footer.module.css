@@ -167,3 +167,58 @@ footer {
   width: 100%;
 }
 }
+@media (max-width:420px) {
+  footer {
+    height: 350px;
+    padding-bottom: 25px;
+  }
+  .footerTitles h2 {
+    font-size: 60px;
+    width: 100%;
+}
+.footerTitles p {
+    font-size: 15px;
+    width: 100%;
+    text-align: center;
+}
+.footerRight {
+  margin-top: -25px;
+}
+.FooterLinks h3 {
+  font-size: 1rem;
+}
+.FooterLinks p {
+  font-size: 0.8rem;
+}
+.divideLine {
+  height: 125px;
+}
+}
+
+@media (max-width:345px) {
+  footer {
+    height: fit-content;
+  }
+  .footerTitles {
+    height:100px;
+    margin-top: -35px;
+    margin-bottom: -35px;
+  }
+  .footerTitles h2 {
+    font-size: 50px;
+  }
+  .footerTitles p {
+    font-size: 12px;
+    margin-top: -10px;
+  }
+  .footerRight {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+  .divideLine {
+    height: 1px;
+    width: 80%;
+  }
+}
