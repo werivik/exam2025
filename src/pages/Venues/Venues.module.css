@@ -66,7 +66,6 @@
 }
 .topSearchbar {
   flex: 1;
-  min-width: 300px;
   display: flex;
   align-items: center;
 }
@@ -79,10 +78,12 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  font-family: "Playfair Display", serif;
 }
 .sortDropdown label {
   font-weight: 500;
   color: #1F1B17;
+  font-family: "Playfair Display", serif;
 }
 .sortDropdown select {
   padding: 8px 12px;
@@ -92,6 +93,7 @@
   font-size: 0.95rem;
   cursor: pointer;
   outline: none;
+  font-family: "Playfair Display", serif;
 }
 .sortDropdown select:hover {
   border-color: #B88A44;
@@ -214,15 +216,7 @@
     width: 95%;
   }
 }
-@media (max-width: 535px) {
-  .pageContent {
-    padding: 10px;
-  }
-  
-  .rightBorder {
-    padding: 15px;
-  }
-  
+@media (max-width: 535px) {  
   .rightTitles h1 {
     font-size: 2rem;
     margin-top: -25px;
@@ -257,4 +251,29 @@
 .sortDropdown label {
   display: none;
 }
+.sortDropdown select {
+  padding: 6px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+}
+@media (max-width:320px) {
+  .rightTitles h1 {
+    font-size: 1.65rem;
+  }
+  .rightTitles p {
+    font-size: 1rem;
+  }
+  .rightTitles {
+    margin-bottom: 50px;
+  }
+  .filterTop {
+    gap: 0;
+  }
+  .topSearchbar {
+    margin-bottom: -25px;
+  }
+  .sortDropdown {
+    margin-bottom: -25px;
+  }
 }

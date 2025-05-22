@@ -53,3 +53,16 @@
 .suggestionItem {
   display: none;
 }
+
+@media (max-width:380px){
+  .searchbarContainer input {
+    font-size: 0.8rem;
+    padding-left: 40px;
+    height: 35px;
+    min-width: 100px;
+  }
+  .searchbarContainer i {
+    font-size: 1rem;
+    height: 35px;
+  }
+}
