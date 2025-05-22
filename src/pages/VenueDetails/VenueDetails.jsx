@@ -35,6 +35,23 @@ const formatDate = (isoString) => {
   return new Date(isoString).toLocaleDateString(undefined, options);
 };
 
+const MetaTooltip = ({ message, isVisible, position }) => {
+  if (!isVisible) return null;
+
+  return (
+    <div 
+      className={styles.metaTooltip}
+      style={{
+        top: position.top,
+        left: position.left,
+      }}
+    >
+      <div className={styles.tooltipArrow}></div>
+      {message}
+    </div>
+  );
+};
+
 const VenueDetails = () => {
   const { id } = useParams();
   const [venue, setVenue] = useState(null);
@@ -61,17 +78,71 @@ const VenueDetails = () => {
   );
   const [popupMessage, setPopupMessage] = useState('');
 
+  const [activeTooltip, setActiveTooltip] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+
   const dropdownRef = useRef(null);
   const [profileError, setProfileError] = useState('');
 
   const handleRatingUpdate = (newRating) => {
-  if (venue) {
-    setVenue({
-      ...venue,
-      rating: newRating
+    if (venue) {
+      setVenue({
+        ...venue,
+        rating: newRating
+      });
+    }
+  };
+
+  const handleMetaClick = (metaType, event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    const tooltipTop = rect.top + scrollTop - 60;
+    const tooltipLeft = rect.left + (rect.width / 2) - 100;
+    
+    setTooltipPosition({
+      top: tooltipTop,
+      left: Math.max(10, tooltipLeft)
     });
-  }
-};
+
+    let message = '';
+    switch (metaType) {
+      case 'maxGuests':
+        message = `The total amount of guests allowed in a single booking is ${venue.maxGuests}`;
+        break;
+      case 'wifi':
+        message = 'Free Wi-Fi internet access is included with your stay';
+        break;
+      case 'parking':
+        message = 'Free parking is available for guests during their stay';
+        break;
+      case 'breakfast':
+        message = 'Complimentary breakfast is included with your booking';
+        break;
+      case 'pets':
+        message = 'Pet-friendly venue - your furry friends are welcome to stay';
+        break;
+      default:
+        message = 'Additional information about this amenity';
+    }
+
+    setActiveTooltip(message);
+
+    setTimeout(() => {
+      setActiveTooltip(null);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (activeTooltip && !event.target.closest(`.${styles.meta}`)) {
+        setActiveTooltip(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [activeTooltip]);
 
   useEffect(() => {
     const handleAuthChange = () => setUserLoggedIn(isLoggedIn());
@@ -115,9 +186,11 @@ const VenueDetails = () => {
         catch (err) {
           console.error("Failed to fetch user profile:", err);
         }
-if (result.data?.owner) {
-  setOwner(result.data.owner);
-}
+
+        if (result.data?.owner) {
+          setOwner(result.data.owner);
+        }
+
         try {
           const bookingsResponse = await fetch(`${VENUES}/${id}/bookings`, { 
             headers: headers() 
@@ -233,7 +306,7 @@ if (result.data?.owner) {
       setShowBookingPopup, 
       setPopupMessage
     );
-      window.location.reload();
+    window.location.reload();
   }, [
     checkInDate, 
     checkOutDate, 
@@ -342,14 +415,14 @@ if (result.data?.owner) {
               </div>
             </div>
             
-                          {userLoggedIn && (
-  <VenueRating 
-    venueId={venue.id} 
-    currentRating={venue.rating} 
-    onRatingUpdate={handleRatingUpdate}
-    className={styles.venueRatingComponent}
-  />
-)}
+            {userLoggedIn && (
+              <VenueRating 
+                venueId={venue.id} 
+                currentRating={venue.rating} 
+                onRatingUpdate={handleRatingUpdate}
+                className={styles.venueRatingComponent}
+              />
+            )}
 
             <p className={styles.description}>
               <h3>Description</h3><br />
@@ -363,35 +436,50 @@ if (result.data?.owner) {
             {venue.meta && (
               <div className={styles.meta}>
                 <ul>
-                  <li>
+                  <li 
+                    className={styles.clickableMeta}
+                    onClick={(e) => handleMetaClick('maxGuests', e)}
+                  >
                     <div className={styles.maxGuestsLeft}>
                       <img src={crowd} className={styles.crowdIcon} alt="Max guests" />
                       <p>{venue.maxGuests}</p>
                     </div>
                   </li>
                   {venue.meta.wifi && (
-                    <li>
+                    <li 
+                      className={styles.clickableMeta}
+                      onClick={(e) => handleMetaClick('wifi', e)}
+                    >
                       <div className={styles.included}></div>
                       <i className="fa-solid fa-wifi"></i>
                       <p>Wi-Fi</p>
                     </li>
                   )}
                   {venue.meta.parking && (
-                    <li>
+                    <li 
+                      className={styles.clickableMeta}
+                      onClick={(e) => handleMetaClick('parking', e)}
+                    >
                       <div className={styles.included}></div>
                       <i className="fa-solid fa-car"></i>
                       <p>Parking</p>
                     </li>
                   )}
                   {venue.meta.breakfast && (
-                    <li>
+                    <li 
+                      className={styles.clickableMeta}
+                      onClick={(e) => handleMetaClick('breakfast', e)}
+                    >
                       <div className={styles.included}></div>
                       <i className="fa-solid fa-utensils"></i>
                       <p>Breakfast</p>
                     </li>
                   )}
                   {venue.meta.pets && (
-                    <li>
+                    <li 
+                      className={styles.clickableMeta}
+                      onClick={(e) => handleMetaClick('pets', e)}
+                    >
                       <div className={styles.included}></div>
                       <i className="fa-solid fa-paw"></i>
                       <p>Pets Allowed</p>
@@ -402,48 +490,48 @@ if (result.data?.owner) {
             )}            
             
             <div className={styles.dividerLine}></div>
-<div className={styles.venueOwner}>
-  <h3>Venue Manager</h3>
-  {owner ? (
-    <div className={styles.ownerWrapper}>
-      <Link
-        to={`/view-profile/${owner.name}`}
-        className={styles.venueProfileName}
-        onClick={(e) => {
-          if (!userLoggedIn) {
-            e.preventDefault();
-            setProfileError('Only logged in users can view Profiles');
-            
-            setTimeout(() => {
-              setProfileError('');
-            }, 5000);
-          }
-        }}
-      >
-        <img
-          src={owner.avatar?.url || '/media/images/mdefault.jpg'}
-          alt={owner.avatar?.alt || 'Venue owner'}
-        />
-        <p>{owner.name || 'Unknown Owner'}</p>
-      </Link>
-      
-      {profileError && <p className={styles.profileError}>{profileError}</p>}
-    </div>
-  ) : (
-    <p>Owner information not available</p>
-  )}
-</div>
+            <div className={styles.venueOwner}>
+              <h3>Venue Manager</h3>
+              {owner ? (
+                <div className={styles.ownerWrapper}>
+                  <Link
+                    to={`/view-profile/${owner.name}`}
+                    className={styles.venueProfileName}
+                    onClick={(e) => {
+                      if (!userLoggedIn) {
+                        e.preventDefault();
+                        setProfileError('Only logged in users can view Profiles');
+                        
+                        setTimeout(() => {
+                          setProfileError('');
+                        }, 5000);
+                      }
+                    }}
+                  >
+                    <img
+                      src={owner.avatar?.url || '/media/images/mdefault.jpg'}
+                      alt={owner.avatar?.alt || 'Venue owner'}
+                    />
+                    <p>{owner.name || 'Unknown Owner'}</p>
+                  </Link>
+                  
+                  {profileError && <p className={styles.profileError}>{profileError}</p>}
+                </div>
+              ) : (
+                <p>Owner information not available</p>
+              )}
+            </div>
             <div className={styles.venueInfo}>
-                <h3>Venue Info</h3>
+              <h3>Venue Info</h3>
               <div className={styles.venueCreationDates}>
                 <div className={styles.venueDates}>
-                <p>Created</p>
-                <span>{formatDate(venue.created)}</span>
-              </div>
-              <div className={styles.venueDates}>
-                <p>Updated</p>
-                <span>{formatDate(venue.updated)}</span>
-              </div>
+                  <p>Created</p>
+                  <span>{formatDate(venue.created)}</span>
+                </div>
+                <div className={styles.venueDates}>
+                  <p>Updated</p>
+                  <span>{formatDate(venue.updated)}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -592,11 +680,18 @@ if (result.data?.owner) {
           </div>
         </div>
       </div>      
+
+      <MetaTooltip 
+        message={activeTooltip} 
+        isVisible={!!activeTooltip}
+        position={tooltipPosition}
+      />
+
       {showBookingPopup && (
         <CostumPopup 
           message={popupMessage} 
           onClose={() => setShowBookingPopup(false)}
-          showButtons = {false}  
+          showButtons={false}  
         />
       )}
     </motion.div>
