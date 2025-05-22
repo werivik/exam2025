@@ -592,7 +592,7 @@ display: flex;
 }
 @media (max-width: 480px) {
 .pageContent {
-padding: 10px;
+margin-top: 35px;
 }
 .venueCreationDates {
 flex-direction: column;
@@ -630,13 +630,12 @@ font-size: 1.5rem;
     padding: 0;
     margin: 0;
   }
-}
-@media (max-width: 275px) {
-.slideshowSection {
-  height: 50vh;
+
+  .slideshowSection {
+  height: 60vh;
 }
 .slideshowRight, .noSlideshow, .detailImageWrapper {
-  height: 50vh;
+  height: 60vh;
   width: 101.5%;
   margin-left: -0.75%;
 }
@@ -650,6 +649,16 @@ font-size: 1.5rem;
     bottom: 15px;
     right: 5px;
   }
+
+
+}
+@media (max-width: 275px) {
+.slideshowSection {
+  height: 50vh;
+}
+.slideshowRight, .noSlideshow, .detailImageWrapper {
+  height: 50vh;
+}
 .description h3 {
   font-size: 1.125rem;
   margin-bottom: -10px;
