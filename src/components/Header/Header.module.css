@@ -211,7 +211,7 @@ header {
 .headerLogoContent {
   position: absolute;
   left: 50%;
-  height: 60px;
+  height: 55px;
   transform: translate(-50%);
 }
 .headerLogo, .headerLogoHover {
@@ -494,12 +494,24 @@ header.special .divideLine {
   .sidebarHeader {
     display: none;
   }
+  .headerLogoContent {
+    height: 55px;
+}
+.headerLogo, .headerLogoHover {
+  height: 55px;
+}
 }
 @media (max-width:725px){
-    header.default nav, header.special nav {
-      width: 95%;
-      padding-left: 2.5%;
-    }
+  header.default nav, header.special nav {
+    width: 95%;
+    padding-left: 2.5%;
+  }
+  .headerLogoContent {
+    height: 45px;
+   }
+  .headerLogo, .headerLogoHover {
+    height: 45px;
+  }
 }
 @media (max-width:425px){
   .headerLogo, .headerLogoHover {
