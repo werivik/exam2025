@@ -215,10 +215,10 @@ header {
   transform: translate(-50%);
 }
 .headerLogo, .headerLogoHover {
-    height: 55px;
-    width: auto;
-    object-fit: contain;
-    transition: all 0.25s ease;
+  height: 55px;
+  width: auto;
+  object-fit: contain;
+  transition: all 0.25s ease;
 }
 .searchContainer {
   position: relative;

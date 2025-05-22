@@ -573,6 +573,7 @@ useEffect(() => {
             </Buttons>
             </div>
               <div className={styles.sortDropdown}>
+                <div>
                 <label htmlFor="sort">Sort by:</label>
                 <select
                   id="sort"
@@ -586,6 +587,10 @@ useEffect(() => {
                   <option value="ratingLowHigh">Rating: Low to High</option>
                   <option value="ratingHighLow">Rating: High to Low</option>
                 </select>
+                </div>
+                <Buttons size='small' version='v2' onClick={toggleSidebar}>
+              All Filters
+            </Buttons>
               </div>
           </div>
           </div>

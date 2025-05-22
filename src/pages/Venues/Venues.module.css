@@ -1,11 +1,12 @@
 .pageContent {
   margin-top: 50px;
-  padding: 20px;
   display: flex;
   min-height: 100vh;
   position: relative;
   color: #1F1B17;
   width: 100%;
+  margin-bottom: 40px;
+  padding-bottom: 75px;
 }
 .rightSection {
   position: relative;
@@ -15,13 +16,11 @@
   justify-content: center;
 }
 .rightBorder {
-  width: 82.5%;
+  width: 80%;
   border-radius: 15px;
   height: inherit;
   color: #1F1B17;
   position: relative;
-  margin-bottom: 40px;
-  padding-bottom: 75px;
 }
 
 .rightTitles {
@@ -96,6 +95,9 @@
 }
 .sortDropdown select:hover {
   border-color: #B88A44;
+}
+.sortDropdown Button {
+  display: none;
 }
 .allHotels {
   display: grid;
@@ -180,7 +182,7 @@
 }
 @media (max-width: 1024px) {
   .rightBorder {
-    width: 94%;
+    width: 90%;
   }
   
   .rightTitles {
@@ -209,7 +211,7 @@
 }
 @media (max-width:725px) {
   .rightBorder {
-    width: 100%;
+    width: 95%;
   }
 }
 @media (max-width: 535px) {
@@ -233,4 +235,26 @@
   .allHotels {
     grid-template-columns: 1fr;
   }
+}
+@media (max-width:475px) {
+.filterTop {
+  flex-direction: column;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+.filterTop Button {
+  display: none;
+}
+.sortDropdown Button {
+  display: block;
+}
+.sortDropdown {
+  width: 100%;
+  justify-content: space-between;
+}
+}
+@media (max-width:380px) {
+.sortDropdown label {
+  display: none;
+}
 }
