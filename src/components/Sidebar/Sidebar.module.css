@@ -74,6 +74,7 @@ padding: 0 12px;
 width: 100%;
 font-size: 0.95rem;
 transition: border-color 0.2s ease;
+z-index: 222;
 }
 .inputWithSuggestions input:focus {
 border-color: #B88A44;
@@ -89,16 +90,17 @@ display: flex;
 flex-direction: column;
 position: absolute;
 width: 100%;
-top: 100%;
-z-index: 10;
+top: 55%;
 padding: 8px 0;
 max-height: 200px;
 overflow-y: auto;
+z-index: 1;
 }
 .suggestionList li {
 padding: 8px 12px;
 cursor: pointer;
 transition: background-color 0.2s ease;
+z-index: 1;
 }
 .suggestionList li:hover {
 background-color: rgba(243, 240, 235, 0.6);
@@ -132,7 +134,7 @@ gap: 15px;
 display: flex;
 align-items: center;
 cursor: pointer;
-font-size: 0.95rem;
+font-size: 1.125rem;
 position: relative;
 padding-left: 30px;
 width: fit-content;
@@ -206,6 +208,7 @@ height: 6px;
 background: #e4e4e4;
 border-radius: 3px;
 outline: none;
+cursor: pointer;
 }
 .sliderSingle input[type="range"]::-webkit-slider-thumb {
 -webkit-appearance: none;

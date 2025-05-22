@@ -152,6 +152,14 @@ const Sidebar = ({
     setNoMatches(filtered.length === 0);
   }, [filters, venues, maxPrice]);
 
+  // Handler to hide suggestions when input loses focus
+  const handleInputBlur = (locationType) => {
+    // Use setTimeout to allow suggestion clicks to register before hiding
+    setTimeout(() => {
+      setShowSuggestions(prev => ({ ...prev, [locationType]: false }));
+    }, 150);
+  };
+
   return (
     <>
       {showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
@@ -175,6 +183,7 @@ const Sidebar = ({
                     value={inputValues[locationType]}
                     onChange={handleFilterChange}
                     onFocus={() => setShowSuggestions(prev => ({ ...prev, [locationType]: true }))}
+                    onBlur={() => handleInputBlur(locationType)}
                     autoComplete="off"
                   />
                   {getSuggestions(locationType).length > 0 && (
