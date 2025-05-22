@@ -147,8 +147,9 @@ const SidebarMenu = memo(({
 
 function Header() {
   const loginOrRegisterRoutes = ['/login-costumer', '/register-costumer', '/login-admin', '/register-admin'];
+  const specialRoutes = ['/']; // Add more special routes here as needed
   const [isHovered, setIsHovered] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isSpecialPage, setIsSpecialPage] = useState(false);
   const [venues, setVenues] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -161,63 +162,38 @@ function Header() {
   const [filters, setFilters] = useState({ destination: "" });
   const [userData, setUserData] = useState(null);
 
-useEffect(() => {
-  const fetchUserRole = async () => {
-    const role = await getUserRole();
-    setUserRole(role);
-  };
-
-  if (isUserLoggedIn) {
-    fetchUserRole();
-  } 
-  else {
-    setUserRole(null);
-  }
-
-  const isLoginOrRegister = loginOrRegisterRoutes.includes(location.pathname);
-  const isHome = location.pathname === "/";
-
-  const handleScroll = () => {
-    if (isHome || isLoginOrRegister) {
-      const scrollThreshold = window.innerHeight * 0.025;
-      setScrolled(window.scrollY > scrollThreshold);
-    } 
-    else {
-      setScrolled(true);
-    }
-  };
-
-  window.addEventListener("scroll", handleScroll);
-
-  setScrolled(!(isHome || isLoginOrRegister));
-
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [location.pathname, isUserLoggedIn]);
-
   useEffect(() => {
     const fetchUserRole = async () => {
       const role = await getUserRole();
       setUserRole(role);
     };
-  
+
     if (isUserLoggedIn) {
       fetchUserRole();
     } 
     else {
       setUserRole(null);
     }
-  
+
+    const isLoginOrRegister = loginOrRegisterRoutes.includes(location.pathname);
+    const isHome = location.pathname === "/";
+    const isSpecial = specialRoutes.includes(location.pathname);
+
     const handleScroll = () => {
-      const scrollThreshold = window.innerHeight * 0.025;
-      setScrolled(window.scrollY > scrollThreshold);
+      if (isSpecial || isLoginOrRegister) {
+        const scrollThreshold = window.innerHeight * 0.025;
+        setIsSpecialPage(window.scrollY <= scrollThreshold);
+      } 
+      else {
+        setIsSpecialPage(false);
+      }
     };
-  
+
     window.addEventListener("scroll", handleScroll);
-    
-  const isLoginOrRegister = loginOrRegisterRoutes.includes(location.pathname);
-  const isHome = location.pathname === "/";
-  setScrolled(!(isLoginOrRegister || isHome));
-    
+
+    // Set initial state
+    setIsSpecialPage(isSpecial || isLoginOrRegister);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, [location.pathname, isUserLoggedIn]);
   
@@ -312,8 +288,6 @@ useEffect(() => {
     setIsSearchOpen(prev => !prev);
   }, []);
 
-  const isSimpleHeader = false;
-
   useEffect(() => {
     setIsUserLoggedIn(isLoggedIn());
   
@@ -367,7 +341,7 @@ useEffect(() => {
     setIsSidebarOpen(false);
   }, [location.pathname]);
 
-  const headerClassName = `${scrolled ? styles.scrolled : ""}`;
+  const headerClassName = `${isSpecialPage ? styles.special : styles.default}`;
 
   return (
     <div ref={sidebarRef}>

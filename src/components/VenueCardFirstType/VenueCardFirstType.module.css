@@ -55,7 +55,7 @@
     color: #F3F0EB;
     display: flex;
     flex-direction: column;
-    gap: 7.5px;
+    gap: 5px;
     transition: 0.25s;
 }
 
@@ -66,11 +66,13 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .hotelLocation {
     font-size: 19px;
-    margin-top: 7.5px;
+    margin-top: 5px;
     margin-bottom: 7.5px;
     font-style: italic;
     white-space: nowrap;
@@ -80,7 +82,7 @@
   }
 
 .hotelPrice {
-    margin-top: -10px;
+    margin-top: -5px;
     font-size: 15px;
     font-style: normal;
     display: flex;
@@ -92,6 +94,8 @@
 
 .hotelPrice p {
   opacity: 75%;
+  padding: 0;
+  margin: 0;
   font-size: 14px;
 }
 
@@ -109,29 +113,23 @@
     text-decoration: underline;
     transition: 0.25s;
     color: #B88A44;
-    font-size: 18px;
-    transition: 0.25s;
+    font-size: 16px;
+    margin-top: -15px;
 }
 
 .hotelCard:hover {
   cursor: pointer;
   transition: 0.25s;
-  background-color: white;
+  background-color: #1F1B17;
 
     .hotelInfo {
         transition: 0.25s;
         padding-left: 5px;
-        color: #1F1B17;
     }
 
     .hotelImage {
-        height: 72.5%;
+        height: 65%;
         transition: 0.25s;
-    }
-
-    .hotelPrice, .hotelLocation {
-      display: none;
-      transition: 0.25s;
     }
 
     .seeMore {
