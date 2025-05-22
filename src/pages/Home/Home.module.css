@@ -380,12 +380,19 @@
     height: 280px;
     text-align: left;
 }
-.metaTitle h2, .venuesTitle h2, .DestinationTitle h2, .venuesTitle h2 {
+.metaTitle h2, .venuesTitle h2, .DestinationTitle h2 {
     font-size: 3rem;
     margin: 0;
     padding: 0;
     pointer-events: none;
     font-style: normal;
+}
+.venuesTitle h2 {
+  font-size: 2.5rem;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  font-style: normal;
 }
 .metaTitle p, .DestinationTitle p, .venuesTitle p {
     font-size: 1.8rem;
@@ -822,6 +829,9 @@
 .metaTitle p, .DestinationTitle p, .venuesTitle p {
     font-size: 1.25rem;
 }
+.fifthSection {
+  max-height: 750px;
+}
 }
 @media (max-width:1024px) {
   .heroSection {
@@ -836,9 +846,12 @@
 .metaTitle, .venuesTitle, .DestinationTitle, .venuesTitle {
   height: 200px;
 }
-.metaTitle h2, .venuesTitle h2, .DestinationTitle h2, .venuesTitle h2 {
+.metaTitle h2, .DestinationTitle h2 {
   font-size: 2rem;
   text-align: left;
+}
+.venuesTitle h2 {
+  font-size: 1.75rem;
 }
 .metaTitle p, .DestinationTitle p, .venuesTitle p {
   font-size: 1.125rem;
@@ -886,6 +899,15 @@
   .firstSection {
     height: 70vh;
   }
+  .venuesTitle .browseAllLink {
+    position: absolute;
+    right: 25px;
+    bottom: 50px;
+  }
+  .popularHotels {
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
 }
 @media (max-width:600px) {
   .filterDestination i, .filterCalender i, .filterPeople i {
