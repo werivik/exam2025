@@ -840,6 +840,40 @@
 .secondSection {
   max-height: 650px;
 }
+
+.thirdSection {
+  height: 70vh;
+}
+.thirdBorder {
+  width: 80%;
+  height: 70%;
+}
+.thirdInfoLinks {
+  height: 30%;
+  gap: 10px;
+}
+.thirdInfo {
+  width: 45%;
+  min-width: 400px;
+}
+.thirdInfo h2 {
+    font-size: 2rem;
+}
+.thirdInfo p {
+    font-size: 1.25rem;
+}
+.thirdContentLogin .thirdInfo h2 span {
+  font-size: 2.25rem;
+}
+.thirdContentLogin .thirdInfo h3 {
+  font-size: 1.25rem;
+}
+.thirdInfoLinks a {
+  font-size: 1.25rem;
+}
+.thirdInfoLinks a::after {
+  height: 1px;
+}
 }
 @media (max-width:1024px) {
   .heroSection {
@@ -890,6 +924,21 @@
 }
 .fourthSection {
   max-height: 650px;
+}
+.thirdContentRegister img, .thirdContentLogin img {
+    display: none;
+}
+.thirdInfo {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+.thirdInfoLinks {
+  width: 100%;
+  margin-top: 50px;
+}
+.thirdSection {
+  max-height: 450px;
 }
 }
 @media (max-width:780px){
@@ -1067,6 +1116,25 @@
     bottom: 25px;
   }
   .DestinationTitle h2, .venuesTitle h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
+  .thirdInfo {
+    margin-top: 15px;
+    min-width: 200px;
+  }
+  .thirdInfo h2 {
+    font-size: 1.5rem;
+}
+.thirdInfo p {
+    font-size: 1rem;
+}
+.thirdContentLogin .thirdInfo h2 span {
+  font-size: 1.5rem;
+}
+.thirdContentLogin .thirdInfo h3 {
+  font-size: 1rem;
+}
+.thirdInfoLinks a {
+  font-size: 1rem;
+}
 }
