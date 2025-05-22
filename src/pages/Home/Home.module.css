@@ -1030,4 +1030,10 @@
   .metaTitle h2 {
     font-size: 1.5rem;
   }
+  .fifthSection {
+    max-height: 650px;
+  }
+  .venuesTitle .browseAllLink {
+    bottom: 25px;
+  }
 }
