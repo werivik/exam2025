@@ -3,7 +3,7 @@ import { VENUES } from '../../constants.js';
 import { headers } from '../../headers.js';
 import { motion } from "framer-motion";
 import styles from './Venues.module.css';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType.jsx';
 import Buttons from '../../components/Buttons/Buttons.jsx';
 import Searchbar from '../../components/Searchbar/Searchbar.jsx';
@@ -52,6 +52,8 @@ const Venues = () => {
   const [sortOption, setSortOption] = useState("all");
   const [searchQuery, setSearchQuery] = useState('');
   const topRef = useRef(null);
+  const location = useLocation();
+  const [initialFiltersApplied, setInitialFiltersApplied] = useState(false);
 
   const inputRefs = {
     continent: useRef(null),
@@ -69,8 +71,8 @@ const Venues = () => {
     minRating: 0,
     meta: {},
     ratings: [],
-    priceMin: minPrice,
-    priceMax: maxPrice
+    priceMin: 0,
+    priceMax: 0
   });
 
   const [locationSuggestionList, setLocationSuggestionList] = useState({
@@ -278,8 +280,38 @@ useEffect(() => {
   fetchVenues();
 }, [extractLocationSuggestions]);
 
+  // Apply initial filters from navigation state
   useEffect(() => {
-    if (!metaFilters.length) return;
+    if (!initialFiltersApplied && location.state?.filters && metaFilters.length > 0 && minPrice !== 0 && maxPrice !== 0) {
+      const navigationFilters = location.state.filters;
+      
+      const newFilters = {
+        continent: navigationFilters.continent || '',
+        country: navigationFilters.country || '',
+        city: navigationFilters.city || '',
+        adults: navigationFilters.adults || 1,
+        children: navigationFilters.children || 0,
+        assisted: navigationFilters.assisted || 0,
+        minRating: 0,
+        meta: navigationFilters.meta || {},
+        ratings: [],
+        priceMin: minPrice,
+        priceMax: maxPrice
+      };
+
+      setFilters(newFilters);
+      setInputValues({
+        continent: navigationFilters.continent || '',
+        country: navigationFilters.country || '',
+        city: navigationFilters.city || '',
+      });
+      
+      setInitialFiltersApplied(true);
+    }
+  }, [location.state, metaFilters, minPrice, maxPrice, initialFiltersApplied]);
+
+  useEffect(() => {
+    if (!metaFilters.length || initialFiltersApplied) return;
     
     const parsedFilters = {
       continent: searchParams.get("continent") || '',
@@ -310,7 +342,7 @@ useEffect(() => {
       country: parsedFilters.country,
       city: parsedFilters.city
     });
-  }, [metaFilters, searchParams]);
+  }, [metaFilters, searchParams, initialFiltersApplied]);
 
   useEffect(() => {
     const params = new URLSearchParams();

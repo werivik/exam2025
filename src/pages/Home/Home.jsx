@@ -38,6 +38,37 @@ const FEATURE_TYPES = [
   { image: animalImage, label: "Animal Friendly", meta: { pets: true } },
 ];
 
+const POPULAR_DESTINATIONS = [
+  {
+    id: 1,
+    name: "Paris",
+    country: "France",
+    description: "City of Lights",
+    image: paris,
+  },
+  {
+    id: 2,
+    name: "Santorini",
+    country: "Greece",
+    description: "Breathtaking Island Views",
+    image: greece,
+  },
+  {
+    id: 3,
+    name: "Tokyo",
+    country: "Japan",
+    description: "Mix of Tradition & Innovation",
+    image: japan,
+  },
+  {
+    id: 4,
+    name: "New York",
+    country: "USA",
+    description: "The City That Never Sleeps",
+    image: america,
+  }
+];
+
 const formatDateWithOrdinal = (dateString) => {
   if (!dateString) return '';
   
@@ -302,35 +333,67 @@ const Home = () => {
     return parts.join(", ");
   };
 
-const applyFilters = () => {
-  if (filters.children > 0 && filters.adults === 0 && filters.disabled === 0) {
-    alert("At least one adult or Assisted guest must be present if there are children.");
-    return;
-  }
-  
-  const appliedFilters = {};
-  
-  if (filters.destination) {
-    const destinationParts = filters.destination.split(',').map(part => part.trim());
+  // Updated navigation functions
+  const handleDestinationClick = (destination) => {
+    const navigationState = {
+      filters: {
+        city: destination.name,
+        country: destination.country,
+        adults: filters.adults,
+        children: filters.children,
+        assisted: filters.disabled,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+      }
+    };
     
-    if (destinationParts.length === 2) {
-      appliedFilters.city = destinationParts[0];
-      appliedFilters.country = destinationParts[1];
-    } 
-    else {
-      appliedFilters.destination = filters.destination;
+    navigate("/venues", { state: navigationState });
+  };
+
+  const handleMetaFilterClick = (metaFilter) => {
+    const navigationState = {
+      filters: {
+        meta: metaFilter,
+        adults: filters.adults,
+        children: filters.children,
+        assisted: filters.disabled,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+      }
+    };
+    
+    navigate("/venues", { state: navigationState });
+  };
+
+  const applyFilters = () => {
+    if (filters.children > 0 && filters.adults === 0 && filters.disabled === 0) {
+      alert("At least one adult or Assisted guest must be present if there are children.");
+      return;
     }
-  }
-  
-  if (filters.startDate) appliedFilters.startDate = filters.startDate;
-  if (filters.endDate) appliedFilters.endDate = filters.endDate;
-  
-  appliedFilters.adults = filters.adults;
-  appliedFilters.children = filters.children;
-  appliedFilters.disabled = filters.disabled;
-  
-  navigate("/venues", { state: { filters: appliedFilters } });
-};
+    
+    const appliedFilters = {};
+    
+    if (filters.destination) {
+      const destinationParts = filters.destination.split(',').map(part => part.trim());
+      
+      if (destinationParts.length === 2) {
+        appliedFilters.city = destinationParts[0];
+        appliedFilters.country = destinationParts[1];
+      } 
+      else {
+        appliedFilters.destination = filters.destination;
+      }
+    }
+    
+    if (filters.startDate) appliedFilters.startDate = filters.startDate;
+    if (filters.endDate) appliedFilters.endDate = filters.endDate;
+    
+    appliedFilters.adults = filters.adults;
+    appliedFilters.children = filters.children;
+    appliedFilters.assisted = filters.disabled;
+    
+    navigate("/venues", { state: { filters: appliedFilters } });
+  };
 
   const VenueTypeSkeleton = () => (
     <div className={`${styles.venueType} ${styles.skeleton}`}>
@@ -470,37 +533,6 @@ const applyFilters = () => {
     </div>
   );
 
-  const POPULAR_DESTINATIONS = [
-  {
-    id: 1,
-    name: "Paris",
-    country: "France",
-    description: "City of Lights",
-    image: paris,
-  },
-  {
-    id: 2,
-    name: "Santorini",
-    country: "Greece",
-    description: "Breathtaking Island Views",
-    image: greece,
-  },
-  {
-    id: 3,
-    name: "Tokyo",
-    country: "Japan",
-    description: "Mix of Tradition & Innovation",
-    image: japan,
-  },
-  {
-    id: 4,
-    name: "New York",
-    country: "USA",
-    description: "The City That Never Sleeps",
-    image: america,
-  }
-];
-
   return (
     <>
       <motion.div
@@ -585,7 +617,8 @@ const applyFilters = () => {
                     <div
                       key={idx}
                       className={styles.metaType}
-                      onClick={() => navigate("/venues", { state: { filters: { meta: type.meta } } })}
+                      onClick={() => handleMetaFilterClick(type.meta)}
+                      style={{ cursor: 'pointer' }}
                     >
                       <img src={type.image} alt={type.label} />
                       <h3>{type.label}</h3>
@@ -631,55 +664,43 @@ const applyFilters = () => {
         </section>        
         <section className={styles.fourthSection}>
           <div className={styles.fourthBorder}>
-      <div className={styles.DestinationContent}>
-      <div className={styles.DestinationTitle}>
-        <h2>Discover Our Most Loved Destinations</h2>
-        <p>"The world is a book and those who do not travel read only one page."</p>
-      </div>
-      
-      <div className={styles.destinationsWrapper}>
-        <div className={styles.destinationsContainer}>
-          {POPULAR_DESTINATIONS.map((destination) => (
-            <div 
-              key={destination.id} 
-              className={styles.destinationCard}
-              onClick={() => {
-                setFilters(prev => ({ 
-                  ...prev, 
-                  destination: `${destination.name}, ${destination.country}` 
-                }));
-                navigate("/venues", { 
-                  state: { 
-                    filters: { 
-                      city: destination.name, 
-                      country: destination.country 
-                    } 
-                  } 
-                });
-              }}
-            >
-              <div className={styles.destinationImageContainer}>
-                <img src={destination.image} alt={destination.name} />
-                <div className={styles.destinationOverlay}></div>
+            <div className={styles.DestinationContent}>
+              <div className={styles.DestinationTitle}>
+                <h2>Discover Our Most Loved Destinations</h2>
+                <p>"The world is a book and those who do not travel read only one page."</p>
               </div>
-              <div className={styles.destinationInfo}>
-                <h3>{destination.name}, <span>{destination.country}</span></h3>
-                <p>{destination.description}</p>
-                <div className={styles.exploreButton}>
-                  <span>Explore</span>
-                  <i className="fa-solid fa-arrow-right"></i>
+              
+              <div className={styles.destinationsWrapper}>
+                <div className={styles.destinationsContainer}>
+                  {POPULAR_DESTINATIONS.map((destination) => (
+                    <div 
+                      key={destination.id} 
+                      className={styles.destinationCard}
+                      onClick={() => handleDestinationClick(destination)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className={styles.destinationImageContainer}>
+                        <img src={destination.image} alt={destination.name} />
+                        <div className={styles.destinationOverlay}></div>
+                      </div>
+                      <div className={styles.destinationInfo}>
+                        <h3>{destination.name}, <span>{destination.country}</span></h3>
+                        <p>{destination.description}</p>
+                        <div className={styles.exploreButton}>
+                          <span>Explore</span>
+                          <i className="fa-solid fa-arrow-right"></i>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
           </div>
         </section>
         <section className={styles.fifthSection}>
-  <div className={styles.fifthBorder}>
-                  <div className={styles.venuesContent}>
+          <div className={styles.fifthBorder}>
+            <div className={styles.venuesContent}>
               <div className={styles.venuesTitle}>
                 <h2>Explore Our Most Popular Hotels<br />for Every Traveler</h2>
                 <Link to="/venues" className={styles.browseAllLink}>Browse All</Link>
@@ -693,8 +714,8 @@ const applyFilters = () => {
 
               <Link to="/venues" className={styles.browseAllLinkSecond}>Browse All</Link>
             </div>
-  </div>
-</section>
+          </div>
+        </section>
       </motion.div>
     </>
   );

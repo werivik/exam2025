@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Sidebar.module.css';
 import Buttons from '../Buttons/Buttons';
 
@@ -22,15 +22,31 @@ const Sidebar = ({
 
   const [adults, setAdults] = useState('');
   const [children, setChildren] = useState('');
-  const [assistedGuests, setAssistedGuests] = useState('');  
+  const [assistedGuests, setAssistedGuests] = useState('');
+
+  // Initialize local state from filters prop
+  useEffect(() => {
+    setAdults(filters.adults || '');
+    setChildren(filters.children || '');
+    setAssistedGuests(filters.assisted || '');
+  }, [filters.adults, filters.children, filters.assisted]);
 
   const handleGuestChange = (e, type) => {
     const rawValue = e.target.value;
     const value = rawValue === '' ? '' : Math.max(0, parseInt(rawValue));
   
-    if (type === 'adults') setAdults(value);
-    else if (type === 'children') setChildren(value);
-    else if (type === 'assistedGuests') setAssistedGuests(value);
+    if (type === 'adults') {
+      setAdults(value);
+      handleFilterChange({ target: { name: 'adults', value: value } });
+    }
+    else if (type === 'children') {
+      setChildren(value);
+      handleFilterChange({ target: { name: 'children', value: value } });
+    }
+    else if (type === 'assistedGuests') {
+      setAssistedGuests(value);
+      handleFilterChange({ target: { name: 'assisted', value: value } });
+    }
   };  
 
   const calculateTotalGuests = () => {
