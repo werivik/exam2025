@@ -192,7 +192,6 @@ header {
   text-decoration: none;
   display: flex;
   align-items: center;
-  transition: 0.25s;
   color: #1F1B17;
   position: relative;
 }
@@ -518,7 +517,7 @@ header.special .divideLine {
     height: 45px;
   }
   .menuLeftLinks a {
-    height: 35px;
+    height: 45px;
     font-size: 1rem;
   }
   .menuOpen {
@@ -531,5 +530,9 @@ header.special .divideLine {
    }
    .sidebarClose, .sidebarClose i {
     font-size: 1rem;
+   }
+   .headerRightLinks li {
+    height: 45px;
+    margin-top: -15px;
    }
 }
