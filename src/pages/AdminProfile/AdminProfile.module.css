@@ -371,8 +371,12 @@ margin-bottom: 15px;
 .bannerWrapper {
 margin-bottom: 75px;
 }
+.desktopProfile 
 .no-scroll {
 overflow: hidden;
+}
+.desktopProfile .sectionHeader {
+  margin-bottom: 50px;
 }
 body.modal-open {
 overflow: hidden;

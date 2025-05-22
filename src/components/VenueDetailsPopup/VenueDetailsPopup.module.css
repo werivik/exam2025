@@ -166,7 +166,7 @@
   display: inline-block;
   margin-top: 15px;
   color: #5D6B2F;
-  text-decoration: none;
+  text-decoration: underline;
   font-weight: 500;
   transition: color 0.2s ease;
 }
@@ -240,6 +240,31 @@
 
 :global(body.modal-open) {
   overflow: hidden;
+}
+
+.slideshowProgress {
+  background-color: #1f1b1786;
+  color: white;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  position: absolute;
+  z-index: 999;
+  left: 7.5px;
+  top: 7.5px;
+  height: 35px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.descriptionToggle {
+  color: #5D6B2F;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {

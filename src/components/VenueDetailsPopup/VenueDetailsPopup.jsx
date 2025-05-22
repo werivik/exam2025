@@ -228,6 +228,20 @@ const VenueDetailsPopup = ({
 
 if (!selectedVenue) return null;
 
+const [showFullDescription, setShowFullDescription] = useState(false);
+
+const toggleDescription = () => {
+  setShowFullDescription((prev) => !prev);
+};
+
+const getDescriptionPreview = (desc) => {
+  if (!desc) return '';
+  const words = desc.trim().split(/\s+/);
+  if (words.length <= 50 || showFullDescription) return desc;
+
+  return words.slice(0, 50).join(' ') + '...';
+};
+
   return (
     <motion.div
       className={styles.modalOverlay}
@@ -254,7 +268,11 @@ if (!selectedVenue) return null;
 
             <div className={styles.venueImageSlideshow}>
               {selectedVenue?.media && selectedVenue.media.length > 0 ? (
+                
                 <div className={styles.imageSlider}>
+                  <div className={styles.slideshowProgress}>
+                    <p>1 of 5</p>
+                  </div>
                   <img
                     src={selectedVenue.media[currentIndex].url}
                     alt={selectedVenue.media[currentIndex].alt || "Venue Image"}
@@ -289,7 +307,17 @@ if (!selectedVenue) return null;
                   <div className={styles.venueInfo}>
                     <h2>{selectedVenue.name}</h2>
                     <p>{selectedVenue.rating} Stars</p>
-                    <p>{selectedVenue.description}</p>
+                    <p>
+  {getDescriptionPreview(selectedVenue.description)}{' '}
+  {selectedVenue.description && selectedVenue.description.split(/\s+/).length > 50 && (
+    <span
+      onClick={toggleDescription}
+      style={{ color: '#5D6B2F', cursor: 'pointer', textDecoration: 'underline', fontWeight: 500 }}
+    >
+      {showFullDescription ? 'Show less' : 'See more'}
+    </span>
+  )}
+</p>
                     <p><strong>Price:</strong> ${selectedVenue.price} <span>/ per night</span></p>
                     <p><strong>Max Guests:</strong> {selectedVenue.maxGuests}</p>
                     <p><strong>Amenities:</strong> {selectedVenue.meta.wifi ? 'WiFi, ' : ''}{selectedVenue.meta.parking ? 'Parking, ' : ''}{selectedVenue.meta.breakfast ? 'Breakfast, ' : ''}{selectedVenue.meta.pets ? 'Pets Allowed' : ''}</p>

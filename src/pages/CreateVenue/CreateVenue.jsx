@@ -547,6 +547,7 @@ function isValidVenueTitle(title) {
             message={popup.message}
             onClose={closePopup}
             showButtons={false}
+            hideBars={false}
           />
         )}
 

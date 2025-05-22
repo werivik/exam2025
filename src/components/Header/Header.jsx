@@ -163,16 +163,27 @@ function Header() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const fetchUserRole = async () => {
-      const role = await getUserRole();
-      setUserRole(role);
+    const fetchUserData = async () => {
+      try {
+        const role = await getUserRole();
+        setUserRole(role);
+        
+        // Set userData based on the role from localStorage/sessionStorage
+        const venueManagerStatus = localStorage.getItem('venueManager') || sessionStorage.getItem('venueManager');
+        setUserData({
+          venueManager: venueManagerStatus === 'true'
+        });
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     };
 
     if (isUserLoggedIn) {
-      fetchUserRole();
+      fetchUserData();
     } 
     else {
       setUserRole(null);
+      setUserData(null);
     }
 
     const isLoginOrRegister = loginOrRegisterRoutes.includes(location.pathname);

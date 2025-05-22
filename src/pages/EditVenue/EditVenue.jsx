@@ -245,6 +245,10 @@ const EditVenue = () => {
   const closePopup = () => {
     setShowPopup(false);
   };  
+  
+  const goBackToAdminProfile = () => {
+    navigate('/admin-profile');
+  };
 
   return (
     <motion.div
@@ -423,13 +427,21 @@ const EditVenue = () => {
             </div>
           </div>
           <div className={styles.editButtons}>
-            <button className={styles.cancelButton}>
+            <Buttons
+            size='medium'
+            version='v2'
+            onClick={goBackToAdminProfile}
+            >
               Cancel Editing
-            </button>
+            </Buttons>
 
-            <button type="submit" className={styles.submitButton}>
+            <Buttons 
+            size='medium'
+            version='v1'
+            type="submit"
+            >
               Save Changes
-            </button>
+            </Buttons>
           </div>
         </form>
       </section>
