@@ -123,7 +123,12 @@ display: flex;
 align-items: center;
 }
 .slideshowProgressSecond {
-display: none;
+  display: none;
+  height: 30px;
+  border-radius: 2.5px;
+  font-size: 0.5rem;
+  display: flex;    
+  align-items: center;
 }
 .noSlideshow {
 width: 100%;
@@ -531,6 +536,9 @@ to {
 }
 }
 @media (max-width: 1100px) {
+  .pageContent {
+    padding-bottom: 25px;
+  }
   .hotelInfoBottom {
 flex-direction: column;
 }
@@ -553,7 +561,8 @@ width: 100%;
 @media (max-width: 768px) {
 .slideshowSection {
 flex-direction: column;
-height: auto;
+height: auto; 
+margin-bottom: -15px;
 }
 .slideshowLeft {
 display: none;
@@ -607,6 +616,14 @@ font-size: 1.5rem;
     margin-top: -5px;
     border-radius: 0;
   }
+  .slideshowSection {
+    margin-top: -10px;
+    width: 106%;
+    margin-left: -3%;
+  }
+  .slideshowProgressSecond {
+    display: flex;
+  }
 
   .pageContent {
     padding: 0;
@@ -617,9 +634,19 @@ font-size: 1.5rem;
 .slideshowSection {
   height: 50vh;
 }
+.slideshowRight, .noSlideshow, .detailImageWrapper {
+  height: 50vh;
+  width: 101.5%;
+  margin-left: -0.75%;
+}
+.slideshowButtonNext {
+  margin-right: -16px;
+}
+.slideshowButtonPrev {
+  margin-left: -1px;
+}
 .description h3 {
   font-size: 1.125rem;
-  margin-top: 30px;
   margin-bottom: -10px;
 }
 .venueOwner h3, .venueInfo h3 {
