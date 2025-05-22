@@ -6,7 +6,7 @@
   position: relative;
 }
 .heroSection {
-  width: 83%;
+  width: 83.6%;
   display: flex;
   justify-content: center;
   position: relative;
@@ -85,7 +85,6 @@
   gap: 15px;
   height: 30px;
 }
-
 .filtersColumns .filterCalender, .filtersColumns .filterPeople {
   width: 100%;
   height: 40px;
@@ -94,7 +93,6 @@
   width: 100%;
   height: 40px;
 }
-
 .filtersColumns .filterDestination input, .filtersColumns .filterCalender input, .filtersColumns .filterPeople input{
   width: 100%;
   height: 40px;
@@ -106,19 +104,16 @@
   cursor: pointer;
   z-index: 996;
 }
-
 .filtersColumns .filterDestination input {
   padding-left: 35px;
   margin-left: -25px;
 }
-
 .filtersColumns .filterCalender input {
   padding-left: 35px;
   padding-right: 5px;
   margin-left: -35px;
   font-size: 0.9rem;
 }
-
 .allFilters {
   display: flex;
   flex-direction: row;
@@ -839,20 +834,16 @@
   font-size: 1rem;
   margin-top: 5px;
 }
-@media (max-width: 700px) {
-  .firstSection {
-    height: 70vh;
-  }
+@media (max-width:1024px) {
+  .heroSection {
+  width: 95.6%;
 }
-@media (max-width:600px) {
-  .filterDestination i, .filterCalender i, .filterPeople i {
-    font-size: 1rem;
-  }
-  .filterDestination input, .filterCalender input, .guestSelector p  {
-    font-size: 1rem;
-  }
+
+.secondBorder, .thirdBorder, .fourthBorder, .fifthBorder {
+  width: 90%;
 }
-@media (max-width:500px){
+}
+@media (max-width:725px){
   .heroSection {
     width: 100%;
   }
@@ -885,7 +876,20 @@
     margin: 0;
   }
 }
-@media (max-width:725px){
+@media (max-width: 700px) {
+  .firstSection {
+    height: 70vh;
+  }
+}
+@media (max-width:600px) {
+  .filterDestination i, .filterCalender i, .filterPeople i {
+    font-size: 1rem;
+  }
+  .filterDestination input, .filterCalender input, .guestSelector p  {
+    font-size: 1rem;
+  }
+}
+@media (max-width:500px){
   .heroSection {
     width: 100%;
   }
