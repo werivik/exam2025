@@ -560,7 +560,7 @@ width: 100%;
   width: 100%;
 }
 }
-@media (max-width: 1024px) {
+@media (max-width: 1150px) {
   .pageStyle {
     width: 90%;
   }

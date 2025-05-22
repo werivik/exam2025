@@ -437,7 +437,7 @@ display: block;
 display: none;
 }
 }
-@media (max-width: 1025px) {
+@media (max-width: 1150px) {
 .profilePage {
 width: 90%;
 margin-left: 5%;

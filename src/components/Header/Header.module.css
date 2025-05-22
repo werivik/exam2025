@@ -240,8 +240,9 @@ header {
   border-radius: 10px;
   top: 2.5px;
   padding-left: 7px;
+  padding-right: 15px;
   width: 100%;
-  min-width: 400px;
+  min-width: 450px;
   right: 100%;
   position: absolute;
   z-index: 998;
@@ -303,6 +304,7 @@ header {
 .searchActive {
   color: #1F1B17;
   cursor: pointer;
+  font-size: 0.75rem;
 }
 .searchInactive {
   color: #1F1B17;
@@ -473,12 +475,12 @@ header.special .divideLine {
     overflow: hidden;
   }
 }
-@media (max-width:1100px){
+@media (max-width:1015px){
   .searchContainer, .searchbarContent, .searchInput, .searchOpen, .searchActive, .searchInactive, .headerRightLinks i, .headerRightLinks .divideLine {
     display: none;
   }
 }
-@media (max-width:1024px){
+@media (max-width:1150px){
   nav {
     width: 90%;
   }

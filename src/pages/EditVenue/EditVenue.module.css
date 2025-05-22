@@ -478,7 +478,7 @@ cursor: pointer;
 transition: background-color 0.2s ease;
 align-self: center;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1150px) {
 .pageContent {
 width: 90%;
 padding: 30px;
