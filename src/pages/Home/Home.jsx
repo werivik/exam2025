@@ -333,22 +333,16 @@ const Home = () => {
     return parts.join(", ");
   };
 
-  // Updated navigation functions
-  const handleDestinationClick = (destination) => {
-    const navigationState = {
-      filters: {
-        city: destination.name,
-        country: destination.country,
-        adults: filters.adults,
-        children: filters.children,
-        assisted: filters.disabled,
-        startDate: filters.startDate,
-        endDate: filters.endDate,
-      }
-    };
-    
-    navigate("/venues", { state: navigationState });
-  };
+const handleDestinationClick = (destination) => {
+  const queryParams = new URLSearchParams({
+    country: destination.country,
+    city: destination.name,
+    adults: filters.adults.toString(),
+    page: "1",
+  });
+
+  navigate(`/venues?${queryParams.toString()}`);
+};
 
   const handleMetaFilterClick = (metaFilter) => {
     const navigationState = {

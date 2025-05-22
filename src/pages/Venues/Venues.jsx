@@ -52,8 +52,14 @@ const Venues = () => {
   const [sortOption, setSortOption] = useState("all");
   const [searchQuery, setSearchQuery] = useState('');
   const topRef = useRef(null);
-  const location = useLocation();
   const [initialFiltersApplied, setInitialFiltersApplied] = useState(false);
+
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const city = params.get('city');
+  const country = params.get('country');
+  const adults = params.get('adults');
+ const page = params.get('page');
 
   const inputRefs = {
     continent: useRef(null),
@@ -239,8 +245,6 @@ useEffect(() => {
       setVenues(allVenues);
       setFilteredVenues(allVenues);
 
-      console.log(allVenues); 
-
       const prices = allVenues.map(venue => venue.price || 0);
       const min = Math.min(...prices);
       const max = Math.max(...prices);
@@ -279,70 +283,6 @@ useEffect(() => {
 
   fetchVenues();
 }, [extractLocationSuggestions]);
-
-  // Apply initial filters from navigation state
-  useEffect(() => {
-    if (!initialFiltersApplied && location.state?.filters && metaFilters.length > 0 && minPrice !== 0 && maxPrice !== 0) {
-      const navigationFilters = location.state.filters;
-      
-      const newFilters = {
-        continent: navigationFilters.continent || '',
-        country: navigationFilters.country || '',
-        city: navigationFilters.city || '',
-        adults: navigationFilters.adults || 1,
-        children: navigationFilters.children || 0,
-        assisted: navigationFilters.assisted || 0,
-        minRating: 0,
-        meta: navigationFilters.meta || {},
-        ratings: [],
-        priceMin: minPrice,
-        priceMax: maxPrice
-      };
-
-      setFilters(newFilters);
-      setInputValues({
-        continent: navigationFilters.continent || '',
-        country: navigationFilters.country || '',
-        city: navigationFilters.city || '',
-      });
-      
-      setInitialFiltersApplied(true);
-    }
-  }, [location.state, metaFilters, minPrice, maxPrice, initialFiltersApplied]);
-
-  useEffect(() => {
-    if (!metaFilters.length || initialFiltersApplied) return;
-    
-    const parsedFilters = {
-      continent: searchParams.get("continent") || '',
-      country: searchParams.get("country") || '',
-      city: searchParams.get("city") || '',
-      adults: parseInt(searchParams.get("adults")) || 1,
-      children: parseInt(searchParams.get("children")) || 0,
-      assisted: parseInt(searchParams.get("assisted")) || 0,
-      ratings: searchParams.getAll("ratings").map(Number),
-      meta: {}
-    };
-
-    metaFilters.forEach(metaKey => {
-      if (searchParams.get(metaKey) === "true") {
-        parsedFilters.meta[metaKey] = true;
-      }
-    });
-
-    const pageParam = searchParams.get("page");
-    if (pageParam) {
-      setCurrentPage(parseInt(pageParam));
-    }
-    
-    setFilters(prev => ({ ...prev, ...parsedFilters }));
-    
-    setInputValues({
-      continent: parsedFilters.continent,
-      country: parsedFilters.country,
-      city: parsedFilters.city
-    });
-  }, [metaFilters, searchParams, initialFiltersApplied]);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -488,7 +428,6 @@ const getPageNumbers = (currentPage, totalPages) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-
   const loadMore = useCallback(() => {
     setVisibleCount(prev => Math.min(prev + 10, filteredVenues.length));
   }, [filteredVenues.length]);
@@ -542,10 +481,125 @@ const visibleVenues = useMemo(() => {
 
 
 useEffect(() => {
-  console.log("Current page:", currentPage);
-  console.log("Visible venues:", visibleVenues.length);
 }, [currentPage, visibleVenues]);
 
+
+useEffect(() => {
+  if (!initialFiltersApplied && venues.length > 0) {
+    const urlParams = new URLSearchParams(location.search);
+    const stateFilters = location.state?.filters || {};
+    
+    const newFilters = { ...filters };
+    let hasChanges = false;
+    
+    if (urlParams.get('country')) {
+      newFilters.country = urlParams.get('country');
+      setInputValues(prev => ({ ...prev, country: urlParams.get('country') }));
+      hasChanges = true;
+    }
+    
+    if (urlParams.get('city')) {
+      newFilters.city = urlParams.get('city');
+      setInputValues(prev => ({ ...prev, city: urlParams.get('city') }));
+      hasChanges = true;
+    }
+    
+    if (urlParams.get('continent')) {
+      newFilters.continent = urlParams.get('continent');
+      setInputValues(prev => ({ ...prev, continent: urlParams.get('continent') }));
+      hasChanges = true;
+    }
+    
+    if (urlParams.get('adults')) {
+      newFilters.adults = parseInt(urlParams.get('adults')) || 1;
+      hasChanges = true;
+    }
+    
+    if (urlParams.get('children')) {
+      newFilters.children = parseInt(urlParams.get('children')) || 0;
+      hasChanges = true;
+    }
+    
+    if (urlParams.get('assisted')) {
+      newFilters.assisted = parseInt(urlParams.get('assisted')) || 0;
+      hasChanges = true;
+    }
+    
+    const ratingsFromUrl = urlParams.getAll('ratings').map(r => parseInt(r)).filter(r => !isNaN(r));
+    if (ratingsFromUrl.length > 0) {
+      newFilters.ratings = ratingsFromUrl;
+      hasChanges = true;
+    }
+    
+    metaFilters.forEach(key => {
+      if (urlParams.get(key) === 'true') {
+        newFilters.meta[key] = true;
+        hasChanges = true;
+      }
+    });
+    
+    if (stateFilters.meta) {
+      newFilters.meta = { ...newFilters.meta, ...stateFilters.meta };
+      hasChanges = true;
+    }
+    
+    if (stateFilters.startDate) {
+      newFilters.startDate = stateFilters.startDate;
+      hasChanges = true;
+    }
+    
+    if (stateFilters.endDate) {
+      newFilters.endDate = stateFilters.endDate;
+      hasChanges = true;
+    }
+    
+    if (stateFilters.adults !== undefined) {
+      newFilters.adults = stateFilters.adults;
+      hasChanges = true;
+    }
+    
+    if (stateFilters.children !== undefined) {
+      newFilters.children = stateFilters.children;
+      hasChanges = true;
+    }
+    
+    if (stateFilters.assisted !== undefined) {
+      newFilters.assisted = stateFilters.assisted;
+      hasChanges = true;
+    }
+    
+    const pageFromUrl = parseInt(urlParams.get('page')) || 1;
+    if (pageFromUrl !== currentPage) {
+      setCurrentPage(pageFromUrl);
+    }
+    
+    if (hasChanges) {
+      setFilters(newFilters);
+    }
+    
+    setInitialFiltersApplied(true);
+  }
+}, [venues, location.search, location.state, initialFiltersApplied, metaFilters, filters, currentPage]);
+
+
+useEffect(() => {
+  if (!initialFiltersApplied) return;
+  
+  const params = new URLSearchParams();
+  if (filters.continent) params.set("continent", filters.continent);
+  if (filters.country) params.set("country", filters.country);
+  if (filters.city) params.set("city", filters.city);
+  if (filters.adults > 0) params.set("adults", filters.adults);
+  if (filters.children > 0) params.set("children", filters.children);
+  if (filters.assisted > 0) params.set("assisted", filters.assisted);
+  filters.ratings.forEach(r => params.append("ratings", r));
+  Object.keys(filters.meta).forEach(key => {
+    if (filters.meta[key]) params.set(key, "true");
+  });
+  params.set("page", currentPage.toString());
+
+  setSearchParams(params, { replace: true });
+}, [filters, currentPage, setSearchParams, initialFiltersApplied]);
 
   return (
     <motion.div
@@ -643,7 +697,7 @@ useEffect(() => {
                 ))}
               </div>
 
-              {window.innerWidth >= 1024 && pageTotal > 1 && (
+              {window.innerWidth >= 725 && pageTotal > 1 && (
                 <div className={styles.paginationWrapper}>
                   <div className={styles.pagination}>
                     {currentPage > 1 && (
@@ -667,7 +721,7 @@ useEffect(() => {
                 </div>
               )}
 
-              {window.innerWidth < 1024 && visibleCount < filteredVenues.length && (
+              {window.innerWidth < 725 && visibleCount < filteredVenues.length && (
                 <div className={styles.loadMoreWrapper}>
                   <button className={styles.loadMoreButton} onClick={loadMore}>
                     Load More

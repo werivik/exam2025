@@ -215,6 +215,12 @@
   .rightBorder {
     width: 95%;
   }
+  .paginationWrapper {
+    display: none;
+  }
+  .loadMoreWrapper {
+    display: flex;
+  }
 }
 @media (max-width: 535px) {  
   .rightTitles h1 {

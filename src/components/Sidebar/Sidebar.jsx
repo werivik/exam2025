@@ -85,6 +85,34 @@ const Sidebar = ({
     setNoMatches(filtered.length === 0);
   };
 
+  useEffect(() => {
+  if (!Array.isArray(venues)) return;
+
+  const totalGuests = calculateTotalGuests();
+  const selectedPrice = filters.priceMax || maxPrice;
+
+  const filtered = venues.filter((venue) => {
+    const matchesDestination =
+      (!filters.continent || venue.continent?.toLowerCase().includes(filters.continent.toLowerCase())) &&
+      (!filters.country || venue.country?.toLowerCase().includes(filters.country.toLowerCase())) &&
+      (!filters.city || venue.city?.toLowerCase().includes(filters.city.toLowerCase()));
+
+    const matchesGuests = venue.maxGuests >= totalGuests;
+
+    const matchesPrice = venue.price <= selectedPrice;
+
+    const matchesMeta = Object.entries(filters.meta || {}).every(([key, value]) => {
+      if (!value) return true;
+      return venue.meta?.[key];
+    });
+
+    return matchesDestination && matchesGuests && matchesPrice && matchesMeta;
+  });
+
+  setFilteredVenues(filtered);
+  setNoMatches(filtered.length === 0);
+}, [filters, venues, maxPrice]);
+
   return (
     <>
       {showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
