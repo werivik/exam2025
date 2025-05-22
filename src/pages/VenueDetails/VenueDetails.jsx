@@ -154,6 +154,22 @@ const VenueDetails = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  const updateLeftImages = useCallback((slideIndex, mediaArray) => {
+    if (!mediaArray || mediaArray.length === 0) return [];
+    
+    const totalImages = mediaArray.length;
+    const leftImagesArray = [];
+    
+    leftImagesArray.push(mediaArray[slideIndex]);
+    
+    for (let i = 1; i < 3; i++) {
+      const nextIndex = (slideIndex + i) % totalImages;
+      leftImagesArray.push(mediaArray[nextIndex]);
+    }
+    
+    return leftImagesArray;
+  }, []);
+
   useEffect(() => {
     const fetchVenue = async () => {
       try {
@@ -170,7 +186,7 @@ const VenueDetails = () => {
         console.log("Venue Owner Data:", result.data.owner);
 
         const mediaArray = getValidMedia(result.data.media);
-        setLeftImages(mediaArray.slice(0, 3));
+        setLeftImages(updateLeftImages(0, mediaArray));
 
         try {
           const userResponse = await fetch('/user/profile', { 
@@ -217,7 +233,7 @@ const VenueDetails = () => {
     };
     
     fetchVenue();
-  }, [id]);
+  }, [id, updateLeftImages]);
 
   useEffect(() => {
     if (venue?.price && checkInDate && checkOutDate) {
@@ -250,22 +266,28 @@ const VenueDetails = () => {
     const mediaArray = getValidMedia(venue.media);
     const newIndex = (currentSlide + 1) % mediaArray.length;
     setCurrentSlide(newIndex);
-    setLeftImages(prev => [
-      ...prev.slice(1),
-      mediaArray[(currentSlide + 3) % mediaArray.length],
-    ]);
-  }, [venue, currentSlide]);
+    setLeftImages(updateLeftImages(newIndex, mediaArray));
+  }, [venue, currentSlide, updateLeftImages]);
 
   const handlePrev = useCallback(() => {
     if (!venue?.media?.length) return;
     const mediaArray = getValidMedia(venue.media);
     const newIndex = (currentSlide - 1 + mediaArray.length) % mediaArray.length;
     setCurrentSlide(newIndex);
-    setLeftImages(prev => [
-      mediaArray[(currentSlide - 1 + mediaArray.length) % mediaArray.length],
-      ...prev.slice(0, 2),
-    ]);
-  }, [venue, currentSlide]);
+    setLeftImages(updateLeftImages(newIndex, mediaArray));
+  }, [venue, currentSlide, updateLeftImages]);
+
+  const handlePreviewImageClick = useCallback((clickedImage) => {
+    if (!venue?.media?.length) return;
+    const mediaArray = getValidMedia(venue.media);
+    
+    const newIndex = mediaArray.findIndex(item => item.url === clickedImage.url);
+    
+    if (newIndex !== -1 && newIndex !== currentSlide) {
+      setCurrentSlide(newIndex);
+      setLeftImages(updateLeftImages(newIndex, mediaArray));
+    }
+  }, [venue, currentSlide, updateLeftImages]);
 
   const checkForDoubleBooking = useCallback((newStart, newEnd) => {
     return existingBookings.some(booking => 
@@ -344,13 +366,17 @@ const VenueDetails = () => {
                   <div className={styles.currentlyViewing}>Currently Viewing</div>
                   {leftImages.map((item, index) => {
                     const dynamicHeight = leftImages.length === 2 ? '50%' : '32.4%';
+                    const isCurrentImage = item.url === currentImage;
                     return (
                       <img
                         key={`${item.url}-${index}`}
                         src={item.url}
                         alt={item.alt || `Preview ${index}`}
-                        style={{ height: dynamicHeight }}
-                        className={styles.previewImage}
+                        style={{ 
+                          height: dynamicHeight,
+                        }}
+                        className={`${styles.previewImage} ${isCurrentImage ? styles.currentPreview : ''}`}
+                        onClick={() => handlePreviewImageClick(item)}
                       />
                     );
                   })}

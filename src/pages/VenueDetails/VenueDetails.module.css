@@ -607,7 +607,7 @@ font-size: 1.5rem;
     margin: 0;
   }
 }
-@media (max-width: 300px) {
+@media (max-width: 275px) {
 .slideshowSection {
   height: 50vh;
 }
