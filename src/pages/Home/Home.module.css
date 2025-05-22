@@ -1004,5 +1004,16 @@
   }
   .venuesTitle .browseAllLink {
     font-size: 1.25rem;
-}
+
+  }
+  .secondSection {
+    max-height: 400px;
+  }
+  .metaTitle {
+    height: 75px;
+    margin-bottom: -25px;
+  }
+  .metaTitle h2 {
+    font-size: 1.5rem;
+  }
 }
