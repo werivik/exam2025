@@ -8,7 +8,7 @@ This project was developed as part of the Noroff FED2 exam project to demonstrat
 
 ## Overview
 
-Holidaze is designed as a complete front-end booking application using modern development tools and UI/UX best practices. The application includes both a customer-facing experience and an admin interface for venue managers.
+Holidaze is designed as a complete front-end booking application using modern development tools and UI/UX best practices. The application includes both a customer-facing experience and an admin interface for venue managers. To access the Venue Manager the 4 digit code is 4321.
 
 ### Guest Users can:
 - Browse Venues
