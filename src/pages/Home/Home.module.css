@@ -372,21 +372,22 @@
   width: 80%;
   height: 100%;
 }
-.metaTitle, .venuesTitle, .DestinationTitle {
+.metaTitle, .venuesTitle, .DestinationTitle, .venuesTitle {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     height: 280px;
+    text-align: left;
 }
-.metaTitle h2, .venuesTitle h2, .DestinationTitle h2 {
+.metaTitle h2, .venuesTitle h2, .DestinationTitle h2, .venuesTitle h2 {
     font-size: 3rem;
     margin: 0;
     padding: 0;
     pointer-events: none;
     font-style: normal;
 }
-.metaTitle p, .DestinationTitle p {
+.metaTitle p, .DestinationTitle p, .venuesTitle p {
     font-size: 1.8rem;
     font-style: italic;
     font-weight: 400;
@@ -725,35 +726,11 @@
   width: 100%;
   height: 100%;
 }
-.fifthTitle {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 280px;
-    padding-top: 50px;
-    margin-bottom: 50px;
-}
-.fifthTitle h2 {
-    font-size: 3rem;
-    margin: 0;
-    padding: 0;
-    pointer-events: none;
-}
-.fifthTitle p {
-    font-size: 1.8rem;
-    font-style: italic;
-    font-weight: 400;
-    margin: 0;
-    padding: 0;
-    pointer-events: none;
-}
 .DestinationContent {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 90vh;
-  align-items: center;
   color: #1F1B17;
 }
 .destinationsWrapper {
@@ -834,6 +811,18 @@
   font-size: 1rem;
   margin-top: 5px;
 }
+@media (max-width:1300px) {
+  .metaTitle, .venuesTitle, .DestinationTitle, .venuesTitle {
+    height: 225px;
+    gap: 50px;
+}
+.metaTitle h2, .venuesTitle h2, .DestinationTitle h2, .venuesTitle h2 {
+    font-size: 2.5rem;
+}
+.metaTitle p, .DestinationTitle p, .venuesTitle p {
+    font-size: 1.25rem;
+}
+}
 @media (max-width:1024px) {
   .heroSection {
   width: 95.6%;
@@ -841,6 +830,23 @@
 
 .secondBorder, .thirdBorder, .fourthBorder, .fifthBorder {
   width: 90%;
+}
+}
+@media (max-width:915px){
+.metaTitle, .venuesTitle, .DestinationTitle, .venuesTitle {
+  height: 200px;
+}
+.metaTitle h2, .venuesTitle h2, .DestinationTitle h2, .venuesTitle h2 {
+  font-size: 2rem;
+  text-align: left;
+}
+.metaTitle p, .DestinationTitle p, .venuesTitle p {
+  font-size: 1.125rem;
+}
+}
+@media (max-width:780px){
+.metaTitle p, .DestinationTitle p {
+  display: none;
 }
 }
 @media (max-width:725px){
