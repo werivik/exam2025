@@ -382,7 +382,7 @@ width: 26px;
 height: 26px;
 border-radius: 50%;
 border: 1px solid #ddd;
-background-color: white;
+background-color: rgba(243, 240, 235, 0.6);
 display: flex;
 justify-content: center;
 align-items: center;
@@ -393,6 +393,7 @@ transition: all 0.2s ease;
 .counterControls button:hover {
 background-color: #B88A44;
 border: none;
+color: white;
 }
 .errorText {
 color: #d32f2f;

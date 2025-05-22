@@ -81,6 +81,9 @@ const VenueDetails = () => {
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
 
+  // New state for calendar functionality
+  const [isSelectingStart, setIsSelectingStart] = useState(true);
+
   const dropdownRef = useRef(null);
   const [profileError, setProfileError] = useState('');
 
@@ -246,20 +249,26 @@ const VenueDetails = () => {
     }
   }, [checkInDate, checkOutDate, venue?.price]);
 
+  // Updated toggleCalendar function
   const toggleCalendar = useCallback((type) => {
     setSelectedDateType(type);
+    setIsSelectingStart(type === 'start');
     setShowCalendar(prev => !prev);
   }, []);
 
+  // Updated handleDateChange function
   const handleDateChange = useCallback((date) => {
     if (selectedDateType === 'start') {
       setCheckInDate(date);
-    } 
-    else {
+      // Clear end date if it's before the new start date
+      if (checkOutDate && new Date(date) >= new Date(checkOutDate)) {
+        setCheckOutDate('');
+      }
+    } else {
       setCheckOutDate(date);
     }
     setShowCalendar(false);
-  }, [selectedDateType]);
+  }, [selectedDateType, checkOutDate]);
 
   const handleNext = useCallback(() => {
     if (!venue?.media?.length) return;
@@ -600,6 +609,10 @@ const VenueDetails = () => {
                     <CustomCalender
                       value={selectedDateType === 'start' ? checkInDate : checkOutDate}
                       onDateChange={handleDateChange}
+                      bookedDates={existingBookings}
+                      startDate={checkInDate}
+                      endDate={checkOutDate}
+                      isSelectingEnd={selectedDateType === 'end'}
                     />
                   )}
                 </div>
