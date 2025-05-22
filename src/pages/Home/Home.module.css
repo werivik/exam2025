@@ -876,6 +876,20 @@
 .metaType img {
     height: 200px;
 }
+.destinationCard {
+  height: 375px;
+}
+.destinationInfo h3 {
+  font-size: 1.125rem;
+  margin-top: 5px;
+}
+.destinationInfo p {
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+.fourthSection {
+  max-height: 650px;
+}
 }
 @media (max-width:780px){
   .metaTitle {
@@ -934,7 +948,7 @@
   .metaType h3 {
     font-size: 1.25rem;
   }
-  .metaContent {
+  .metaContent, .destinationsContainer {
     width: 111%;
     left: 0;
     margin-left: -5.5%;
@@ -974,6 +988,16 @@
   }
   .fifthSection {
     max-height: 700px;
+  }
+  .destinationCard {
+  min-width: 225px;
+  }
+  .DestinationTitle {
+    height: 100px;
+    margin-top: 25px;
+  }
+  .fourthSection {
+    max-height: 575px;
   }
 }
 @media (max-width:600px) {
