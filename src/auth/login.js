@@ -44,6 +44,7 @@ export const loginAdmin = async ({ email, password }) => {
     console.log("Saving token to localStorage:", token);
     localStorage.setItem('accessToken', token);
     localStorage.setItem('username', name);
+    localStorage.setItem('venueManager', venueManager.toString());
   }
 
   let venueManager = false;

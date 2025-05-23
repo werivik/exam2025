@@ -6,7 +6,7 @@ import headerLogo from "/media/logo/logo-default.png";
 import headerLogoHover from "/media/logo/logo-hover.png";
 import { VENUES, PROFILES_SEARCH, VENUES_SEARCH } from "../../constants";
 import { headers } from "../../headers";
-import { isLoggedIn, getUserRole } from "../../auth/auth";
+import { isLoggedIn, getUserRole, getVenueManagerStatus } from "../../auth/auth";
 
 const Logo = memo(({ isHovered, setIsHovered }) => (
   <Link to="/" className={styles.headerLogoContent}>
@@ -165,21 +165,42 @@ function Header() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const role = await getUserRole();
-        setUserRole(role);
-        
-        const venueManagerStatus = localStorage.getItem('venueManager') || sessionStorage.getItem('venueManager');
-        setUserData({
-          venueManager: venueManagerStatus === 'true'
-        });
-      } 
-      catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+const fetchUserData = async () => {
+  try {
+    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+    const username = localStorage.getItem('username') || sessionStorage.getItem('username');
 
+    if (!token || !username) {
+      setUserData(null);
+      return;
+    }
+
+    const profileRes = await fetch(PROFILES_SINGLE.replace("<name>", username), {
+      method: 'GET',
+      headers: headers(token),
+    });
+
+    const profileData = await profileRes.json();
+
+    if (!profileRes.ok) {
+      throw new Error(profileData?.errors?.[0]?.message || 'Failed to fetch profile');
+    }
+
+    const isVenueManager = profileData?.data?.venueManager === true;
+
+    setUserData({
+      venueManager: isVenueManager
+    });
+
+    localStorage.setItem('venueManager', isVenueManager.toString());
+    sessionStorage.setItem('venueManager', isVenueManager.toString());
+
+  } 
+  catch (error) {
+    console.error("Error fetching user data:", error);
+    setUserData(null);
+  }
+};
     if (isUserLoggedIn) {
       fetchUserData();
     } 

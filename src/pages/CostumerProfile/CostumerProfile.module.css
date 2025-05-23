@@ -45,8 +45,8 @@
   width: 100%;
   background-color: #1F1B17;
   border-radius: 99px;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
 .mobileProfile {
   height: 100%;
@@ -111,15 +111,6 @@
   margin-top: 5px;
   font-style: italic;
 }
-.dashBtn {
-  width: 100%;
-  right: 15px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  position: absolute;
-  top: 440px;
-}
 .mobileContent {
   margin: 0 15px;
   display: flex;
@@ -131,7 +122,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 35px;
 }
 .sectionHeader h3 {
   font-size: 1.75rem;
@@ -165,13 +156,14 @@
 }
 .bookingsContent {
   margin-top: 50px;
-  height: 100%;
+  height: fit-content;
 }
 .editSection {
   scroll-margin-top: 100px;
+  margin-top: 0;
 }
 .editContent {
-  margin-top: 50px;
+  margin-top: 0px;
   height: 450px;
   position: relative;
 }
@@ -254,8 +246,7 @@
   margin-right: 7.5px;
 }
 .userInfo h2, 
-.userInfo p, 
-.userInfo .profileRating {
+.userInfo p {
   width: 100%;
   text-align: left;
 }
@@ -329,9 +320,13 @@
   width: 100%;
 }
 .profileHeader {
-  height: 550px;
+  height: 525px;
   width: 100%;
   position: relative;
+}
+.bookingsSection{
+  margin-top: 25px;
+  height: fit-content;
 }
 .avatarContainer {
   position: relative;
@@ -403,7 +398,7 @@ body.modal-open {
   left: 0;
   z-index: 777;
 }
-.mobileProfile .venuesSection {
+.mobileProfile .bookingsSection {
   margin-top: 0;
 }
 .editButtons {
@@ -412,6 +407,57 @@ justify-content: flex-end;
 gap: 10px;
 margin-top: 15px;
 }
+.bookingsFilter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dashButton {
+  position: absolute;
+  right: 15px;
+  top: 425px;
+}
+
+.tabletProfile .avatar {
+  width: 175px;
+  height: 175px;
+  margin-left: 35px;
+}
+
+.tabletProfile .edgeLeft {
+  width: 20px;
+  margin-left: 15px;
+}
+
+.tabletProfile .edgeRight {
+  left: 210px;
+  width: 20px;
+}
+
+.tabletProfile .profileInfo {
+  margin-left: 50px;
+}
+
+.tabletProfile .profileInfo h2 {
+  font-size: 1.75rem;
+}
+
+.mobileProfile .editSection h3 {
+  font-size: 1.75rem;
+}
+.mobileProfile .editSection {
+  margin-top: 0px;
+}
+.tabletProfile .editSection {
+  margin-top: -50px;
+}
+.tabletProfile .editSection h2 {
+  margin-bottom: 25px;
+}
+.desktopProfile .editSection {
+  margin-top: 50px;
+}
+
 @media (max-width: 1125px) {
   .tabletProfile {
     display: block;
@@ -432,6 +478,30 @@ margin-top: 15px;
     font-size: 2.5rem;
   }
 }
+@media (max-width: 875px) {
+.tabletProfile .avatar {
+  width: 135px;
+  height: 135px;
+  margin-left: 35px;
+}
+.tabletProfile .edgeLeft {
+  width: 17px;
+  margin-left: 17px;
+}
+.tabletProfile .edgeRight {
+  left: 170.2px;
+  width: 17px;
+}
+.tabletProfile .profileInfo {
+  margin-left: 50px;
+}
+.tabletProfile .profileInfo h2 {
+  font-size: 1.75rem;
+}
+.sectionHeader h2 {
+  font-size: 1.75rem;
+}
+}
 @media (max-width: 725px) {
   .profilePage {
     width: 95%;
@@ -439,7 +509,7 @@ margin-top: 15px;
     margin-right: 2.5%;
   }
 }
-@media (max-width: 425px) {
+@media (max-width: 500px) {
   .tabletProfile, 
   .desktopProfile {
     display: none;
@@ -454,12 +524,18 @@ margin-top: 15px;
   .mobileProfile {
     display: block;
   }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 25px;
+  }
 }
 @media (max-width: 325px) {
-  .dashBtn {
+  .dashButton {
     width: 95%;
     display: flex;
-    position: inherit;
+    position: fixed;
   }
 }
 @media (max-width: 275px) {
@@ -473,4 +549,3 @@ margin-top: 15px;
     margin-bottom: 25px;
   }
 }
-

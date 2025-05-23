@@ -36,6 +36,10 @@ export const getUserRole = async () => {
   return 'customer';
 };
 
+export function getVenueManagerStatus() {
+  return localStorage.getItem('venueManager') === 'true' || sessionStorage.getItem('venueManager') === 'true';
+}
+
 const fetchUserRole = async (username) => {
   const cachedRole = sessionStorage.getItem(`role-${username}`);
   if (cachedRole) return cachedRole;
@@ -53,7 +57,8 @@ const fetchUserRole = async (username) => {
       throw new Error(data.errors?.[0]?.message || 'Failed to fetch user role');
     }
 
-    const role = data.data?.role || 'guest';
+    const isVenueManager = data.data?.venueManager;
+    const role = isVenueManager ? 'venueManager' : 'customer';
     sessionStorage.setItem(`role-${username}`, role);
     return role;
   } 

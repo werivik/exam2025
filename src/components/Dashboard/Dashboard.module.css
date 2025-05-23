@@ -24,13 +24,13 @@
     position: relative;
 }
 .filterSidebarContent h2 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-top: 20px;
     margin-bottom: 10px;
     pointer-events: none;
 }
 .filterSidebarContent h3 {
-    font-size: 1.8rem;
+    font-size: 1.45rem;
     margin-bottom: 15px;
     pointer-events: none;
 }
@@ -55,7 +55,7 @@
     border: none;
     border-radius: 10px;
     padding: 12px 15px;
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-family: "Playfair Display", serif;
     text-align: left;
     cursor: pointer;
@@ -70,11 +70,8 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .divideLine {
-    height: 1px;
-    width: 100%;
-    background-color: #1F1B17;
-    border-radius: 99px;
-    margin: 5px 0;
+border-top: 1px solid #1f1b1732;
+margin: 20px 0;
 }
 
 @media (max-width: 1024px) {

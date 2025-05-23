@@ -10,7 +10,6 @@ import { VENUE_DELETE } from '../../constants';
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
 import slideshowNext from "/media/icons/slideshow-next-button.png";
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
-
 const VenueDetailsPopup = ({ 
   selectedVenue, 
   isModalVisible, 
@@ -29,9 +28,7 @@ const VenueDetailsPopup = ({
   const [editedVenue, setEditedVenue] = useState(selectedVenue);
   const [isEditing, setIsEditing] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
-  const [showBookingPopup, setShowBookingPopup] = useState(false);
-  
-  // New states for improved booking form
+  const [showBookingPopup, setShowBookingPopup] = useState(false);  
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
   const [adults, setAdults] = useState(1);
@@ -44,17 +41,15 @@ const VenueDetailsPopup = ({
   const [totalGuests, setTotalGuests] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
   const [existingBookings, setExistingBookings] = useState([]);
-
   const dropdownRef = useRef(null);
 
   const formatDateWithOrdinal = (dateString) => {
     if (!dateString) return '';
-    
     const date = new Date(dateString);
     const day = date.getDate();
     const month = date.toLocaleDateString('en-US', { month: 'long' });
     const year = date.getFullYear();
-    
+
     const getOrdinalSuffix = (day) => {
       if (day > 3 && day < 21) return 'th';
       switch (day % 10) {
@@ -64,37 +59,29 @@ const VenueDetailsPopup = ({
         default: return 'th';
       }
     };
-    
     return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
   };
 
   const formatGuestDisplay = (adults, children, disabled) => {
     const parts = [];
-    
     if (adults > 0) {
       parts.push(`${adults} Adult${adults !== 1 ? 's' : ''}`);
     }
-    
     if (children > 0) {
       parts.push(`${children} Child${children !== 1 ? 'ren' : ''}`);
-    }
-    
+    }    
     if (disabled > 0) {
       parts.push(`${disabled} Assisted Guest${disabled !== 1 ? 's' : ''}`);
-    }
-    
+    }   
     if (parts.length === 0) {
       return '0 Guests';
     }
-    
     if (parts.length === 1) {
       return parts[0];
     }
-    
     if (parts.length === 2) {
       return `${parts[0]}, ${parts[1]}`;
-    }
-    
+    }   
     return `${parts[0]}, ${parts[1]}, ${parts[2]}`;
   };
 
@@ -103,7 +90,9 @@ const VenueDetailsPopup = ({
   }, [selectedVenue]);
 
   useEffect(() => {
-    setTotalGuests(adults + children + disabled);
+  const newTotalGuests = adults + children + disabled;
+  setTotalGuests(newTotalGuests);
+  console.log('Total guests updated:', newTotalGuests);
   }, [adults, children, disabled]);
 
   useEffect(() => {
@@ -119,7 +108,8 @@ const VenueDetailsPopup = ({
         const total = nights * selectedVenue.price;
         setTotalPrice(total);
       }
-    } else {
+    } 
+    else {
       setTotalNights(0);
       setTotalPrice(0);
     }
@@ -129,7 +119,8 @@ const VenueDetailsPopup = ({
     if (showCalendar && calendarInitiatedFrom === type) {
       setShowCalendar(false);
       setCalendarInitiatedFrom(null);
-    } else {
+    } 
+    else {
       setShowCalendar(true);
       setCalendarInitiatedFrom(type);
     }
@@ -144,7 +135,8 @@ const VenueDetailsPopup = ({
       if (!checkOutDate) {
         setCalendarInitiatedFrom('end');
       }
-    } else if (calendarInitiatedFrom === 'end') {
+    } 
+    else if (calendarInitiatedFrom === 'end') {
       setCheckOutDate(date);
       setShowCalendar(false);
       setCalendarInitiatedFrom(null);
@@ -165,27 +157,22 @@ const VenueDetailsPopup = ({
       setIsEditing(true);
     }
   };
-
   const handleClose = () => {
     setIsEditing(false);
     closeModal();
   };
-
   const openDeleteConfirmation = () => {
     setIsConfirmDeleteVisible(true);
   };
-  
   const closeDeleteConfirmation = () => {
     setIsConfirmDeleteVisible(false);
   };
-
   const handleDeleteConfirm = async () => {
     const token = localStorage.getItem('accessToken');
     if (!token || !selectedVenue?.id) {
       console.error('Missing token or venue ID');
       return;
     }  
-
     try {
       const url = VENUE_DELETE.replace('<id>', selectedVenue.id);
       const response = await fetch(url, {
@@ -207,37 +194,38 @@ const VenueDetailsPopup = ({
   
     setIsConfirmDeleteVisible(false);
   };
-  
   const handleDelete = () => {
     openDeleteConfirmation();
   };
-
   const handlePrevImage = (mediaLength) => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + mediaLength) % mediaLength);
   };
-
   const handleNextImage = (mediaLength) => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % mediaLength);
   };
 
-  useEffect(() => {
-    if (selectedBooking) {
-      setBookingData(selectedBooking);
-      
-      // Set the form values from booking data
-      const checkInISO = new Date(selectedBooking.dateFrom).toISOString().split('T')[0];
-      const checkOutISO = new Date(selectedBooking.dateTo).toISOString().split('T')[0];
-      
-      setCheckInDate(checkInISO);
-      setCheckOutDate(checkOutISO);
-      
-      // For now, we'll assume all guests are adults since the booking data doesn't specify
-      // You may need to adjust this based on your actual booking data structure
-      setAdults(selectedBooking.guests || 1);
-      setChildren(0);
-      setDisabled(0);
-    }
-  }, [selectedBooking]);
+useEffect(() => {
+  if (selectedBooking) {
+    setBookingData(selectedBooking);
+    
+    const checkInISO = new Date(selectedBooking.dateFrom).toISOString().split('T')[0];
+    const checkOutISO = new Date(selectedBooking.dateTo).toISOString().split('T')[0];
+    
+    setCheckInDate(checkInISO);
+    setCheckOutDate(checkOutISO);
+    
+    const totalBookingGuests = selectedBooking.guests || 1;
+    setAdults(totalBookingGuests);
+    setChildren(0);
+    setDisabled(0);
+    
+    console.log('Initialized booking data:', {
+      checkIn: checkInISO,
+      checkOut: checkOutISO,
+      guests: totalBookingGuests
+    });
+  }
+}, [selectedBooking]);
 
   useEffect(() => {
     if (!selectedBooking && selectedVenue?.bookingId) {
@@ -279,51 +267,62 @@ const VenueDetailsPopup = ({
     }
   }, [selectedBooking, selectedVenue]);
 
-  const handleSave = async () => {
-    if (!bookingData?.id) {
-      console.error('No booking ID found');
-      return;
-    }
-
-    const editValues = {
-      dateFrom: checkInDate,
-      dateTo: checkOutDate,
-      guests: totalGuests,
-    };
-
-    const updatedBooking = await handleBookingUpdate(
-      bookingData.id, 
-      editValues, 
-      setPopupMessage, 
-      setShowBookingPopup
-    );
-
-    if (updatedBooking) {
-      setBookingData(updatedBooking.data);
-      setIsEditing(false);
-    }
+const handleSave = async () => {
+  if (!bookingData?.id) {
+    console.error('No booking ID found');
+    return;
+  }
+  if (!checkInDate || !checkOutDate) {
+    setPopupMessage('Please select both check-in and check-out dates');
+    setShowBookingPopup(true);
+    return;
+  }
+  if (totalGuests < 1) {
+    setPopupMessage('Please select at least 1 guest');
+    setShowBookingPopup(true);
+    return;
+  }
+  const checkInDateObj = new Date(checkInDate);
+  const checkOutDateObj = new Date(checkOutDate);
+  if (checkOutDateObj <= checkInDateObj) {
+    setPopupMessage('Check-out date must be after check-in date');
+    setShowBookingPopup(true);
+    return;
+  }
+  const editValues = {
+    dateFrom: checkInDate,
+    dateTo: checkOutDate,
+    guests: totalGuests,
   };
+  console.log('Sending booking update with:', editValues);
+  const updatedBooking = await handleBookingUpdate(
+    bookingData.id, 
+    editValues, 
+    setPopupMessage, 
+    setShowBookingPopup
+  );
+  if (updatedBooking) {
+    setBookingData(updatedBooking.data);
+    setIsEditing(false);
+  }
+};
 
   const openCancelConfirmation = () => {
     setIsConfirmCancelVisible(true);
   };
-
   const closeCancelConfirmation = () => {
     setIsConfirmCancelVisible(false);
   };
-
   const handleCancelBookingConfirm = async () => {
     if (!bookingData?.id) {
       console.error('No booking ID found');
       return;
     }
-
     const success = await handleBookingDelete(
       bookingData.id, 
       setPopupMessage, 
       setShowBookingPopup
     );
-
     if (success) {
       closeCancelConfirmation();
       window.location.reload();
@@ -531,6 +530,7 @@ const getDescriptionPreview = (desc) => {
                             </div>
                           </div>
                         </div>
+                        <p>This Venue can only have </p>
                       </div>
 
                       <div className={styles.dividerLine}></div>
@@ -583,7 +583,6 @@ const getDescriptionPreview = (desc) => {
             </div>
           </div>
         )}
-
         {isConfirmCancelVisible && (
           <CustomPopup
             message="Are you sure you want to cancel this booking?"
@@ -594,7 +593,6 @@ const getDescriptionPreview = (desc) => {
             hideBars={true}
           />
         )}
-
         {isConfirmDeleteVisible && (
           <CustomPopup
             message="Are you sure you want to delete this venue?"

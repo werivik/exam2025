@@ -51,28 +51,32 @@ export const handleBookingUpdate = async (
   setPopupMessage, 
   setShowBookingPopup
 ) => {
+  console.log('handleBookingUpdate called with:', { bookingId, bookingData });
   if (!bookingId) {
     console.error('No booking ID provided');
     if (setPopupMessage) setPopupMessage('Invalid booking ID');
     if (setShowBookingPopup) setShowBookingPopup(true);
     return null;
   }
-
+  if (!bookingData.dateFrom || !bookingData.dateTo) {
+    console.error('Missing date information');
+    if (setPopupMessage) setPopupMessage('Please provide both check-in and check-out dates');
+    if (setShowBookingPopup) setShowBookingPopup(true);
+    return null;
+  }
   if (!validateDate(bookingData.dateFrom) || !validateDate(bookingData.dateTo)) {
     console.error('Invalid date format');
     if (setPopupMessage) setPopupMessage('Invalid dates. Please check your dates.');
     if (setShowBookingPopup) setShowBookingPopup(true);
     return null;
   }
-
   const guests = parseInt(bookingData.guests, 10);
   if (isNaN(guests) || guests < 1) {
-    console.error('Invalid number of guests');
-    if (setPopupMessage) setPopupMessage('Please enter a valid number of guests');
+    console.error('Invalid number of guests:', bookingData.guests);
+    if (setPopupMessage) setPopupMessage('Please enter a valid number of guests (minimum 1)');
     if (setShowBookingPopup) setShowBookingPopup(true);
     return null;
   }
-
   const dateFrom = new Date(bookingData.dateFrom);
   const dateTo = new Date(bookingData.dateTo);
   if (dateTo <= dateFrom) {
@@ -81,39 +85,45 @@ export const handleBookingUpdate = async (
     if (setShowBookingPopup) setShowBookingPopup(true);
     return null;
   }
-
   try {
     const token = localStorage.getItem('accessToken');
-    
     if (!token) {
       if (setPopupMessage) setPopupMessage("You need to log in first.");
       if (setShowBookingPopup) setShowBookingPopup(true);
       return null;
     }
-    
+    const requestBody = {
+      dateFrom: dateFrom.toISOString(),
+      dateTo: dateTo.toISOString(),
+      guests: guests,
+    };
+
+    console.log('Sending PUT request with body:', requestBody);
+
     const response = await fetch(`${BOOKINGS_UPDATE.replace('<id>', bookingId)}`, {
       method: 'PUT',
       headers: headers(token),
-      body: JSON.stringify({
-        dateFrom: new Date(bookingData.dateFrom).toISOString(),
-        dateTo: new Date(bookingData.dateTo).toISOString(),
-        guests: parseInt(bookingData.guests, 10),
-      }),
+      body: JSON.stringify(requestBody),
     });
-    
+
     const data = await response.json();
     
     if (!response.ok) {
       console.error("Booking update failed:", data);
-      if (setPopupMessage) setPopupMessage(data.errors?.[0]?.message || "Booking update failed");
+      console.error("Response status:", response.status);
+      console.error("Response headers:", [...response.headers.entries()]);
+      if (setPopupMessage) {
+        const errorMessage = data.errors?.[0]?.message || 
+                           data.message || 
+                           `Booking update failed (${response.status})`;
+        setPopupMessage(errorMessage);
+      }
       if (setShowBookingPopup) setShowBookingPopup(true);
       return null;
     }
-    
     console.log("Booking updated successfully:", data);
     if (setPopupMessage) setPopupMessage("Booking updated successfully!");
     if (setShowBookingPopup) setShowBookingPopup(true);
-    
     return data;
   } 
   catch (error) {

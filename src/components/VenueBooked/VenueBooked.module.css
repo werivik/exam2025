@@ -118,12 +118,13 @@
   .hotelInfo {
       transition: 0.25s;
       padding-left: 5px;
+      height: 40%;
       background-color: white;
   }
 
   .hotelImage {
-      height: 52.5%;
       transition: 0.25s;
+      height: 60%;
   }
 
   .seeMore {

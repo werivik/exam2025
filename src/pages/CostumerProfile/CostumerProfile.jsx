@@ -442,7 +442,7 @@ const CostumerProfile = () => {
             <div className={styles.profileInfo}>
               <h2>{capitalizeFirstLetter(userData.name) || 'Guest'}</h2>
               <p>Customer</p>
-              <div className={styles.dashBtn}>
+              <div className={styles.dashButton}>
                 <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
               </div>
             </div>
@@ -454,9 +454,16 @@ const CostumerProfile = () => {
                 <div className={styles.sectionHeader}>
                   <h3>My Bookings</h3>
                   <div className={styles.bookingsFilter}>
-                    <Buttons size="small" version="v3" onClick={() => setFilter('All')}>All</Buttons>
-                    <Buttons size="small" version="v1" onClick={() => setFilter('Future')}>Future</Buttons>
-                    <Buttons size="small" version="v2" onClick={() => setFilter('Previous')}>Previous</Buttons>
+                    <label>Sort By:</label>
+                    <select
+                      value={sortOption}
+                      onChange={(e) => setSortOption(e.target.value)}
+                      className={styles.sortDropdown}
+                    >
+                      <option value="default">All</option>
+                      <option value="nearestFuture">Nearest Future</option>
+                      <option value="recentPast">Previous</option>
+                    </select>
                   </div>
                 </div>
                 
@@ -487,6 +494,84 @@ const CostumerProfile = () => {
               </div>
             </div>
           </section>
+
+          <div className={styles.tabletProfile}>
+            <section className={styles.profileHeader} ref={desktopRefs.profile}>
+              <div className={styles.bannerWrapper}>
+                <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
+              </div>
+              <div className={styles.avatarContainer}>
+                <img src={bannerEdge} className={styles.edgeLeft} alt="Banner Edge" />
+                <img
+                  className={styles.avatar}
+                  src={userData.avatar?.url || defaultAvatar}
+                  alt={userData.name || 'User Avatar'}
+                />
+                <img src={bannerEdge} className={styles.edgeRight} alt="Banner Edge" />
+              </div>
+              <div className={styles.profileInfo}>
+                <h2>{capitalizeFirstLetter(userData.name) || 'Guest'}</h2>
+                <p>Customer</p>
+                <div className={styles.dashButton}>
+                  <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
+                </div>
+              </div>
+            </section>
+            
+            <div className={styles.divider}></div>
+
+            <section className={styles.tabletContent}>
+              <div className={styles.contentContainer}>
+                <div className={styles.bookingsSection} ref={mobileRefs.bookings}>
+                  <div className={styles.sectionHeader}>
+                    <h2>My Bookings</h2>
+                  <div className={styles.bookingsFilter}>
+                    <label>Sort By:</label>
+                    <select
+                      value={sortOption}
+                      onChange={(e) => setSortOption(e.target.value)}
+                      className={styles.sortDropdown}
+                    >
+                      <option value="default">All</option>
+                      <option value="nearestFuture">Nearest Future</option>
+                      <option value="recentPast">Previous</option>
+                    </select>
+                  </div>
+                  </div>
+                  
+                  <div className={styles.bookingsContent}>
+                    {isVenuesLoading ? (
+                      <div>Loading...</div>
+                    ) : filteredVenues.length > 0 ? (
+                      <div className={styles.venueGrid}>
+                        {filteredVenues.map((venue) => (
+                          <VenueBooked
+                            key={`${venue.id}-${venue.dateFrom.getTime()}`}
+                            venue={venue}
+                            onClick={() => handleVenueClick(venue)}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <p>No venues booked yet.</p>
+                    )}
+                  </div>
+                </div>
+                
+                <div className={styles.divider}></div>
+                
+                <div className={styles.editSection} ref={mobileRefs.edit}>
+                  <div className={styles.sectionHeader}>
+                    <h2>Edit Profile</h2>
+                  </div>
+                  
+                  <div className={styles.editContent}>
+                    <EditProfileForm />
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
 
           <div className={styles.desktopProfile}>
             <section className={styles.sidebar}>
@@ -575,76 +660,6 @@ const CostumerProfile = () => {
                 
                 <div className={styles.editContent}>
                   <EditProfileForm />
-                </div>
-              </div>
-            </section>
-          </div>
-
-          <div className={styles.tabletProfile}>
-            <section className={styles.profileHeader} ref={desktopRefs.profile}>
-              <div className={styles.bannerWrapper}>
-                <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
-              </div>
-              <div className={styles.avatarContainer}>
-                <img src={bannerEdge} className={styles.edgeLeft} alt="Banner Edge" />
-                <img
-                  className={styles.avatar}
-                  src={userData.avatar?.url || defaultAvatar}
-                  alt={userData.name || 'User Avatar'}
-                />
-                <img src={bannerEdge} className={styles.edgeRight} alt="Banner Edge" />
-              </div>
-              
-              <div className={styles.profileInfo}>
-                <h2>{capitalizeFirstLetter(userData.name) || 'Guest'}</h2>
-                <p>Customer</p>
-                <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
-              </div>
-            </section>
-            
-            <div className={styles.divider}></div>
-
-            <section className={styles.tabletContent}>
-              <div className={styles.contentContainer}>
-                <div className={styles.bookingsSection} ref={mobileRefs.bookings}>
-                  <div className={styles.sectionHeader}>
-                    <h2>My Bookings</h2>
-                    <div className={styles.bookingsFilter}>
-                      <Buttons size="small" version="v1" onClick={() => setFilter('All')}>All</Buttons>
-                      <Buttons size="small" version="v1" onClick={() => setFilter('Future')}>Future</Buttons>
-                      <Buttons size="small" version="v2" onClick={() => setFilter('Previous')}>Previous</Buttons>
-                    </div>
-                  </div>
-                  
-                  <div className={styles.bookingsContent}>
-                    {isVenuesLoading ? (
-                      <div>Loading...</div>
-                    ) : filteredVenues.length > 0 ? (
-                      <div className={styles.venueGrid}>
-                        {filteredVenues.map((venue) => (
-                          <VenueBooked
-                            key={`${venue.id}-${venue.dateFrom.getTime()}`}
-                            venue={venue}
-                            onClick={() => handleVenueClick(venue)}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      <p>No venues booked yet.</p>
-                    )}
-                  </div>
-                </div>
-                
-                <div className={styles.divider}></div>
-                
-                <div className={styles.editSection} ref={mobileRefs.edit}>
-                  <div className={styles.sectionHeader}>
-                    <h2>Edit Profile</h2>
-                  </div>
-                  
-                  <div className={styles.editContent}>
-                    <EditProfileForm />
-                  </div>
                 </div>
               </div>
             </section>
