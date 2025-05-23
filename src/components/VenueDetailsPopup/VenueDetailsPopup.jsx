@@ -42,6 +42,7 @@ const VenueDetailsPopup = ({
   const [totalPrice, setTotalPrice] = useState(0);
   const [existingBookings, setExistingBookings] = useState([]);
   const dropdownRef = useRef(null);
+  const [isPastBooking, setIsPastBooking] = useState(false);
 
   const formatDateWithOrdinal = (dateString) => {
     if (!dateString) return '';
@@ -224,6 +225,13 @@ useEffect(() => {
       checkOut: checkOutISO,
       guests: totalBookingGuests
     });
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const bookingEnd = new Date(selectedBooking.dateTo);
+    bookingEnd.setHours(0, 0, 0, 0);
+
+    setIsPastBooking(bookingEnd < today);
   }
 }, [selectedBooking]);
 
@@ -243,9 +251,12 @@ useEffect(() => {
             if (response.ok) {
               const data = await response.json();
               console.log("Fetched booking data:", data);
-              if (data?.data?.id) {
-                setBookingData(data.data);
-              } 
+if (data?.data?.id) {
+  setBookingData(data.data);
+  const today = new Date();
+  const bookingEnd = new Date(data.data.dateTo);
+  setIsPastBooking(bookingEnd < today);
+}
               else {
                 console.error('Booking data is missing the ID');
               }
@@ -553,8 +564,12 @@ const getDescriptionPreview = (desc) => {
                       </div>
 
                       <div className={styles.bookedVenueEditButtons}>
-                        <Buttons size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel</Buttons>
-                        <Buttons size="small" version="v1" onClick={handleSave}>Save Changes</Buttons>
+{!isPastBooking && (
+  <div className={styles.bookedVenueEditButtons}>
+    <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
+    <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+  </div>
+)}
                       </div>
                     </div>
                   ) : bookingData ? (

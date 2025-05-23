@@ -286,29 +286,31 @@ const CostumerProfile = () => {
 
   const today = new Date();
 
-  const filterVenues = (venues) => {
-    let filtered = [];
+const filterVenues = (venues) => {
+  const today = new Date();
 
-    switch (filter) {
-      case 'Future':
-        filtered = venues.filter((venue) => venue.dateFrom >= today);
-        break;
-      case 'Previous':
-        filtered = venues.filter((venue) => venue.dateFrom < today);
-        break;
-      default:
-        filtered = [...venues];
-    }
+  if (filter === 'Future') {
+    return [...venues]
+      .filter((venue) => venue.dateFrom >= today)
+      .sort((a, b) => a.dateFrom - b.dateFrom);
+  }
 
-    switch (sortOption) {
-      case 'nearestFuture':
-        return [...filtered].sort((a, b) => a.dateFrom - b.dateFrom);
-      case 'recentPast':
-        return [...filtered].sort((a, b) => b.dateFrom - a.dateFrom);
-      default:
-        return filtered;
-    }
-  };
+  if (filter === 'Previous') {
+    return [...venues]
+      .filter((venue) => venue.dateFrom < today)
+      .sort((a, b) => b.dateFrom - a.dateFrom);
+  }
+
+  const future = venues
+    .filter((venue) => venue.dateFrom >= today)
+    .sort((a, b) => a.dateFrom - b.dateFrom);
+
+  const past = venues
+    .filter((venue) => venue.dateFrom < today)
+    .sort((a, b) => b.dateFrom - a.dateFrom);
+
+  return [...future, ...past];
+};
 
   const filteredVenues = filterVenues(bookedVenues);
 
@@ -455,15 +457,21 @@ const CostumerProfile = () => {
                   <h3>My Bookings</h3>
                   <div className={styles.bookingsFilter}>
                     <label>Sort By:</label>
-                    <select
-                      value={sortOption}
-                      onChange={(e) => setSortOption(e.target.value)}
-                      className={styles.sortDropdown}
-                    >
-                      <option value="default">All</option>
-                      <option value="nearestFuture">Nearest Future</option>
-                      <option value="recentPast">Previous</option>
-                    </select>
+<select
+  value={sortOption}
+  onChange={(e) => {
+    const value = e.target.value;
+    setSortOption(value);
+    if (value === 'nearestFuture') setFilter('Future');
+    else if (value === 'recentPast') setFilter('Previous');
+    else setFilter('All');
+  }}
+  className={styles.sortDropdown}
+>
+  <option value="default">All</option>
+  <option value="nearestFuture">Nearest Future</option>
+  <option value="recentPast">Previous</option>
+</select>
                   </div>
                 </div>
                 
@@ -527,15 +535,21 @@ const CostumerProfile = () => {
                     <h2>My Bookings</h2>
                   <div className={styles.bookingsFilter}>
                     <label>Sort By:</label>
-                    <select
-                      value={sortOption}
-                      onChange={(e) => setSortOption(e.target.value)}
-                      className={styles.sortDropdown}
-                    >
-                      <option value="default">All</option>
-                      <option value="nearestFuture">Nearest Future</option>
-                      <option value="recentPast">Previous</option>
-                    </select>
+<select
+  value={sortOption}
+  onChange={(e) => {
+    const value = e.target.value;
+    setSortOption(value);
+    if (value === 'nearestFuture') setFilter('Future');
+    else if (value === 'recentPast') setFilter('Previous');
+    else setFilter('All');
+  }}
+  className={styles.sortDropdown}
+>
+  <option value="default">All</option>
+  <option value="nearestFuture">Nearest Future</option>
+  <option value="recentPast">Previous</option>
+</select>
                   </div>
                   </div>
                   
@@ -620,15 +634,21 @@ const CostumerProfile = () => {
                   <h2>My Bookings</h2>
                   <div className={styles.bookingsFilter}>
                     <label>Sort By:</label>
-                    <select
-                      value={sortOption}
-                      onChange={(e) => setSortOption(e.target.value)}
-                      className={styles.sortDropdown}
-                    >
-                      <option value="default">All</option>
-                      <option value="nearestFuture">Nearest Future</option>
-                      <option value="recentPast">Previous</option>
-                    </select>
+<select
+  value={sortOption}
+  onChange={(e) => {
+    const value = e.target.value;
+    setSortOption(value);
+    if (value === 'nearestFuture') setFilter('Future');
+    else if (value === 'recentPast') setFilter('Previous');
+    else setFilter('All');
+  }}
+  className={styles.sortDropdown}
+>
+  <option value="default">All</option>
+  <option value="nearestFuture">Nearest Future</option>
+  <option value="recentPast">Previous</option>
+</select>
                   </div>
                 </div>
                 

@@ -9,6 +9,10 @@
   margin-bottom: 25px;
 }
 
+.hotelCard:hover {
+  cursor: pointer;
+}
+
 .imageContainer {
   position: relative;
   width: 100%;
