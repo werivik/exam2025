@@ -67,20 +67,27 @@ const EditVenue = () => {
     try {
       const token = localStorage.getItem('accessToken');
       if (!token) {
-        console.error('Token is required!');
+        setPopupMessage(
+          <>
+            <h2>Authentication Required</h2>
+            <p>Please log in to edit this venue.</p>
+          </>
+        );
+        setPopupType('error');
+        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(false);
+          navigate('/login');
+        }, 2000);
         return;
       }
 
-      const response = await fetch(`${VENUE_UPDATE}?_published=true`.replace('<id>', id), {
-        method: 'PUT',
+      const response = await fetch(`${VENUE_UPDATE.replace('<id>', venueId)}?_published=true`, {
+        method: 'GET',
         headers: headers(token),
-        body: JSON.stringify(transformedFormData),
       });
 
       const data = await response.json();
-      if (!response.ok) {
-        console.error('Failed to update venue:', response.status, data);
-      }      
 
       if (response.ok) {
         setFormData({
@@ -102,12 +109,33 @@ const EditVenue = () => {
         });
       } 
       else {
-        console.error('Failed to fetch venue:', data);
-        navigate('/admin-profile');
+        setPopupMessage(
+          <>
+            <h2>Failed to Load Venue</h2>
+            <p>Could not retrieve venue information. Redirecting to profile.</p>
+          </>
+        );
+        setPopupType('error');
+        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(false);
+          navigate('/admin-profile');
+        }, 2000);
       }
     } 
     catch (error) {
-      console.error('Error fetching venue:', error);
+      setPopupMessage(
+        <>
+          <h2>Network Error</h2>
+          <p>Failed to connect to the server. Please check your connection and try again.</p>
+        </>
+      );
+      setPopupType('error');
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+        navigate('/admin-profile');
+      }, 2000);
     }
   };
 
@@ -173,7 +201,18 @@ const EditVenue = () => {
   
     const token = localStorage.getItem('accessToken');
     if (!token) {
-      console.error('Token is required!');
+      setPopupMessage(
+        <>
+          <h2>Authentication Required</h2>
+          <p>Please log in to save changes.</p>
+        </>
+      );
+      setPopupType('error');
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+        navigate('/login');
+      }, 2000);
       return;
     }
   
@@ -190,8 +229,6 @@ const EditVenue = () => {
         ? formData.location
         : undefined,
     };
-  
-    console.log("Transformed Form Data:", transformedFormData);
   
     try {
       const response = await fetch(VENUE_UPDATE.replace('<id>', id), {
@@ -216,29 +253,31 @@ const EditVenue = () => {
         }, 3000);
       } 
       else {
+        const errorMsg = data.errors
+          ? data.errors.map(err => err.message).join(', ')
+          : data.message || 'Unknown error occurred';
+        
         setPopupMessage(
           <>
             <h2>Could not Save the Changes</h2>
-            <p>Please try again.</p>
+            <p>{errorMsg}</p>
           </>
         );        
         setPopupType('error');
         setShowPopup(true);
-        setTimeout(() => setShowPopup(false), 2000);
-        console.error('Error updating venue:', data);
+        setTimeout(() => setShowPopup(false), 3000);
       }
     } 
     catch (error) {
       setPopupMessage(
         <>
-          <h2>Could not Save the Changes</h2>
-          <p>Please try again.</p>
+          <h2>Network Error</h2>
+          <p>Failed to save changes. Please check your connection and try again.</p>
         </>
       );      
       setPopupType('error');
       setShowPopup(true);
-      setTimeout(() => setShowPopup(false), 2000);
-      console.error('Error updating venue:', error);
+      setTimeout(() => setShowPopup(false), 3000);
     }
   };  
 

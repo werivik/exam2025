@@ -208,7 +208,12 @@ function isValidVenueTitle(title) {
     const cleanedTitle = normalizeTitle(formData.name);
 
     if (!isValidVenueTitle(cleanedTitle)) {
-      alert("Venue title can only contain letters and spaces.");
+      setPopup({
+        isVisible: true,
+        message: 'Venue title can only contain letters, numbers, and common punctuation.',
+        type: 'error',
+      });
+      setLoading(false);
       return;
     }
 

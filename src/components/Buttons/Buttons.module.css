@@ -310,15 +310,14 @@
   width: 27px;
   height: 27px;
   border-radius: 50%;
-  background-color: #1F1B17;
-  color:#f9f9f9;
+  background-color: transparent;
+  color:#1F1B17;
   font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   border: none;
 }
 
@@ -326,6 +325,7 @@
   background-color: #B88A44;
   color: white;
   transform: rotate(90deg);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .addMedia {

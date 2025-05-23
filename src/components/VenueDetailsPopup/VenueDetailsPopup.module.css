@@ -26,6 +26,9 @@
 
 .venueDetails {
   display: flex;
+  flex-direction: row;
+  width: 100%;
+  position: relative;
   height: 100%;
   max-height: 90vh;
 }
@@ -54,8 +57,7 @@
 }
 
 .venueImageSlideshow {
-  flex: 1;
-  width: 70%;
+  flex: 1.25;
   height: 100%;
   position: relative;
   border-radius: 10px;
@@ -114,8 +116,7 @@
 }
 
 .venueRight {
-  width: 30%;
-  flex: 1;
+  flex: 0.9;
   padding: 20px;
   overflow-y: auto;
   max-height: 90vh;

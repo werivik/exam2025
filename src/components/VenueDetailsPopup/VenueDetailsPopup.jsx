@@ -164,7 +164,8 @@ const VenueDetailsPopup = ({
               else {
                 console.error('Booking data is missing the ID');
               }
-            } else {
+            } 
+            else {
               console.error('Failed to fetch booking data');
             }
           } 
@@ -262,9 +263,13 @@ const getDescriptionPreview = (desc) => {
           <div>Loading...</div>
         ) : (
           <div className={styles.venueDetails}>
-            <button className={styles.closeVenueButton} onClick={closeModal}>
+            <Buttons 
+            onClick={closeModal}
+            className={styles.closeVenueButton}
+            size='close'
+            >
               <i className="fa-solid fa-xmark"></i>
-            </button>
+            </Buttons>
 
             <div className={styles.venueImageSlideshow}>
               {selectedVenue?.media && selectedVenue.media.length > 0 ? (
@@ -327,8 +332,8 @@ const getDescriptionPreview = (desc) => {
 
                   {userRole === "admin" && (
                     <div className={styles.bookedVenueEditButtons}>
-                      <Buttons size="small" onClick={handleEditClick}>Edit</Buttons>
-                      <Buttons size="small" version="v2" onClick={handleDelete}>Delete</Buttons>
+                      <Buttons size="small" onClick={handleEditClick}>Edit Venue</Buttons>
+                      <Buttons size="small" version="v2" onClick={handleDelete}>Delete Venue</Buttons>
                     </div>
                   )}
                 </>

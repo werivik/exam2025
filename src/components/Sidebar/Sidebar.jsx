@@ -184,7 +184,7 @@ const Sidebar = ({
           onClick={toggleSidebar}
           className={styles.closeButton}
           >
-          &times;
+          <i className="fa-solid fa-xmark"></i>
           </Buttons>
           <div className={styles.allFilters}>
             <div className={styles.filterGroup}>
