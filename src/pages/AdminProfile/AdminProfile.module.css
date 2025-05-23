@@ -188,8 +188,8 @@ flex-direction: column;
 font-size: 1.125rem;
 padding-left: 10px;
 height: 35px;
-border-radius: 15px;
-border: none;
+border-radius: 5px;
+border: solid 1px #ccc;
 }
 .editForm label {
 font-size: 1.125rem;
@@ -340,18 +340,43 @@ position: relative;
 position: relative;
 }
 .tabletContent {
-width: 95%;
-margin: 0 25px;
-position: relative;
-flex-grow: 1;
+  width: 100%;
+  position: relative;
+  flex-grow: 1;
 }
+.tabletContent
 .contentContainer {
-width: 100%;
+width: 90%;
 height: auto;
 position: relative;
 display: flex;
 flex-direction: column;
-gap: 100px;
+gap: 50px;
+}
+.tabletContent .venuesContent {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-start;
+}
+.avatarContainer .edgeLeft,
+.avatarContainer .edgeRight {
+width: 20px;
+position: absolute;
+bottom: 0;
+z-index: 3;
+}
+.avatarContainer .edgeRight {
+left: 195px;
+transform: scaleX(-1);
+}
+.tabletProfile .avatarContainer {
+  margin-left: 25px;
+} 
+.tabletProfile .avatar {
+  width: 175px;
+  margin-left: 20px;
+  height: 175px;
 }
 .desktopProfile
 .userInfo {
@@ -382,14 +407,6 @@ overflow: hidden;
   position: absolute;
   right: 0px;
   top: 425px;
-}
-.tabletProfile .avatarContainer {
-  margin-left: 25px;
-} 
-.tabletProfile .avatar {
-  background-color: pink;
-  width: 175px;
-  height: 175px;
 }
 .tabletProfile .profileInfo, .tabletContent {
   margin-left: 50px;
@@ -476,10 +493,65 @@ font-size: 2.5rem;
 .profilePage {
 width: 95%;
 margin-left: 2.5%;
-margin-right: 2.5%;
+}
+.avatarContainer .edgeLeft,
+.avatarContainer .edgeRight {
+width: 15px;
+position: absolute;
+bottom: 0;
+z-index: 3;
+}
+.avatarContainer .edgeRight {
+left: 165px;
+transform: scaleX(-1);
+}
+.tabletProfile .avatarContainer {
+  margin-left: 15px;
+} 
+.tabletProfile .avatar {
+  width: 150px;
+  margin-left: 15px;
+  height: 150px;
+}
+.tabletProfile .profileInfo {
+  margin-left: 25px;
+}
+.tabletContent
+.contentContainer{
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  position: relative;
+}
+.tabletContent .sectionHeader {
+  width: 100%;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+.tabletContent {
+  width: 100%;
+  margin-left: 0;
+  position: relative;
+}
+.tabletContent .venuesContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  min-width: 100%;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+.tabletContent .divider {
+  margin: 0;
+  width: 100%;
+}
+.tabletContent .editContent {
+  margin-left: 25px;
 }
 }
-@media (max-width: 425px) {
+@media (max-width: 500px) {
 .tabletProfile,
 .desktopProfile {
 display: none;
@@ -499,6 +571,14 @@ width: 95%;
 display: flex;
 position: inherit;
 }
+.container {
+  margin-bottom: 0;
+}
+.mobileContent .editSection {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  height: fit-content;
+}
 }
 @media (max-width: 275px) {
 .sectionHeader {
@@ -510,4 +590,54 @@ margin-left: 27%;
 margin-top: 25px;
 margin-bottom: 25px;
 }
+}
+@media (max-width: 1125px) and (min-width: 426px) {
+  .tabletProfile .venueGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .tabletProfile .venueGrid > * {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    max-width: none;
+  }
+  
+  .tabletProfile .venuesContent {
+    width: 95%;
+    display: block;
+  }
+  
+  .tabletProfile .contentContainer {
+    width: 95%;
+  }
+}
+@media (max-width: 800px) and (min-width: 426px) {
+  .tabletProfile .venueGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+  }
+}
+@media (max-width: 600px) and (min-width: 426px) {
+  .tabletProfile .venueGrid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+}
+@media (max-width: 500px) {
+  .mobileProfile .venueGrid {
+    grid-template-columns: 1fr; 
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .mobileProfile .venueGrid > * {
+    max-width: 100%;
+    width: 100%;
+  }
 }

@@ -285,6 +285,13 @@ const calculateRatings = (venues) => {
     </div>
   );
 
+  const handleCancelEdit = () => {
+  setNewName(userData.name || '');
+  setNewAvatar(userData.avatar?.url || '');
+  setNewBanner(userData.banner?.url || '');
+  setIsEditing(false);
+};
+
   const EditProfileForm = () => (
     <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSaveProfile(); }}>
       <label>
@@ -304,6 +311,7 @@ const calculateRatings = (venues) => {
         />
       </label>
       <div className={styles.actionBtns}>
+        <Buttons size='small' version='v2' onClick={handleCancelEdit}>Cancel</Buttons>
         <Buttons type="submit" size="small" version="v1">Save Changes</Buttons>
       </div>
     </form>
@@ -332,63 +340,6 @@ const calculateRatings = (venues) => {
       
       <div className={`${styles.contentWrapper} ${showPopup ? styles.blurred : ''}`}>
         <div className={styles.profilePage}>
-          <section className={styles.mobileProfile} ref={mobileRefs.profile}>
-            <div className={styles.profileTop}>
-              <div className={styles.bannerWrapper}>
-                <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
-              </div>
-              <div className={styles.avatarWrapper}>
-                <img src={bannerEdge} className={styles.edgeLeft}></img>
-                <img
-                  className={styles.avatar}
-                  src={userData.avatar?.url || defaultAvatar}
-                  alt={userData.name || 'User Avatar'}
-                />
-                <img src={bannerEdge} className={styles.edgeRight}></img>
-              </div>
-            </div>
-            
-            <div className={styles.profileInfo}>
-              <h2>{capitalizeFirstLetter(userData.name) || 'User'}</h2>
-              <p>Venue Manager</p>
-              <RatingDisplay />
-              <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
-            </div>
-            
-            <div className={styles.mobileContent}>
-              <div className={styles.divider}></div>
-              
-              <div className={styles.venuesSection} ref={mobileRefs.venues}>
-                <div className={styles.sectionHeader}>
-                  <h3>Venues</h3>
-                  <Buttons size="small" version="v1" onClick={handleCreateVenue}>Create Venue</Buttons>
-                </div>
-                
-                {filteredVenues.length > 0 ? (
-                  <div className={styles.venueGrid}>
-                    {filteredVenues.map((venue) => (
-                      <VenueCardSecondType
-                        key={venue.id}
-                        venue={venue}
-                        onClick={() => handleVenueClick(venue)}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <p>No venues yet.</p>
-                )}
-              </div>
-              
-              <div className={styles.divider}></div>
-              
-              <div className={styles.editSection} ref={mobileRefs.edit}>
-                <h3>Edit Profile</h3>
-                <div className={styles.editContent}>
-                  <EditProfileForm />
-                </div>
-              </div>
-            </div>
-          </section>
           <div className={styles.desktopProfile}>
             <section className={styles.sidebar}>
               <div className={styles.sidebarContent}>
@@ -469,6 +420,63 @@ const calculateRatings = (venues) => {
               </div>
             </section>
           </div>
+          <section className={styles.mobileProfile} ref={mobileRefs.profile}>
+            <div className={styles.profileTop}>
+              <div className={styles.bannerWrapper}>
+                <img src={userData.banner?.url || bannerImage} alt="Profile Banner" />
+              </div>
+              <div className={styles.avatarWrapper}>
+                <img src={bannerEdge} className={styles.edgeLeft}></img>
+                <img
+                  className={styles.avatar}
+                  src={userData.avatar?.url || defaultAvatar}
+                  alt={userData.name || 'User Avatar'}
+                />
+                <img src={bannerEdge} className={styles.edgeRight}></img>
+              </div>
+            </div>
+            
+            <div className={styles.profileInfo}>
+              <h2>{capitalizeFirstLetter(userData.name) || 'User'}</h2>
+              <p>Venue Manager</p>
+              <RatingDisplay />
+              <Buttons size='small' version='v2' onClick={toggleDashboard}>Dashboard</Buttons>
+            </div>
+            
+            <div className={styles.mobileContent}>
+              <div className={styles.divider}></div>
+              
+              <div className={styles.venuesSection} ref={mobileRefs.venues}>
+                <div className={styles.sectionHeader}>
+                  <h3>Venues</h3>
+                  <Buttons size="small" version="v1" onClick={handleCreateVenue}>Create Venue</Buttons>
+                </div>
+                
+                {filteredVenues.length > 0 ? (
+                  <div className={styles.venueGrid}>
+                    {filteredVenues.map((venue) => (
+                      <VenueCardSecondType
+                        key={venue.id}
+                        venue={venue}
+                        onClick={() => handleVenueClick(venue)}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p>No venues yet.</p>
+                )}
+              </div>
+              
+              <div className={styles.divider}></div>
+              
+              <div className={styles.editSection} ref={mobileRefs.edit}>
+                <h3>Edit Profile</h3>
+                <div className={styles.editContent}>
+                  <EditProfileForm />
+                </div>
+              </div>
+            </div>
+          </section>
           <div className={styles.tabletProfile}>
             <section className={styles.profileHeader} ref={desktopRefs.profile}>
               <div className={styles.bannerWrapper}>
