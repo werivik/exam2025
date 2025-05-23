@@ -176,25 +176,6 @@ const CustomCalender = ({
   const renderSelectionStatus = () => {
     return (
       <div className={styles.selectionStatus}>
-        <div className={styles.statusItem}>
-          <span className={styles.statusLabel}>Check-in:</span>
-          <span className={`${styles.statusValue} ${isSelectingStartDate ? styles.active : ''}`}>
-            {formatDateForDisplay(selectedStart)}
-          </span>
-        </div>
-        <div className={styles.statusItem}>
-          <span className={styles.statusLabel}>Check-out:</span>
-          <span className={`${styles.statusValue} ${!isSelectingStartDate ? styles.active : ''}`}>
-            {formatDateForDisplay(selectedEnd)}
-          </span>
-        </div>
-        <button 
-          className={styles.resetButton} 
-          onClick={resetSelection}
-          type="button"
-        >
-          Reset
-        </button>
       </div>
     );
   };

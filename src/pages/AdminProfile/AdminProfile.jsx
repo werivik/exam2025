@@ -335,7 +335,7 @@ const handleSaveProfile = async () => {
           onChange={(e) => setNewBanner(e.target.value)}
         />
       </label>
-      <div className={styles.actionBtns}>
+      <div className={styles.editButtons}>
         <Buttons size='small' version='v2' onClick={handleCancelEdit}>Cancel</Buttons>
         <Buttons type="submit" size="small" version="v1">Save Changes</Buttons>
       </div>

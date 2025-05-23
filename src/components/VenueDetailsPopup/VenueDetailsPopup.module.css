@@ -129,6 +129,7 @@
 
 .venueInfo h2 {
   margin: 0 0 8px 0;
+  margin-top: 25px;
   font-size: 1.8rem;
   font-weight: 700;
   color: #1F1B17;
@@ -243,6 +244,144 @@
   cursor: pointer;
   text-decoration: underline;
   font-weight: 500;
+}
+
+.editBookingForm {
+  background-color: #F8F6F3;
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.editBookingForm h3 {
+  font-size: 1.75rem;
+  margin-top: 0;
+}
+
+.editBookingForm .dividerLine {
+border-top: 1px solid #1f1b1732;
+margin: 20px 0;
+}
+
+.bookDate {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.bookDateStart,
+.bookDateEnd {
+display: flex;
+align-items: center;
+gap: 10px;
+background-color: white;
+padding: 10px;
+border-radius: 5px;
+border: 1px solid #ddd;
+width: 100%;
+}
+.bookDateStart i,
+.bookDateEnd i {
+color: #666;
+cursor: pointer;
+}
+.bookDateStart input,
+.bookDateEnd input {
+border: none;
+outline: none;
+width: 100%;
+font-size: 0.95rem;
+cursor: pointer;
+}
+.bookGuests {
+margin-bottom: 25px;
+}
+
+.filterPeople {
+display: flex;
+align-items: center;
+gap: 10px;
+background-color: white;
+padding: 10px;
+padding-left: 12.5px;
+border-radius: 5px;
+border: 1px solid #ddd;
+}
+.filterPeople i {
+color: #1F1B17;
+}
+.guestSelector {
+position: relative;
+width: 100%;
+cursor: pointer;
+padding-left: 10px;
+}
+.dropdownMenu {
+position: absolute;
+top: 120%;
+left: -30px;
+width: 110.5%;
+background-color: white;
+border-radius: 6px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+z-index: 10;
+padding: 10px;
+display: none;
+}
+.dropdownMenu.open {
+display: block;
+}
+.dropdownRow {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 8px 0;
+}
+.counterControls {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.counterControls button {
+width: 26px;
+height: 26px;
+border-radius: 50%;
+border: 1px solid #ddd;
+background-color: #F8F6F3;
+display: flex;
+justify-content: center;
+align-items: center;
+cursor: pointer;
+font-size: 1rem;
+transition: all 0.2s ease;
+}
+.counterControls button:hover {
+background-color: #B88A44;
+border: none;
+color: white;
+}
+
+.maxGuests {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.maxGuestsPrice {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.bookedVenueEditButtons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 @media (max-width: 1024px) {

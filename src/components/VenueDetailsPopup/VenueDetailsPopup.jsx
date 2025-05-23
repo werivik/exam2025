@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";
 import styles from './VenueDetailsPopup.module.css';
@@ -9,6 +9,7 @@ import { handleBookingDelete, handleBookingUpdate } from '../../auth/booking';
 import { VENUE_DELETE } from '../../constants';
 import slideshowPrev from "/media/icons/slideshow-next-button.png";
 import slideshowNext from "/media/icons/slideshow-next-button.png";
+import CustomCalender from '../../components/CostumCalender/CostumCalender';
 
 const VenueDetailsPopup = ({ 
   selectedVenue, 
@@ -29,15 +30,131 @@ const VenueDetailsPopup = ({
   const [isEditing, setIsEditing] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [showBookingPopup, setShowBookingPopup] = useState(false);
-  const [editValues, setEditValues] = useState({
-    dateFrom: '',
-    dateTo: '',
-    guests: 1,
-  });
+  
+  // New states for improved booking form
+  const [checkInDate, setCheckInDate] = useState('');
+  const [checkOutDate, setCheckOutDate] = useState('');
+  const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
+  const [disabled, setDisabled] = useState(0);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarInitiatedFrom, setCalendarInitiatedFrom] = useState(null);
+  const [showGuestDropdown, setShowGuestDropdown] = useState(false);
+  const [totalNights, setTotalNights] = useState(0);
+  const [totalGuests, setTotalGuests] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [existingBookings, setExistingBookings] = useState([]);
+
+  const dropdownRef = useRef(null);
+
+  const formatDateWithOrdinal = (dateString) => {
+    if (!dateString) return '';
+    
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleDateString('en-US', { month: 'long' });
+    const year = date.getFullYear();
+    
+    const getOrdinalSuffix = (day) => {
+      if (day > 3 && day < 21) return 'th';
+      switch (day % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+      }
+    };
+    
+    return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
+  };
+
+  const formatGuestDisplay = (adults, children, disabled) => {
+    const parts = [];
+    
+    if (adults > 0) {
+      parts.push(`${adults} Adult${adults !== 1 ? 's' : ''}`);
+    }
+    
+    if (children > 0) {
+      parts.push(`${children} Child${children !== 1 ? 'ren' : ''}`);
+    }
+    
+    if (disabled > 0) {
+      parts.push(`${disabled} Assisted Guest${disabled !== 1 ? 's' : ''}`);
+    }
+    
+    if (parts.length === 0) {
+      return '0 Guests';
+    }
+    
+    if (parts.length === 1) {
+      return parts[0];
+    }
+    
+    if (parts.length === 2) {
+      return `${parts[0]}, ${parts[1]}`;
+    }
+    
+    return `${parts[0]}, ${parts[1]}, ${parts[2]}`;
+  };
 
   useEffect(() => {
     setEditedVenue(selectedVenue);
   }, [selectedVenue]);
+
+  useEffect(() => {
+    setTotalGuests(adults + children + disabled);
+  }, [adults, children, disabled]);
+
+  useEffect(() => {
+    if (checkInDate && checkOutDate) {
+      const checkIn = new Date(checkInDate);
+      const checkOut = new Date(checkOutDate);
+
+      const diffTime = checkOut - checkIn;
+      const nights = Math.max(diffTime / (1000 * 60 * 60 * 24), 0);
+      setTotalNights(nights);
+
+      if (selectedVenue?.price) {
+        const total = nights * selectedVenue.price;
+        setTotalPrice(total);
+      }
+    } else {
+      setTotalNights(0);
+      setTotalPrice(0);
+    }
+  }, [checkInDate, checkOutDate, selectedVenue?.price]);
+
+  const toggleCalendar = useCallback((type) => {
+    if (showCalendar && calendarInitiatedFrom === type) {
+      setShowCalendar(false);
+      setCalendarInitiatedFrom(null);
+    } else {
+      setShowCalendar(true);
+      setCalendarInitiatedFrom(type);
+    }
+  }, [showCalendar, calendarInitiatedFrom]);
+
+  const handleDateChange = useCallback((date) => {
+    if (calendarInitiatedFrom === 'start' || (!checkInDate && calendarInitiatedFrom === 'start')) {
+      setCheckInDate(date);
+      if (checkOutDate && new Date(date) >= new Date(checkOutDate)) {
+        setCheckOutDate('');
+      }
+      if (!checkOutDate) {
+        setCalendarInitiatedFrom('end');
+      }
+    } else if (calendarInitiatedFrom === 'end') {
+      setCheckOutDate(date);
+      setShowCalendar(false);
+      setCalendarInitiatedFrom(null);
+    }
+  }, [calendarInitiatedFrom, checkInDate, checkOutDate]);
+
+  const handleCalendarComplete = useCallback(() => {
+    setShowCalendar(false);
+    setCalendarInitiatedFrom(null);
+  }, []);
 
   const handleEditClick = () => {
     if (userRole === 'admin') {
@@ -106,41 +223,21 @@ const VenueDetailsPopup = ({
   useEffect(() => {
     if (selectedBooking) {
       setBookingData(selectedBooking);
-      setEditValues({
-        dateFrom: new Date(selectedBooking.dateFrom).toISOString().split('T')[0],
-        dateTo: new Date(selectedBooking.dateTo).toISOString().split('T')[0],
-        guests: selectedBooking.guests,
-      });
+      
+      // Set the form values from booking data
+      const checkInISO = new Date(selectedBooking.dateFrom).toISOString().split('T')[0];
+      const checkOutISO = new Date(selectedBooking.dateTo).toISOString().split('T')[0];
+      
+      setCheckInDate(checkInISO);
+      setCheckOutDate(checkOutISO);
+      
+      // For now, we'll assume all guests are adults since the booking data doesn't specify
+      // You may need to adjust this based on your actual booking data structure
+      setAdults(selectedBooking.guests || 1);
+      setChildren(0);
+      setDisabled(0);
     }
   }, [selectedBooking]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditValues((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const calculateTotalPrice = () => {
-    const { dateFrom, dateTo } = editValues;
-    const venuePricePerNight = selectedVenue?.price || 0;
-
-    const dateFromObj = new Date(dateFrom);
-    const dateToObj = new Date(dateTo);
-
-    const timeDifference = dateToObj - dateFromObj;
-    const numberOfNights = timeDifference / (1000 * 3600 * 24);
-
-    return numberOfNights > 0 ? numberOfNights * venuePricePerNight : 0;
-  };
-  
-  useEffect(() => {
-    if (selectedBooking && userRole === 'customer') {
-      setEditValues({
-        dateFrom: new Date(selectedBooking.dateFrom).toISOString().split('T')[0],
-        dateTo: new Date(selectedBooking.dateTo).toISOString().split('T')[0],
-        guests: selectedBooking.guests,
-      });
-    }
-  }, [selectedBooking, userRole]);
 
   useEffect(() => {
     if (!selectedBooking && selectedVenue?.bookingId) {
@@ -187,6 +284,12 @@ const VenueDetailsPopup = ({
       console.error('No booking ID found');
       return;
     }
+
+    const editValues = {
+      dateFrom: checkInDate,
+      dateTo: checkOutDate,
+      guests: totalGuests,
+    };
 
     const updatedBooking = await handleBookingUpdate(
       bookingData.id, 
@@ -341,57 +444,126 @@ const getDescriptionPreview = (desc) => {
               {userRole === 'customer' && selectedVenue?.id && (
                 <div className={styles.bookingSection}>
                   {isEditing ? (
-                    <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+                    <div className={styles.editBookingForm}>
                       <h3>Edit Booking</h3>
-                      <label>
-                        Guests:
-                        <input
-                          type="number"
-                          name="guests"
-                          value={editValues.guests}
-                          onChange={handleInputChange}
-                          required
-                          min="1"
-                          max={selectedVenue.maxGuests}
-                        />
-                      </label>
-                      <label>
-                        From:
-                        <input
-                          type="date"
-                          name="dateFrom"
-                          value={editValues.dateFrom}
-                          onChange={handleInputChange}
-                          required
-                        />
-                      </label>
-                      <label>
-                        To:
-                        <input
-                          type="date"
-                          name="dateTo"
-                          value={editValues.dateTo}
-                          onChange={handleInputChange}
-                          required
-                        />
-                      </label>
+                      <div className={styles.bookDateContent}>
+                        <div className={styles.bookDate}>
+                          <div className={styles.bookDateStart}>
+                            <i 
+                              className="fa-solid fa-calendar-days" 
+                              onClick={() => toggleCalendar('start')}
+                            ></i>
+                            <input
+                              type="text"
+                              value={formatDateWithOrdinal(checkInDate)}
+                              placeholder="Check-in Date"
+                              onClick={() => toggleCalendar('start')}
+                              readOnly
+                            />
+                          </div>
+                          <div className={styles.bookDateEnd}>
+                            <i 
+                              className="fa-solid fa-calendar-days" 
+                              onClick={() => toggleCalendar('end')}
+                            ></i>
+                            <input
+                              type="text"
+                              value={formatDateWithOrdinal(checkOutDate)}
+                              placeholder="Check-out Date"
+                              onClick={() => toggleCalendar('end')}
+                              readOnly
+                            />
+                          </div>
+                        </div>
+                        
+                        {showCalendar && (
+                          <CustomCalender
+                            value={calendarInitiatedFrom === 'start' ? checkInDate : checkOutDate}
+                            onDateChange={handleDateChange}
+                            bookedDates={existingBookings}
+                            startDate={checkInDate}
+                            endDate={checkOutDate}
+                            isSelectingEnd={calendarInitiatedFrom === 'end'}
+                            onSelectionComplete={handleCalendarComplete}
+                          />
+                        )}
+                      </div>
+                      <div className={styles.bookGuests}>
+                        <div className={styles.filterPeople}>
+                          <i className="fa-solid fa-person"></i>
+                          <div
+                            className={styles.guestSelector}
+                            onClick={() => setShowGuestDropdown(prev => !prev)}
+                            ref={dropdownRef}
+                          >
+                            <p>{formatGuestDisplay(adults, children, disabled)}</p>
+                            <div
+                              className={`${styles.dropdownMenu} ${showGuestDropdown ? styles.open : ''}`}
+                            >
+                              {[
+                                { type: "adults", label: "Adults", value: adults, setter: setAdults, min: 1 },
+                                { type: "children", label: "Children", value: children, setter: setChildren, min: 0 },
+                                { type: "disabled", label: `Assisted Guest${disabled !== 1 ? "s" : ""}`, value: disabled, setter: setDisabled, min: 0 }
+                              ].map(({ type, label, value, setter, min }) => (
+                                <div key={type} className={styles.dropdownRow}>
+                                  <span className={styles.label}>{label}</span>
+                                  <div className={styles.counterControls}>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setter(Math.max(min, value - 1));
+                                      }}
+                                    >
+                                      -
+                                    </button>
+                                    <span>{value}</span>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setter(value + 1);
+                                      }}
+                                    >
+                                      +
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
-                      <div className={styles.totalPrice}>
-                        <p><strong>Total Price:</strong> ${calculateTotalPrice()}</p>
+                      <div className={styles.dividerLine}></div>
+                      <p className={styles.maxGuests}>
+                        <strong>{totalNights} </strong><span> Total Nights</span>
+                      </p>
+                      <div className={styles.dividerLine}></div>
+                      <p className={styles.maxGuests}>
+                        <strong>{totalGuests} </strong><span> Total Guests</span>
+                      </p>
+                      <div className={styles.dividerLine}></div>
+                      <div className={styles.maxGuestsPrice}>
+                        <div className={styles.bookPrice}>
+                          <p>
+                            <span className={styles.totalPriceSpan}>Price:</span>
+                            <strong> ${totalPrice.toFixed(2)}</strong> 
+                            <span> / ${selectedVenue.price} per night</span>
+                          </p>
+                        </div>  
                       </div>
 
                       <div className={styles.bookedVenueEditButtons}>
-                        <Buttons type="submit" size="small" version="v1">Save</Buttons>
-                        <Buttons type="button" size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel</Buttons>
+                        <Buttons size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel</Buttons>
+                        <Buttons size="small" version="v1" onClick={handleSave}>Save Changes</Buttons>
                       </div>
-                    </form>
+                    </div>
                   ) : bookingData ? (
                     <div className={styles.bookingInfo}>
                       <h3>Booking Information</h3>
                       <p><strong>Guests:</strong> {bookingData.guests}</p>
                       <p><strong>From:</strong> {new Date(bookingData.dateFrom).toLocaleDateString()}</p>
                       <p><strong>To:</strong> {new Date(bookingData.dateTo).toLocaleDateString()}</p>
-                      <p><strong>Total Price:</strong> ${calculateTotalPrice()}</p>
+                      <p><strong>Total Price:</strong> ${totalPrice.toFixed(2)}</p>
                       {bookingData.created && (
                         <p><strong>Created:</strong> {new Date(bookingData.created).toLocaleDateString()}</p>
                       )}

@@ -435,7 +435,7 @@ z-index: 777;
 .mobileProfile .venuesSection {
 margin-top: 0;
 }
-.actionBtns {
+.editButtons {
 display: flex;
 justify-content: flex-end;
 gap: 10px;
@@ -456,7 +456,6 @@ font-size: 0.875rem;
 opacity: 0.8;
 }
 
-/* Venue Grid Styles - Updated from Venues.module.css */
 .allHotels {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -469,7 +468,6 @@ opacity: 0.8;
   justify-self: center;
 }
 
-/* Updated venue grid for all profile versions */
 .venueGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

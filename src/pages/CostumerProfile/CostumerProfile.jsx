@@ -366,6 +366,13 @@ const CostumerProfile = () => {
     };
   }, [isModalVisible, showDashboard]);
 
+  const handleCancelEdit = () => {
+  setNewName(userData.name || '');
+  setNewAvatar(userData.avatar?.url || '');
+  setNewBanner(userData.banner?.url || '');
+  setIsEditing(false);
+};
+
   const EditProfileForm = () => (
     <form className={styles.editForm} onSubmit={handleSaveProfile}>
       <label>
@@ -387,6 +394,7 @@ const CostumerProfile = () => {
         />
       </label>
       <div className={styles.editButtons}>
+        <Buttons size='small' version='v2' onClick={handleCancelEdit}>Cancel</Buttons>
         <Buttons type="submit" size="small" version="v1">Save Changes</Buttons>
       </div>
     </form>
