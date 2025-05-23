@@ -300,8 +300,6 @@ const getDescriptionPreview = (desc) => {
               )}
             </div>
             <div className={styles.venueRight}>
-              <div className={styles.fadeOutDivTop}></div>
-              
               {!isEditing ? (
                 <>
                   <div className={styles.venueInfo}>
@@ -335,7 +333,6 @@ const getDescriptionPreview = (desc) => {
                   )}
                 </>
               ) : null}
-
               {userRole === 'customer' && selectedVenue?.id && (
                 <div className={styles.bookingSection}>
                   {isEditing ? (
@@ -405,9 +402,7 @@ const getDescriptionPreview = (desc) => {
                     <p>Booking details not available.</p>
                   )}
                 </div>
-              )}
-              
-              <div className={styles.fadeOutDivBottom}></div>
+              )}              
             </div>
           </div>
         )}
