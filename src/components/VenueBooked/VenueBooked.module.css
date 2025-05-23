@@ -1,6 +1,5 @@
 .hotelCard {
   width: 100%;
-  height: 100%;
   height: 415px;
   min-width: 315px;
   position: relative;
@@ -10,11 +9,17 @@
   margin-bottom: 25px;
 }
 
-.hotelImage {
+.imageContainer {
+  position: relative;
   width: 100%;
   height: 65%;
-  object-fit: cover;
   border-radius: 25px 25px 5px 5px;
+}
+
+.hotelImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 25px 25px 5px 5px;
   -webkit-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
   -moz-box-shadow: 0px 0px 25px -16px rgba(31, 27, 23, 1);
@@ -22,6 +27,38 @@
   transition: 0.25s;
   background-image: url(/media/logo/loadingScreen.png);
   background-position: center;
+}
+
+.blurredImage {
+  filter: blur(2px) brightness(0.7);
+  transition: filter 0.3s ease;
+}
+
+.bookAgainOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 25px 25px 5px 5px;
+}
+
+.bookAgainButton {
+  color: white;
+  background-color: #1F1B17;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .bookedDate {
@@ -43,6 +80,7 @@
   min-width: 250px;
   padding-left: 5px;
   padding-right: 5px;
+  z-index: 2;
 }
 
 .bookedDate span {
@@ -86,6 +124,18 @@
   font-style: italic;
 }
 
+.pastBookingLabel {
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.pastBookingLabel span {
+  font-weight: 600;
+  color: #888;
+}
+
 .totalPrice {
   margin-top: 0px;
   font-size: 1.225rem;
@@ -111,25 +161,55 @@
   font-size: 18px;
 }
 
-.hotelCard:hover {
+.futureBooking {
+  border: 2px solid transparent;
+}
+
+.futureBooking:hover .hotelInfo {
+  transition: 0.25s;
+  padding-left: 5px;
+  height: 45%;
+  background-color: white;
+}
+
+.futureBooking:hover .imageContainer {
+  transition: 0.25s;
+  height: 60%;
+}
+
+.futureBooking:hover .seeMore {
+  display: block;
+}
+
+.pastBooking {
+  border: 2px solid transparent;
+  opacity: 0.95;
+}
+
+.pastBooking:hover {
   cursor: pointer;
   transition: 0.25s;
+  opacity: 1;
+}
 
-  .hotelInfo {
-      transition: 0.25s;
-      padding-left: 5px;
-      height: 40%;
-      background-color: white;
-  }
+.pastBooking:hover .blurredImage {
+  filter: blur(0px);
+}
 
-  .hotelImage {
-      transition: 0.25s;
-      height: 60%;
-  }
+.pastBooking:hover .bookAgainButton {
+  display: none;
+}
 
-  .seeMore {
-      display: block;
-  }
+.pastBooking:hover .hotelInfo {
+  transition: 0.25s;
+  padding-left: 5px;
+  height: 45%;
+  background-color: white;
+}
+
+.pastBooking:hover .imageContainer {
+  transition: 0.25s;
+  height: 60%;
 }
 
 .loadingCard {
