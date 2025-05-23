@@ -4,7 +4,7 @@ import debounce from "lodash.debounce";
 import styles from "./Header.module.css";
 import headerLogo from "/media/logo/logo-default.png";
 import headerLogoHover from "/media/logo/logo-hover.png";
-import { VENUES, PROFILES_SINGLE, PROFILES_SEARCH, VENUES_SEARCH } from "../../constants";
+import { VENUES, PROFILES_SEARCH, VENUES_SEARCH } from "../../constants";
 import { headers } from "../../headers";
 import { isLoggedIn, getUserRole } from "../../auth/auth";
 
@@ -128,15 +128,17 @@ const SidebarMenu = memo(({
         </ul>
       )}
 
+      <div className={styles.divideLineLaying}></div>
+
       <ul className={styles.menuLinks}>
         <li><Link to="/about">About Us</Link></li>
         <li><Link to="/contact">Contact Us</Link></li>
       </ul>
-
-      <div className={styles.divideLineLaying}></div>
-
       {!isUserLoggedIn && (
         <ul className={styles.menuLinks}>
+
+          <div className={styles.divideLineLaying}></div>
+
           <li><Link to="/login-costumer">Login</Link></li>
           <li><Link to="/register-costumer">Register</Link></li>
         </ul>
@@ -147,7 +149,7 @@ const SidebarMenu = memo(({
 
 function Header() {
   const loginOrRegisterRoutes = ['/login-costumer', '/register-costumer', '/login-admin', '/register-admin'];
-  const specialRoutes = ['/']; // Add more special routes here as needed
+  const specialRoutes = ['/'];
   const [isHovered, setIsHovered] = useState(false);
   const [isSpecialPage, setIsSpecialPage] = useState(false);
   const [venues, setVenues] = useState([]);
@@ -168,12 +170,12 @@ function Header() {
         const role = await getUserRole();
         setUserRole(role);
         
-        // Set userData based on the role from localStorage/sessionStorage
         const venueManagerStatus = localStorage.getItem('venueManager') || sessionStorage.getItem('venueManager');
         setUserData({
           venueManager: venueManagerStatus === 'true'
         });
-      } catch (error) {
+      } 
+      catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
@@ -202,7 +204,6 @@ function Header() {
 
     window.addEventListener("scroll", handleScroll);
 
-    // Set initial state
     setIsSpecialPage(isSpecial || isLoginOrRegister);
 
     return () => window.removeEventListener("scroll", handleScroll);
