@@ -163,23 +163,10 @@
 }
 
 .gobackBtn button {
-  background-color: white;
-  border: solid 1px #1F1B17;
-  color: #1F1B17;
-  border-radius: 10px;
-  padding: 5px;
   transition: 0.25s;
   position: absolute;
   right: 25px;
   top: 475px;
-  font-size: 1rem;
-}
-
-.gobackBtn button:hover {
-  transition: 0.25s;
-  cursor: pointer;
-  background-color: #1F1B17;
-  color: #fffefb;
 }
 
 .mobileProfile {

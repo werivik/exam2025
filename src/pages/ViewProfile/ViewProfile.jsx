@@ -5,6 +5,7 @@ import styles from './ViewProfile.module.css';
 import { PROFILES_SINGLE, PROFILES_SINGLE_BY_VENUES } from '../../constants';
 import { headers } from '../../headers';
 import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType';
+import Buttons from '../../components/Buttons/Buttons';
 
 import defaultAvatar from '/media/images/mdefault.jpg';
 import starRating from '../../../media/rating/christmas-stars.png';
@@ -172,7 +173,13 @@ const ViewProfile = () => {
           <p>Venue Manager</p>
           <RatingDisplay />
           <div className={styles.gobackBtn}>
-            <button onClick={goBack}>Go Back</button>
+            <Buttons
+            size='small'
+            version='v2'
+            onClick={goBack}
+            >
+              Go Back
+            </Buttons>
           </div>
         </div>
       ) : null}

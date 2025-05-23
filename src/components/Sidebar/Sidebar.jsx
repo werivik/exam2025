@@ -18,7 +18,8 @@ const Sidebar = ({
   venues,
   setFilteredVenues,
   setNoMatches,
-  initialLocationFilters
+  initialLocationFilters,
+  initialMetaFilters
 }) => {
 
   const [adults, setAdults] = useState('');
@@ -52,6 +53,22 @@ const Sidebar = ({
       }
     }
   }, [initialLocationFilters, handleFilterChange]);
+
+  useEffect(() => {
+    if (initialMetaFilters) {
+      Object.entries(initialMetaFilters).forEach(([key, value]) => {
+        if (value) {
+          handleFilterChange({
+            target: {
+              name: key,
+              checked: true,
+              type: 'checkbox'
+            }
+          });
+        }
+      });
+    }
+  }, [initialMetaFilters, handleFilterChange]);
 
   const handleGuestChange = (e, type) => {
     const rawValue = e.target.value;
@@ -152,9 +169,7 @@ const Sidebar = ({
     setNoMatches(filtered.length === 0);
   }, [filters, venues, maxPrice]);
 
-  // Handler to hide suggestions when input loses focus
   const handleInputBlur = (locationType) => {
-    // Use setTimeout to allow suggestion clicks to register before hiding
     setTimeout(() => {
       setShowSuggestions(prev => ({ ...prev, [locationType]: false }));
     }, 150);
@@ -170,7 +185,6 @@ const Sidebar = ({
           >
           &times;
           </Buttons>
-
           <div className={styles.allFilters}>
             <div className={styles.filterGroup}>
               <h3>Destination</h3>
@@ -201,9 +215,7 @@ const Sidebar = ({
                 </div>
               ))}
             </div>
-
             <div className={styles.divideLine}></div>
-
             <div className={styles.filterGroup}>
               <h3>Price Range</h3>
               <div className={styles.priceLimits}>
@@ -249,9 +261,7 @@ const Sidebar = ({
 />
               </div>
             </div>
-
             <div className={styles.divideLine}></div>
-
             <div className={styles.filterGroup}>
               <h3>Guests</h3>
               <div className={styles.guestInputs}>
@@ -281,12 +291,9 @@ const Sidebar = ({
                 />
               </div>
             </div>
-
             <div className={styles.divideLine}></div>
-
             <div className={styles.filterGroup}>
   <h3>Facilities</h3>
-
   <div className={styles.metaFilters}>
     {metaFilters.map(metaKey => (
       <div key={metaKey} className={styles.metaCheckboxWrapper}>
@@ -305,11 +312,8 @@ const Sidebar = ({
     ))}
   </div>
             </div>
-
           </div>
-
           <div className={styles.divideLine}></div>
-
           <Buttons size='small'
           version='v1' 
           onClick={clearFilters} 
@@ -317,7 +321,6 @@ const Sidebar = ({
           >
             Clear Filters
           </Buttons>
-
         </div>
       </div>
     </>

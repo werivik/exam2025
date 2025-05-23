@@ -53,6 +53,7 @@ const Venues = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const topRef = useRef(null);
   const [initialFiltersApplied, setInitialFiltersApplied] = useState(false);
+  const [initialMetaFilters, setInitialMetaFilters] = useState(null);
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -195,26 +196,8 @@ const Venues = () => {
   const handleSearchInputChange = useCallback((e) => {
     const value = e.target.value;
     setSearchQuery(value);
-
-    if (value.trim()) {
-      const searchTerm = value.toLowerCase();
-      const filtered = venues.filter(venue => {
-        const nameMatch = venue.name?.toLowerCase().includes(searchTerm);
-        const cityMatch = venue.location?.city?.toLowerCase().includes(searchTerm);
-        const countryMatch = venue.location?.country?.toLowerCase().includes(searchTerm);
-        const ownerMatch = venue.owner?.name?.toLowerCase().includes(searchTerm);
-
-        return nameMatch || cityMatch || countryMatch || ownerMatch;
-      });
-      setFilteredVenues(filtered);
-      setNoMatches(filtered.length === 0);
-      setCurrentPage(1);
-    } 
-    else {
-      setFilteredVenues(venues);
-      setNoMatches(false);
-    }
-  }, [venues]);
+    setCurrentPage(1);
+  }, []);
 
 useEffect(() => {
   const fetchVenues = async () => {
@@ -467,18 +450,13 @@ const getPageNumbers = (currentPage, totalPages) => {
   }, []);
 
 const visibleVenues = useMemo(() => {
-  if (searchQuery) {
-    return filteredVenues;
-  }
-
   if (isMobile) {
     return filteredVenues.slice(0, visibleCount);
   } 
   else {
     return filteredVenues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   }
-}, [filteredVenues, currentPage, visibleCount, isMobile, searchQuery]);
-
+}, [filteredVenues, currentPage, visibleCount, isMobile]);
 
 useEffect(() => {
 }, [currentPage, visibleVenues]);
@@ -617,6 +595,32 @@ useEffect(() => {
   }
 }, [venues, location.search, location.state, initialFiltersApplied, metaFilters, filters, currentPage]);
 
+useEffect(() => {
+  if (location.state?.filters) {
+    const { filters } = location.state;
+    
+    if (filters.country || filters.city) {
+      setInitialLocationFilters({
+        country: filters.country || '',
+        city: filters.city || ''
+      });
+    }
+    
+    if (filters.meta) {
+      setInitialMetaFilters(filters.meta);
+    }
+    
+    if (filters.adults) {
+      setFilters(prev => ({ ...prev, adults: filters.adults }));
+    }
+    if (filters.children) {
+      setFilters(prev => ({ ...prev, children: filters.children }));
+    }
+    if (filters.assisted) {
+      setFilters(prev => ({ ...prev, assisted: filters.assisted }));
+    }
+  }
+}, [location.state]);
 
 useEffect(() => {
   if (!initialFiltersApplied) return;
@@ -665,6 +669,7 @@ useEffect(() => {
         setFilteredVenues={setFilteredVenues}
         setNoMatches={setNoMatches}
         initialLocationFilters={initialLocationFilters}
+        initialMetaFilters={initialMetaFilters}
       />
       
       <div ref={topRef} />
