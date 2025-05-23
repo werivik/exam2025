@@ -41,9 +41,8 @@
   gap: 50px;
 }
 .divider {
-  height: 0.5px;
-  width: 100%;
-  background-color: #1F1B17;
+  border-top: 1px solid #1f1b1732;
+  margin: 20px 0;
   border-radius: 99px;
   margin-top: 25px;
   margin-bottom: 25px;
@@ -353,8 +352,8 @@
 }
 .sidebarContent
 .divider {
-  background-color: #1F1B17;
-  margin: 0;
+border-top: 1px solid #1f1b1732;
+margin: 20px 0;
   margin-top: 15px;
   margin-bottom: 15px;
 }
@@ -456,6 +455,15 @@ margin-top: 15px;
 }
 .desktopProfile .editSection {
   margin-top: 50px;
+}
+.desktopProfile .bookingsSection .sectionHeader {
+  margin-bottom: 75px;
+}
+.desktopProfile .editSection .sectionHeader {
+  margin-bottom: 50px;
+}
+.editForm {
+  width: 100%;
 }
 
 @media (max-width: 1125px) {
