@@ -430,17 +430,16 @@ align-items: center;
 margin-bottom: 20px;
 width: 100%;
 }
-.maxGuestsSecond {
-display: none;
-}
-.maxGuestsFirst {
+.maxGuests {
 font-size: 0.9rem;
 color: #1F1B17;
 width: 100%;
 display: flex;
 justify-content: flex-end;
+align-items: center;
+gap: 5px;
 }
-.maxGuestsFirst strong {
+.maxGuests strong {
 color: #1F1B17;
 font-size: 1.1rem;
 }

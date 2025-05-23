@@ -43,7 +43,6 @@ const formatDateWithOrdinal = (dateString) => {
   const month = date.toLocaleDateString('en-US', { month: 'long' });
   const year = date.getFullYear();
   
-  // Add ordinal suffix to day
   const getOrdinalSuffix = (day) => {
     if (day > 3 && day < 21) return 'th';
     switch (day % 10) {
@@ -117,11 +116,9 @@ const VenueDetails = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [existingBookings, setExistingBookings] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [owner, setOwner] = useState(null);
-  
-  // Updated state management for connected date selection
+  const [owner, setOwner] = useState(null);  
   const [showCalendar, setShowCalendar] = useState(false);
-  const [calendarInitiatedFrom, setCalendarInitiatedFrom] = useState(null); // Track which input opened calendar
+  const [calendarInitiatedFrom, setCalendarInitiatedFrom] = useState(null);
   
   const [selectedDateType, setSelectedDateType] = useState(null);
   const [userLoggedIn, setUserLoggedIn] = useState(isLoggedIn());
@@ -141,6 +138,7 @@ const VenueDetails = () => {
 
   const dropdownRef = useRef(null);
   const [profileError, setProfileError] = useState('');
+  const [totalNights, setTotalNights] = useState(0);
 
   const handleRatingUpdate = (newRating) => {
     if (venue) {
@@ -150,6 +148,10 @@ const VenueDetails = () => {
       });
     }
   };
+
+  useEffect(() => {
+  setTotalGuests(adults + children + disabled);
+}, [adults, children, disabled]);
 
   const handleMetaClick = (metaType, event) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -293,53 +295,56 @@ const VenueDetails = () => {
     fetchVenue();
   }, [id, updateLeftImages]);
 
-  useEffect(() => {
-    if (venue?.price && checkInDate && checkOutDate) {
-      const checkIn = new Date(checkInDate);
-      const checkOut = new Date(checkOutDate);
-      const nights = Math.max((checkOut - checkIn) / (1000 * 60 * 60 * 24), 1);
-      const pricePerNight = venue.price;
-      const total = nights * pricePerNight;
+useEffect(() => {
+  if (checkInDate && checkOutDate) {
+    const checkIn = new Date(checkInDate);
+    const checkOut = new Date(checkOutDate);
+
+    const diffTime = checkOut - checkIn;
+    const nights = Math.max(diffTime / (1000 * 60 * 60 * 24), 0);
+    setTotalNights(nights);
+
+    if (venue?.price) {
+      const total = nights * venue.price;
       setTotalPrice(total);
     }
-  }, [checkInDate, checkOutDate, venue?.price]);
+  } 
+  else {
+    setTotalNights(0);
+    setTotalPrice(0);
+  }
+}, [checkInDate, checkOutDate, venue?.price]);
 
-  // Updated toggleCalendar function for connected date selection
   const toggleCalendar = useCallback((type) => {
     if (showCalendar && calendarInitiatedFrom === type) {
-      // Clicking same input closes calendar
       setShowCalendar(false);
       setCalendarInitiatedFrom(null);
-    } else {
-      // Open calendar for this input type
+    } 
+    else {
       setShowCalendar(true);
       setCalendarInitiatedFrom(type);
       setSelectedDateType(type);
     }
   }, [showCalendar, calendarInitiatedFrom]);
 
-  // Updated handleDateChange function for connected date selection
   const handleDateChange = useCallback((date) => {
     if (calendarInitiatedFrom === 'start' || (!checkInDate && calendarInitiatedFrom === 'start')) {
       setCheckInDate(date);
-      // Don't close calendar, let user select end date
       if (checkOutDate && new Date(date) >= new Date(checkOutDate)) {
         setCheckOutDate('');
       }
-      // Automatically switch to end date selection if start date is selected
       if (!checkOutDate) {
         setCalendarInitiatedFrom('end');
         setSelectedDateType('end');
       }
-    } else if (calendarInitiatedFrom === 'end') {
+    } 
+    else if (calendarInitiatedFrom === 'end') {
       setCheckOutDate(date);
-      // Close calendar after selecting end date
       setShowCalendar(false);
       setCalendarInitiatedFrom(null);
     }
   }, [calendarInitiatedFrom, checkInDate, checkOutDate]);
 
-  // New function to handle when both dates are selected
   const handleCalendarComplete = useCallback(() => {
     setShowCalendar(false);
     setCalendarInitiatedFrom(null);
@@ -423,14 +428,15 @@ const VenueDetails = () => {
     checkForDoubleBooking
   ]);
 
+  const [totalGuests, setTotalGuests] = useState(adults + children + disabled);
+
+const mediaArray = venue ? getValidMedia(venue.media) : [];
+const currentImage = mediaArray[currentSlide]?.url;
+const currentAlt = mediaArray[currentSlide]?.alt || venue?.name || '';
+
   if (loading) return <VenueDetailsSkeleton />;
   
   if (!venue) return <div className={styles.pageStyle}><p>Venue not found.</p></div>;
-
-  const mediaArray = getValidMedia(venue.media);
-  const currentImage = mediaArray[currentSlide]?.url;
-  const currentAlt = mediaArray[currentSlide]?.alt || venue.name;
-  const totalGuests = adults + children + disabled;
 
   return (
     <motion.div
@@ -742,36 +748,25 @@ const VenueDetails = () => {
                 {errorMessage && <p className={styles.errorText}>{errorMessage}</p>}
 
                 <div className={styles.dividerLine}></div>
+                <p className={styles.maxGuests}>
+                  <strong>{totalNights} </strong><span> Total Nights</span>
+                </p>
+                <div className={styles.dividerLine}></div>
+                <p className={styles.maxGuests}>
+                  <strong>{totalGuests} </strong><span> Total Guests</span>
+                </p>
+                <div className={styles.dividerLine}></div>
 
                 <div className={styles.maxGuestsPrice}>
-                  <p className={styles.maxGuestsSecond}>
-                    <strong>{venue.maxGuests}</strong> <span>Max Guests</span>
-                  </p>
                   <div className={styles.bookPrice}>
                     <p>
-                      <span className={styles.totalPriceSpan}>Price</span>
+                      <span className={styles.totalPriceSpan}>Price:</span>
                       <strong> ${totalPrice.toFixed(2)}</strong> 
-                      <span>/ ${venue.price} per night</span>
+                      <span> / ${venue.price} per night</span>
                     </p>
                   </div>  
                 </div>
-
-                <div className={styles.maxGuestsSecond}>
-                  <p>
-                    Total Price:<strong> ${totalPrice.toFixed(2)}</strong> 
-                    <span>/ ${venue.price} per night</span>
-                  </p>
-
-                  <Buttons size="large" version="v2" onClick={handleSubmit}>
-                    Book Room
-                  </Buttons>
-                </div>
-
-                <div className={styles.dividerLine}></div>
-                <p className={styles.maxGuestsFirst}>
-                  <strong></strong> <span>Total Nights</span>
-                </p>
-                <div className={styles.dividerLine}></div>
+                
                 <div className={styles.submitButton}>
                   <Buttons size="medium" version="v1" onClick={handleSubmit}>
                     Book Room
