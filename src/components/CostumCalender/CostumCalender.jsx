@@ -7,11 +7,13 @@ const CustomCalender = ({
   bookedDates = [], 
   startDate = null, 
   endDate = null,
-  isSelectingEnd = false 
+  isSelectingEnd = false,
+  onSelectionComplete = null
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedStart, setSelectedStart] = useState(startDate);
   const [selectedEnd, setSelectedEnd] = useState(endDate);
+  const [isSelectingStartDate, setIsSelectingStartDate] = useState(!isSelectingEnd);
 
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -34,6 +36,10 @@ const CustomCalender = ({
       }
     }
   }, [startDate, endDate]);
+
+  useEffect(() => {
+    setIsSelectingStartDate(!isSelectingEnd);
+  }, [isSelectingEnd]);
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -64,6 +70,30 @@ const CustomCalender = ({
     return null;
   };
 
+  // Helper function to safely format dates for display
+  const formatDateForDisplay = (date) => {
+    if (!date) return 'Select date';
+    
+    let dateObj;
+    if (typeof date === 'string') {
+      dateObj = new Date(date);
+    } else if (date instanceof Date) {
+      dateObj = date;
+    } else {
+      return 'Select date';
+    }
+    
+    if (isNaN(dateObj.getTime())) {
+      return 'Select date';
+    }
+    
+    return dateObj.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
+
   const isDateBooked = (date) => {
     const dateStr = formatDate(date);
     return bookedDates.some(bookedDate => {
@@ -84,7 +114,7 @@ const CustomCalender = ({
     
     if (isDateBooked(date)) return true;
     
-    if (isSelectingEnd && selectedStart && date < selectedStart) return true;
+    if (!isSelectingStartDate && selectedStart && date <= selectedStart) return true;
     
     return false;
   };
@@ -108,8 +138,24 @@ const CustomCalender = ({
     if (isDateDisabled(date)) return;
     
     const dateStr = formatDate(date);
-    if (dateStr) {
+    if (!dateStr) return;
+
+    if (isSelectingStartDate) {
+      setSelectedStart(date);
       onDateChange(dateStr);
+      
+      if (selectedEnd && date >= selectedEnd) {
+        setSelectedEnd(null);
+      }
+      setIsSelectingStartDate(false);
+    } 
+    else {
+      setSelectedEnd(date);
+      onDateChange(dateStr);
+      
+      if (onSelectionComplete) {
+        onSelectionComplete();
+      }
     }
   };
 
@@ -119,6 +165,38 @@ const CustomCalender = ({
       newDate.setMonth(prevDate.getMonth() + direction);
       return newDate;
     });
+  };
+
+  const resetSelection = () => {
+    setSelectedStart(null);
+    setSelectedEnd(null);
+    setIsSelectingStartDate(true);
+  };
+
+  const renderSelectionStatus = () => {
+    return (
+      <div className={styles.selectionStatus}>
+        <div className={styles.statusItem}>
+          <span className={styles.statusLabel}>Check-in:</span>
+          <span className={`${styles.statusValue} ${isSelectingStartDate ? styles.active : ''}`}>
+            {formatDateForDisplay(selectedStart)}
+          </span>
+        </div>
+        <div className={styles.statusItem}>
+          <span className={styles.statusLabel}>Check-out:</span>
+          <span className={`${styles.statusValue} ${!isSelectingStartDate ? styles.active : ''}`}>
+            {formatDateForDisplay(selectedEnd)}
+          </span>
+        </div>
+        <button 
+          className={styles.resetButton} 
+          onClick={resetSelection}
+          type="button"
+        >
+          Reset
+        </button>
+      </div>
+    );
   };
 
   const renderCalendarDays = () => {
@@ -161,6 +239,8 @@ const CustomCalender = ({
 
   return (
     <div className={styles.calendarContainer}>
+      {renderSelectionStatus()}
+      
       <div className={styles.calendarHeader}>
         <button 
           className={styles.navButton}

@@ -35,7 +35,6 @@ const formatDate = (isoString) => {
   return new Date(isoString).toLocaleDateString(undefined, options);
 };
 
-// New function to format dates with ordinal suffix
 const formatDateWithOrdinal = (dateString) => {
   if (!dateString) return '';
   
@@ -58,7 +57,6 @@ const formatDateWithOrdinal = (dateString) => {
   return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
 };
 
-// New function to format guest display
 const formatGuestDisplay = (adults, children, disabled) => {
   const parts = [];
   
@@ -86,7 +84,6 @@ const formatGuestDisplay = (adults, children, disabled) => {
     return `${parts[0]}, ${parts[1]}`;
   }
   
-  // For 3 parts: "1 Adult, 2 Children, 1 Assisted Guest"
   return `${parts[0]}, ${parts[1]}, ${parts[2]}`;
 };
 
@@ -121,7 +118,11 @@ const VenueDetails = () => {
   const [existingBookings, setExistingBookings] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [owner, setOwner] = useState(null);
+  
+  // Updated state management for connected date selection
   const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarInitiatedFrom, setCalendarInitiatedFrom] = useState(null); // Track which input opened calendar
+  
   const [selectedDateType, setSelectedDateType] = useState(null);
   const [userLoggedIn, setUserLoggedIn] = useState(isLoggedIn());
   const [bookingError, setBookingError] = useState('');
@@ -136,7 +137,6 @@ const VenueDetails = () => {
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
 
-  // New state for calendar functionality
   const [isSelectingStart, setIsSelectingStart] = useState(true);
 
   const dropdownRef = useRef(null);
@@ -304,26 +304,46 @@ const VenueDetails = () => {
     }
   }, [checkInDate, checkOutDate, venue?.price]);
 
-  // Updated toggleCalendar function
+  // Updated toggleCalendar function for connected date selection
   const toggleCalendar = useCallback((type) => {
-    setSelectedDateType(type);
-    setIsSelectingStart(type === 'start');
-    setShowCalendar(prev => !prev);
-  }, []);
+    if (showCalendar && calendarInitiatedFrom === type) {
+      // Clicking same input closes calendar
+      setShowCalendar(false);
+      setCalendarInitiatedFrom(null);
+    } else {
+      // Open calendar for this input type
+      setShowCalendar(true);
+      setCalendarInitiatedFrom(type);
+      setSelectedDateType(type);
+    }
+  }, [showCalendar, calendarInitiatedFrom]);
 
-  // Updated handleDateChange function
+  // Updated handleDateChange function for connected date selection
   const handleDateChange = useCallback((date) => {
-    if (selectedDateType === 'start') {
+    if (calendarInitiatedFrom === 'start' || (!checkInDate && calendarInitiatedFrom === 'start')) {
       setCheckInDate(date);
-      // Clear end date if it's before the new start date
+      // Don't close calendar, let user select end date
       if (checkOutDate && new Date(date) >= new Date(checkOutDate)) {
         setCheckOutDate('');
       }
-    } else {
+      // Automatically switch to end date selection if start date is selected
+      if (!checkOutDate) {
+        setCalendarInitiatedFrom('end');
+        setSelectedDateType('end');
+      }
+    } else if (calendarInitiatedFrom === 'end') {
       setCheckOutDate(date);
+      // Close calendar after selecting end date
+      setShowCalendar(false);
+      setCalendarInitiatedFrom(null);
     }
+  }, [calendarInitiatedFrom, checkInDate, checkOutDate]);
+
+  // New function to handle when both dates are selected
+  const handleCalendarComplete = useCallback(() => {
     setShowCalendar(false);
-  }, [selectedDateType, checkOutDate]);
+    setCalendarInitiatedFrom(null);
+  }, []);
 
   const handleNext = useCallback(() => {
     if (!venue?.media?.length) return;
@@ -662,12 +682,13 @@ const VenueDetails = () => {
                   
                   {showCalendar && (
                     <CustomCalender
-                      value={selectedDateType === 'start' ? checkInDate : checkOutDate}
+                      value={calendarInitiatedFrom === 'start' ? checkInDate : checkOutDate}
                       onDateChange={handleDateChange}
                       bookedDates={existingBookings}
                       startDate={checkInDate}
                       endDate={checkOutDate}
-                      isSelectingEnd={selectedDateType === 'end'}
+                      isSelectingEnd={calendarInitiatedFrom === 'end'}
+                      onSelectionComplete={handleCalendarComplete}
                     />
                   )}
                 </div>
@@ -728,14 +749,10 @@ const VenueDetails = () => {
                   </p>
                   <div className={styles.bookPrice}>
                     <p>
-                      <span className={styles.totalPriceSpan}>Total Price</span>
+                      <span className={styles.totalPriceSpan}>Price</span>
                       <strong> ${totalPrice.toFixed(2)}</strong> 
                       <span>/ ${venue.price} per night</span>
                     </p>
-
-                    <Buttons size="small" version="v1" onClick={handleSubmit}>
-                      Book Room
-                    </Buttons>
                   </div>  
                 </div>
 
@@ -752,8 +769,14 @@ const VenueDetails = () => {
 
                 <div className={styles.dividerLine}></div>
                 <p className={styles.maxGuestsFirst}>
-                  <strong>{venue.maxGuests}</strong> <span>Max Guests</span>
+                  <strong></strong> <span>Total Nights</span>
                 </p>
+                <div className={styles.dividerLine}></div>
+                <div className={styles.submitButton}>
+                  <Buttons size="medium" version="v1" onClick={handleSubmit}>
+                    Book Room
+                  </Buttons>
+                </div>
               </>
             ) : (
               <div className={styles.loginReminder}>
