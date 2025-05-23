@@ -46,6 +46,9 @@ const AdminProfile = () => {
   const [showDashboard, setShowDashboard] = useState(false);
   const navigate = useNavigate();
 
+  const [successPopupMessage, setSuccessPopupMessage] = useState('');
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
   const mobileRefs = {
     profile: useRef(null),
     edit: useRef(null),
@@ -189,46 +192,68 @@ const calculateRatings = (venues) => {
     }
   };  
 
-  const handleSaveProfile = async () => {
-    const token = localStorage.getItem('accessToken');
-    const username = localStorage.getItem('username');
-  
-    if (!token || !username) {
-      console.error('Missing token or name in localStorage');
-      return;
-    }
+const handleSaveProfile = async () => {
+  const token = localStorage.getItem('accessToken');
+  const username = localStorage.getItem('username');
 
-    const avatarData = newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName || username}'s avatar` } : undefined;
-    if (avatarData) updateData.avatar = avatarData;
+  if (!token || !username) {
+    console.error('Missing token or name in localStorage');
+    return;
+  }
 
-    const bannerData = newBanner.trim() ? { url: newBanner.trim(), alt: `${newName || username}'s banner` } : undefined;
-    if (bannerData) updateData.banner = bannerData;
-  
-    try {
-      const response = await fetch(`${PROFILES_SINGLE.replace("<name>", username)}`, {
-        method: 'PUT',
-        headers: headers(token),
-        body: JSON.stringify(updateData),
-      });
-  
-      const data = await response.json();
-      
-      if (response.ok) {
-        setUserData(data.data);
-        setIsEditing(false);
+  const updateData = {};
 
-        if (newName && newName !== userData.name) {
-          localStorage.setItem('username', newName);
-        }
-      } 
-      else {
-        console.error('Failed to update profile', data.errors);
+  const avatarData = newAvatar.trim() ? { url: newAvatar.trim(), alt: `${newName || username}'s avatar` } : undefined;
+  if (avatarData) updateData.avatar = avatarData;
+
+  const bannerData = newBanner.trim() ? { url: newBanner.trim(), alt: `${newName || username}'s banner` } : undefined;
+  if (bannerData) updateData.banner = bannerData;
+
+  try {
+    const response = await fetch(`${PROFILES_SINGLE.replace("<name>", username)}`, {
+      method: 'PUT',
+      headers: headers(token),
+      body: JSON.stringify(updateData),
+    });
+
+    const data = await response.json();
+    
+    if (response.ok) {
+      setUserData(data.data);
+      setIsEditing(false);
+
+      if (newName && newName !== userData.name) {
+        localStorage.setItem('username', newName);
       }
+
+      setSuccessPopupMessage('Profile updated successfully!');
+      setShowSuccessPopup(true);
+
+      setTimeout(() => {
+        setShowSuccessPopup(false);
+        setSuccessPopupMessage('');
+      }, 2250);
+    } 
+    else {
+      console.error('Failed to update profile', data.errors);
+      setSuccessPopupMessage('Failed to update profile. Please try again.');
+      setShowSuccessPopup(true);
+      setTimeout(() => {
+        setShowSuccessPopup(false);
+        setSuccessPopupMessage('');
+      }, 2250);
     }
-    catch (error) {
-      console.error('Error updating profile:', error);
-    }
-  };  
+  }
+  catch (error) {
+    console.error('Error updating profile:', error);
+    setSuccessPopupMessage('An error occurred while updating your profile.');
+    setShowSuccessPopup(true);
+    setTimeout(() => {
+      setShowSuccessPopup(false);
+      setSuccessPopupMessage('');
+    }, 2250);
+  }
+};
 
   const handleCreateVenue = () => {
     navigate('/create-venue');
@@ -578,6 +603,15 @@ const calculateRatings = (venues) => {
           hideBars={false}
         />
       )}
+
+      {showSuccessPopup && (
+  <CostumPopup
+    message={successPopupMessage}
+    title="Success"
+    showButtons={false}
+    disableAutoClose={true}
+  />
+)}
     </motion.div>
   );
 };
