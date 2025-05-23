@@ -182,6 +182,7 @@ const Sidebar = ({
         <div className={styles.filterSidebarContent}>
           <Buttons size='close'
           onClick={toggleSidebar}
+          className={styles.closeButton}
           >
           &times;
           </Buttons>

@@ -38,7 +38,8 @@ gap: 10px;
 }
 .currentlyViewing {
 background-color: rgba(0, 0, 0, 0.6);
-color: white;padding: 8px;
+color: white;
+padding: 8px;
 border-radius: 5px;
 font-size: 0.9rem;
 font-weight: 500;
@@ -168,7 +169,7 @@ width: 62%;
 .hotelInfoRight {
   width: 28%;
   flex: 1;
-  background-color: rgba(243, 240, 235, 0.6);
+  background-color: #F8F6F3;
   border-radius: 8px;
   padding: 20px;
   position: sticky;
@@ -246,7 +247,7 @@ margin: 0;
 display: flex;
 align-items: center;
 gap: 6px;
-background-color: rgba(243, 240, 235, 0.6);
+background-color: #F8F6F3;
 padding: 8px 12px;
 border-radius: 20px;
 font-size: 0.9rem;
@@ -286,7 +287,7 @@ border-radius: 8px;
 transition: background-color 0.2s ease;
 }
 .venueProfileName:hover {
-background-color: rgba(243, 240, 235, 0.6);
+background-color: #F8F6F3;
 }
 .venueProfileName img {
 width: 40px;
@@ -306,7 +307,7 @@ display: flex;
 gap: 30px;
 }
 .venueDates {
-background-color: rgba(243, 240, 235, 0.6);
+background-color: #F8F6F3;
 padding: 10px 15px;
 border-radius: 8px;
 width: 170px;
@@ -404,7 +405,7 @@ width: 26px;
 height: 26px;
 border-radius: 50%;
 border: 1px solid #ddd;
-background-color: rgba(243, 240, 235, 0.6);
+background-color: #F8F6F3;
 display: flex;
 justify-content: center;
 align-items: center;

@@ -387,7 +387,7 @@ const calculateRatings = (venues) => {
               <div className={styles.venuesSection} ref={desktopRefs.venues}>
                 <div className={styles.sectionHeader}>
                   <h2>My Venues</h2>
-                  <Buttons size='small' version='v1' onClick={handleCreateVenue}>Create Venue</Buttons>
+                  <Buttons size='medium' version='v1' onClick={handleCreateVenue}>Create Venue</Buttons>
                 </div>
                 
                 <div className={styles.venuesContent}>
