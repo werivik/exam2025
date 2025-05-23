@@ -146,23 +146,6 @@ padding: 0;
 margin-top: 50px;
 scroll-margin-top: 100px;
 }
-.venueGrid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-grid-auto-rows: 1fr;
-max-width: 100%;
-gap: 25px;
-position: relative;
-align-items: start;
-height: 100%;
-}
-.venueGrid > * {
-aspect-ratio: 3 / 4;
-max-width: 400px;
-width: 100%;
-height: 100%;
-justify-self: center;
-}
 .bookingsContent {
 margin-top: 50px;
 height: 100%;
@@ -355,9 +338,10 @@ gap: 50px;
 }
 .tabletContent .venuesContent {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 10px;
   justify-content: flex-start;
+  width: 100%;
 }
 .avatarContainer .edgeLeft,
 .avatarContainer .edgeRight {
@@ -471,6 +455,33 @@ width: auto;
 font-size: 0.875rem;
 opacity: 0.8;
 }
+
+/* Venue Grid Styles - Updated from Venues.module.css */
+.allHotels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 35px;
+  margin-top: 20px;
+}
+.allHotels > * {
+  width: 100%;
+  height: 100%;
+  justify-self: center;
+}
+
+/* Updated venue grid for all profile versions */
+.venueGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 35px;
+  margin-top: 20px;
+}
+.venueGrid > * {
+  width: 100%;
+  height: 100%;
+  justify-self: center;
+}
+
 @media (max-width: 1125px) {
 .tabletProfile {
 display: block;
@@ -487,6 +498,9 @@ margin-right: 5%;
 }
 .contentContainer h2 {
 font-size: 2.5rem;
+}
+.venueGrid {
+  gap: 20px;
 }
 }
 @media (max-width: 725px) {
@@ -524,7 +538,7 @@ transform: scaleX(-1);
   position: relative;
 }
 .tabletContent .sectionHeader {
-  width: 100%;
+  width: 96%;
   margin-left: 25px;
   margin-right: 25px;
 }
@@ -539,9 +553,6 @@ transform: scaleX(-1);
   justify-content: center;
   position: relative;
   width: 100%;
-  min-width: 100%;
-  margin-left: 25px;
-  margin-right: 25px;
 }
 .tabletContent .divider {
   margin: 0;
@@ -550,6 +561,11 @@ transform: scaleX(-1);
 .tabletContent .editContent {
   margin-left: 25px;
 }
+}
+@media (max-width: 535px) {  
+  .venueGrid {
+    grid-template-columns: 1fr;
+  }
 }
 @media (max-width: 500px) {
 .tabletProfile,
@@ -586,58 +602,9 @@ flex-direction: column;
 align-items: flex-start;
 }
 .sectionHeader button {
-margin-left: 27%;
-margin-top: 25px;
-margin-bottom: 25px;
+margin-top: 50px;
+margin-bottom: -25px;
+width: 100%;
+height: 35px;
 }
-}
-@media (max-width: 1125px) and (min-width: 426px) {
-  .tabletProfile .venueGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    grid-auto-rows: 1fr;
-    gap: 20px;
-    width: 100%;
-    max-width: 100%;
-  }
-  
-  .tabletProfile .venueGrid > * {
-    width: 100%;
-    height: 100%;
-    min-height: 400px;
-    max-width: none;
-  }
-  
-  .tabletProfile .venuesContent {
-    width: 95%;
-    display: block;
-  }
-  
-  .tabletProfile .contentContainer {
-    width: 95%;
-  }
-}
-@media (max-width: 800px) and (min-width: 426px) {
-  .tabletProfile .venueGrid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
-  }
-}
-@media (max-width: 600px) and (min-width: 426px) {
-  .tabletProfile .venueGrid {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-  }
-}
-@media (max-width: 500px) {
-  .mobileProfile .venueGrid {
-    grid-template-columns: 1fr; 
-    gap: 20px;
-    width: 100%;
-  }
-  
-  .mobileProfile .venueGrid > * {
-    max-width: 100%;
-    width: 100%;
-  }
 }
