@@ -375,8 +375,27 @@ margin-bottom: 75px;
 .no-scroll {
 overflow: hidden;
 }
-.desktopProfile .sectionHeader {
+.sectionHeader {
   margin-bottom: 50px;
+}
+.profileInfo Button {
+  position: absolute;
+  right: 0px;
+  top: 425px;
+}
+.tabletProfile .avatarContainer {
+  margin-left: 25px;
+} 
+.tabletProfile .avatar {
+  background-color: pink;
+  width: 175px;
+  height: 175px;
+}
+.tabletProfile .profileInfo, .tabletContent {
+  margin-left: 50px;
+}
+.tabletProfile .profileInfo h2 {
+  font-size: 2rem;
 }
 body.modal-open {
 overflow: hidden;
@@ -406,7 +425,9 @@ border-radius: 0;
 .mobileProfile .profileInfo button {
 position: fixed;
 bottom: 0;
+top: calc(100% - 40px);
 width: 100%;
+height: 40px;
 left: 0;
 z-index: 777;
 }

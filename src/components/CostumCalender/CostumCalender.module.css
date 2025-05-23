@@ -221,6 +221,123 @@
   animation: selectDate 0.3s ease-out;
 }
 
+.selectionStatus {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border: 1px solid rgba(184, 138, 68, 0.2);
+  border-radius: 8px;
+  gap: 12px;
+}
+
+.statusItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex: 1;
+}
+
+.statusLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #5D6B2F;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusValue {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1F1B17;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: white;
+  border: 1px solid rgba(31, 27, 23, 0.1);
+  min-width: 100px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.statusValue.active {
+  background-color: rgba(184, 138, 68, 0.1);
+  border-color: #B88A44;
+  color: #B88A44;
+  font-weight: 600;
+}
+
+.resetButton {
+  background-color: white;
+  border: 1px solid rgba(184, 138, 68, 0.3);
+  color: #B88A44;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  height: fit-content;
+  align-self: center;
+}
+
+.resetButton:hover {
+  background-color: #B88A44;
+  color: white;
+  border-color: #B88A44;
+}
+
+.resetButton:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 480px) {
+  .selectionStatus {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  
+  .statusValue {
+    font-size: 0.8rem;
+    min-width: 85px;
+    padding: 3px 6px;
+  }
+  
+  .statusLabel {
+    font-size: 0.7rem;
+  }
+  
+  .resetButton {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 365px) {
+  .selectionStatus {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .statusItem {
+    align-items: center;
+  }
+  
+  .statusValue {
+    width: 100%;
+  }
+  
+  .resetButton {
+    align-self: stretch;
+    text-align: center;
+  }
+}
+
 @media (max-width: 480px) {
   .calendarContainer {
     padding: 15px;

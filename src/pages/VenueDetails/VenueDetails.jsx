@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import styles from './VenueDetails.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import Buttons from '../../components/Buttons/Buttons';
-import { isLoggedIn } from '../../auth/auth';
+import { isLoggedIn, getUserRole } from '../../auth/auth';
 import { handleBookingSubmit } from '../../auth/booking';
 
 import slideshowNext from "/media/icons/slideshow-next-button.png";
@@ -122,6 +122,7 @@ const VenueDetails = () => {
   
   const [selectedDateType, setSelectedDateType] = useState(null);
   const [userLoggedIn, setUserLoggedIn] = useState(isLoggedIn());
+  const [userRole, setUserRole] = useState('guest');
   const [bookingError, setBookingError] = useState('');
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
@@ -205,7 +206,26 @@ const VenueDetails = () => {
   }, [activeTooltip]);
 
   useEffect(() => {
-    const handleAuthChange = () => setUserLoggedIn(isLoggedIn());
+    const handleAuthChange = async () => {
+      const loggedIn = isLoggedIn();
+      setUserLoggedIn(loggedIn);
+      
+      if (loggedIn) {
+        try {
+          const role = await getUserRole();
+          setUserRole(role);
+        } 
+        catch (error) {
+          console.error('Error fetching user role:', error);
+          setUserRole('guest');
+        }
+      } 
+      else {
+        setUserRole('guest');
+      }
+    };
+    
+    handleAuthChange();
     window.addEventListener("authchange", handleAuthChange);
     return () => window.removeEventListener("authchange", handleAuthChange);
   }, []);
@@ -517,7 +537,6 @@ const currentAlt = mediaArray[currentSlide]?.alt || venue?.name || '';
             </div>
           )}
         </div>
-        
         <div className={styles.hotelInfoBottom}>
           <div className={styles.hotelInfoLeft}>
             <div className={styles.hotelInfoTop}>
@@ -651,145 +670,154 @@ const currentAlt = mediaArray[currentSlide]?.alt || venue?.name || '';
               </div>
             </div>
           </div>
-          
-          <div className={styles.hotelInfoRight}>
-            {userLoggedIn ? (
-              <>
-                <div className={styles.bookDateContent}>
-                  <h3>Find the Perfect Date</h3>
-                  <div className={styles.bookDate}>
-                    <div className={styles.bookDateStart}>
-                      <i 
-                        className="fa-solid fa-calendar-days" 
-                        onClick={() => toggleCalendar('start')}
-                      ></i>
-                      <input
-                        type="text"
-                        value={formatDateWithOrdinal(checkInDate)}
-                        placeholder="Check-in Date"
-                        onClick={() => toggleCalendar('start')}
-                        readOnly
-                      />
-                    </div>
-                    <div className={styles.bookDateEnd}>
-                      <i 
-                        className="fa-solid fa-calendar-days" 
-                        onClick={() => toggleCalendar('end')}
-                      ></i>
-                      <input
-                        type="text"
-                        value={formatDateWithOrdinal(checkOutDate)}
-                        placeholder="Check-out Date"
-                        onClick={() => toggleCalendar('end')}
-                        readOnly
-                      />
-                    </div>
-                  </div>
-                  
-                  {showCalendar && (
-                    <CustomCalender
-                      value={calendarInitiatedFrom === 'start' ? checkInDate : checkOutDate}
-                      onDateChange={handleDateChange}
-                      bookedDates={existingBookings}
-                      startDate={checkInDate}
-                      endDate={checkOutDate}
-                      isSelectingEnd={calendarInitiatedFrom === 'end'}
-                      onSelectionComplete={handleCalendarComplete}
-                    />
-                  )}
-                </div>
-                
-                <div className={styles.bookGuests}>
-                  <div className={styles.filterPeople}>
-                    <i className="fa-solid fa-person"></i>
-                    <div
-                      className={styles.guestSelector}
-                      onClick={() => setShowGuestDropdown(prev => !prev)}
-                      ref={dropdownRef}
-                    >
-                      <p>{formatGuestDisplay(adults, children, disabled)}</p>
-                      <div
-                        className={`${styles.dropdownMenu} ${showGuestDropdown ? styles.open : ''}`}
-                      >
-                        {[
-                          { type: "adults", label: "Adults", value: adults, setter: setAdults, min: 1 },
-                          { type: "children", label: "Children", value: children, setter: setChildren, min: 0 },
-                          { type: "disabled", label: `Assisted Guest${disabled !== 1 ? "s" : ""}`, value: disabled, setter: setDisabled, min: 0 }
-                        ].map(({ type, label, value, setter, min }) => (
-                          <div key={type} className={styles.dropdownRow}>
-                            <span className={styles.label}>{label}</span>
-                            <div className={styles.counterControls}>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setter(Math.max(min, value - 1));
-                                }}
-                              >
-                                -
-                              </button>
-                              <span>{value}</span>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setter(value + 1);
-                                }}
-                              >
-                                +
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {bookingError && <p className={styles.errorText}>{bookingError}</p>}
-                {errorMessage && <p className={styles.errorText}>{errorMessage}</p>}
-
-                <div className={styles.dividerLine}></div>
-                <p className={styles.maxGuests}>
-                  <strong>{totalNights} </strong><span> Total Nights</span>
-                </p>
-                <div className={styles.dividerLine}></div>
-                <p className={styles.maxGuests}>
-                  <strong>{totalGuests} </strong><span> Total Guests</span>
-                </p>
-                <div className={styles.dividerLine}></div>
-
-                <div className={styles.maxGuestsPrice}>
-                  <div className={styles.bookPrice}>
-                    <p>
-                      <span className={styles.totalPriceSpan}>Price:</span>
-                      <strong> ${totalPrice.toFixed(2)}</strong> 
-                      <span> / ${venue.price} per night</span>
-                    </p>
-                  </div>  
-                </div>
-                
-                <div className={styles.submitButton}>
-                  <Buttons size="medium" version="v1" onClick={handleSubmit}>
-                    Book Room
-                  </Buttons>
-                </div>
-              </>
-            ) : (
-              <div className={styles.loginReminder}>
-                <p className={styles.loginMessage}>
-                  Sign in to view booking options and availability.
-                </p>
-                <Buttons
-                  size="medium"
-                  version="v1"
-                  onClick={() => {
-                    window.location.href = "/login-costumer";
-                  }}
-                >
-                  Login
-                </Buttons>
-              </div>
-            )}
+<div className={styles.hotelInfoRight}>
+  {userLoggedIn && userRole === 'guest' ? (
+    <>
+      <div className={styles.bookDateContent}>
+        <h3>Find the Perfect Date</h3>
+        <div className={styles.bookDate}>
+          <div className={styles.bookDateStart}>
+            <i 
+              className="fa-solid fa-calendar-days" 
+              onClick={() => toggleCalendar('start')}
+            ></i>
+            <input
+              type="text"
+              value={formatDateWithOrdinal(checkInDate)}
+              placeholder="Check-in Date"
+              onClick={() => toggleCalendar('start')}
+              readOnly
+            />
           </div>
+          <div className={styles.bookDateEnd}>
+            <i 
+              className="fa-solid fa-calendar-days" 
+              onClick={() => toggleCalendar('end')}
+            ></i>
+            <input
+              type="text"
+              value={formatDateWithOrdinal(checkOutDate)}
+              placeholder="Check-out Date"
+              onClick={() => toggleCalendar('end')}
+              readOnly
+            />
+          </div>
+        </div>
+        
+        {showCalendar && (
+          <CustomCalender
+            value={calendarInitiatedFrom === 'start' ? checkInDate : checkOutDate}
+            onDateChange={handleDateChange}
+            bookedDates={existingBookings}
+            startDate={checkInDate}
+            endDate={checkOutDate}
+            isSelectingEnd={calendarInitiatedFrom === 'end'}
+            onSelectionComplete={handleCalendarComplete}
+          />
+        )}
+      </div>
+      <div className={styles.bookGuests}>
+        <div className={styles.filterPeople}>
+          <i className="fa-solid fa-person"></i>
+          <div
+            className={styles.guestSelector}
+            onClick={() => setShowGuestDropdown(prev => !prev)}
+            ref={dropdownRef}
+          >
+            <p>{formatGuestDisplay(adults, children, disabled)}</p>
+            <div
+              className={`${styles.dropdownMenu} ${showGuestDropdown ? styles.open : ''}`}
+            >
+              {[
+                { type: "adults", label: "Adults", value: adults, setter: setAdults, min: 1 },
+                { type: "children", label: "Children", value: children, setter: setChildren, min: 0 },
+                { type: "disabled", label: `Assisted Guest${disabled !== 1 ? "s" : ""}`, value: disabled, setter: setDisabled, min: 0 }
+              ].map(({ type, label, value, setter, min }) => (
+                <div key={type} className={styles.dropdownRow}>
+                  <span className={styles.label}>{label}</span>
+                  <div className={styles.counterControls}>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setter(Math.max(min, value - 1));
+                      }}
+                    >
+                      -
+                    </button>
+                    <span>{value}</span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setter(value + 1);
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>               
+      {bookingError && <p className={styles.errorText}>{bookingError}</p>}
+      {errorMessage && <p className={styles.errorText}>{errorMessage}</p>}
+      <div className={styles.dividerLine}></div>
+      <p className={styles.maxGuests}>
+        <strong>{totalNights} </strong><span> Total Nights</span>
+      </p>
+      <div className={styles.dividerLine}></div>
+      <p className={styles.maxGuests}>
+        <strong>{totalGuests} </strong><span> Total Guests</span>
+      </p>
+      <div className={styles.dividerLine}></div>
+      <div className={styles.maxGuestsPrice}>
+        <div className={styles.bookPrice}>
+          <p>
+            <span className={styles.totalPriceSpan}>Price:</span>
+            <strong> ${totalPrice.toFixed(2)}</strong> 
+            <span> / ${venue.price} per night</span>
+          </p>
+        </div>  
+      </div>                
+      <div className={styles.submitButton}>
+        <Buttons size="medium" version="v1" onClick={handleSubmit}>
+          Book Room
+        </Buttons>
+      </div>
+    </>
+  ) : userLoggedIn && userRole === 'venueManager' ? (
+    <div className={styles.loginReminder}>
+      <p className={styles.loginMessage}>
+        Venue Managers cannot book venues. Please log in as a Customer to make a booking.
+      </p>
+      <Buttons
+        size="medium"
+        version="v1"
+        onClick={() => {
+          window.location.href = "/login-costumer";
+        }}
+      >
+        Login as Customer
+      </Buttons>
+    </div>
+  ) : (
+    <div className={styles.loginReminder}>
+      <p className={styles.loginMessage}>
+        Sign in to view booking options and availability.
+      </p>
+      <Buttons
+        size="medium"
+        version="v1"
+        onClick={() => {
+          window.location.href = "/login-costumer";
+        }}
+      >
+        Login
+      </Buttons>
+    </div>
+  )}
+</div>
         </div>
       </div>      
 

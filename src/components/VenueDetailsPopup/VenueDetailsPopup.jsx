@@ -270,8 +270,8 @@ const getDescriptionPreview = (desc) => {
               {selectedVenue?.media && selectedVenue.media.length > 0 ? (
                 
                 <div className={styles.imageSlider}>
-                  <div className={styles.slideshowProgress}>
-                    <p>1 of 5</p>
+<div className={styles.slideshowProgress}>
+                    <p>{currentIndex + 1} of {selectedVenue.media.length}</p>
                   </div>
                   <img
                     src={selectedVenue.media[currentIndex].url}
