@@ -228,55 +228,68 @@ useEffect(() => {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const bookingEnd = new Date(selectedBooking.dateTo);
-    bookingEnd.setHours(0, 0, 0, 0);
 
-    setIsPastBooking(bookingEnd < today);
+    const bookingStart = new Date(selectedBooking.dateFrom);
+    bookingStart.setHours(0, 0, 0, 0);
+
+    const hasBookingStarted = today >= bookingStart;
+    setIsPastBooking(hasBookingStarted);
+
+    console.log("Booking status check:", {
+      bookingStart: bookingStart.toISOString().split('T')[0],
+      today: today.toISOString().split('T')[0],
+      hasBookingStarted,
+    });
   }
 }, [selectedBooking]);
 
-  useEffect(() => {
-    if (!selectedBooking && selectedVenue?.bookingId) {
-      const fetchBookingData = async () => {
-        const token = localStorage.getItem('accessToken');
-        if (token && selectedVenue.bookingId) {
-          try {
-            const response = await fetch(`/holidaze/bookings/${selectedVenue.bookingId}`, {
-              method: 'GET',
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
+useEffect(() => {
+  if (!selectedBooking && selectedVenue?.bookingId) {
+    const fetchBookingData = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (token && selectedVenue.bookingId) {
+        try {
+          const response = await fetch(`/holidaze/bookings/${selectedVenue.bookingId}`, {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-            if (response.ok) {
-              const data = await response.json();
-              console.log("Fetched booking data:", data);
-if (data?.data?.id) {
-  setBookingData(data.data);
-  const today = new Date();
-  const bookingEnd = new Date(data.data.dateTo);
-  setIsPastBooking(bookingEnd < today);
-}
-              else {
-                console.error('Booking data is missing the ID');
-              }
-            } 
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Fetched booking data:", data);
+            if (data?.data?.id) {
+              setBookingData(data.data);
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              
+              const bookingStart = new Date(data.data.dateFrom);
+              bookingStart.setHours(0, 0, 0, 0);
+              
+              const hasBookingStarted = today >= bookingStart;
+              setIsPastBooking(hasBookingStarted);
+            }
             else {
-              console.error('Failed to fetch booking data');
+              console.error('Booking data is missing the ID');
             }
           } 
-          catch (error) {
-            console.error('Error fetching booking data:', error);
+          else {
+            console.error('Failed to fetch booking data');
           }
+        } 
+        catch (error) {
+          console.error('Error fetching booking data:', error);
         }
-      };
+      }
+    };
 
-      fetchBookingData();
-    } 
-    else {
-      setBookingData(selectedBooking);
-    }
-  }, [selectedBooking, selectedVenue]);
+    fetchBookingData();
+  } 
+  else {
+    setBookingData(selectedBooking);
+  }
+}, [selectedBooking, selectedVenue]);
 
 const handleSave = async () => {
   if (!bookingData?.id) {
@@ -541,7 +554,6 @@ const getDescriptionPreview = (desc) => {
                             </div>
                           </div>
                         </div>
-                        <p>This Venue can only have </p>
                       </div>
 
                       <div className={styles.dividerLine}></div>
@@ -585,10 +597,12 @@ const getDescriptionPreview = (desc) => {
                       {bookingData.updated && (
                         <p><strong>Updated:</strong> {new Date(bookingData.updated).toLocaleDateString()}</p>
                       )}
-                      <div className={styles.bookedVenueEditButtons}>
-                        <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
-                        <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
-                      </div>
+{!isPastBooking && (
+  <div className={styles.bookedVenueEditButtons}>
+    <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
+    <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+  </div>
+)}
                     </div>
                   ) : (
                     <p>Booking details not available.</p>
