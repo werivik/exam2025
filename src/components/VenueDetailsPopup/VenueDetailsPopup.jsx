@@ -576,12 +576,10 @@ const getDescriptionPreview = (desc) => {
                       </div>
 
                       <div className={styles.bookedVenueEditButtons}>
-{!isPastBooking && (
-  <div className={styles.bookedVenueEditButtons}>
-    <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
-    <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
-  </div>
-)}
+<div className={styles.bookedVenueEditButtons}>
+  <Buttons size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel Edit</Buttons>
+  <Buttons size="small" version="v1" onClick={handleSave}>Save Changes</Buttons>
+</div>
                       </div>
                     </div>
                   ) : bookingData ? (
