@@ -224,45 +224,41 @@ setAllLocations(Array.from(locationsSet));
     };
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        guestDropdownRefOne.current &&
-        !guestDropdownRefOne.current.contains(event.target) &&
-        guestDropdownRefTwo.current &&
-        !guestDropdownRefTwo.current.contains(event.target)
-      ) {
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (showGuestDropdown) {
+      const currentDropdownRef = window.innerWidth > 1375 ? guestDropdownRefOne : guestDropdownRefTwo;
+      if (currentDropdownRef.current && !currentDropdownRef.current.contains(event.target)) {
         setShowGuestDropdown(false);
       }
-      
-      if (
-        showCalendar &&
-        calendarRef.current &&
-        !calendarRef.current.contains(event.target) &&
-        dateFilterRef.current &&
-        !dateFilterRef.current.contains(event.target)
-      ) {
-        setShowCalendar(false);
-        setCalendarInitiatedFrom(null);
-      }
-    };
-  
-    document.addEventListener("mousedown", handleClickOutside);
-    
-    const handleScroll = () => {
-      if (showCalendar) {
-        setShowCalendar(false);
-        setCalendarInitiatedFrom(null);
-      }
-    };
-    
-    window.addEventListener("scroll", handleScroll);
-    
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [showCalendar]);
+    }
+    if (
+      showCalendar &&
+      calendarRef.current &&
+      !calendarRef.current.contains(event.target) &&
+      dateFilterRef.current &&
+      !dateFilterRef.current.contains(event.target)
+    ) {
+      setShowCalendar(false);
+      setCalendarInitiatedFrom(null);
+    }
+  };
+  document.addEventListener("mousedown", handleClickOutside);
+  const handleScroll = () => {
+    if (showCalendar) {
+      setShowCalendar(false);
+      setCalendarInitiatedFrom(null);
+    }
+    if (showGuestDropdown) {
+      setShowGuestDropdown(false);
+    }
+  };
+  window.addEventListener("scroll", handleScroll);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [showCalendar, showGuestDropdown]);
 
   const updateDisplayedVenues = useCallback(() => {
     const width = window.innerWidth;
