@@ -342,10 +342,12 @@ header {
   transition: transform 0.25s ease;
   z-index: 999;
 }
+.sidebarHeader Button {
+  margin-bottom: 25px;
+}
 .divideLineLaying {
-  height: 0.5px;
   width: 125px;
-  background-color: white;
+  border-top: solid 0.5px #f2f2f2ca;
   border-radius: 99px;
   margin-left: 15%;
   margin-top: 15px;
@@ -469,6 +471,11 @@ header.special .searchInactive:hover {
 }
 header.special .divideLine {
   background-color: white;
+}
+
+.menuLinks .divideLineLaying {
+  margin-left: 0;
+  margin-top: -5px;
 }
 
 @media (max-width:1375px){

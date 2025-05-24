@@ -128,21 +128,18 @@ const SidebarMenu = memo(({
         </ul>
       )}
 
-      <div className={styles.divideLineLaying}></div>
-
-      <ul className={styles.menuLinks}>
-        <li><Link to="/about">About Us</Link></li>
-        <li><Link to="/contact">Contact Us</Link></li>
-      </ul>
       {!isUserLoggedIn && (
         <ul className={styles.menuLinks}>
-
-          <div className={styles.divideLineLaying}></div>
-
           <li><Link to="/login-costumer">Login</Link></li>
           <li><Link to="/register-costumer">Register</Link></li>
         </ul>
       )}
+
+      <ul className={styles.menuLinks}>
+        <div className={styles.divideLineLaying}></div>
+        <li><Link to="/about">About Us</Link></li>
+        <li><Link to="/contact">Contact Us</Link></li>
+      </ul>
     </div>
   )
 ));
