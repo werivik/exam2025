@@ -60,6 +60,11 @@ h1 {
     pointer-events: none;
   }
 
+input:focus {
+border-color: #B88A44;
+outline: none;
+}
+
   @media (max-width:425px) {
     h2 {
       font-size: 1.5rem;
