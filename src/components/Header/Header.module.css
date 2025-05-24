@@ -233,6 +233,7 @@ header {
   justify-content: space-between;
   top: 0;
   transition: 0.25s;
+  position: relative;
 }
 .searchInput {
   padding: 0.25rem;
@@ -251,16 +252,17 @@ header {
   background-color: white;
 }
 .suggestionsList {
-  width: calc(100% - 0.25rem);
+  width: 100%;
+  min-width: 450px;
   position: absolute;
   top: 50%;
-  min-width: 396px;
   right: 100%;
   padding-top: 1.5rem;
   padding-bottom: 0.5rem;
+  padding-left: 10px;
+
   text-align: left;
-  padding-left: 0.25rem;
-  font-size: 1.25rem;
+  font-size: 1rem;
   background-color: white;
   border-radius: 0px 0px 10px 10px;
   z-index: 997;

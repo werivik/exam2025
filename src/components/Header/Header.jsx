@@ -35,7 +35,7 @@ const SearchBar = memo(({
     <input
       type="text"
       className={styles.searchInput}
-      placeholder="Search venues, profiles, or locations..."
+      placeholder="Search for Venues or Locations..."
       value={filters.destination}
       onChange={(e) => {
         const value = e.target.value;
