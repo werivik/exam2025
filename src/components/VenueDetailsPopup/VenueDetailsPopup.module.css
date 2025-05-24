@@ -434,3 +434,87 @@ color: white;
     max-height: 100vh;
   }
 }
+
+
+
+
+.currentlyStayingBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #5D6B2F;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  width: fit-content;
+  margin-top: 25px;
+}
+
+.currentlyStayingBadge i {
+  font-size: 0.8rem;
+}
+
+.bookDateContent {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.bookPrice {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.bookPrice p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.totalPriceSpan {
+  color: #666;
+  font-weight: 400;
+}
+
+.label {
+  font-weight: 500;
+  color: #1F1B17;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .currentlyStayingBadge {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+  
+  .bookDate {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .bookedVenueEditButtons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .bookedVenueEditButtons button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .currentlyStayingBadge {
+    font-size: 0.8rem;
+    padding: 5px 8px;
+  }
+  
+  .editBookingForm {
+    padding: 15px;
+  }
+  
+  .editBookingForm h3 {
+    font-size: 1.5rem;
+  }
+}

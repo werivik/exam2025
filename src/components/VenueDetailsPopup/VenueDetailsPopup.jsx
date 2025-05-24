@@ -43,6 +43,7 @@ const VenueDetailsPopup = ({
   const [existingBookings, setExistingBookings] = useState([]);
   const dropdownRef = useRef(null);
   const [isPastBooking, setIsPastBooking] = useState(false);
+  const [isCurrentlyStaying, setIsCurrentlyStaying] = useState(false);
 
   const formatDateWithOrdinal = (dateString) => {
     if (!dateString) return '';
@@ -160,7 +161,6 @@ const VenueDetailsPopup = ({
   };
 
   const handleBookAgain = () => {
-    // Navigate to the venue details page where user can make a new booking
     navigate(`/venue-details/${selectedVenue?.id}`);
     closeModal();
   };
@@ -239,13 +239,22 @@ useEffect(() => {
     const bookingStart = new Date(selectedBooking.dateFrom);
     bookingStart.setHours(0, 0, 0, 0);
 
-    const hasBookingStarted = today >= bookingStart;
-    setIsPastBooking(hasBookingStarted);
+    const bookingEnd = new Date(selectedBooking.dateTo);
+    bookingEnd.setHours(0, 0, 0, 0);
+
+    const bothDatesInPast = today > bookingEnd;
+    
+    const currentlyStaying = today >= bookingStart && today < bookingEnd;
+    
+    setIsPastBooking(bothDatesInPast);
+    setIsCurrentlyStaying(currentlyStaying);
 
     console.log("Booking status check:", {
       bookingStart: bookingStart.toISOString().split('T')[0],
+      bookingEnd: bookingEnd.toISOString().split('T')[0],
       today: today.toISOString().split('T')[0],
-      hasBookingStarted,
+      bothDatesInPast,
+      currentlyStaying,
     });
   }
 }, [selectedBooking]);
@@ -274,8 +283,14 @@ useEffect(() => {
               const bookingStart = new Date(data.data.dateFrom);
               bookingStart.setHours(0, 0, 0, 0);
               
-              const hasBookingStarted = today >= bookingStart;
-              setIsPastBooking(hasBookingStarted);
+              const bookingEnd = new Date(data.data.dateTo);
+              bookingEnd.setHours(0, 0, 0, 0);
+              
+              const bothDatesInPast = today > bookingEnd;
+              const currentlyStaying = today >= bookingStart && today < bookingEnd;
+              
+              setIsPastBooking(bothDatesInPast);
+              setIsCurrentlyStaying(currentlyStaying);
             }
             else {
               console.error('Booking data is missing the ID');
@@ -601,10 +616,21 @@ const getDescriptionPreview = (desc) => {
                       {bookingData.updated && (
                         <p><strong>Updated:</strong> {new Date(bookingData.updated).toLocaleDateString()}</p>
                       )}
-{!isPastBooking && (
+                      {isCurrentlyStaying && (
+                        <div className={styles.currentlyStayingBadge}>
+                          <i className="fa-solid fa-location-dot"></i>
+                          <span>Currently Staying</span>
+                        </div>
+                      )}
+{!isPastBooking && !isCurrentlyStaying && (
   <div className={styles.bookedVenueEditButtons}>
     <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
     <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+  </div>
+)}
+{isCurrentlyStaying && (
+  <div className={styles.bookedVenueEditButtons}>
+    <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
   </div>
 )}
 {isPastBooking && (

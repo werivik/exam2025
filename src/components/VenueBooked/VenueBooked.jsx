@@ -7,7 +7,13 @@ const VenueBooked = ({ venue, onClick }) => {
   const startDate = new Date(venue.dateFrom);
   const endDate = new Date(venue.dateTo);
   const today = new Date();
-  const isPastBooking = startDate < today;
+  
+  today.setHours(0, 0, 0, 0);
+  startDate.setHours(0, 0, 0, 0);
+  endDate.setHours(0, 0, 0, 0);
+  
+  const isPastBooking = today > endDate;
+  const isCurrentlyStaying = today >= startDate && today < endDate;
   const durationInDays = Math.ceil((endDate - startDate) / (1000 * 3600 * 24));
 
   const totalPrice = venue.price && durationInDays > 0
@@ -17,12 +23,26 @@ const VenueBooked = ({ venue, onClick }) => {
   const guests = venue.guests || 'N/A';
 
   return (
-    <div className={`${styles.hotelCard} ${isPastBooking ? styles.pastBooking : styles.futureBooking}`} onClick={onClick}>
-      {!isPastBooking && (
+    <div 
+      className={`${styles.hotelCard} ${
+        isPastBooking ? styles.pastBooking : 
+        isCurrentlyStaying ? styles.currentlyStaying : 
+        styles.futureBooking
+      }`} 
+      onClick={onClick}
+    >
+      {!isPastBooking && !isCurrentlyStaying && (
         <div className={styles.bookedDate}>
           <p><span>From</span> {startDate.toLocaleDateString()}</p>
           <div className={styles.divideLine}></div>
           <p><span>To</span> {endDate.toLocaleDateString()}</p>
+        </div>
+      )}
+
+      {isCurrentlyStaying && (
+        <div className={styles.currentlyStayingBadge}>
+          <i className="fa-solid fa-location-dot"></i>
+          <span>Currently Staying</span>
         </div>
       )}
       
@@ -50,6 +70,12 @@ const VenueBooked = ({ venue, onClick }) => {
           <p className={styles.pastBookingLabel}>
             <span>Stayed on:</span> {startDate.toLocaleDateString()}
           </p>
+        )}
+        {isCurrentlyStaying && (
+          <div className={styles.stayingDates}>
+            <p><span>Check-in:</span> {startDate.toLocaleDateString()}</p>
+            <p><span>Check-out:</span> {endDate.toLocaleDateString()}</p>
+          </div>
         )}
         <p className={styles.totalPrice}>
           <strong>$ {totalPrice}</strong><span> / Total price</span>
