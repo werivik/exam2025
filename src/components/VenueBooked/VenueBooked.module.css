@@ -82,10 +82,9 @@
 }
 .divideLine {
   height: 70%;
-  margin-left: 15px;
-  margin-right: 15px;
-  width: 1.5px;
-  background-color: #1F1B17;
+  border-left: 1px solid #1f1b1732;
+  border-right: 1px solid #1f1b1732;
+  margin: 20px 0;
   border-radius: 99px;
 }
 .currentlyStayingBadge {
@@ -148,9 +147,16 @@
 .stayingDates {
   display: flex;
   flex-direction: row;
-  gap: 15px;
-  margin-top: 5px;
-  margin-bottom: 10px;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.stayingDates  .divideLine {
+  border-left: 1px solid #6b7a3aae;
+  border-right: 1px solid #6b7a3aae;
+  border-radius: 99px;
+  height: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .stayingDates p {
   margin: 2px 0;
@@ -203,9 +209,6 @@
 .currentlyStaying:hover .imageContainer {
   transition: 0.25s;
   height: 60%;
-}
-.currentlyStaying:hover .seeMore {
-  display: block;
 }
 .currentlyStaying:hover .currentlyStayingBadge {
   padding-top: 15px;

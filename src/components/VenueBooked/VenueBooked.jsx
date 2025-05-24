@@ -74,6 +74,7 @@ const VenueBooked = ({ venue, onClick }) => {
         {isCurrentlyStaying && (
           <div className={styles.stayingDates}>
             <p><span>Check-in:</span> {startDate.toLocaleDateString()}</p>
+            <div className={styles.divideLine}></div>
             <p><span>Check-out:</span> {endDate.toLocaleDateString()}</p>
           </div>
         )}
