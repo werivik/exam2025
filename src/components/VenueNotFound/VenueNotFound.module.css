@@ -31,12 +31,13 @@
 }
 
 .title {
-    margin-top: 0;
+  margin-top: 0;
   font-size: 2rem;
   font-weight: 700;
   color: #1F1B17;
   margin-bottom: 0.5rem;
   animation: fadeIn 0.6s ease-out 0.3s both;
+  pointer-events: none;
 }
 
 .description {
@@ -45,6 +46,7 @@
   margin-bottom: 1.5rem;
   line-height: 1.6;
   animation: fadeIn 0.6s ease-out 0.4s both;
+  pointer-events: none;
 }
 
 .venueId {
@@ -56,6 +58,7 @@
   border-radius: 20px;
   font-family: monospace;
   animation: fadeIn 0.6s ease-out 0.5s both;
+    pointer-events: none;
 }
 
 .buttonContainer {
@@ -107,15 +110,24 @@
   color: #1F1B17;
   transition: all 0.2s ease;
   font-size: 0.95rem;
+  transition: 0.25s;
 }
 
 .actionItem:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
+  color: #6B7A3A;
+  transition: 0.25s;
+}
+
+.actionItem:hover i {
+    color: #6B7A3A;
+    transition: 0.25s;
 }
 
 .actionItem i {
   color: #B88A44;
+  transition: 0.25s;
 }
 
 .supportText {
@@ -130,6 +142,10 @@
   cursor: pointer;
   font-weight: 500;
   text-decoration: underline;
+}
+
+.supportLink:hover {
+    color: #6B7A3A;
 }
 
 @keyframes fadeInUp {
