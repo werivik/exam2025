@@ -187,8 +187,8 @@
 
 @media (max-width: 480px) {
   .container {
-    margin: 0.5rem;
     padding: 1rem;
+    margin-top: 30px;
   }
   
   .iconContainer {
@@ -198,5 +198,11 @@
   
   .iconContainer i {
     font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 365px) {
+  .container {
+    margin-top: 50px;
   }
 }
