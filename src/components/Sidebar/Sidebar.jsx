@@ -124,50 +124,68 @@ const Sidebar = ({
     setNoMatches(filtered.length === 0);
   };
 
-  useEffect(() => {
-    if (!Array.isArray(venues)) return;
+useEffect(() => {
+  if (!Array.isArray(venues)) return;
 
-    const totalGuests = calculateTotalGuests();
-    const selectedPrice = filters.priceMax || maxPrice;
+  const totalGuests = calculateTotalGuests();
+  const selectedPrice = filters.priceMax || maxPrice;
 
-    const filtered = venues.filter((venue) => {
-      const matchesDestination = (() => {
-        if (filters.continent && venue.location?.continent) {
-          if (!venue.location.continent.toLowerCase().includes(filters.continent.toLowerCase())) {
-            return false;
-          }
-        }
+  const filtered = venues.filter((venue) => {
+    const matchesDestination = (() => {
+      if (filters.destination && !filters.continent && !filters.country && !filters.city) {
+        const searchTerm = filters.destination.toLowerCase();
+        const location = venue.location;
         
-        if (filters.country && venue.location?.country) {
-          if (!venue.location.country.toLowerCase().includes(filters.country.toLowerCase())) {
-            return false;
-          }
+        return venue.name?.toLowerCase().includes(searchTerm) ||
+               venue.description?.toLowerCase().includes(searchTerm) ||
+               location?.city?.toLowerCase().includes(searchTerm) ||
+               location?.country?.toLowerCase().includes(searchTerm) ||
+               location?.continent?.toLowerCase().includes(searchTerm) ||
+               location?.address?.toLowerCase().includes(searchTerm);
+      }
+      
+      if (filters.continent && venue.location?.continent) {
+        if (!venue.location.continent.toLowerCase().includes(filters.continent.toLowerCase())) {
+          return false;
         }
-        
-        if (filters.city && venue.location?.city) {
-          if (!venue.location.city.toLowerCase().includes(filters.city.toLowerCase())) {
-            return false;
-          }
+      }
+      
+      if (filters.country && venue.location?.country) {
+        if (!venue.location.country.toLowerCase().includes(filters.country.toLowerCase())) {
+          return false;
         }
-        
-        return true;
-      })();
+      }
+      
+      if (filters.city && venue.location?.city) {
+        if (!venue.location.city.toLowerCase().includes(filters.city.toLowerCase())) {
+          return false;
+        }
+      }
+      
+      if (filters.venueName && venue.name) {
+        if (!venue.name.toLowerCase().includes(filters.venueName.toLowerCase())) {
+          return false;
+        }
+      }
+      
+      return true;
+    })();
 
-      const matchesGuests = venue.maxGuests >= totalGuests;
+    const matchesGuests = venue.maxGuests >= totalGuests;
 
-      const matchesPrice = venue.price <= selectedPrice;
+    const matchesPrice = venue.price <= selectedPrice;
 
-      const matchesMeta = Object.entries(filters.meta || {}).every(([key, value]) => {
-        if (!value) return true;
-        return venue.meta?.[key];
-      });
-
-      return matchesDestination && matchesGuests && matchesPrice && matchesMeta;
+    const matchesMeta = Object.entries(filters.meta || {}).every(([key, value]) => {
+      if (!value) return true;
+      return venue.meta?.[key];
     });
 
-    setFilteredVenues(filtered);
-    setNoMatches(filtered.length === 0);
-  }, [filters, venues, maxPrice]);
+    return matchesDestination && matchesGuests && matchesPrice && matchesMeta;
+  });
+
+  setFilteredVenues(filtered);
+  setNoMatches(filtered.length === 0);
+}, [filters, venues, maxPrice]);
 
   const handleInputBlur = (locationType) => {
     setTimeout(() => {

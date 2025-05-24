@@ -115,7 +115,6 @@ const LoginAdmin = () => {
               className={styles.input}
             />
             </div>
-
 <Buttons 
   size='medium' 
   version={isFormValid ? 'v1' : 'v2'} 
@@ -123,9 +122,15 @@ const LoginAdmin = () => {
   disabled={!isFormValid || isSubmitting}
 >
   {isSubmitting ? 'Logging in...' : 'Login'}
-</Buttons>
-            
-            {error && <p className={styles.error}>{error}</p>}
+</Buttons>       
+{error && (
+  <div className={styles.clickableMeta} style={{ marginTop: '16px', display: 'inline-block' }}>
+    <div className={styles.metaTooltip}>
+      ⚠️ {error}
+      <div className={styles.tooltipArrow}></div>
+    </div>
+  </div>
+)}
           </form>
           <div className={styles.BottomOptions}>
             <p>

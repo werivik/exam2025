@@ -550,10 +550,6 @@ border-top: 6px solid #1F1B17;
   opacity: 75%;
   font-size: 0.9rem;
 }
-
-.notFound {
-}
-
 @keyframes tooltipFadeIn {
 from {
   opacity: 0;

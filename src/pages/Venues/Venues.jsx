@@ -54,13 +54,10 @@ const Venues = () => {
   const topRef = useRef(null);
   const [initialFiltersApplied, setInitialFiltersApplied] = useState(false);
   const [initialMetaFilters, setInitialMetaFilters] = useState(null);
+  const [initialLocationFilters, setInitialLocationFilters] = useState(null);
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const initialLocationFilters = location.state?.filters ? {
-    country: location.state.filters.country,
-    city: location.state.filters.city
-  } : null;
 
   const inputRefs = {
     continent: useRef(null),
@@ -380,9 +377,7 @@ const pageTotal = useMemo(() =>
 
 const getPageNumbers = (currentPage, totalPages) => {
   const maxPageNumbers = 5;
-  
   let startPage;
-  
   if (totalPages <= maxPageNumbers) {
     startPage = 1;
   } 
@@ -395,60 +390,49 @@ const getPageNumbers = (currentPage, totalPages) => {
   else {
     startPage = currentPage - 2;
   }
-
   return Array.from({ length: Math.min(maxPageNumbers, totalPages) }, (_, i) => startPage + i);
 };
 
   const scrollToTop = useCallback(() => {
     topRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
-
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
-
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   const loadMore = useCallback(() => {
     setVisibleCount(prev => Math.min(prev + 10, filteredVenues.length));
   }, [filteredVenues.length]);
-
   const handlePageClick = useCallback((pageNum) => {
     setCurrentPage(pageNum);
     scrollToTop();
   }, [scrollToTop]);
-
   const goToNextPage = useCallback(() => {
     if (currentPage < pageTotal) {
       setCurrentPage(prev => prev + 1);
       scrollToTop();
     }
   }, [currentPage, pageTotal, scrollToTop]);
-
   const goToPrevPage = useCallback(() => {
     if (currentPage > 1) {
       setCurrentPage(prev => prev - 1);
       scrollToTop();
     }
   }, [currentPage, scrollToTop]);
-
   const getSuggestions = useCallback((type) => {
     const input = inputValues[type]?.toLowerCase().replace(/[-_]/g, ' ').trim();
     if (!input) return [];
-  
     return locationSuggestionList[type].filter(item => 
       normalizeString(item).includes(input)
     );
   }, [inputValues, locationSuggestionList]);
-  
   const handleLocationSuggestionClick = useCallback((type, value) => {
     setFilters(prev => ({ ...prev, [type]: value }));
     setInputValues(prev => ({ ...prev, [type]: value }));
     setShowLocationSuggestions(prev => ({ ...prev, [type]: false }));
   }, []);
-
 const visibleVenues = useMemo(() => {
   if (isMobile) {
     return filteredVenues.slice(0, visibleCount);
@@ -457,13 +441,10 @@ const visibleVenues = useMemo(() => {
     return filteredVenues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   }
 }, [filteredVenues, currentPage, visibleCount, isMobile]);
-
 useEffect(() => {
 }, [currentPage, visibleVenues]);
-
 useEffect(() => {
   if (!initialFiltersApplied) return;
-  
   const params = new URLSearchParams();
   if (filters.continent) params.set("continent", filters.continent);
   if (filters.country) params.set("country", filters.country);
@@ -476,7 +457,6 @@ useEffect(() => {
     if (filters.meta[key]) params.set(key, "true");
   });
   params.set("page", currentPage.toString());
-
   setSearchParams(params, { replace: true });
 }, [filters, currentPage, setSearchParams, initialFiltersApplied]);
 
@@ -484,113 +464,92 @@ useEffect(() => {
   if (!initialFiltersApplied && venues.length > 0) {
     const urlParams = new URLSearchParams(location.search);
     const stateFilters = location.state?.filters || {};
-    
     const newFilters = { ...filters };
     let hasChanges = false;
-    
     if (urlParams.get('country')) {
       newFilters.country = urlParams.get('country');
       setInputValues(prev => ({ ...prev, country: urlParams.get('country') }));
       hasChanges = true;
     }
-    
     if (urlParams.get('city')) {
       newFilters.city = urlParams.get('city');
       setInputValues(prev => ({ ...prev, city: urlParams.get('city') }));
       hasChanges = true;
     }
-    
     if (urlParams.get('continent')) {
       newFilters.continent = urlParams.get('continent');
       setInputValues(prev => ({ ...prev, continent: urlParams.get('continent') }));
       hasChanges = true;
     }
-    
     if (urlParams.get('adults')) {
       newFilters.adults = parseInt(urlParams.get('adults')) || 1;
       hasChanges = true;
     }
-    
     if (urlParams.get('children')) {
       newFilters.children = parseInt(urlParams.get('children')) || 0;
       hasChanges = true;
     }
-    
     if (urlParams.get('assisted')) {
       newFilters.assisted = parseInt(urlParams.get('assisted')) || 0;
       hasChanges = true;
     }
-    
     const ratingsFromUrl = urlParams.getAll('ratings').map(r => parseInt(r)).filter(r => !isNaN(r));
     if (ratingsFromUrl.length > 0) {
       newFilters.ratings = ratingsFromUrl;
       hasChanges = true;
     }
-    
     metaFilters.forEach(key => {
       if (urlParams.get(key) === 'true') {
         newFilters.meta[key] = true;
         hasChanges = true;
       }
     });
-    
     if (stateFilters.meta) {
       newFilters.meta = { ...newFilters.meta, ...stateFilters.meta };
       hasChanges = true;
     }
-    
     if (stateFilters.startDate) {
       newFilters.startDate = stateFilters.startDate;
       hasChanges = true;
     }
-    
     if (stateFilters.endDate) {
       newFilters.endDate = stateFilters.endDate;
       hasChanges = true;
     }
-    
     if (stateFilters.adults !== undefined) {
       newFilters.adults = stateFilters.adults;
       hasChanges = true;
     }
-    
     if (stateFilters.children !== undefined) {
       newFilters.children = stateFilters.children;
       hasChanges = true;
     }
-    
     if (stateFilters.assisted !== undefined) {
       newFilters.assisted = stateFilters.assisted;
       hasChanges = true;
     }
-    
     if (stateFilters.city) {
       newFilters.city = stateFilters.city;
       setInputValues(prev => ({ ...prev, city: stateFilters.city }));
       hasChanges = true;
     }
-    
     if (stateFilters.country) {
       newFilters.country = stateFilters.country;
       setInputValues(prev => ({ ...prev, country: stateFilters.country }));
       hasChanges = true;
     }
-    
     if (stateFilters.continent) {
       newFilters.continent = stateFilters.continent;
       setInputValues(prev => ({ ...prev, continent: stateFilters.continent }));
       hasChanges = true;
-    }
-    
+    } 
     const pageFromUrl = parseInt(urlParams.get('page')) || 1;
     if (pageFromUrl !== currentPage) {
       setCurrentPage(pageFromUrl);
     }
-    
     if (hasChanges) {
       setFilters(newFilters);
     }
-    
     setInitialFiltersApplied(true);
   }
 }, [venues, location.search, location.state, initialFiltersApplied, metaFilters, filters, currentPage]);
@@ -605,11 +564,9 @@ useEffect(() => {
         city: filters.city || ''
       });
     }
-    
     if (filters.meta) {
       setInitialMetaFilters(filters.meta);
     }
-    
     if (filters.adults) {
       setFilters(prev => ({ ...prev, adults: filters.adults }));
     }
@@ -681,7 +638,6 @@ useEffect(() => {
               <h1>Find your Dream Stay</h1>
               <p>...with Holidaze</p>
             </div>
-
             <div className={styles.filterTopSection}>
             <div className={styles.filterTop}>
               <div className={styles.topSearchbar}>
@@ -738,14 +694,12 @@ useEffect(() => {
                   <VenueCardSecondType key={venue.id} venue={venue} />
                 ))}
               </div>
-
               {window.innerWidth >= 725 && pageTotal > 1 && (
                 <div className={styles.paginationWrapper}>
                   <div className={styles.pagination}>
                     {currentPage > 1 && (
                       <button onClick={goToPrevPage} className={styles.page}>Prev</button>
                     )}
-                    
                     {getPageNumbers(currentPage, pageTotal).map(pageNum => (
                       <button
                         key={pageNum}
@@ -762,7 +716,6 @@ useEffect(() => {
                   </div>
                 </div>
               )}
-
               {window.innerWidth < 725 && visibleCount < filteredVenues.length && (
                 <div className={styles.loadMoreWrapper}>
                   <button className={styles.loadMoreButton} onClick={loadMore}>

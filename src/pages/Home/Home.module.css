@@ -88,6 +88,7 @@
 .filtersColumns .filterCalender, .filtersColumns .filterPeople {
   width: 100%;
   height: 40px;
+  z-index: 3;
 }
 .filtersColumns .filterDestination {
   width: 100%;
