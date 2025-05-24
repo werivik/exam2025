@@ -240,12 +240,28 @@ function Header() {
   useEffect(() => {
     const fetchVenues = async () => {
       try {
-        const res = await fetch(VENUES, {
-          method: "GET",
-          headers: headers(),
-        });
-        const data = await res.json();
-        setVenues(data.data || []);
+        let allVenues = [];
+        let currentPage = 1;
+        const pageSize = 100;
+
+        while (true) {
+          const response = await fetch(`${VENUES}?page=${currentPage}&pageSize=${pageSize}`, {
+            method: 'GET',
+            headers: headers(),
+          });
+
+          if (!response.ok) throw new Error("Failed to fetch venues");
+
+          const data = await response.json();
+          const venuesData = data.data || [];
+
+          if (venuesData.length === 0) break;
+
+          allVenues = allVenues.concat(venuesData);
+          currentPage++;
+        }
+
+        setVenues(allVenues);
       } 
       catch (err) {
         console.error("Error fetching venues:", err);
@@ -255,6 +271,14 @@ function Header() {
     fetchVenues();
   }, []);
 
+  const normalizeString = (str) => {
+    return str
+      ?.toLowerCase()
+      .replace(/[-_]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim() || '';
+  };
+
   const handleSearch = useCallback(
     debounce(async (input) => {
       if (!input) {
@@ -263,36 +287,51 @@ function Header() {
       }
 
       try {
-        const venuesRes = await fetch(`${VENUES_SEARCH}`, {
-          headers: headers()
+        const searchTerm = input.toLowerCase();
+        
+        const venueMatches = venues
+          .filter(venue => 
+            venue.name?.toLowerCase().includes(searchTerm)
+          )
+          .map(venue => ({
+            type: "Venue",
+            value: venue.name,
+            id: venue.id,
+          }))
+          .slice(0, 5);
+
+        const locationMatches = [];
+        const seenLocations = new Set();
+
+        venues.forEach(venue => {
+          const location = venue.location || {};
+          
+          if (location.city && normalizeString(location.city).includes(normalizeString(input))) {
+            const key = `City:${location.city}`;
+            if (!seenLocations.has(key)) {
+              locationMatches.push({ type: "City", value: location.city });
+              seenLocations.add(key);
+            }
+          }
+          
+          if (location.country && normalizeString(location.country).includes(normalizeString(input))) {
+            const key = `Country:${location.country}`;
+            if (!seenLocations.has(key)) {
+              locationMatches.push({ type: "Country", value: location.country });
+              seenLocations.add(key);
+            }
+          }
+          
+          if (location.continent && normalizeString(location.continent).includes(normalizeString(input))) {
+            const key = "Region:" + location.continent;
+            if (!seenLocations.has(key)) {
+              locationMatches.push({ type: "Region", value: location.continent });
+              seenLocations.add(key);
+            }
+          }
         });
-        const venuesData = await venuesRes.json();
 
-        const locationMatches = (venuesData.data || []).flatMap((v) => {
-          const locs = [];
-          if (v.location?.city) locs.push({ type: "City", value: v.location.city });
-          if (v.location?.country) locs.push({ type: "Country", value: v.location.country });
-          if (v.location?.continent) locs.push({ type: "Region", value: v.location.continent });
-          return locs;
-        });
-
-        const venueMatches = (venuesData.data || []).map((v) => ({
-          type: "Venue",
-          value: v.name,
-          id: v.id,
-        }));
-
-        const profilesRes = await fetch(`${PROFILES_SEARCH}`, {
-          headers: headers()
-        });
-        const profilesData = await profilesRes.json();
-
-        const profileMatches = (profilesData.data || []).map((p) => ({
-          type: "Profile",
-          value: p.name,
-        }));
-
-        const combined = [...venueMatches, ...locationMatches, ...profileMatches];
+        const combined = [...venueMatches, ...locationMatches.slice(0, 5)];
         const unique = Array.from(
           new Map(combined.map((item) => [`${item.type}:${item.value}`, item])).values()
         ).slice(0, 10);
@@ -304,19 +343,26 @@ function Header() {
         setSuggestions([{ type: "None", value: "Error searching..." }]);
       }
     }, 300),
-    []
+    [venues]
   );
 
   const handleSelect = useCallback((item) => {
     if (item.type === "Venue" && item.id) {
       navigate(`/venue-details/${item.id}`);
     } 
-    else if (item.type === "Profile") {
-      navigate(`/venue-details/${item.value}`);
-    } 
-    else if (["City", "Country", "Region"].includes(item.type)) {
+    else if (item.type === "City") {
       navigate("/venues", {
-        state: { filters: { destination: item.value } },
+        state: { filters: { city: item.value } },
+      });
+    }
+    else if (item.type === "Country") {
+      navigate("/venues", {
+        state: { filters: { country: item.value } },
+      });
+    }
+    else if (item.type === "Region") {
+      navigate("/venues", {
+        state: { filters: { continent: item.value } },
       });
     }
     setFilters({ destination: "" });
@@ -407,14 +453,14 @@ function Header() {
             <Logo isHovered={isHovered} setIsHovered={setIsHovered} />
             <ul className={styles.headerRightLinks}>
               <li className={`${styles.searchContainer} ${isSearchOpen ? styles.searchOpen : ""}`}>
-                <SearchBar 
-                  isSearchOpen={isSearchOpen}
-                  filters={filters}
-                  setFilters={setFilters}
-                  suggestions={suggestions}
-                  handleSearch={handleSearch}
-                  handleSelect={handleSelect}
-                />
+            <SearchBar
+              isSearchOpen={isSearchOpen}
+              filters={filters}
+              setFilters={setFilters}
+              suggestions={suggestions}
+              handleSearch={handleSearch}
+              handleSelect={handleSelect}
+            />
                 <i
                   className={`fa-solid fa-magnifying-glass ${
                     isSearchOpen ? styles.searchActive : styles.searchInactive
