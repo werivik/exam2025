@@ -11,6 +11,7 @@ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 margin-bottom: 40px;
 transition: filter 0.3s ease;
 width: 80%;
+min-height: 100vh;
 }
 .blurred {
 filter: blur(4px);
@@ -548,6 +549,9 @@ border-top: 6px solid #1F1B17;
 .bookPrice span {
   opacity: 75%;
   font-size: 0.9rem;
+}
+
+.notFound {
 }
 
 @keyframes tooltipFadeIn {

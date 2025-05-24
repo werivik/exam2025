@@ -17,6 +17,7 @@ import CostumPopup from '../../components/CostumPopup/CostumPopup';
 
 import VenueRating from '../../components/VenueRating/VenueRating';
 import VenueDetailsSkeleton from '../../components/VenueDetailsSkeleton/VenueDetailsSkeleton';
+import VenueNotFound from '../../components/VenueNotFound/VenueNotFound';
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -457,7 +458,15 @@ const currentAlt = mediaArray[currentSlide]?.alt || venue?.name || '';
 
   if (loading) return <VenueDetailsSkeleton />;
   
-  if (!venue) return <div className={styles.pageStyle}><p>Venue not found.</p></div>;
+if (!venue) return (
+  <div className={styles.pageContent}>
+    <VenueNotFound 
+      venueId={id}
+      onGoBack={() => navigate(-1)}
+      onBrowseVenues={() => navigate('/')}
+    />
+  </div>
+);
 
   return (
     <motion.div

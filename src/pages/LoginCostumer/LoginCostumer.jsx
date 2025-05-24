@@ -31,40 +31,41 @@ const LoginCostumer = () => {
 
   const isFormValid = email.trim() !== '' && password.trim() !== '';
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError('');
-  
-    if (!isFormValid) {
-      setError('Email and Password are required.');
-      return;
-    }
-  
-    setIsSubmitting(true);
-  
-    try {
-      const { name, token } = await loginCostumer({ email, password });
-  
-      setUsername(name);
-      localStorage.setItem('accessToken', token);
-      localStorage.setItem('username', name);
-  
-      setShowPopup(true);
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setError('');
+
+  if (!isFormValid) {
+    setError('Email and Password are required.');
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    const { name, token } = await loginCostumer({ email, password });
+
+    setUsername(name);
+    localStorage.setItem('accessToken', token);
+    localStorage.setItem('username', name);
+
+    setShowPopup(true);
+    setTimeout(() => {
+      navigate('/costumer-profile');
       setTimeout(() => {
-        navigate('/costumer-profile');
-      }, 2000);
-    } 
-    
-    catch (err) {
-      setError(err.message || 'Something went wrong');
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
-    } 
-    
-    finally {
-      setIsSubmitting(false);
-    }
-  };  
+        window.location.reload();
+      }, 100);
+    }, 2000);
+  } 
+  catch (err) {
+    setError(err.message || 'Something went wrong');
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
+  } 
+  finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <motion.div
