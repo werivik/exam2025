@@ -282,6 +282,12 @@ background-image: url(/media/logo/loadingScreen.png);
   }
 }
 
+@media (max-width:1000px) {
+  .heroSection {
+    margin-bottom: -75px;
+  }
+}
+
 @media (max-width: 768px) {
   .missionSection,
   .storySection {
