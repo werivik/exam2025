@@ -4,7 +4,7 @@ import debounce from "lodash.debounce";
 import styles from "./Header.module.css";
 import headerLogo from "/media/logo/logo-default.png";
 import headerLogoHover from "/media/logo/logo-hover.png";
-import { VENUES, PROFILES_SEARCH, VENUES_SEARCH } from "../../constants";
+import { VENUES, PROFILES_SEARCH, VENUES_SEARCH, PROFILES_SINGLE } from "../../constants";
 import { headers } from "../../headers";
 import { isLoggedIn, getUserRole, getVenueManagerStatus } from "../../auth/auth";
 
@@ -96,8 +96,13 @@ const SidebarMenu = memo(({
   isUserLoggedIn, 
   userData 
 }) => (
-  isOpen && (
-    <div className={styles.sidebarHeader}>
+  <>
+    <div 
+      className={`${styles.sidebarBackdrop} ${isOpen ? styles.backdropOpen : ''}`}
+      onClick={onClose}
+    />
+    
+    <div className={`${styles.sidebarHeader} ${isOpen ? styles.sidebarOpen : ''}`}>
       <button
         className={styles.sidebarClose}
         onClick={onClose}
@@ -134,14 +139,14 @@ const SidebarMenu = memo(({
           <li><Link to="/register-costumer">Register</Link></li>
         </ul>
       )}
+      <div className={styles.divideLineLaying}></div>
 
       <ul className={styles.menuLinks}>
-        <div className={styles.divideLineLaying}></div>
         <li><Link to="/about">About Us</Link></li>
         <li><Link to="/contact">Contact Us</Link></li>
       </ul>
     </div>
-  )
+  </>
 ));
 
 function Header() {
@@ -162,42 +167,43 @@ function Header() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-const fetchUserData = async () => {
-  try {
-    const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
-    const username = localStorage.getItem('username') || sessionStorage.getItem('username');
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+        const username = localStorage.getItem('username') || sessionStorage.getItem('username');
 
-    if (!token || !username) {
-      setUserData(null);
-      return;
-    }
+        if (!token || !username) {
+          setUserData(null);
+          return;
+        }
 
-    const profileRes = await fetch(PROFILES_SINGLE.replace("<name>", username), {
-      method: 'GET',
-      headers: headers(token),
-    });
+        const profileRes = await fetch(PROFILES_SINGLE.replace("<name>", username), {
+          method: 'GET',
+          headers: headers(token),
+        });
 
-    const profileData = await profileRes.json();
+        const profileData = await profileRes.json();
 
-    if (!profileRes.ok) {
-      throw new Error(profileData?.errors?.[0]?.message || 'Failed to fetch profile');
-    }
+        if (!profileRes.ok) {
+          throw new Error(profileData?.errors?.[0]?.message || 'Failed to fetch profile');
+        }
 
-    const isVenueManager = profileData?.data?.venueManager === true;
+        const isVenueManager = profileData?.data?.venueManager === true;
 
-    setUserData({
-      venueManager: isVenueManager
-    });
+        setUserData({
+          venueManager: isVenueManager
+        });
 
-    localStorage.setItem('venueManager', isVenueManager.toString());
-    sessionStorage.setItem('venueManager', isVenueManager.toString());
+        localStorage.setItem('venueManager', isVenueManager.toString());
+        sessionStorage.setItem('venueManager', isVenueManager.toString());
 
-  } 
-  catch (error) {
-    console.error("Error fetching user data:", error);
-    setUserData(null);
-  }
-};
+      } 
+      catch (error) {
+        console.error("Error fetching user data:", error);
+        setUserData(null);
+      }
+    };
+    
     if (isUserLoggedIn) {
       fetchUserData();
     } 

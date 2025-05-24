@@ -339,19 +339,65 @@ header {
   flex-direction: column;
   justify-content: flex-start;
   gap: 0px;
-  transition: transform 0.25s ease;
   z-index: 999;
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
 }
 .sidebarHeader Button {
   margin-bottom: 25px;
 }
-.divideLineLaying {
-  width: 125px;
-  border-top: solid 0.5px #f2f2f2ca;
-  border-radius: 99px;
-  margin-left: 15%;
-  margin-top: 15px;
-  margin-bottom: 15px;
+.sidebarHeader.sidebarOpen {
+  transform: translateX(0);
+}
+.sidebarHeader .menuLinks,
+.sidebarHeader .sidebarClose {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.3s ease 0.2s, transform 0.3s ease 0.2s;
+}
+.sidebarHeader.sidebarOpen .menuLinks,
+.sidebarHeader.sidebarOpen .sidebarClose {
+  opacity: 1;
+  transform: translateX(0);
+}
+.sidebarHeader .menuLinks li:nth-child(1) {
+  transition-delay: 0.25s;
+}
+.sidebarHeader .menuLinks li:nth-child(2) {
+  transition-delay: 0.3s;
+}
+
+.sidebarHeader .menuLinks li:nth-child(3) {
+  transition-delay: 0.35s;
+}
+
+.sidebarHeader .menuLinks li:nth-child(4) {
+  transition-delay: 0.4s;
+}
+
+.sidebarHeader .menuLinks li:nth-child(5) {
+  transition-delay: 0.45s;
+}
+
+.sidebarHeader.sidebarOpen .menuLinks li:nth-child(1) {
+  transition-delay: 0.25s;
+}
+
+.sidebarHeader.sidebarOpen .menuLinks li:nth-child(2) {
+  transition-delay: 0.3s;
+}
+
+.sidebarHeader.sidebarOpen .menuLinks li:nth-child(3) {
+  transition-delay: 0.35s;
+}
+
+.sidebarHeader.sidebarOpen .menuLinks li:nth-child(4) {
+  transition-delay: 0.4s;
+}
+
+.sidebarHeader.sidebarOpen .menuLinks li:nth-child(5) {
+  transition-delay: 0.45s;
 }
 .menuLinks {
   list-style: none;
@@ -359,12 +405,19 @@ header {
   flex-direction: column;
   gap: 10px;
 }
+.divideLineLaying {
+  border-top: solid 0.5px #f2f2f27c;
+  width: 65%;
+  margin-left: 35px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
 .menuLinks a {
   color: white;
   text-decoration: none;
   transition: 0.25s;
   position: relative;
-  width: 100%;
+  width: fit-content;
   max-width: 120px;
 }
 .menuLinks a::after {
@@ -426,10 +479,29 @@ header {
   font-size: 1.5rem;
   cursor: pointer;
 }
+
 .blurred {
   filter: blur(5px);
-  transition: filter 0.3s ease;
+  transition: filter 0.4s ease;
   pointer-events: none;
+}
+
+.sidebarBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  z-index: 998;
+}
+
+.sidebarBackdrop.backdropOpen {
+  opacity: 1;
+  visibility: visible;
 }
 
 header.special .menuLeftLinks a {
