@@ -327,7 +327,9 @@ useEffect(() => {
   min={minPrice}
   max={maxPrice}
   onChange={(e) => {
-    const value = e.target.value;
+    const value = e.target.value; 
+
+    console.log('Input Value:', value);
 
     if (value === "") {
       handleFilterChange({ target: { name: "priceMax", value: "" } });
