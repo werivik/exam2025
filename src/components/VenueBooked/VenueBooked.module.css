@@ -1,6 +1,7 @@
 .hotelCard {
   width: 100%;
-  height: 450px;
+  height: 460px;
+  padding-bottom: 10px;
   min-width: 315px;
   position: relative;
   border-radius: 25px 25px 5px 5px;
@@ -11,12 +12,10 @@
 .hotelCard:hover {
   cursor: pointer;
   transition: 0.25s;
+  background-color: white;
 }
 .hotelCard:hover .hotelInfo {
-  transition: 0.25s;
-  padding-left: 5px;
-  height: 45%;
-  background-color: white;
+  margin-left: 5px;
 }
 .imageContainer {
   position: relative;
@@ -128,11 +127,14 @@
   text-overflow: ellipsis;
 }
 .hotelLocation {
-  font-size: 19px;
+  font-size: 18px;
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 0;
   font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .pastBookingLabel {
   color: #666;
@@ -149,6 +151,7 @@
   flex-direction: row;
   align-items: center;
   margin-bottom: 5px;
+  height: 25px;
 }
 .stayingDates  .divideLine {
   border-left: 1px solid #6b7a3aae;
@@ -188,18 +191,10 @@
   color: #1F1B17;
   font-size: 18px;
 }
-.futureBooking:hover .imageContainer {
-  transition: 0.25s;
-  height: 60%;
-}
 .futureBooking:hover .bookedDate {
   height: 45px;
   padding-top: 15px;
   transition: 0.25s;
-}
-.currentlyStaying:hover .imageContainer {
-  transition: 0.25s;
-  height: 60%;
 }
 .currentlyStaying:hover .currentlyStayingBadge {
   padding-top: 15px;
@@ -212,10 +207,6 @@
 .pastBooking:hover .bookAgainButton {
     padding-top: 15px;
     transition: 0.25s;
-}
-.pastBooking:hover .imageContainer {
-  transition: 0.25s;
-  height: 60%;
 }
 .loadingCard {
   display: flex;
