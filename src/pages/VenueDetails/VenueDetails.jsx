@@ -570,7 +570,7 @@ if (!venue) return (
                 className={styles.venueRatingComponent}
               />
             )}
-
+<div className={styles.dividerLine}></div>
             <p className={styles.description}>
               <h3>Description</h3><br />
               {venue.description}
@@ -668,6 +668,7 @@ if (!venue) return (
                 <p>Owner information not available</p>
               )}
             </div>
+            <div className={styles.dividerLine}></div>
             <div className={styles.venueInfo}>
               <h3>Venue Info</h3>
               <div className={styles.venueCreationDates}>
