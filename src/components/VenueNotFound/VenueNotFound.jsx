@@ -1,8 +1,13 @@
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './VenueNotFound.module.css';
 import Buttons from '../Buttons/Buttons';
 
 const VenueNotFound = ({ venueId, onGoBack, onBrowseVenues }) => {
+
+  const navigate = useNavigate();
+  const handleGoBack = onGoBack || (() => window.history.back());
+  const handleBrowseVenues = onBrowseVenues || (() => navigate('/venues'));
+
   return (
     <div className={styles.container}>
       <div className={styles.iconContainer}>
@@ -25,15 +30,23 @@ const VenueNotFound = ({ venueId, onGoBack, onBrowseVenues }) => {
       )}
 
       <div className={styles.buttonContainer}>
-        <Buttons size='medium' version='v1' onClick={onGoBack || (() => window.history.back())}>
-            <i className="fa-solid fa-arrow-left"></i>
-            Go back
-        </Buttons>
+<Buttons
+  size="medium"
+  version="v1"
+  onClick={handleGoBack}
+>
+  <i className="fa-solid fa-arrow-left"></i>
+  Go back
+</Buttons>
 
-        <Buttons size='medium' version='v2' onClick={onBrowseVenues || (() => window.location.href = '/venues')}>
-            <i className="fa-solid fa-home"></i>
-            Browse All Venues
-        </Buttons>
+<Buttons
+  size="medium"
+  version="v2"
+  onClick={handleBrowseVenues}
+>
+  <i className="fa-solid fa-home"></i>
+  Browse All Venues
+</Buttons>
       </div>
 
       <div className={styles.actionCard}>

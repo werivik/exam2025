@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import styles from './VenueDetails.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -106,6 +106,7 @@ const MetaTooltip = ({ message, isVisible, position }) => {
 
 const VenueDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checkInDate, setCheckInDate] = useState('');
@@ -457,13 +458,14 @@ const currentImage = mediaArray[currentSlide]?.url;
 const currentAlt = mediaArray[currentSlide]?.alt || venue?.name || '';
 
   if (loading) return <VenueDetailsSkeleton />;
-  
+
 if (!venue) return (
   <div className={styles.pageContent}>
     <VenueNotFound 
       venueId={id}
       onGoBack={() => navigate(-1)}
       onBrowseVenues={() => navigate('/')}
+      
     />
   </div>
 );
