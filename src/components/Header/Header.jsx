@@ -307,7 +307,7 @@ function Header() {
           const location = venue.location || {};
           
           if (location.city && normalizeString(location.city).includes(normalizeString(input))) {
-            const key = `City:${location.city}`;
+            const key = `City: ${location.city}`;
             if (!seenLocations.has(key)) {
               locationMatches.push({ type: "City", value: location.city });
               seenLocations.add(key);
@@ -315,7 +315,7 @@ function Header() {
           }
           
           if (location.country && normalizeString(location.country).includes(normalizeString(input))) {
-            const key = `Country:${location.country}`;
+            const key = `Country: ${location.country}`;
             if (!seenLocations.has(key)) {
               locationMatches.push({ type: "Country", value: location.country });
               seenLocations.add(key);
@@ -323,7 +323,7 @@ function Header() {
           }
           
           if (location.continent && normalizeString(location.continent).includes(normalizeString(input))) {
-            const key = "Region:" + location.continent;
+            const key = `Region: ${location.continent}`;
             if (!seenLocations.has(key)) {
               locationMatches.push({ type: "Region", value: location.continent });
               seenLocations.add(key);

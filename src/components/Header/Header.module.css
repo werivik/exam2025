@@ -236,20 +236,21 @@ header {
   position: relative;
 }
 .searchInput {
-  padding: 0.25rem;
+  padding: 0.35rem;
   border: none;
-  border-radius: 10px;
+  border-radius: 5px;
   top: 2.5px;
-  padding-left: 7px;
+  padding-left: 10px;
   padding-right: 15px;
   width: 100%;
   min-width: 450px;
   right: 100%;
   position: absolute;
   z-index: 998;
-  font-size: 1rem;
+  font-size: 0.9rem;
   transition: 0.25s;
   background-color: white;
+  border: solid 0.5px #ddd;
 }
 .suggestionsList {
   width: 100%;
@@ -264,7 +265,7 @@ header {
   text-align: left;
   font-size: 1rem;
   background-color: white;
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 0px 0px 5px 5px;
   z-index: 997;
   transition: 0.25s;
   -webkit-box-shadow: inset 0px 1px 67px -53px rgba(0,0,0,0.39);
@@ -304,7 +305,7 @@ header {
   color: #1F1B17;
 }
 .searchActive {
-  color: #1F1B17;
+  color: #1F1B17 !important;
   cursor: pointer;
   font-size: 0.75rem;
 }
