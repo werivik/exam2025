@@ -205,26 +205,27 @@ const VenueDetails = () => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [activeTooltip]);
 
-  useEffect(() => {
-    const handleAuthChange = async () => {
-      const loggedIn = isLoggedIn();
-      setUserLoggedIn(loggedIn);
-      
-      if (loggedIn) {
-        try {
-          const role = await getUserRole();
-          setUserRole(role);
-        } 
-        catch (error) {
-          console.error('Error fetching user role:', error);
-          setUserRole('guest');
-        }
+useEffect(() => {
+  const handleAuthChange = async () => {
+    const loggedIn = isLoggedIn();
+    setUserLoggedIn(loggedIn);
+
+    if (loggedIn) {
+      try {
+        const role = await getUserRole();
+        console.log("Detected user role:", role);
+        setUserRole(role);
       } 
-      else {
-        setUserRole('guest');
+      catch (error) {
+        console.error('Error determining user role:', error);
+        setUserRole('customer');
       }
-    };
-    
+    } 
+    else {
+      setUserRole('guest');
+    }
+  };
+
     handleAuthChange();
     window.addEventListener("authchange", handleAuthChange);
     return () => window.removeEventListener("authchange", handleAuthChange);

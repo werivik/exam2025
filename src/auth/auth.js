@@ -9,8 +9,23 @@ export function isLoggedIn() {
   return Boolean(localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken"));
 }
 
-export function login({ accessToken, remember }) {
+export async function login({ accessToken, remember }) {
   (remember ? localStorage : sessionStorage).setItem("accessToken", accessToken);
+  const storage = remember ? localStorage : sessionStorage;
+
+  try {
+    const username = storage.getItem("username");
+    if (username) {
+      const role = await fetchUserRole(username);
+      storage.setItem("venueManager", role === 'venueManager' ? 'true' : 'false');
+    }
+  } 
+  
+  catch (error) {
+    console.error("Failed to determine user role during login:", error);
+    storage.setItem("venueManager", 'false');
+  }
+
   window.dispatchEvent(new Event("authchange"));
 }
 
@@ -27,14 +42,27 @@ export function logout() {
 }
 
 export const getUserRole = async () => {
-  const venueManager = localStorage.getItem('venueManager');
+  try {
+    const response = await fetch(PROFILES_SINGLE, {
+      headers: headers(),
+    });
 
-  if (venueManager === 'true') {
-    return 'venueManager';
+    const data = await response.json();
+    const { venueManager } = data.data;
+
+    const roleValue = venueManager === true ? 'venueManager' : 'customer';
+
+    sessionStorage.setItem('venueManager', venueManager);
+    localStorage.setItem('venueManager', venueManager);
+
+    return roleValue;
+  } 
+  catch (error) {
+    console.error('Error fetching user role:', error);
+    return 'guest';
   }
-
-  return 'customer';
 };
+
 
 export function getVenueManagerStatus() {
   return localStorage.getItem('venueManager') === 'true' || sessionStorage.getItem('venueManager') === 'true';

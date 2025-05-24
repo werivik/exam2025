@@ -158,6 +158,13 @@ const VenueDetailsPopup = ({
       setIsEditing(true);
     }
   };
+
+  const handleBookAgain = () => {
+    // Navigate to the venue details page where user can make a new booking
+    navigate(`/venue-details/${selectedVenue?.id}`);
+    closeModal();
+  };
+
   const handleClose = () => {
     setIsEditing(false);
     closeModal();
@@ -401,7 +408,7 @@ const getDescriptionPreview = (desc) => {
               {selectedVenue?.media && selectedVenue.media.length > 0 ? (
                 
                 <div className={styles.imageSlider}>
-<div className={styles.slideshowProgress}>
+                  <div className={styles.slideshowProgress}>
                     <p>{currentIndex + 1} of {selectedVenue.media.length}</p>
                   </div>
                   <img
@@ -574,12 +581,11 @@ const getDescriptionPreview = (desc) => {
                           </p>
                         </div>  
                       </div>
-
                       <div className={styles.bookedVenueEditButtons}>
-<div className={styles.bookedVenueEditButtons}>
-  <Buttons size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel Edit</Buttons>
-  <Buttons size="small" version="v1" onClick={handleSave}>Save Changes</Buttons>
-</div>
+                        <div className={styles.bookedVenueEditButtons}>
+                          <Buttons size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel Edit</Buttons>
+                          <Buttons size="small" version="v1" onClick={handleSave}>Save Changes</Buttons>
+                        </div>
                       </div>
                     </div>
                   ) : bookingData ? (
@@ -599,6 +605,11 @@ const getDescriptionPreview = (desc) => {
   <div className={styles.bookedVenueEditButtons}>
     <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
     <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+  </div>
+)}
+{isPastBooking && (
+  <div className={styles.bookedVenueEditButtons}>
+    <Buttons size="small" version="v1" onClick={handleBookAgain}>Book Again</Buttons>
   </div>
 )}
                     </div>

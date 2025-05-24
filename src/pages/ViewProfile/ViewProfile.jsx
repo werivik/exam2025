@@ -189,8 +189,8 @@ const ViewProfile = () => {
   const VenuesList = ({ showLabel = false }) => (
     <div className={styles.venuesSection} ref={mobileRefs.venues}>
       <div className={styles.sectionHeader}>
-        <h3>Venues</h3>
-        <div>
+        <h3>{capitalizeFirstLetter(userData.name) || 'User'}'s Venues</h3>
+        <div className={styles.sectionFilter}>
           {showLabel && <label>Sort By:</label>}
           <SortDropdown />
         </div>
