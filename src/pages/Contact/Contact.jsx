@@ -127,16 +127,16 @@ const Contact = () => {
             <div className={styles.socialLinks}>
               <h3>Connect With Us</h3>
               <div className={styles.socialIcons}>
-                <a href="#" className={styles.socialIcon}>
+                <a href="https://www.linkedin.com/in/weronika-vik-0844022a6/" className={styles.socialIcon}>
                   <i className="fa-brands fa-facebook-f"></i>
                 </a>
-                <a href="#" className={styles.socialIcon}>
+                <a href="https://www.linkedin.com/in/weronika-vik-0844022a6/" className={styles.socialIcon}>
                   <i className="fa-brands fa-instagram"></i>
                 </a>
-                <a href="#" className={styles.socialIcon}>
+                <a href="https://www.linkedin.com/in/weronika-vik-0844022a6/" className={styles.socialIcon}>
                   <i className="fa-brands fa-twitter"></i>
                 </a>
-                <a href="#" className={styles.socialIcon}>
+                <a href="https://www.linkedin.com/in/weronika-vik-0844022a6/" className={styles.socialIcon}>
                   <i className="fa-brands fa-linkedin-in"></i>
                 </a>
               </div>

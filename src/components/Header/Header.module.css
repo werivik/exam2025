@@ -341,8 +341,9 @@ header {
   gap: 0px;
   z-index: 999;
   transform: translateX(-100%);
-  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+  will-change: transform;
 }
 .sidebarHeader Button {
   margin-bottom: 25px;
@@ -353,31 +354,44 @@ header {
 .sidebarHeader .menuLinks,
 .sidebarHeader .sidebarClose {
   opacity: 0;
-  transform: translateX(-20px);
-  transition: opacity 0.3s ease 0.2s, transform 0.3s ease 0.2s;
+  transform: translateX(-30px);
+  transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0.15s, 
+              transform 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0.15s;
+  will-change: opacity, transform;
 }
 .sidebarHeader.sidebarOpen .menuLinks,
 .sidebarHeader.sidebarOpen .sidebarClose {
   opacity: 1;
   transform: translateX(0);
 }
+.sidebarHeader .menuLinks li {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1), 
+              transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: opacity, transform;
+}
+.sidebarHeader.sidebarOpen .menuLinks li {
+  opacity: 1;
+  transform: translateX(0);
+}
 .sidebarHeader .menuLinks li:nth-child(1) {
-  transition-delay: 0.25s;
+  transition-delay: 0.2s;
 }
 .sidebarHeader .menuLinks li:nth-child(2) {
-  transition-delay: 0.3s;
+  transition-delay: 0.25s;
 }
 
 .sidebarHeader .menuLinks li:nth-child(3) {
-  transition-delay: 0.35s;
+  transition-delay: 0.3s;
 }
 
 .sidebarHeader .menuLinks li:nth-child(4) {
-  transition-delay: 0.4s;
+  transition-delay: 0.35s;
 }
 
 .sidebarHeader .menuLinks li:nth-child(5) {
-  transition-delay: 0.45s;
+  transition-delay: 0.4s;
 }
 
 .sidebarHeader.sidebarOpen .menuLinks li:nth-child(1) {
@@ -482,7 +496,7 @@ header {
 
 .blurred {
   filter: blur(5px);
-  transition: filter 0.4s ease;
+  transition: filter 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   pointer-events: none;
 }
 
@@ -495,8 +509,10 @@ header {
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
+  transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), 
+              visibility 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   z-index: 998;
+  will-change: opacity;
 }
 
 .sidebarBackdrop.backdropOpen {
@@ -548,6 +564,29 @@ header.special .divideLine {
 .menuLinks .divideLineLaying {
   margin-left: 0;
   margin-top: -5px;
+}
+
+.holidazeMotto {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translate(-50%);
+  margin-left: 25px;
+  width: fit-content;
+}
+
+.holidazeMotto h3 {
+  font-size: 2.25rem;
+  margin: 0;
+  padding: 0;
+}
+
+.holidazeMotto p {
+  margin: 0;
+  padding: 0;
+  font-size: 0.75rem;
+  margin-top: -5px;
+  text-align: center;
 }
 
 @media (max-width:1375px){

@@ -145,6 +145,10 @@ const SidebarMenu = memo(({
         <li><Link to="/about">About Us</Link></li>
         <li><Link to="/contact">Contact Us</Link></li>
       </ul>
+      <div className={styles.holidazeMotto}>
+        <h3>Holidaze</h3>
+        <p>Elegance meets Comfort</p>
+      </div>
     </div>
   </>
 ));
