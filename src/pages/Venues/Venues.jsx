@@ -556,8 +556,10 @@ useEffect(() => {
 
 useEffect(() => {
   if (location.state?.filters) {
-    const { filters } = location.state;
-    
+    const { filters } = location.state;    
+    if (location.state?.searchQuery) {
+      setSearchQuery(location.state.searchQuery);
+    }
     if (filters.country || filters.city) {
       setInitialLocationFilters({
         country: filters.country || '',

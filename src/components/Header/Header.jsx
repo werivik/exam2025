@@ -346,29 +346,38 @@ function Header() {
     [venues]
   );
 
-  const handleSelect = useCallback((item) => {
-    if (item.type === "Venue" && item.id) {
-      navigate(`/venue-details/${item.id}`);
-    } 
-    else if (item.type === "City") {
-      navigate("/venues", {
-        state: { filters: { city: item.value } },
-      });
-    }
-    else if (item.type === "Country") {
-      navigate("/venues", {
-        state: { filters: { country: item.value } },
-      });
-    }
-    else if (item.type === "Region") {
-      navigate("/venues", {
-        state: { filters: { continent: item.value } },
-      });
-    }
-    setFilters({ destination: "" });
-    setSuggestions([]);
-    setIsSearchOpen(false);
-  }, [navigate]);
+const handleSelect = useCallback((item) => {
+  if (item.type === "Venue" && item.id) {
+    navigate(`/venue-details/${item.id}`);
+  } 
+  else if (item.type === "City") {
+    navigate("/venues", {
+      state: { 
+        filters: { city: item.value },
+        searchQuery: item.value 
+      },
+    });
+  }
+  else if (item.type === "Country") {
+    navigate("/venues", {
+      state: { 
+        filters: { country: item.value },
+        searchQuery: item.value 
+      },
+    });
+  }
+  else if (item.type === "Region") {
+    navigate("/venues", {
+      state: { 
+        filters: { continent: item.value },
+        searchQuery: item.value 
+      },
+    });
+  }
+  setFilters({ destination: "" });
+  setSuggestions([]);
+  setIsSearchOpen(false);
+}, [navigate]);
 
   const toggleSearchBar = useCallback(() => {
     setIsSearchOpen(prev => !prev);
