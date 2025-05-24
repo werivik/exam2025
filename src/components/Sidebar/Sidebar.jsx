@@ -313,53 +313,51 @@ useEffect(() => {
   </div>
 </div>
             <div className={styles.divideLine}></div>
-            <div className={styles.filterGroup}>
-              <h3>Price Range</h3>
-              <div className={styles.priceLimits}>
-                <span>Min: ${minPrice}</span>
-                <span>Max: ${maxPrice}</span>
-              </div>
-              <div className={styles.priceInputSingle}>
-<input
-  type="number"
-  value={filters.priceMax || ""}
-  placeholder={`The Maximum price is ${maxPrice}`}
-  min={minPrice}
-  max={maxPrice}
-  onChange={(e) => {
-    const value = e.target.value; 
-
-    console.log('Input Value:', value);
-
-    if (value === "") {
-      handleFilterChange({ target: { name: "priceMax", value: "" } });
-    } 
-    else {
-      const numericValue = Math.max(minPrice, Math.min(maxPrice, parseInt(value)));
-      handleFilterChange({ target: { name: "priceMax", value: numericValue } });
-    }
-  }}
-/>
-              </div>
-              <div className={styles.sliderSingle}>
-<input
-  type="range"
-  min={minPrice}
-  max={maxPrice}
-  value={filters.priceMax || maxPrice}
-  onChange={(e) => {
-    handleFilterChange({ target: { name: 'priceMax', value: parseInt(e.target.value) } });
-  }}
-  style={{
-    background: `linear-gradient(to right, #1F1B17 ${
-      ((filters.priceMax || maxPrice) - minPrice) / (maxPrice - minPrice) * 100
-    }%, #ddd ${
-      ((filters.priceMax || maxPrice) - minPrice) / (maxPrice - minPrice) * 100
-    }%)`
-  }}
-/>
-              </div>
-            </div>
+<div className={styles.filterGroup}>
+  <h3>Price Range</h3>
+  <div className={styles.priceLimits}>
+    <span>Min: ${minPrice}</span>
+    <span>Max: ${filters.priceMax || maxPrice}</span>
+  </div>
+  <div className={styles.priceInputSingle}>
+    <input
+      type="number"
+      value={filters.priceMax || ""}
+      placeholder={`The Maximum price is ${maxPrice}`}
+      min={minPrice}
+      max={maxPrice}
+      onChange={(e) => {
+        const value = e.target.value;
+        if (value === "") {
+          handleFilterChange({ target: { name: "priceMax", value: "" } });
+        } 
+        else {
+          const numericValue = Math.max(minPrice, Math.min(maxPrice, parseInt(value)));
+          handleFilterChange({ target: { name: "priceMax", value: numericValue } });
+        }
+      }}
+    />
+  </div>
+  <p className={styles.maxPriceText}>The max price is {maxPrice}</p>
+  <div className={styles.sliderSingle}>
+    <input
+      type="range"
+      min={minPrice}
+      max={maxPrice}
+      value={filters.priceMax || maxPrice}
+      onChange={(e) => {
+        handleFilterChange({ target: { name: 'priceMax', value: parseInt(e.target.value) } });
+      }}
+      style={{
+        background: `linear-gradient(to right, #1F1B17 ${
+          ((filters.priceMax || maxPrice) - minPrice) / (maxPrice - minPrice) * 100
+        }%, #ddd ${
+          ((filters.priceMax || maxPrice) - minPrice) / (maxPrice - minPrice) * 100
+        }%)`
+      }}
+    />
+  </div>
+</div>
             <div className={styles.divideLine}></div>
             <div className={styles.filterGroup}>
               <h3>Guests</h3>
