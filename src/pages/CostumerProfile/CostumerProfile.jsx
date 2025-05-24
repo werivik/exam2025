@@ -288,28 +288,62 @@ const CostumerProfile = () => {
 
 const filterVenues = (venues) => {
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const isCurrentlyStaying = (venue) => {
+    const startDate = new Date(venue.dateFrom);
+    const endDate = new Date(venue.dateTo);
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+    return today >= startDate && today < endDate;
+  };
 
   if (filter === 'Future') {
-    return [...venues]
-      .filter((venue) => venue.dateFrom >= today)
-      .sort((a, b) => a.dateFrom - b.dateFrom);
+    const futureVenues = venues.filter((venue) => {
+      const startDate = new Date(venue.dateFrom);
+      startDate.setHours(0, 0, 0, 0);
+      return startDate >= today;
+    });
+
+    const currentlyStaying = futureVenues.filter(isCurrentlyStaying);
+    const upcomingFuture = futureVenues.filter(venue => !isCurrentlyStaying(venue));
+
+    currentlyStaying.sort((a, b) => a.dateFrom - b.dateFrom);
+    upcomingFuture.sort((a, b) => a.dateFrom - b.dateFrom);
+
+    return [...currentlyStaying, ...upcomingFuture];
   }
 
   if (filter === 'Previous') {
-    return [...venues]
-      .filter((venue) => venue.dateFrom < today)
+    return venues
+      .filter((venue) => {
+        const endDate = new Date(venue.dateTo);
+        endDate.setHours(0, 0, 0, 0);
+        return endDate < today;
+      })
       .sort((a, b) => b.dateFrom - a.dateFrom);
   }
 
+  const currentlyStaying = venues.filter(isCurrentlyStaying);
   const future = venues
-    .filter((venue) => venue.dateFrom >= today)
+    .filter((venue) => {
+      const startDate = new Date(venue.dateFrom);
+      startDate.setHours(0, 0, 0, 0);
+      return startDate >= today && !isCurrentlyStaying(venue);
+    })
     .sort((a, b) => a.dateFrom - b.dateFrom);
 
   const past = venues
-    .filter((venue) => venue.dateFrom < today)
+    .filter((venue) => {
+      const endDate = new Date(venue.dateTo);
+      endDate.setHours(0, 0, 0, 0);
+      return endDate < today;
+    })
     .sort((a, b) => b.dateFrom - a.dateFrom);
 
-  return [...future, ...past];
+  currentlyStaying.sort((a, b) => a.dateFrom - b.dateFrom);
+
+  return [...currentlyStaying, ...future, ...past];
 };
 
   const filteredVenues = filterVenues(bookedVenues);

@@ -197,15 +197,6 @@
   padding-top: 15px;
   transition: 0.25s;
 }
-.currentlyStaying img {
-  border: solid 1px #6B7A3A;
-}
-.futureBooking img {
-  border: solid 1px white;
-}
-.pastBooking img {
-  border: solid 1px #1F1B17;
-}
 .currentlyStaying:hover .imageContainer {
   transition: 0.25s;
   height: 60%;
