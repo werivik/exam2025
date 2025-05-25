@@ -55,6 +55,7 @@ const Venues = () => {
   const [initialFiltersApplied, setInitialFiltersApplied] = useState(false);
   const [initialMetaFilters, setInitialMetaFilters] = useState(null);
   const [initialLocationFilters, setInitialLocationFilters] = useState(null);
+  const [searchPlaceholder, setSearchPlaceholder] = useState("Search venues, locations, or owners...");
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -556,14 +557,18 @@ useEffect(() => {
 
 useEffect(() => {
   if (location.state?.filters) {
-    const { filters } = location.state;    
+    const { filters } = location.state;
+    
     if (location.state?.searchQuery) {
       setSearchQuery(location.state.searchQuery);
+      setSearchPlaceholder(`Searching for "${location.state.searchQuery}"`);
     }
-    if (filters.country || filters.city) {
+    
+    if (filters.country || filters.city || filters.continent) {
       setInitialLocationFilters({
         country: filters.country || '',
-        city: filters.city || ''
+        city: filters.city || '',
+        continent: filters.continent || ''
       });
     }
     if (filters.meta) {
@@ -644,14 +649,15 @@ useEffect(() => {
             <div className={styles.filterTop}>
               <div className={styles.topSearchbar}>
               <Searchbar
-                filters={filters}
-                setFilters={setFilters}
-                venues={venues}
-                setSearchQuery={setSearchQuery}
-                searchQuery={searchQuery}
-                handleSearchInputChange={handleSearchInputChange}
-                setFilteredVenues={setFilteredVenues}
-                setNoMatches={setNoMatches}
+  filters={filters}
+  setFilters={setFilters}
+  venues={venues}
+  setSearchQuery={setSearchQuery}
+  searchQuery={searchQuery}
+  handleSearchInputChange={handleSearchInputChange}
+  setFilteredVenues={setFilteredVenues}
+  setNoMatches={setNoMatches}
+  placeholder={searchPlaceholder}
               />
             </div>
               <Buttons size='small' version='v2' onClick={toggleSidebar}>
