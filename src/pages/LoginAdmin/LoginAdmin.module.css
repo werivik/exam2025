@@ -140,6 +140,10 @@
   animation: shakeEffect 0.5s ease-in-out;
 }
 
+.metaTooltip {
+  color: white;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
