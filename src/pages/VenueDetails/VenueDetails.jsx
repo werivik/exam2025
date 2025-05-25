@@ -6,10 +6,10 @@ import Buttons from '../../components/Buttons/Buttons';
 import { isLoggedIn, getUserRole } from '../../auth/auth';
 import { handleBookingSubmit } from '../../auth/booking';
 
-import slideshowNext from "/media/icons/slideshow-next-button.png";
-import slideshowPrev from "/media/icons/slideshow-prev-button.png";
-import star from "/media/rating/christmas-stars.png";
-import crowd from "/media/icons/crowd-icon.png";
+import slideshowNext from "../../../public/media/icons/slideshow-next-button.png";
+import slideshowPrev from "../../../public/media/icons/slideshow-prev-button.png";
+import star from "../../../public/media/rating/christmas-stars.png";
+import crowd from "../../../public/media/icons/crowd-icon.png";
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';

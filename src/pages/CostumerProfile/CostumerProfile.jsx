@@ -10,8 +10,8 @@ import { updateProfile } from '../../auth/auth';
 import VenueBooked from '../../components/VenueBooked/VenueBooked';
 import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
 import CostumPopup from '../../components/CostumPopup/CostumPopup';
-import bannerImage from '../../../media/logo/loadingScreen.png';
-import bannerEdge from '../../../media/images/beige-edge.png';
+import bannerImage from '../../../public/media/logo/loadingScreen.png';
+import bannerEdge from '../../../public/media/images/beige-edge.png';
 import Dashboard from '../../components/Dashboard/Dashboard.jsx';
 
 const pageVariants = {

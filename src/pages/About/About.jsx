@@ -8,25 +8,25 @@ const teamMembers = [
   {
     name: "Sarah Johnson",
     role: "Chief Executive Officer",
-    image: "/media/staff/female1.jpg",
+    image: "../../../public/media/staff/female1.jpg",
     bio: "Sarah founded Holidaze in 2018 with a vision to connect travelers with unique accommodations around the world."
   },
   {
     name: "Marcus Chen",
     role: "Head of Operations",
-    image: "/media/staff/male1.jpg",
+    image: "../../../public/media/staff/male1.jpg",
     bio: "With 15 years in hospitality, Marcus ensures every Holidaze experience meets our high standards."
   },
   {
     name: "Elena Rodriguez",
     role: "Customer Experience Director",
-    image: "/media/staff/female2.jpg",
+    image: "../../../public/media/staff/female2.jpg",
     bio: "Elena leads our support team with her signature blend of efficiency and warmth."
   },
   {
     name: "Thomas Nielsen",
     role: "Head of Technology",
-    image: "/media/staff/male2.jpg",
+    image: "../../../public/media/staff/male2.jpg",
     bio: "Thomas oversees our digital platform, making sure your booking experience is seamless."
   }
 ];

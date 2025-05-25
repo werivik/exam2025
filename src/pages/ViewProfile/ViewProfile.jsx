@@ -7,10 +7,10 @@ import { headers } from '../../headers';
 import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType';
 import Buttons from '../../components/Buttons/Buttons';
 
-import defaultAvatar from '/media/images/mdefault.jpg';
-import starRating from '../../../media/rating/christmas-stars.png';
-import bannerImage from '../../../media/logo/loadingScreen.png';
-import bannerEdge from '../../../media/images/beige-edge.png';
+import defaultAvatar from '../../../public/media/images/mdefault.jpg';
+import starRating from '../../../public/media/rating/christmas-stars.png';
+import bannerImage from '../../../public/media/logo/loadingScreen.png';
+import bannerEdge from '../../../public/media/images/beige-edge.png';
 
 const pageVariants = {
   initial: { opacity: 0 },

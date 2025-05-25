@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./BannerSlideshow.module.css";
 
-import img1 from "/media/images/homeBanner.png";
-import img2 from "/media/images/spainBanner2.png";
-import img3 from "/media/images/irelandBanner2.png";
-import img4 from "/media/images/parisBanner.jpg";
-import img5 from "/media/images/japanBanner.png";
+import img1 from "/public/media/images/homeBanner.png";
+import img2 from "/public/media/images/spainBanner2.png";
+import img3 from "/public/media/images/irelandBanner2.png";
+import img4 from "/public/media/images/parisBanner.jpg";
+import img5 from "/public/media/images/japanBanner.png";
 
 const slides = [
   {

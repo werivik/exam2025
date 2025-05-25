@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './VenueCardSecondType.module.css';
-import stars from "/media/rating/christmas-stars.png";
+import stars from "/public/media/rating/christmas-stars.png";
 
 const VenueCardSecondType = ({ venue, onClick }) => {
   const isLoading = !venue;

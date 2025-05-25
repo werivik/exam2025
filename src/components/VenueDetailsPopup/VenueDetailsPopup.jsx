@@ -7,8 +7,8 @@ import CustomPopup from '../CostumPopup/CostumPopup';
 import { headers } from '../../headers';
 import { handleBookingDelete, handleBookingUpdate } from '../../auth/booking';
 import { VENUE_DELETE } from '../../constants';
-import slideshowPrev from "/media/icons/slideshow-next-button.png";
-import slideshowNext from "/media/icons/slideshow-next-button.png";
+import slideshowPrev from "/public/media/icons/slideshow-next-button.png";
+import slideshowNext from "/public/media/icons/slideshow-next-button.png";
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
 const VenueDetailsPopup = ({ 
   selectedVenue, 
