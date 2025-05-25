@@ -1,7 +1,7 @@
 import { AUTH_LOGIN, PROFILES_SINGLE } from '../constants';
 import { headers } from '../headers';
 
-// Costumer
+// Cstumer
 export async function loginCostumer({ email, password }) {
   const response = await fetch(AUTH_LOGIN, {
     method: 'POST',
@@ -40,14 +40,8 @@ export const loginAdmin = async ({ email, password }) => {
 
   console.log("Token received:", token);
 
-  if (token) {
-    console.log("Saving token to localStorage:", token);
-    localStorage.setItem('accessToken', token);
-    localStorage.setItem('username', name);
-    localStorage.setItem('venueManager', venueManager.toString());
-  }
-
   let venueManager = false;
+
   if (name && token) {
     const profileRes = await fetch(PROFILES_SINGLE.replace("<name>", name), {
       method: 'GET',
@@ -58,11 +52,16 @@ export const loginAdmin = async ({ email, password }) => {
     venueManager = profileData?.data?.venueManager ?? false;
   }
 
+  if (token) {
+    console.log("Saving token to localStorage:", token);
+    localStorage.setItem('accessToken', token);
+    localStorage.setItem('username', name);
+    localStorage.setItem('venueManager', venueManager.toString());
+  }
+
   return {
     name: name,
     token: token,
     venueManager: venueManager,
   };
 };
-
-  
