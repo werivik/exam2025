@@ -4,6 +4,7 @@
   display: flex;
   justify-content: center;
   position: relative;
+  z-index: 2;
 }
 .heroSection {
   width: 83.6%;
@@ -213,7 +214,7 @@
     overflow-y: auto;
     background-color: white;
     font-size: 1rem;
-    z-index: 995;
+    z-index: 9999;
     border-radius: 5px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   } 
@@ -265,7 +266,7 @@
     min-width: 225px;
     position: relative;
     cursor: pointer;
-    z-index: 777;
+    z-index: 99999;
     border: 1px solid #ddd;
   }
   .guestSelector p {
@@ -285,7 +286,7 @@
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
     padding: 10px;
-    z-index: 777;
+    z-index: 9999;
   }
   .dropdownMenu.open {
     display: flex;
