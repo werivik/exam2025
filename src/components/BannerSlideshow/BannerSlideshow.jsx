@@ -1,38 +1,43 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./BannerSlideshow.module.css";
 
-import img1 from "/public/media/images/homeBanner.png";
-import img2 from "/public/media/images/spainBanner2.png";
-import img3 from "/public/media/images/irelandBanner2.png";
+import img1 from "/public/media/images/yatch.mov";
+import img2 from "/public/media/images/spainBanner.png";
+import img3 from "/public/media/images/irelandBanner.png";
 import img4 from "/public/media/images/parisBanner.jpg";
 import img5 from "/public/media/images/japanBanner.png";
 
 const slides = [
   {
     img: img1,
+    isVideo: true,
     h1: "Holidaze",
     span: "Elegance meets Comfort"
   },
   {
     img: img4,
+    isVideo: false,
     h2: "Paris",
     h3: "Travel to",
     p: "...with Holidaze"
   },
   {
     img: img2,
+    isVideo: false,
     h2: "Spain",
     h3: "Travel to",
     p: "...with Holidaze"
   },
   {
     img: img3,
+    isVideo: false,
     h2: "Ireland",
     h3: "Travel to",
     p: "...with Holidaze"
   },
-    {
+  {
     img: img5,
+    isVideo: false,
     h2: "Japan",
     h3: "Travel to",
     p: "...with Holidaze"
@@ -47,8 +52,10 @@ export default function BannerSlideshow() {
 
   useEffect(() => {
     slides.forEach((slide) => {
-      const img = new Image();
-      img.src = slide.img;
+      if (!slide.isVideo) {
+        const img = new Image();
+        img.src = slide.img;
+      }
     });
   }, []);
 
@@ -92,10 +99,33 @@ export default function BannerSlideshow() {
     }
   }, [isDotClicked]);
 
+  const renderMedia = (slide, slideIndex, side) => {
+    if (slide.isVideo) {
+      return (
+        <video
+          src={slide.img}
+          className={styles.fullImage}
+          autoPlay
+          muted
+          loop
+          playsInline
+          key={`video-${side}-${slideIndex}`}
+        />
+      );
+    } else {
+      return (
+        <img
+          src={slide.img}
+          alt={`Slide ${slideIndex}`}
+          className={styles.fullImage}
+        />
+      );
+    }
+  };
+
   return (
     <section className={styles.slideshowWrapper}>
       <div className={styles.splitSlideshow}>
-        {/* Left Lane */}
         <div className={styles.lane}>
           <div
             className={styles.stack}
@@ -104,14 +134,12 @@ export default function BannerSlideshow() {
             {slides.map((slide, i) => (
               <div className={styles.slice} key={`left-${i}`}>
                 <div className={styles.leftWrapper}>
-                  <img src={slide.img} alt={`Slide ${i}`} className={styles.fullImage} />
+                  {renderMedia(slide, i, 'left')}
                 </div>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Right Lane */}
         <div className={`${styles.lane} ${styles.right}`}>
           <div
             className={styles.stack}
@@ -123,7 +151,7 @@ export default function BannerSlideshow() {
               .map((slide, i) => (
                 <div className={styles.slice} key={`right-${i}`}>
                   <div className={styles.rightWrapper}>
-                    <img src={slide.img} alt={`Slide ${i}`} className={styles.fullImage} />
+                    {renderMedia(slide, i, 'right')}
                   </div>
                 </div>
               ))}
@@ -131,14 +159,14 @@ export default function BannerSlideshow() {
         </div>
 
         <div className={styles.paginationDots}>
-  {slides.map((_, i) => (
-    <div
-      key={`dot-${i}`}
-      onClick={() => handleDotClick(i)}
-      className={`${styles.slideDot} ${index === i ? styles.active : ""}`}
-    />
-  ))}
-</div>
+          {slides.map((_, i) => (
+            <div
+              key={`dot-${i}`}
+              onClick={() => handleDotClick(i)}
+              className={`${styles.slideDot} ${index === i ? styles.active : ""}`}
+            />
+          ))}
+        </div>
 
         {showContent && (
           <div className={styles.bannerText}>
