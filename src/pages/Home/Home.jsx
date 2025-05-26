@@ -8,10 +8,10 @@ import Buttons from '../../components/Buttons/Buttons';
 
 import Edge from "../../../public/media/images/beige-edge.png";
 import registerImage from "../../../public/media/hotelTypes/hotelReseption.jpeg";
-import animalImage from "../../../public/media/metaImages/animal.jpeg";
-import breakfastImage from "../../../public/media/metaImages/breakfast.jpg";
-import parkingImage from "../../../public/media/metaImages/parking.jpeg";
-import wifiImage from "../../../public/media/metaImages/wifi.jpeg";
+import animalImage from "../../../public/media/metaImages/animal-min.jpeg";
+import breakfastImage from "../../../public/media/metaImages/breakfast-min.jpg";
+import parkingImage from "../../../public/media/metaImages/parking-min.jpeg";
+import wifiImage from "../../../public/media/metaImages/wifi-min.jpeg";
 
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
@@ -20,10 +20,10 @@ import PopularCard from '../../components/PopularCard/PopularCard';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
 import BannerSlideshow from '../../components/BannerSlideshow/BannerSlideshow';
 
-import paris from '../../../public/media/images/parisDestination.jpeg';
-import greece from '../../../public/media/images/greeceDestination.jpeg';
-import japan from '../../../public/media/images/tokyoDestination.jpeg';
-import america from '../../../public/media/images/yorkDestination.jpeg';
+import paris from '../../../public/media/images/parisDestination-min.jpeg';
+import greece from '../../../public/media/images/greeceDestination-min.jpeg';
+import japan from '../../../public/media/images/tokyoDestination-min.jpeg';
+import america from '../../../public/media/images/yorkDestination-min.jpeg';
 
 const pageVariants = {
   initial: { opacity: 0 },
