@@ -616,6 +616,8 @@ useEffect(() => {
               <h1>Find your Dream Stay</h1>
               <p>...with Holidaze</p>
             </div>
+            <div className={styles.divideLine}></div>
+
             <div className={styles.filterTopSection}>
             <div className={styles.filterTop}>
               <div className={styles.topSearchbar}>
@@ -656,6 +658,8 @@ useEffect(() => {
               </div>
           </div>
           </div>
+
+          <div className={styles.divideLine}></div>
 
           {loading ? (
             <div className={styles.allHotels}>

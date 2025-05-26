@@ -29,10 +29,20 @@
   justify-content: space-between;
   align-items: center;
   pointer-events: none;
-  height: 280px;
+  height: 150px;
+  margin-top: 50px;
 }
+
+.divideLine {
+  border-top: solid 0.5px #1F1B17;
+  opacity: 15%;
+  margin-bottom: 50px;
+  margin-top: 50px;
+  width: 100%;
+}
+
 .rightTitles h1 {
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 700;
   color: #1F1B17;
   margin: 0;
@@ -53,7 +63,6 @@
   position: relative;
   gap: 50px;
   width: 100%;
-  margin-bottom: 75px;
 }
 .filterTop {
   display: flex;
@@ -172,6 +181,7 @@
 .loadMoreButton:hover {
   background-color: #5D6B2F;
 }
+
 @media (max-width: 1200px) {
   .filterTop {
     width: 100%;
@@ -190,11 +200,12 @@
   .rightBorder {
     width: 90%;
   }
-  
   .rightTitles {
     height: 150px;
   }
-  
+  .rightTitles h1 {
+    font-size: 3rem;
+  }
   .allHotels {
     gap: 20px;
   }
@@ -245,7 +256,6 @@
 .filterTop {
   flex-direction: column;
   gap: 25px;
-  margin-bottom: 25px;
 }
 .filterTop Button {
   display: none;
@@ -256,6 +266,10 @@
 .sortDropdown {
   width: 100%;
   justify-content: space-between;
+}
+.divideLine {
+  margin-top: 35px;
+  margin-bottom: 25px;
 }
 }
 @media (max-width:380px) {
@@ -279,12 +293,6 @@
     margin-bottom: 50px;
   }
   .filterTop {
-    gap: 0;
-  }
-  .topSearchbar {
-    margin-bottom: -25px;
-  }
-  .sortDropdown {
-    margin-bottom: -25px;
+    gap: 10px;
   }
 }
