@@ -455,6 +455,7 @@ const getDescriptionPreview = (desc) => {
               )}
             </div>
             <div className={styles.venueRight}>
+              <div className={styles.fadeOutTop}></div>
               {!isEditing ? (
                 <>
                   <div className={styles.venueInfo}>
@@ -651,7 +652,8 @@ const getDescriptionPreview = (desc) => {
                     <p>Booking details not available.</p>
                   )}
                 </div>
-              )}              
+              )}    
+              <div className={styles.fadeOutBottom}></div>          
             </div>
           </div>
         )}
