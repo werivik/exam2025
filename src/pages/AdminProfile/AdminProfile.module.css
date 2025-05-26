@@ -120,6 +120,7 @@ justify-content: flex-end;
 align-items: flex-end;
 position: absolute;
 top: 440px;
+z-index: 997;
 }
 .mobileContent {
 margin: 0 15px;
@@ -529,6 +530,9 @@ transform: scaleX(-1);
 .tabletProfile .profileInfo {
   margin-left: 25px;
 }
+.tabletProfile .editContent {
+  height: 300px;
+}
 .tabletContent
 .contentContainer{
   width: 100%;
@@ -578,6 +582,13 @@ padding: 0;
 }
 .mobileProfile {
 display: block;
+}
+.allHotels {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 25px;
+}
+.mobileProfile .editContent {
+  height: 325px;
 }
 }
 @media (max-width: 325px) {

@@ -421,6 +421,7 @@ margin-top: 15px;
   position: absolute;
   right: 15px;
   top: 425px;
+  z-index: 997;
 }
 
 .tabletProfile .avatar {
@@ -525,6 +526,9 @@ margin-top: 15px;
 .tabletProfile .profileInfo h2 {
   font-size: 1.75rem;
 }
+.tabletProfile .editContent {
+  height: 300px;
+}
 .sectionHeader h2 {
   font-size: 1.75rem;
 }
@@ -552,6 +556,10 @@ margin-top: 15px;
     display: block;
   }
 
+  .mobileProfile .editContent {
+    height: 325px;
+  }
+
   .sectionHeader {
     flex-direction: column;
     align-items: flex-start;
@@ -559,9 +567,9 @@ margin-top: 15px;
   }
 
   .venueGrid {
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 25px;
-}
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 25px;
+  }
 
 }
 @media (max-width: 325px) {
