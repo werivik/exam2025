@@ -176,7 +176,10 @@ video.fullImage::-webkit-media-controls-start-playback-button {
 
 @media (max-width:1375px) {
   .paginationDots {
-    top: 37%;
+    top: 35%;
+  }
+  .bannerText {
+    height: 80%;
   }
 }
 @media (max-width: 1024px) {
@@ -219,7 +222,7 @@ video.fullImage::-webkit-media-controls-start-playback-button {
     border: solid 1px white;
   }
   .bannerText {
-    height: 80%;
+    height: 75%;
   }
   .bannerText h1 {
     font-size: 110px;
