@@ -359,35 +359,64 @@ useEffect(() => {
   </div>
 </div>
             <div className={styles.divideLine}></div>
-            <div className={styles.filterGroup}>
-              <h3>Guests</h3>
-              <div className={styles.guestInputs}>
-                <input
-                  type="number"
-                  name="adults"
-                  placeholder="Adults"
-                  min="0"
-                  value={adults}
-                  onChange={(e) => handleGuestChange(e, 'adults')}
-                />
-                <input
-                  type="number"
-                  name="children"
-                  placeholder="Children"
-                  min="0"
-                  value={children}
-                  onChange={(e) => handleGuestChange(e, 'children')}
-                />
-                <input
-                  type="number"
-                  name="assistedGuests"
-                  placeholder="Assisted Guests"
-                  min="0"
-                  value={assistedGuests}
-                  onChange={(e) => handleGuestChange(e, 'assistedGuests')}
-                />
-              </div>
-            </div>
+<div className={styles.filterGroup}>
+  <h3>Guests</h3>
+  <div className={styles.guestInputs}>
+    <div className={styles.guestInputWrapper}>
+      <input
+        type="number"
+        name="adults"
+        placeholder="0"
+        min="0"
+        value={adults}
+        onChange={(e) => handleGuestChange(e, 'adults')}
+        className={styles.guestNumberInput}
+      />
+      <span className={styles.guestLabel}>
+        {adults && parseInt(adults) > 0 
+          ? (parseInt(adults) === 1 ? 'Adult' : 'Adults')
+          : 'Adults'
+        }
+      </span>
+    </div>
+    
+    <div className={styles.guestInputWrapper}>
+      <input
+        type="number"
+        name="children"
+        placeholder="0"
+        min="0"
+        value={children}
+        onChange={(e) => handleGuestChange(e, 'children')}
+        className={styles.guestNumberInput}
+      />
+      <span className={styles.guestLabel}>
+        {children && parseInt(children) > 0
+          ? (parseInt(children) === 1 ? 'Child' : 'Children')
+          : 'Children'
+        }
+      </span>
+    </div>
+    
+    <div className={styles.guestInputWrapper}>
+      <input
+        type="number"
+        name="assistedGuests"
+        placeholder="0"
+        min="0"
+        value={assistedGuests}
+        onChange={(e) => handleGuestChange(e, 'assistedGuests')}
+        className={styles.guestNumberInput}
+      />
+      <span className={styles.guestLabel}>
+        {assistedGuests && parseInt(assistedGuests) > 0
+          ? (parseInt(assistedGuests) === 1 ? 'Assisted Guest' : 'Assisted Guests')
+          : 'Assisted Guests'
+        }
+      </span>
+    </div>
+  </div>
+</div>
             <div className={styles.divideLine}></div>
             <div className={styles.filterGroup}>
   <h3>Facilities</h3>

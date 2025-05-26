@@ -143,12 +143,13 @@ const EditVenue = () => {
     const { name, value, checked, type } = e.target;
     let newValue = value;
   
-    if (type === 'checkbox' && name === 'meta') {
-      const metaKey = e.target.nextSibling.textContent.trim().toLowerCase();
+    if (type === 'checkbox' && name.startsWith('meta-')) {
+      const metaKey = name.split('-')[1];
       setFormData((prev) => ({
         ...prev,
         meta: { ...prev.meta, [metaKey]: checked },
       }));
+      return;
     } 
     else if (name.startsWith('media-')) {
       const parts = name.split('-');
@@ -325,103 +326,111 @@ const EditVenue = () => {
           <div className={styles.fieldGroup}>
             <label>Price</label>
             <input
-  type="text"
-  name="price"
-  value={formData.price.toString()}
-  onChange={handleChange}
-  required
-  inputMode="numeric"
-/>
+              type="text"
+              name="price"
+              value={formData.price.toString()}
+              onChange={handleChange}
+              required
+              inputMode="numeric"
+            />
           </div>
 
           <div className={styles.fieldGroup}>
             <label>Max Guests</label>
             <input
-  type="text"
-  name="maxGuests"
-  value={formData.maxGuests.toString()}
-  onChange={handleChange}
-  required
-  inputMode="numeric"
-/>
+              type="text"
+              name="maxGuests"
+              value={formData.maxGuests.toString()}
+              onChange={handleChange}
+              required
+              inputMode="numeric"
+            />
           </div>
 
           <div className={styles.fieldGroup}>
             <label>Media (Images)</label>
             {formData.media.map((media, index) => (
-  <div key={index} className={styles.mediaField}>
-    <input
-      type="url"
-      name={`media-${index}-url`}
-      placeholder="Image URL"
-      value={media.url || ''}
-      onChange={handleChange}
-      required
-    />
-    <input
-      type="text"
-      name={`media-${index}-alt`}
-      placeholder="Image Alt Text"
-      value={media.alt || ''}
-      onChange={handleChange}
-    />
-    {index > 0 && (
-      <Buttons 
-      size='removeMedia'
-      onClick={() => handleDeleteMedia(index)}>
-        Remove 
-      </Buttons>
-    )}
-  </div>
-))}
-<div className={styles.mediaButtons}>
-  <Buttons 
-    size='addMedia'
-    onClick={handleAddMedia}>
-    + Add Media      
-  </Buttons>
-</div>
+              <div key={index} className={styles.mediaField}>
+                <input
+                  type="url"
+                  name={`media-${index}-url`}
+                  placeholder="Image URL"
+                  value={media.url || ''}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="text"
+                  name={`media-${index}-alt`}
+                  placeholder="Image Alt Text"
+                  value={media.alt || ''}
+                  onChange={handleChange}
+                />
+                {index > 0 && (
+                  <Buttons 
+                    size='removeMedia'
+                    onClick={() => handleDeleteMedia(index)}>
+                    Remove 
+                  </Buttons>
+                )}
+              </div>
+            ))}
+            <div className={styles.mediaButtons}>
+              <Buttons 
+                size='addMedia'
+                onClick={handleAddMedia}>
+                + Add Media      
+              </Buttons>
+            </div>
           </div>
 
           <div className={styles.fieldGroup}>
             <label>Meta Tags</label>
-            <div>
-            <label>
-  <input
-    type="checkbox"
-    name="meta"
-    onChange={handleChange}
-    checked={formData.meta.wifi}
-  />
-  Wifi
-</label>
-<label>
-  <input
-    type="checkbox"
-    name="meta"
-    onChange={handleChange}
-    checked={formData.meta.parking}
-  />
-  Parking
-</label>
-<label>
-  <input
-    type="checkbox"
-    name="meta"
-    onChange={handleChange}
-    checked={formData.meta.breakfast}
-  />
-  Breakfast
-</label>
-<label>
-  <input
-    type="checkbox"
-    name="meta"
-    onChange={handleChange}
-    checked={formData.meta.pets}
-  />
-  Pets
-</label>
+            <div className={styles.metaCheckboxContainer}>
+              <label className={styles.metaLabel}>
+                <input
+                  type="checkbox"
+                  name="meta-wifi"
+                  className={styles.metaCheckbox}
+                  onChange={handleChange}
+                  checked={formData.meta.wifi}
+                />
+                <span className={styles.customCheckbox}></span>
+                Wifi
+              </label>
+              <label className={styles.metaLabel}>
+                <input
+                  type="checkbox"
+                  name="meta-parking"
+                  className={styles.metaCheckbox}
+                  onChange={handleChange}
+                  checked={formData.meta.parking}
+                />
+                <span className={styles.customCheckbox}></span>
+                Parking
+              </label>
+              <label className={styles.metaLabel}>
+                <input
+                  type="checkbox"
+                  name="meta-breakfast"
+                  className={styles.metaCheckbox}
+                  onChange={handleChange}
+                  checked={formData.meta.breakfast}
+                />
+                <span className={styles.customCheckbox}></span>
+                Breakfast
+              </label>
+              <label className={styles.metaLabel}>
+                <input
+                  type="checkbox"
+                  name="meta-pets"
+                  className={styles.metaCheckbox}
+                  onChange={handleChange}
+                  checked={formData.meta.pets}
+                />
+                <span className={styles.customCheckbox}></span>
+                Pets
+              </label>
             </div>
           </div>
 
@@ -467,17 +476,17 @@ const EditVenue = () => {
           </div>
           <div className={styles.editButtons}>
             <Buttons
-            size='medium'
-            version='v2'
-            onClick={goBackToAdminProfile}
+              size='medium'
+              version='v2'
+              onClick={goBackToAdminProfile}
             >
               Cancel Editing
             </Buttons>
 
             <Buttons 
-            size='medium'
-            version='v1'
-            type="submit"
+              size='medium'
+              version='v1'
+              type="submit"
             >
               Save Changes
             </Buttons>
@@ -488,11 +497,11 @@ const EditVenue = () => {
 
       {showPopup && (
         <CostumPopup
-  message={popupMessage}
-  onClose={closePopup}
-  showButtons={false}
-/>
-)}
+          message={popupMessage}
+          onClose={closePopup}
+          showButtons={false}
+        />
+      )}
 
     </motion.div>
   );
