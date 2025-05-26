@@ -341,6 +341,16 @@ const handleSaveProfile = async () => {
     </form>
   );
 
+      useEffect(() => {
+  if (userData?.name) {
+    document.title = `${userData.name} - Holidaze`;
+  }
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+  }, [userData?.name]);
+
   return (
     <motion.div
       className={styles.container}

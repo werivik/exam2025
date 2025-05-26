@@ -82,7 +82,7 @@ const LoginAdmin = () => {
   };
 
   useEffect(() => {
-  document.title = 'Login';
+  document.title = 'Login - Holidaze';
   
   return () => {
     document.title = 'Holidaze';

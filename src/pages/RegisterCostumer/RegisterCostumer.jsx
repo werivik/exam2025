@@ -111,7 +111,7 @@ const RegisterCostumer = () => {
   };
   
   useEffect(() => {
-  document.title = 'Register';
+  document.title = 'Register - Holidaze';
   
   return () => {
     document.title = 'Holidaze';

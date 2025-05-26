@@ -618,7 +618,7 @@ useEffect(() => {
 }, [filters, currentPage, setSearchParams, initialFiltersApplied]);
 
 useEffect(() => {
-  document.title = 'All Venues';
+  document.title = 'Venues - Holidaze';
   
   return () => {
     document.title = 'Holidaze';

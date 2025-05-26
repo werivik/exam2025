@@ -152,6 +152,16 @@ const ViewProfile = () => {
       <RatingDisplay />
     </div>
   );
+
+      useEffect(() => {
+  if (userData?.name) {
+    document.title = `${userData.name} - Holidaze`;
+  }
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+  }, [userData?.name]);
   
   const ProfileHeader = ({ includeBackButton = false }) => (
     <div className={styles.profileTop}>

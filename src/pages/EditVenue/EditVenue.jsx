@@ -291,7 +291,7 @@ const EditVenue = () => {
   };
 
   useEffect(() => {
-  document.title = 'Edit Venue';
+  document.title = 'Edit Venue - Holidaze';
   
   return () => {
     document.title = 'Holidaze';

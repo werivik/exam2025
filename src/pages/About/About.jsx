@@ -43,7 +43,7 @@ const About = () => {
   }, []);
 
   useEffect(() => {
-  document.title = 'About Us';
+  document.title = 'About Us - Holidaze';
   
   return () => {
     document.title = 'Holidaze';

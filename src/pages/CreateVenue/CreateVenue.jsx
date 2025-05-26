@@ -154,7 +154,7 @@ const buildVenuePayload = (formData, username, avatar) => {
   }));
 
   useEffect(() => {
-  document.title = 'Create Venue';
+  document.title = 'Create Venue - Holidaze';
   
   return () => {
     document.title = 'Holidaze';

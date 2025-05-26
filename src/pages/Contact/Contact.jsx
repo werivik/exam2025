@@ -75,7 +75,7 @@ const Contact = () => {
   };
 
   useEffect(() => {
-  document.title = 'Contact Us';
+  document.title = 'Contact Us - Holidaze';
   
   return () => {
     document.title = 'Holidaze';

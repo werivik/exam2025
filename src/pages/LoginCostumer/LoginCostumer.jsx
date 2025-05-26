@@ -68,7 +68,7 @@ const handleLogin = async (e) => {
 };
 
 useEffect(() => {
-  document.title = 'Login';
+  document.title = 'Login - Holidaze';
   
   return () => {
     document.title = 'Holidaze';
