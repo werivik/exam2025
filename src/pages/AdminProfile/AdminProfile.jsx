@@ -5,15 +5,14 @@ import { motion } from "framer-motion";
 import { PROFILES_SINGLE, PROFILES_SINGLE_BY_VENUES } from '../../constants';
 import { headers } from '../../headers';
 import defaultAvatar from '/media/images/mdefault.jpg';
-import VenueCard from '../../components/VenueCard/VenueCard.jsx';
+import VenueCard from '../../components/VenueCard/VenueCard';
 import Buttons from '../../components/Buttons/Buttons';
 import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
 import CostumPopup from '../../components/CostumPopup/CostumPopup';
 import starRating from '../../../public/media/rating/christmas-stars.png';
 import bannerImage from '../../../public/media/logo/loadingScreen.png';
 import bannerEdge from '../../../public/media/images/beige-edge.png';
-
-import Dashboard from '../../components/Dashboard/Dashboard.jsx';
+import Dashboard from '../../components/Dashboard/Dashboard';
 
 const pageVariants = {
   initial: { opacity: 0 },

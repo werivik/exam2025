@@ -12,7 +12,7 @@ import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPo
 import CostumPopup from '../../components/CostumPopup/CostumPopup';
 import bannerImage from '../../../public/media/logo/loadingScreen.png';
 import bannerEdge from '../../../public/media/images/beige-edge.png';
-import Dashboard from '../../components/Dashboard/Dashboard.jsx';
+import Dashboard from '../../components/Dashboard/Dashboard';
 
 const pageVariants = {
   initial: { opacity: 0 },
