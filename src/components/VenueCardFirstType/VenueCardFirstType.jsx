@@ -19,19 +19,19 @@ const VenueCardFirstType = ({ venue, onClick }) => {
         </div>
       ) : (
         <>
-<div className={styles.starRating}>
-  <span>{venue.rating?.toFixed(1) || "0.0"}</span>
-  <div className={styles.starRow}>
-    {[...Array(1)].map((_, i) => (
-      <img
-        key={i}
-        src={stars}
-        alt={i < Math.round(venue.rating || 0) ? "Filled Star" : "Empty Star"}
-        className={i < Math.round(venue.rating || 0) ? styles.starFilled : styles.starEmpty}
-      />
-    ))}
-  </div>
-</div>
+          <div className={styles.starRating}>
+            <span>{venue.rating?.toFixed(1) || "0.0"}</span>
+            <div className={styles.starRow}>
+              {[...Array(1)].map((_, i) => (
+                <img
+                  key={i}
+                  src={stars}
+                  alt={i < Math.round(venue.rating || 0) ? "Filled Star" : "Empty Star"}
+                  className={i < Math.round(venue.rating || 0) ? styles.starFilled : styles.starEmpty}
+                />
+              ))}
+            </div>
+          </div>
           <img
             src={venue.media?.[0]?.url || '/media/logo/loadingScreen.png'}
             alt={venue.media?.[0]?.alt || venue.name}

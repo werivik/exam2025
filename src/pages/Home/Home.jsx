@@ -36,6 +36,12 @@ const FEATURE_TYPES = [
   { image: wifiImage, label: "Excellent WiFi", meta: { wifi: true } },
   { image: animalImage, label: "Animal Friendly", meta: { pets: true } },
 ];
+const FeatureTypeSkeleton = () => (
+  <div className={styles.featureTypeSkeleton}>
+    <div className={styles.featureSkeletonImage}></div>
+    <div className={styles.featureSkeletonText}></div>
+  </div>
+);
 const POPULAR_DESTINATIONS = [
   {
     id: 1,
@@ -757,10 +763,10 @@ setAllLocations(Array.from(locationsSet));
             <div className={styles.metaContent}>
               {venues.length === 0 ? (
                 <>
-                  <VenueTypeSkeleton />
-                  <VenueTypeSkeleton />
-                  <VenueTypeSkeleton />
-                  <VenueTypeSkeleton />
+                  <FeatureTypeSkeleton />
+                  <FeatureTypeSkeleton />
+                  <FeatureTypeSkeleton />
+                  <FeatureTypeSkeleton />
                 </>
               ) : (
                 <>
@@ -856,9 +862,15 @@ setAllLocations(Array.from(locationsSet));
                 <Link to="/venues" className={styles.browseAllLink}>Browse All</Link>
               </div>
               <div className={styles.popularHotels}>
-                {displayedVenues.map((venue) => (
-                  <VenueCardFirstType key={venue.id} venue={venue} />
-                ))}
+                {venues.length === 0 ? (
+                  Array.from({ length: window.innerWidth <= 690 ? 5 : window.innerWidth <= 1093 ? 3 : window.innerWidth <= 1375 ? 4 : 5 }).map((_, index) => (
+                    <VenueCardFirstType key={index} venue={null} />
+                  ))
+                ) : (
+                  displayedVenues.map((venue) => (
+                    <VenueCardFirstType key={venue.id} venue={venue} />
+                  ))
+                )}
               </div>
               <Link to="/venues" className={styles.browseAllLinkSecond}>Browse All</Link>
             </div>
