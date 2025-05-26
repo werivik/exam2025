@@ -6,7 +6,7 @@
   background-color: #f7f5f2;
   padding: 20px;
 
-  background-image: url(/media/images/homeBanner.png);
+  background-image: url(/public/media/slideshow/homeBanner.png);
   background-position: center;
   background-size: cover;
   overflow: hidden;

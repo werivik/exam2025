@@ -5,6 +5,8 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -78,7 +80,7 @@
   margin-bottom: 10px;
   object-fit: cover;
   border-radius: 10px;
-  background-image: url(/media/logo/loadingScreen.png);
+  background-image: url(/public/media/logo/loadingScreen.png);
   background-size: contain;
   z-index: 2;
 }

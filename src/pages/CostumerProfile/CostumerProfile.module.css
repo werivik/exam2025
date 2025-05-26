@@ -71,6 +71,7 @@
   height: 100%;
   object-fit: cover;
   border-radius: 25px 25px 5px 5px;
+  background-image: url(/public/media/logo/loadingScreen.png);
 }
 .avatarWrapper {
   position: relative;
@@ -84,6 +85,7 @@
   margin-left: 15px;
   border-radius: 99px 99px 15px 15px;
   object-fit: cover;
+  background-image: url(/public/media/logo/loadingScreen.png);
 }
 .edgeLeft, 
 .edgeRight {
