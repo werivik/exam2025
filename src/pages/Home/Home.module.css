@@ -869,8 +869,6 @@ input[type="date"] {
   font-size: 1rem;
   margin-top: 5px;
 }
-
-
 .featureTypeSkeleton {
     display: flex;
     flex-direction: column;
@@ -908,8 +906,6 @@ input[type="date"] {
     opacity: 0.3;
   }
 }
-
-
 @media (max-width: 1375px) {
   .dropdownMenu {
     z-index: 9999;
@@ -1295,5 +1291,11 @@ input[type="date"] {
   .firstSection {
     height: 73vh;
     padding-bottom: 25px;
+  }
+  .popularHotels {
+    height: 350px;
+  }
+  .fifthSection {
+    height: 625px;
   }
 }

@@ -249,3 +249,62 @@
     opacity: 0.3;
   }
 }
+
+@media (max-width:500px) {
+    .hotelCard {
+      background-color: white;
+      margin-bottom: 10px;
+      min-width: 150px;
+    }
+    .hotelInfo {
+      margin-left: 5px;
+      margin-top: -5px;
+    }
+    
+}
+
+@media (max-width:350px) {
+  .hotelCard {
+    height: 300px;
+  }
+  .imageContainer {
+    height: 50%;
+  }
+
+  .hotelInfo h3 {
+  font-size: 18px;
+  }
+.hotelLocation {
+  font-size: 14px;
+}
+.pastBookingLabel {
+  font-size: 0.75rem;
+}
+.stayingDates p {
+  font-size: 0.75rem;
+}
+.totalPrice {
+  margin-top: 0px;
+  font-size: 0.9rem;
+}
+.totalPrice span {
+  font-size: 0.75rem;
+}
+
+.currentlyStayingBadge, .bookAgainButton {
+  font-size: 0.75rem;
+  width: 60%;
+}
+.currentlyStayingBadge i {
+  font-size: 0.6rem;
+}
+.bookedDate {
+  width: 60%;
+  font-size: 0.75rem;
+  min-width: 200px;
+}
+.bookedDate span {
+  font-size: 0.6rem;
+}
+
+}

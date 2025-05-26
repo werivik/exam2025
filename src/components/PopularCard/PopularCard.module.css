@@ -194,3 +194,38 @@
       color: #1F1B17;
     }
   }
+
+  @media (max-width:350px) {
+  .hotelCard {
+    height: 300px;
+    margin: 0;
+  }
+  .hotelImage {
+    height: 65%;
+  }
+  .hotelInfo {
+    padding-top: 5px;
+  }
+  .hotelInfo h3 {
+  font-size: 18px;
+  height: 20px;
+  }
+  .hotelLocation {
+    font-size: 14px;
+    margin-bottom: 0px;
+  }
+
+  .hotelPrice {
+    height: 15px;
+    margin-top: 0px;
+
+  }
+
+  .hotelPrice p {
+    font-size: 10px;
+  }
+
+  .hotelPrice strong {
+    font-size: 15px;
+  }
+  }

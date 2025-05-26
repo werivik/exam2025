@@ -491,6 +491,19 @@ margin-top: 15px;
   .contentContainer h2 {
     font-size: 2.5rem;
   }
+
+  .contentContainer .divider {
+    margin-top: -25px;
+  }
+
+  .contentContainer .editSection{
+    height: 400px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+  }
+  .container {
+    margin-bottom: 0;
+  }
 }
 @media (max-width: 875px) {
 .tabletProfile .avatar {
@@ -544,6 +557,12 @@ margin-top: 15px;
     align-items: flex-start;
     gap: 25px;
   }
+
+  .venueGrid {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 25px;
+}
+
 }
 @media (max-width: 325px) {
   .dashButton {
