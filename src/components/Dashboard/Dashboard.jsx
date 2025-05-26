@@ -44,7 +44,7 @@ const Dashboard = ({
   <button onClick={onScrollToProfileEdit}>Edit Profile</button>
 </div>
 <div className={styles.divideLine}></div>
-  <Buttons size="medium" version="v2" onClick={onSignOut}>
+  <Buttons size="signout" version="v2" onClick={onSignOut}>
     Sign Out
   </Buttons>
         </div>

@@ -129,6 +129,32 @@ transition: all 0.2s ease;
   color: #7D1201;
 }
 
+.signout {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  background-color: #1F1B17;
+  color: white;
+}
+
+.signoutv2 {
+  font-size: 1.1rem;
+  padding: 10px 18px;
+  background-color: #1F1B17;
+  color: white;
+}
+
+.cancel {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  background-color: #1F1B17;
+  color: white;
+}
+
+.signout:hover, .cancel:hover {
+  background-color: #7D1201;
+  color: white;
+}
+
 @media (max-width: 650px) {
   .medium {
     font-size: 1rem;

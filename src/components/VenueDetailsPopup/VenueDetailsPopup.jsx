@@ -464,18 +464,16 @@ const getDescriptionPreview = (desc) => {
                     <p className={styles.venueRating}><img src={star} alt="Rating" /> {selectedVenue.rating}</p>
                     <div className={styles.divideLine}></div>
                     <h3>Description</h3>
-                    <p>
-  {getDescriptionPreview(selectedVenue.description)}{' '}
-  {selectedVenue.description && selectedVenue.description.split(/\s+/).length > 50 && (
-    <span
-      onClick={toggleDescription}
-      style={{ color: '#5D6B2F', cursor: 'pointer', textDecoration: 'underline', fontWeight: 500 }}
-    >
-      {showFullDescription ? 'Show less' : 'See more'}
-    </span>
-  )}
-</p>
-<div className={styles.divideLine}></div>
+                    <p>{getDescriptionPreview(selectedVenue.description)}{' '}
+                       {selectedVenue.description && selectedVenue.description.split(/\s+/).length > 50 && (
+                          <span
+                            onClick={toggleDescription}
+                            style={{ color: '#5D6B2F', cursor: 'pointer', textDecoration: 'underline', fontWeight: 500 }}>
+                            {showFullDescription ? 'Show less' : 'See more'}
+                          </span>
+                        )}
+                      </p>
+                  <div className={styles.divideLine}></div>
                     <p><strong>Price:</strong> $ {selectedVenue.price} <span>/ per night</span></p>
                     <div className={styles.divideLine}></div>
                     <p><strong>Max Guests:</strong> {selectedVenue.maxGuests}</p>
@@ -490,7 +488,7 @@ const getDescriptionPreview = (desc) => {
                   {userRole === "admin" && (
                     <div className={styles.bookedVenueEditButtons}>
                       <Buttons size="small" onClick={handleEditClick}>Edit Venue</Buttons>
-                      <Buttons size="small" version="v2" onClick={handleDelete}>Delete Venue</Buttons>
+                      <Buttons size="cancel" onClick={handleDelete}>Delete Venue</Buttons>
                     </div>
                   )}
                 </>
@@ -607,7 +605,7 @@ const getDescriptionPreview = (desc) => {
                       </div>
                       <div className={styles.bookedVenueEditButtons}>
                         <div className={styles.bookedVenueEditButtons}>
-                          <Buttons size="small" version="v2" onClick={() => setIsEditing(false)}>Cancel Edit</Buttons>
+                          <Buttons size="cancel" onClick={() => setIsEditing(false)}>Cancel Edit</Buttons>
                           <Buttons size="small" version="v1" onClick={handleSave}>Save Changes</Buttons>
                         </div>
                       </div>
@@ -631,22 +629,22 @@ const getDescriptionPreview = (desc) => {
                           <span>Currently Staying</span>
                         </div>
                       )}
-{!isPastBooking && !isCurrentlyStaying && (
-  <div className={styles.bookedVenueEditButtons}>
-    <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
-    <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
-  </div>
-)}
-{isCurrentlyStaying && (
-  <div className={styles.bookedVenueEditButtons}>
-    <Buttons size="small" version="v2" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
-  </div>
-)}
-{isPastBooking && (
-  <div className={styles.bookedVenueEditButtons}>
-    <Buttons size="small" version="v1" onClick={handleBookAgain}>Book Again</Buttons>
-  </div>
-)}
+                      {!isPastBooking && !isCurrentlyStaying && (
+                        <div className={styles.bookedVenueEditButtons}>
+                          <Buttons size="cancel" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
+                          <Buttons size="small" version="v1" onClick={() => setIsEditing(true)}>Edit Booking</Buttons>
+                        </div>
+                      )}
+                      {isCurrentlyStaying && (
+                        <div className={styles.bookedVenueEditButtons}>
+                          <Buttons size="cancel" onClick={openCancelConfirmation}>Cancel Booking</Buttons>
+                        </div>
+                      )}
+                      {isPastBooking && (
+                        <div className={styles.bookedVenueEditButtons}>
+                          <Buttons size="small" version="v1" onClick={handleBookAgain}>Book Again</Buttons>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <p>Booking details not available.</p>

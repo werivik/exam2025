@@ -652,7 +652,7 @@ const filterVenues = (venues) => {
                   </div>
                   
                   <div className={styles.signOutBtnWrapper}>
-                    <Buttons size="small" version="v2" onClick={handleSignOut}>Sign out</Buttons>
+                    <Buttons size="signout" onClick={handleSignOut}>Sign out</Buttons>
                   </div>
                 </div>
               </div>
