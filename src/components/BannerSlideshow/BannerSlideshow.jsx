@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./BannerSlideshow.module.css";
 
-import img1 from "/public/media/images/yatch.mov";
-import img2 from "/public/media/images/spainBanner.png";
-import img3 from "/public/media/images/irelandBanner.png";
-import img4 from "/public/media/images/parisBanner.jpg";
-import img5 from "/public/media/images/japanBanner.png";
+import backup from "/public/media/slideshow/homeBanner.png";
+import img1 from "/public/media/slideshow/yatch.mov";
+import img2 from "/public/media/slideshow/spainBanner.png";
+import img3 from "/public/media/slideshow/irelandBanner.png";
+import img4 from "/public/media/slideshow/parisBanner.jpg";
+import img5 from "/public/media/slideshow/japanBanner.png";
 
 const slides = [
   {
@@ -48,6 +49,7 @@ export default function BannerSlideshow() {
   const [index, setIndex] = useState(0);
   const [showContent, setShowContent] = useState(false);
   const [isDotClicked, setIsDotClicked] = useState(false);
+  const [videoLoadError, setVideoLoadError] = useState(false);
   const timerRef = useRef(null);
 
   useEffect(() => {
@@ -99,8 +101,12 @@ export default function BannerSlideshow() {
     }
   }, [isDotClicked]);
 
+  const handleVideoError = () => {
+    setVideoLoadError(true);
+  };
+
   const renderMedia = (slide, slideIndex, side) => {
-    if (slide.isVideo) {
+    if (slide.isVideo && !videoLoadError) {
       return (
         <video
           src={slide.img}
@@ -109,10 +115,22 @@ export default function BannerSlideshow() {
           muted
           loop
           playsInline
+          onError={handleVideoError}
+          onLoadStart={() => setVideoLoadError(false)}
           key={`video-${side}-${slideIndex}`}
         />
       );
-    } else {
+    } 
+    else if (slide.isVideo && videoLoadError) {
+      return (
+        <img
+          src={backup}
+          alt={`Slide ${slideIndex} (backup)`}
+          className={styles.fullImage}
+        />
+      );
+    } 
+    else {
       return (
         <img
           src={slide.img}
