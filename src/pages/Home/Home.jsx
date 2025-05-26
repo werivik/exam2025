@@ -215,7 +215,7 @@ setAllLocations(Array.from(locationsSet));
       window.removeEventListener("storage", update);
     };
   }, []);
-useEffect(() => {
+  useEffect(() => {
   const handleClickOutside = (event) => {
     if (showGuestDropdown) {
       const currentDropdownRef = window.innerWidth > 1375 ? guestDropdownRefOne : guestDropdownRefTwo;
@@ -249,7 +249,7 @@ useEffect(() => {
     document.removeEventListener("mousedown", handleClickOutside);
     window.removeEventListener("scroll", handleScroll);
   };
-}, [showCalendar, showGuestDropdown]);
+  }, [showCalendar, showGuestDropdown]);
   const updateDisplayedVenues = useCallback(() => {
     const width = window.innerWidth;
     let limit = 5;
@@ -272,7 +272,7 @@ useEffect(() => {
     window.addEventListener("resize", updateDisplayedVenues);
     return () => window.removeEventListener("resize", updateDisplayedVenues);
   }, [venues, updateDisplayedVenues]);
-const handleDestinationSuggestions = useCallback(
+  const handleDestinationSuggestions = useCallback(
   debounce(async (input) => {
     if (!input) return setSuggestions([]);
     const searchTerm = input.toLowerCase();
@@ -349,7 +349,7 @@ const handleDestinationSuggestions = useCallback(
     }
   }, 300),
   [allLocations, allVenues]
-);
+  );
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
@@ -359,19 +359,19 @@ const handleDestinationSuggestions = useCallback(
   continent: '',
   country: '',
   city: ''
-});
+  });
   const handleSearchInputChange = (e) => {
   const { name, value } = e.target;
   setSearchInput(prev => ({ ...prev, [name]: value }));
-};
-const handleSearch = () => {
+  };
+  const handleSearch = () => {
   setFilters(prevFilters => ({
     ...prevFilters,
     continent: searchInput.continent,
     country: searchInput.country,
     city: searchInput.city
   }));
-};
+  };
   const handleGuestsChange = (type, increment) => {
     const newValue = Math.max(0, filters[type] + increment);
     
@@ -450,7 +450,7 @@ const handleSearch = () => {
     
     return parts.join(", ");
   };
-const handleDestinationClick = (destination) => {
+  const handleDestinationClick = (destination) => {
   const navigationState = {
     filters: {
       country: destination.country,
@@ -471,7 +471,7 @@ const handleDestinationClick = (destination) => {
   });
 
   navigate(`/venues?${queryParams.toString()}`, { state: navigationState });
-};
+  };
   const handleMetaFilterClick = (metaFilter) => {
     const navigationState = {
       filters: {
@@ -486,7 +486,7 @@ const handleDestinationClick = (destination) => {
     
     navigate("/venues", { state: navigationState });
   };
-const applyFilters = () => {
+  const applyFilters = () => {
   if (filters.children > 0 && filters.adults === 0 && filters.disabled === 0) {
     alert("At least one adult or Assisted guest must be present if there are children.");
     return;
@@ -552,7 +552,7 @@ const applyFilters = () => {
   appliedFilters.assisted = filters.disabled;
   
   navigate("/venues", { state: { filters: appliedFilters } });
-};
+  };
   const VenueTypeSkeleton = () => (
     <div className={`${styles.venueType} ${styles.skeleton}`}>
       <div className={styles.skeletonImage}></div>
@@ -703,39 +703,35 @@ const applyFilters = () => {
             <BannerSlideshow />    
             <div className={styles.bannerFilters}>
               <img src={Edge} className={styles.edgeLeft} alt="" />
-{window.innerWidth > 1375 ? (
-  <div className={styles.filterContent}>
-    <div className={styles.allFilters}>
-      <div className={styles.filtersLeft}>
-        <DestinationFilter />
-        <DateFilter />
-      </div>
-      <GuestFilter refProp={guestDropdownRefOne} />
-      <div className={styles.searchButtonFirst}>
-        <Buttons size='small' version='v1' onClick={applyFilters}>
-          Search
-        </Buttons>
-      </div>
-    </div>
-  </div>
-) : (
-  <div className={styles.filterContentSecond}>
-    <div className={styles.allFilters}>
-      <div className={styles.filtersColumns}>
-        <DestinationFilter />
-        <DateFilter />
-        <div className={styles.filtersColumnsBottom}>
-          <GuestFilter refProp={guestDropdownRefTwo} />
-          <div className={styles.searchButtonSecond}>
-            <Buttons size='small' version='v1' onClick={applyFilters}>
-              Search
-            </Buttons>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+                {window.innerWidth > 1375 ? (
+                  <div className={styles.filterContent}>
+                    <div className={styles.allFilters}>
+                      <div className={styles.filtersLeft}>
+                        <DestinationFilter />
+                        <DateFilter />
+                      </div>
+                      <GuestFilter refProp={guestDropdownRefOne} />
+                        <div className={styles.searchButtonFirst}>
+                          <Buttons size='small' version='v1' onClick={applyFilters}>Search</Buttons>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className={styles.filterContentSecond}>
+                      <div className={styles.allFilters}>
+                        <div className={styles.filtersColumns}>
+                          <DestinationFilter />
+                          <DateFilter />
+                          <div className={styles.filtersColumnsBottom}>
+                            <GuestFilter refProp={guestDropdownRefTwo} />
+                            <div className={styles.searchButtonSecond}>
+                              <Buttons size='small' version='v1' onClick={applyFilters}>Search</Buttons>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
               <img src={Edge} className={styles.edgeRight} alt="" />
             </div>
           </div>
