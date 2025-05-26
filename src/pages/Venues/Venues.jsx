@@ -199,13 +199,13 @@ const Venues = () => {
     setCurrentPage(1);
   }, []);
 
-useEffect(() => {
-  const fetchVenues = async () => {
-    try {
-      setLoading(true);
-      let allVenues = [];
-      let currentPage = 1;
-      const pageSize = 100;
+  useEffect(() => {
+    const fetchVenues = async () => {
+      try {
+        setLoading(true);
+        let allVenues = [];
+        let currentPage = 1;
+        const pageSize = 100;
 
       while (true) {
         const response = await fetch(`${VENUES}?page=${currentPage}&pageSize=${pageSize}`, {
@@ -265,7 +265,7 @@ useEffect(() => {
   };
 
   fetchVenues();
-}, [extractLocationSuggestions]);
+  }, [extractLocationSuggestions]);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -374,27 +374,27 @@ useEffect(() => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-const pageTotal = useMemo(() => 
-  Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE)),
-[filteredVenues.length]);
+  const pageTotal = useMemo(() => 
+    Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE)),
+  [filteredVenues.length]);
 
-const getPageNumbers = (currentPage, totalPages) => {
-  const maxPageNumbers = 5;
-  let startPage;
-  if (totalPages <= maxPageNumbers) {
-    startPage = 1;
-  } 
-  else if (currentPage <= 3) {
-    startPage = 1;
-  } 
-  else if (currentPage >= totalPages - 2) {
-    startPage = totalPages - 4;
-  } 
-  else {
-    startPage = currentPage - 2;
-  }
-  return Array.from({ length: Math.min(maxPageNumbers, totalPages) }, (_, i) => startPage + i);
-};
+  const getPageNumbers = (currentPage, totalPages) => {
+    const maxPageNumbers = 5;
+    let startPage;
+    if (totalPages <= maxPageNumbers) {
+      startPage = 1;
+    } 
+    else if (currentPage <= 3) {
+      startPage = 1;
+    } 
+    else if (currentPage >= totalPages - 2) {
+      startPage = totalPages - 4;
+    } 
+    else {
+      startPage = currentPage - 2;
+    }
+    return Array.from({ length: Math.min(maxPageNumbers, totalPages) }, (_, i) => startPage + i);
+  };
 
   const scrollToTop = useCallback(() => {
     topRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -444,73 +444,73 @@ const getPageNumbers = (currentPage, totalPages) => {
     setShowLocationSuggestions(prev => ({ ...prev, [type]: false }));
   }, []);
 
-const visibleVenues = useMemo(() => {
-  if (isMobile) {
-    return filteredVenues.slice(0, visibleCount);
-  } 
-  else {
-    return filteredVenues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-  }
-}, [filteredVenues, currentPage, visibleCount, isMobile]);
+  const visibleVenues = useMemo(() => {
+    if (isMobile) {
+      return filteredVenues.slice(0, visibleCount);
+    } 
+    else {
+      return filteredVenues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+    }
+  }, [filteredVenues, currentPage, visibleCount, isMobile]);
 
-useEffect(() => {
-}, [currentPage, visibleVenues]);
+  useEffect(() => {
+    }, [currentPage, visibleVenues]);
 
-useEffect(() => {
-  if (!initialFiltersApplied) return;
-  const params = new URLSearchParams();
-  if (filters.continent) params.set("continent", filters.continent);
-  if (filters.country) params.set("country", filters.country);
-  if (filters.city) params.set("city", filters.city);
-  if (filters.adults > 0) params.set("adults", filters.adults);
-  if (filters.children > 0) params.set("children", filters.children);
-  if (filters.assisted > 0) params.set("assisted", filters.assisted);
-  filters.ratings.forEach(r => params.append("ratings", r));
-  Object.keys(filters.meta).forEach(key => {
-    if (filters.meta[key]) params.set(key, "true");
-  });
-  params.set("page", currentPage.toString());
-  setSearchParams(params, { replace: true });
-}, [filters, currentPage, setSearchParams, initialFiltersApplied]);
+  useEffect(() => {
+    if (!initialFiltersApplied) return;
+    const params = new URLSearchParams();
+    if (filters.continent) params.set("continent", filters.continent);
+    if (filters.country) params.set("country", filters.country);
+    if (filters.city) params.set("city", filters.city);
+    if (filters.adults > 0) params.set("adults", filters.adults);
+    if (filters.children > 0) params.set("children", filters.children);
+    if (filters.assisted > 0) params.set("assisted", filters.assisted);
+    filters.ratings.forEach(r => params.append("ratings", r));
+    Object.keys(filters.meta).forEach(key => {
+      if (filters.meta[key]) params.set(key, "true");
+    });
+    params.set("page", currentPage.toString());
+    setSearchParams(params, { replace: true });
+  }, [filters, currentPage, setSearchParams, initialFiltersApplied]);
 
-useEffect(() => {
-  if (!initialFiltersApplied && venues.length > 0) {
-    const urlParams = new URLSearchParams(location.search);
-    const stateFilters = location.state?.filters || {};
-    const newFilters = { ...filters };
-    let hasChanges = false;
-    if (urlParams.get('country')) {
-      newFilters.country = urlParams.get('country');
-      setInputValues(prev => ({ ...prev, country: urlParams.get('country') }));
-      hasChanges = true;
-    }
-    if (urlParams.get('city')) {
-      newFilters.city = urlParams.get('city');
-      setInputValues(prev => ({ ...prev, city: urlParams.get('city') }));
-      hasChanges = true;
-    }
-    if (urlParams.get('continent')) {
-      newFilters.continent = urlParams.get('continent');
-      setInputValues(prev => ({ ...prev, continent: urlParams.get('continent') }));
-      hasChanges = true;
-    }
-    if (urlParams.get('adults')) {
-      newFilters.adults = parseInt(urlParams.get('adults')) || 1;
-      hasChanges = true;
-    }
-    if (urlParams.get('children')) {
-      newFilters.children = parseInt(urlParams.get('children')) || 0;
-      hasChanges = true;
-    }
-    if (urlParams.get('assisted')) {
-      newFilters.assisted = parseInt(urlParams.get('assisted')) || 0;
-      hasChanges = true;
-    }
+  useEffect(() => {
+    if (!initialFiltersApplied && venues.length > 0) {
+      const urlParams = new URLSearchParams(location.search);
+      const stateFilters = location.state?.filters || {};
+      const newFilters = { ...filters };
+      let hasChanges = false;
+      if (urlParams.get('country')) {
+        newFilters.country = urlParams.get('country');
+        setInputValues(prev => ({ ...prev, country: urlParams.get('country') }));
+        hasChanges = true;
+      }
+      if (urlParams.get('city')) {
+        newFilters.city = urlParams.get('city');
+        setInputValues(prev => ({ ...prev, city: urlParams.get('city') }));
+        hasChanges = true;
+      }
+      if (urlParams.get('continent')) {
+        newFilters.continent = urlParams.get('continent');
+        setInputValues(prev => ({ ...prev, continent: urlParams.get('continent') }));
+        hasChanges = true;
+      }
+      if (urlParams.get('adults')) {
+        newFilters.adults = parseInt(urlParams.get('adults')) || 1;
+        hasChanges = true;
+      }
+      if (urlParams.get('children')) {
+        newFilters.children = parseInt(urlParams.get('children')) || 0;
+        hasChanges = true;
+      }
+      if (urlParams.get('assisted')) {
+        newFilters.assisted = parseInt(urlParams.get('assisted')) || 0;
+        hasChanges = true;
+      }
     const ratingsFromUrl = urlParams.getAll('ratings').map(r => parseInt(r)).filter(r => !isNaN(r));
-    if (ratingsFromUrl.length > 0) {
-      newFilters.ratings = ratingsFromUrl;
-      hasChanges = true;
-    }
+      if (ratingsFromUrl.length > 0) {
+        newFilters.ratings = ratingsFromUrl;
+        hasChanges = true;
+      }
     metaFilters.forEach(key => {
       if (urlParams.get(key) === 'true') {
         newFilters.meta[key] = true;
@@ -563,9 +563,9 @@ useEffect(() => {
     if (hasChanges) {
       setFilters(newFilters);
     }
-    setInitialFiltersApplied(true);
-  }
-}, [venues, location.search, location.state, initialFiltersApplied, metaFilters, filters, currentPage]);
+      setInitialFiltersApplied(true);
+    }
+  }, [venues, location.search, location.state, initialFiltersApplied, metaFilters, filters, currentPage]);
 
 useEffect(() => {
   if (location.state?.filters) {
@@ -658,15 +658,15 @@ useEffect(() => {
             <div className={styles.filterTop}>
               <div className={styles.topSearchbar}>
               <Searchbar
-  filters={filters}
-  setFilters={setFilters}
-  venues={venues}
-  setSearchQuery={setSearchQuery}
-  searchQuery={searchQuery}
-  handleSearchInputChange={handleSearchInputChange}
-  setFilteredVenues={setFilteredVenues}
-  setNoMatches={setNoMatches}
-  placeholder={searchPlaceholder}
+                filters={filters}
+                setFilters={setFilters}
+                venues={venues}
+                setSearchQuery={setSearchQuery}
+                searchQuery={searchQuery}
+                handleSearchInputChange={handleSearchInputChange}
+                setFilteredVenues={setFilteredVenues}
+                setNoMatches={setNoMatches}
+                placeholder={searchPlaceholder}
               />
             </div>
               <Buttons size='small' version='v2' onClick={toggleSidebar}>
