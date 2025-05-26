@@ -255,6 +255,16 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
+  if (venue?.name) {
+    document.title = `${venue.name} - Holidaze`;
+  }
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+  }, [venue?.name]);
+
+  useEffect(() => {
     const fetchVenue = async () => {
       try {
         const response = await fetch(`${VENUES}/${id}?_owner=true&_bookings=true`, {
@@ -470,7 +480,6 @@ if (!venue) return (
     />
   </div>
 );
-
   return (
     <motion.div
       className={styles.pageContent}

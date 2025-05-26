@@ -617,6 +617,14 @@ useEffect(() => {
   setSearchParams(params, { replace: true });
 }, [filters, currentPage, setSearchParams, initialFiltersApplied]);
 
+useEffect(() => {
+  document.title = 'All Venues';
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+}, []);
+
   return (
     <motion.div
       className={styles.pageContent}

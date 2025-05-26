@@ -81,6 +81,14 @@ const LoginAdmin = () => {
     }
   };
 
+  useEffect(() => {
+  document.title = 'Login';
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+}, []);
+
   return (
     <motion.div
   className={styles.pageContent}

@@ -42,6 +42,14 @@ const About = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  useEffect(() => {
+  document.title = 'About Us';
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+}, []);
+
   return (
     <motion.div
       className={styles.aboutContent}

@@ -153,6 +153,14 @@ const buildVenuePayload = (formData, username, avatar) => {
     alt: item.alt || 'Venue image'
   }));
 
+  useEffect(() => {
+  document.title = 'Create Venue';
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+}, []);
+
   return {
     name: formData.name,
     description: formData.description,

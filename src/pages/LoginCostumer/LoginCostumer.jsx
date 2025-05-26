@@ -67,6 +67,14 @@ const handleLogin = async (e) => {
   }
 };
 
+useEffect(() => {
+  document.title = 'Login';
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+}, []);
+
   return (
     <motion.div
   className={styles.pageContent}

@@ -290,6 +290,14 @@ const EditVenue = () => {
     navigate('/admin-profile');
   };
 
+  useEffect(() => {
+  document.title = 'Edit Venue';
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+}, []);
+
   return (
     <motion.div
       className={styles.editVenueContainer}

@@ -110,6 +110,13 @@ const RegisterCostumer = () => {
     }
   };
   
+  useEffect(() => {
+  document.title = 'Register';
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+}, []);
 
   return (
     <motion.div

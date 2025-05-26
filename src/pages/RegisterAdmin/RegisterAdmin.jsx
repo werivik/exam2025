@@ -166,6 +166,14 @@ const RegisterAdmin = () => {
     }
   };
 
+  useEffect(() => {
+  document.title = 'Register';
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+}, []);
+
   return (
     <motion.div
       className={styles.pageContent}

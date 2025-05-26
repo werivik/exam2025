@@ -74,6 +74,14 @@ const Contact = () => {
     }
   };
 
+  useEffect(() => {
+  document.title = 'Contact Us';
+  
+  return () => {
+    document.title = 'Holidaze';
+  };
+}, []);
+
   return (
     <motion.div
       className={styles.contactContainer}
