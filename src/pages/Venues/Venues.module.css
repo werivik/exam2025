@@ -28,9 +28,8 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 50px;
-  margin-bottom: 75px;
   pointer-events: none;
+  height: 280px;
 }
 .rightTitles h1 {
   font-size: 3rem;
@@ -44,6 +43,8 @@
   font-style: italic;
   color: #5D6B2F;
   margin: 0;
+  font-family: "Source Serif 4", serif;
+  font-weight: 300;
 }
 .filterTopSection {
   display: flex;

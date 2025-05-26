@@ -65,6 +65,7 @@
   font-size: 200px;
   margin: 0;
   padding: 0;
+  font-family: "Judson", serif;
 }
 .bannerText span {
   margin: 0;
@@ -77,6 +78,7 @@
 .bannerText p {
   margin: 0;
   padding: 0;
+  font-family: "Playfair Display", serif;
 }
 .bannerText h1,
 .bannerText span,

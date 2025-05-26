@@ -14,7 +14,6 @@ const pageVariants = {
   animate: { opacity: 1 },
   exit: { opacity: 0 },
 };
-
 const normalizeString = (str) => {
   return str
     ?.toLowerCase()
@@ -22,7 +21,6 @@ const normalizeString = (str) => {
     .replace(/\s+/g, ' ')
     .trim() || '';
 };
-
 const formatSuggestion = (str) => {
   return str
     ?.toLowerCase()
@@ -33,9 +31,7 @@ const formatSuggestion = (str) => {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ') || '';
 };
-
 const PAGE_SIZE = 20;
-
 const Venues = () => {
   const [venues, setVenues] = useState([]);
   const [filteredVenues, setFilteredVenues] = useState([]);
@@ -65,7 +61,6 @@ const Venues = () => {
     country: useRef(null),
     city: useRef(null),
   };
-
   const [filters, setFilters] = useState({
     continent: '',
     country: location.state?.filters?.country || '',
@@ -79,25 +74,21 @@ const Venues = () => {
     priceMin: 0,
     priceMax: 0
   });
-
   const [locationSuggestionList, setLocationSuggestionList] = useState({
     continent: [],
     country: [],
     city: [],
   });
-  
   const [showLocationSuggestions, setShowLocationSuggestions] = useState({
     continent: false,
     country: false,
     city: false,
-  });  
-  
+  });   
   const [inputValues, setInputValues] = useState({
   continent: '',
   country: location.state?.filters?.country || '',
   city: location.state?.filters?.city || '',
-});
-
+  });
   const extractLocationSuggestions = useCallback((venuesData) => {
     const continents = new Map();
     const countries = new Map();
@@ -131,7 +122,6 @@ const Venues = () => {
       city: Array.from(cities.values()),
     };
   }, []);
-
   const clearFilters = useCallback(() => {
     setFilters({
       continent: '',
@@ -154,7 +144,6 @@ const Venues = () => {
     });
     setCurrentPage(1);
   }, [minPrice, maxPrice]);
-
   const handleFilterChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
 
@@ -186,17 +175,14 @@ const Venues = () => {
       }));
     }
   }, []);
-  
   const toggleSidebar = useCallback(() => {
     setShowSidebar(prev => !prev);
   }, []);
-
   const handleSearchInputChange = useCallback((e) => {
     const value = e.target.value;
     setSearchQuery(value);
     setCurrentPage(1);
   }, []);
-
 useEffect(() => {
   const fetchVenues = async () => {
     try {
@@ -264,7 +250,6 @@ useEffect(() => {
 
   fetchVenues();
 }, [extractLocationSuggestions]);
-
   useEffect(() => {
     const params = new URLSearchParams();
     if (filters.continent) params.set("continent", filters.continent);
@@ -281,7 +266,6 @@ useEffect(() => {
 
     setSearchParams(params, { replace: true });
   }, [filters, currentPage, setSearchParams]);
-
   useEffect(() => {
     if (!venues.length) return;
     
@@ -351,14 +335,12 @@ useEffect(() => {
     setNoMatches(filtered.length === 0);
     
   }, [filters, venues, sortOption, searchQuery]);
-
   useEffect(() => {
     document.body.style.overflow = showSidebar ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
   }, [showSidebar]);
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       Object.entries(inputRefs).forEach(([key, ref]) => {
@@ -371,11 +353,9 @@ useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
 const pageTotal = useMemo(() => 
   Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE)),
 [filteredVenues.length]);
-
 const getPageNumbers = (currentPage, totalPages) => {
   const maxPageNumbers = 5;
   let startPage;
@@ -393,7 +373,6 @@ const getPageNumbers = (currentPage, totalPages) => {
   }
   return Array.from({ length: Math.min(maxPageNumbers, totalPages) }, (_, i) => startPage + i);
 };
-
   const scrollToTop = useCallback(() => {
     topRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
@@ -460,7 +439,6 @@ useEffect(() => {
   params.set("page", currentPage.toString());
   setSearchParams(params, { replace: true });
 }, [filters, currentPage, setSearchParams, initialFiltersApplied]);
-
 useEffect(() => {
   if (!initialFiltersApplied && venues.length > 0) {
     const urlParams = new URLSearchParams(location.search);
@@ -554,7 +532,6 @@ useEffect(() => {
     setInitialFiltersApplied(true);
   }
 }, [venues, location.search, location.state, initialFiltersApplied, metaFilters, filters, currentPage]);
-
 useEffect(() => {
   if (location.state?.filters) {
     const { filters } = location.state;
@@ -585,7 +562,6 @@ useEffect(() => {
     }
   }
 }, [location.state]);
-
 useEffect(() => {
   if (!initialFiltersApplied) return;
   
@@ -612,10 +588,8 @@ useEffect(() => {
       animate="animate"
       exit="exit"
       variants={pageVariants}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
-    >
+      transition={{ duration: 0.5, ease: "easeInOut" }}>
       {showSidebar && <div className={styles.backdrop} onClick={toggleSidebar}></div>}
-      
       <Sidebar
         showSidebar={showSidebar}
         toggleSidebar={toggleSidebar}
@@ -633,11 +607,8 @@ useEffect(() => {
         setFilteredVenues={setFilteredVenues}
         setNoMatches={setNoMatches}
         initialLocationFilters={initialLocationFilters}
-        initialMetaFilters={initialMetaFilters}
-      />
-      
+        initialMetaFilters={initialMetaFilters}/>
       <div ref={topRef} />
-      
       <section className={styles.rightSection}>
         <div className={styles.rightBorder}>
           <div className={styles.topSection}>
@@ -670,8 +641,7 @@ useEffect(() => {
                 <select
                   id="sort"
                   value={sortOption}
-                  onChange={(e) => setSortOption(e.target.value)}
-                >
+                  onChange={(e) => setSortOption(e.target.value)}>
                   <option value="all">All</option>
                   <option value="az">A - Z</option>
                   <option value="priceLowHigh">Price: Low to High</option>

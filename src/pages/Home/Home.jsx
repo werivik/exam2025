@@ -30,14 +30,12 @@ const pageVariants = {
   animate: { opacity: 1 },
   exit: { opacity: 0 },
 };
-
 const FEATURE_TYPES = [
   { image: breakfastImage, label: "Breakfast Included", meta: { breakfast: true } },
   { image: parkingImage, label: "Free Parking", meta: { parking: true } },
   { image: wifiImage, label: "Excellent WiFi", meta: { wifi: true } },
   { image: animalImage, label: "Animal Friendly", meta: { pets: true } },
 ];
-
 const POPULAR_DESTINATIONS = [
   {
     id: 1,
@@ -68,7 +66,6 @@ const POPULAR_DESTINATIONS = [
     image: america,
   }
 ];
-
 const normalizeString = (str) => {
   return str
     ?.toLowerCase()
@@ -76,7 +73,6 @@ const normalizeString = (str) => {
     .replace(/\s+/g, ' ')
     .trim() || '';
 };
-
 const formatDateWithOrdinal = (dateString) => {
   if (!dateString) return '';
   
@@ -128,11 +124,9 @@ const Home = () => {
     children: 0,
     disabled: 0,
   });
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
-
   useEffect(() => {
     const fetchVenues = async () => {
       try {
@@ -198,7 +192,6 @@ setAllLocations(Array.from(locationsSet));
 
     fetchVenues();
   }, []);
-
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollIcon(window.scrollY === 0);
@@ -207,7 +200,6 @@ setAllLocations(Array.from(locationsSet));
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
   useEffect(() => {
     const update = () => setIsUserLoggedIn(isLoggedIn());
 
@@ -223,7 +215,6 @@ setAllLocations(Array.from(locationsSet));
       window.removeEventListener("storage", update);
     };
   }, []);
-
 useEffect(() => {
   const handleClickOutside = (event) => {
     if (showGuestDropdown) {
@@ -259,7 +250,6 @@ useEffect(() => {
     window.removeEventListener("scroll", handleScroll);
   };
 }, [showCalendar, showGuestDropdown]);
-
   const updateDisplayedVenues = useCallback(() => {
     const width = window.innerWidth;
     let limit = 5;
@@ -276,14 +266,12 @@ useEffect(() => {
 
     setDisplayedVenues(venues.slice(0, limit));
   }, [venues]);
-
   useEffect(() => {
     updateDisplayedVenues();
 
     window.addEventListener("resize", updateDisplayedVenues);
     return () => window.removeEventListener("resize", updateDisplayedVenues);
   }, [venues, updateDisplayedVenues]);
-
 const handleDestinationSuggestions = useCallback(
   debounce(async (input) => {
     if (!input) return setSuggestions([]);
@@ -362,24 +350,20 @@ const handleDestinationSuggestions = useCallback(
   }, 300),
   [allLocations, allVenues]
 );
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
     if (name === "destination") handleDestinationSuggestions(value);
   };
-
   const [searchInput, setSearchInput] = useState({
   continent: '',
   country: '',
   city: ''
 });
-
   const handleSearchInputChange = (e) => {
   const { name, value } = e.target;
   setSearchInput(prev => ({ ...prev, [name]: value }));
 };
-
 const handleSearch = () => {
   setFilters(prevFilters => ({
     ...prevFilters,
@@ -388,7 +372,6 @@ const handleSearch = () => {
     city: searchInput.city
   }));
 };
-
   const handleGuestsChange = (type, increment) => {
     const newValue = Math.max(0, filters[type] + increment);
     
@@ -409,7 +392,6 @@ const handleSearch = () => {
     
     setFilters(prev => ({ ...prev, [type]: newValue }));
   };
-
   const toggleCalendar = useCallback((type) => {
     if (showCalendar && calendarInitiatedFrom === type) {
       setShowCalendar(false);
@@ -420,7 +402,6 @@ const handleSearch = () => {
       setCalendarInitiatedFrom(type);
     }
   }, [showCalendar, calendarInitiatedFrom]);
-
   const handleDateChange = useCallback((newDate) => {
     if (calendarInitiatedFrom === 'start' || (!checkInDate && calendarInitiatedFrom === 'start')) {
       setCheckInDate(newDate);
@@ -448,12 +429,10 @@ const handleSearch = () => {
       setCalendarInitiatedFrom(null);
     }
   }, [calendarInitiatedFrom, checkInDate, checkOutDate]);
-
   const handleCalendarComplete = useCallback(() => {
     setShowCalendar(false);
     setCalendarInitiatedFrom(null);
   }, []);
-
   const renderGuestInfo = () => {
     const parts = [];
     
@@ -471,7 +450,6 @@ const handleSearch = () => {
     
     return parts.join(", ");
   };
-
 const handleDestinationClick = (destination) => {
   const navigationState = {
     filters: {
@@ -494,7 +472,6 @@ const handleDestinationClick = (destination) => {
 
   navigate(`/venues?${queryParams.toString()}`, { state: navigationState });
 };
-
   const handleMetaFilterClick = (metaFilter) => {
     const navigationState = {
       filters: {
@@ -509,7 +486,6 @@ const handleDestinationClick = (destination) => {
     
     navigate("/venues", { state: navigationState });
   };
-
 const applyFilters = () => {
   if (filters.children > 0 && filters.adults === 0 && filters.disabled === 0) {
     alert("At least one adult or Assisted guest must be present if there are children.");
@@ -577,14 +553,12 @@ const applyFilters = () => {
   
   navigate("/venues", { state: { filters: appliedFilters } });
 };
-
   const VenueTypeSkeleton = () => (
     <div className={`${styles.venueType} ${styles.skeleton}`}>
       <div className={styles.skeletonImage}></div>
       <div className={styles.skeletonText}></div>
     </div>
   );
-
   const DestinationFilter = () => (
     <div className={styles.filterDestination}>
       <i className="fa-solid fa-location-dot"></i>
@@ -614,7 +588,6 @@ const applyFilters = () => {
       )}
     </div>
   );
-
   const DateFilter = () => (
     <div className={styles.filterCalender} ref={dateFilterRef}>
       <i
@@ -670,7 +643,6 @@ const applyFilters = () => {
       </div>
     </div>
   );
-
   const GuestFilter = ({ refProp }) => (
     <div className={styles.filterPeople}>
       <i className="fa-solid fa-person"></i>

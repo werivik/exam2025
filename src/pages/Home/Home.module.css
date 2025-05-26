@@ -50,6 +50,9 @@
   background-color: #F3F0EB;
   border-radius: 15px 15px 0px 0px;
 }
+.filterContentSecond Button {
+  height: 40px;
+}
 .filterContentSecond .allFilters .filtersColumns {
   width: 100%;
   display: flex;
@@ -364,27 +367,6 @@ input[type="date"] {
   justify-content: space-between;
   z-index: 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   .scrollIcon {
     display: flex;
     flex-direction: column;
@@ -434,14 +416,17 @@ input[type="date"] {
   width: 80%;
   height: 100%;
 }
-.metaTitle, .venuesTitle, .DestinationTitle, .venuesTitle {
+.metaTitle, .venuesTitle, .DestinationTitle {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     height: 280px;
     text-align: left;
-    gap: 50px;
+    gap: 75px;
+}
+.venuesTitle {
+  height: 300px;
 }
 .metaTitle h2, .venuesTitle h2, .DestinationTitle h2 {
     font-size: 3rem;
@@ -449,21 +434,21 @@ input[type="date"] {
     padding: 0;
     pointer-events: none;
     font-style: normal;
+    width: 50%;
 }
-.venuesTitle h2 {
-  font-size: 2.5rem;
+.metaTitle p, .DestinationTitle p {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 1.8rem;
+  font-style: italic;
+  font-weight: 300;
   margin: 0;
   padding: 0;
   pointer-events: none;
-  font-style: normal;
-}
-.metaTitle p, .DestinationTitle p, .venuesTitle p {
-    font-size: 1.8rem;
-    font-style: italic;
-    font-weight: 400;
-    margin: 0;
-    padding: 0;
-    pointer-events: none;
+  font-family: "Source Serif 4", serif;
+  width: 35%;
+  min-width: 450px;
 }
 .venuesTitle .browseAllLink {
     font-size: 1.8rem;
@@ -735,7 +720,6 @@ input[type="date"] {
     flex-direction: row;
     justify-content: space-between;
     gap: 25px;
-    margin-top: 50px;
 }
 .warningPopup {
   position: absolute;
@@ -882,6 +866,7 @@ input[type="date"] {
   font-size: 1rem;
   margin-top: 5px;
 }
+
 @media (max-width: 1375px) {
   .dropdownMenu {
     z-index: 9999;
@@ -898,13 +883,18 @@ input[type="date"] {
 @media (max-width:1300px) {
   .metaTitle, .venuesTitle, .DestinationTitle, .venuesTitle {
     height: 225px;
-    gap: 50px;
+    gap: 0px;
 }
 .metaTitle h2, .venuesTitle h2, .DestinationTitle h2, .venuesTitle h2 {
     font-size: 2.5rem;
+    min-width: 450px;
 }
 .metaTitle p, .DestinationTitle p, .venuesTitle p {
-    font-size: 1.25rem;
+  font-size: 1.25rem;
+  min-width: 350px;
+}
+.venuesTitle h2 {
+  min-width: 600px;
 }
 .fifthSection {
   max-height: 750px;
@@ -915,7 +905,6 @@ input[type="date"] {
 .secondSection {
   max-height: 650px;
 }
-
 .thirdSection {
   height: 70vh;
 }
@@ -964,14 +953,15 @@ input[type="date"] {
   height: 200px;
 }
 .metaTitle h2, .DestinationTitle h2 {
-  font-size: 2rem;
-  text-align: left;
+  font-size: 2.125rem;
+  min-width: 375px;
 }
 .venuesTitle h2 {
   font-size: 1.75rem;
 }
 .metaTitle p, .DestinationTitle p, .venuesTitle p {
   font-size: 1.125rem;
+  min-width: 300px;
 }
 .secondSection {
   max-height: 550px;
@@ -1015,7 +1005,6 @@ input[type="date"] {
 .thirdSection {
   max-height: 450px;
 }
-
 .thirdInfo {
     width: 100%;
     text-align: center;
@@ -1035,12 +1024,14 @@ input[type="date"] {
   .secondSection {
     max-height: 500px;
   }
-.metaTitle p, .DestinationTitle p {
-  display: none;
-}
 .venuesTitle .browseAllLink {
     font-size: 1.5rem;
 }
+}
+@media (max-width:750px) {
+  .metaTitle p, .DestinationTitle p {
+    display: none;
+  }
 }
 @media (max-width:725px){
   .heroSection {
@@ -1071,7 +1062,11 @@ input[type="date"] {
     min-width: 75px;
   }
   .filtersColumnsBottom {
-    gap: 5px;
+    gap: 10px;
+    margin: 0;
+    height: 40px;
+  }
+  .filtersColumnsBottom .filterPeople {
     margin: 0;
   }
   .DestinationTitle {
@@ -1087,6 +1082,11 @@ input[type="date"] {
   }
   .metaType {
     min-width: 175px;
+  }
+  .metaTitle h2, .venuesTitle h2, .DestinationTitle h2 {
+    width: 100%;
+    text-align: center;
+    min-width: 100px;
   }
   .metaType h3 {
     font-size: 1.25rem;
@@ -1117,7 +1117,6 @@ input[type="date"] {
   .venuesTitle {
     height: 150px;
     margin-top: 25px;
-    margin-bottom: -35px;
   }
   .popularHotels {
     overflow-x: scroll;
@@ -1194,7 +1193,7 @@ input[type="date"] {
     margin-bottom: -25px;
   }
   .metaTitle h2 {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
   .fifthSection {
     max-height: 650px;
@@ -1203,7 +1202,10 @@ input[type="date"] {
     bottom: 25px;
   }
   .DestinationTitle h2, .venuesTitle h2 {
-    font-size: 1.75rem;
+    min-width: none;
+  }
+  .venuesTitle {
+    margin-bottom: 10px;
   }
   .thirdInfo {
     margin-top: 15px;
@@ -1224,4 +1226,30 @@ input[type="date"] {
 .thirdInfoLinks a {
   font-size: 1rem;
 }
+}
+@media (max-width:440px) {
+  .venuesTitle h2 {
+    font-size: 1.75rem;
+    min-width: 200px;
+    width: 100%;
+  }
+}
+@media (max-width:386px) {
+  .metaTitle h2, .venuesTitle h2, .DestinationTitle h2 {
+    font-size: 1.5rem;
+  }
+}
+@media (max-width:320px) {
+  .filtersColumnsBottom {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
+  }
+  .filtersColumnsBottom Button {
+    height: 35px;
+  }
+  .firstSection {
+    height: 73vh;
+    padding-bottom: 25px;
+  }
 }
