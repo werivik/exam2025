@@ -2,11 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./BannerSlideshow.module.css";
 
 import backup from "/public/media/slideshow/homeBanner.png";
-import img1 from "/public/media/slideshow/yatch.mov";
+import img1 from "/public/media/slideshow/exotic.mp4";
 import img2 from "/public/media/slideshow/spainBanner.png";
 import img3 from "/public/media/slideshow/irelandBanner.png";
 import img4 from "/public/media/slideshow/parisBanner.jpg";
 import img5 from "/public/media/slideshow/japanBanner.png";
+
+/* 
+Video by <a href="https://pixabay.com/users/delmagrom_photography-32857503/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=146632">Jor Delmagro</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=146632">Pixabay</a> 
+// */
 
 const slides = [
   {
