@@ -125,12 +125,13 @@
 
 .venueInfo {
   margin-bottom: 25px;
+  width: 95%;
 }
 
-.venueInfo h2 {
+.venueInfo h1 {
   margin: 0 0 8px 0;
   margin-top: 25px;
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #1F1B17;
   pointer-events: none;
@@ -149,6 +150,19 @@
   text-decoration: underline;
   font-weight: 500;
   transition: color 0.2s ease;
+}
+
+.venueRating {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  height: 35px;
+}
+
+.venueRating img {
+  width: 20px;
+  height: 20px;
 }
 
 .venueInfo a:hover {
@@ -387,6 +401,63 @@ color: white;
   justify-content: flex-end;
 }
 
+.currentlyStayingBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #5D6B2F;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  width: fit-content;
+  margin-top: 25px;
+}
+
+.currentlyStayingBadge i {
+  font-size: 0.8rem;
+}
+
+.bookDateContent {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.bookPrice {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.bookPrice p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.totalPriceSpan {
+  color: #666;
+  font-weight: 400;
+}
+
+.label {
+  font-weight: 500;
+  color: #1F1B17;
+  font-size: 0.95rem;
+}
+
+.venueLocation {
+  color: #5D6B2F;
+  font-size: 1rem;
+}
+
+.divideLine {
+  border-top: solid 0.5px #1F1B17;
+  opacity: 10%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 @media (max-width: 1024px) {
   .venueDetails {
     flex-direction: column;
@@ -433,55 +504,6 @@ color: white;
     max-height: 100vh;
   }
 }
-
-
-
-
-.currentlyStayingBadge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #5D6B2F;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  width: fit-content;
-  margin-top: 25px;
-}
-
-.currentlyStayingBadge i {
-  font-size: 0.8rem;
-}
-
-.bookDateContent {
-  position: relative;
-  margin-bottom: 25px;
-}
-
-.bookPrice {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.bookPrice p {
-  margin: 0;
-  font-size: 1rem;
-}
-
-.totalPriceSpan {
-  color: #666;
-  font-weight: 400;
-}
-
-.label {
-  font-weight: 500;
-  color: #1F1B17;
-  font-size: 0.95rem;
-}
-
 @media (max-width: 768px) {
   .currentlyStayingBadge {
     font-size: 0.85rem;
@@ -502,7 +524,6 @@ color: white;
     width: 100%;
   }
 }
-
 @media (max-width: 480px) {
   .currentlyStayingBadge {
     font-size: 0.8rem;

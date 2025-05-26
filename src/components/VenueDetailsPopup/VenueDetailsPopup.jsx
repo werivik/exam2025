@@ -10,6 +10,8 @@ import { VENUE_DELETE } from '../../constants';
 import slideshowPrev from "/public/media/icons/slideshow-next-button.png";
 import slideshowNext from "/public/media/icons/slideshow-next-button.png";
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
+import star from "../../../public/media/rating/christmas-stars.png";
+
 const VenueDetailsPopup = ({ 
   selectedVenue, 
   isModalVisible, 
@@ -456,8 +458,11 @@ const getDescriptionPreview = (desc) => {
               {!isEditing ? (
                 <>
                   <div className={styles.venueInfo}>
-                    <h2>{selectedVenue.name}</h2>
-                    <p>{selectedVenue.rating} Stars</p>
+                    <h1>{selectedVenue.name}</h1>
+                    <p className={styles.venueLocation}>{selectedVenue.location.city}, {selectedVenue.location.country}, {selectedVenue.location.address} {selectedVenue.location.zip}</p>
+                    <p className={styles.venueRating}><img src={star} alt="Rating" /> {selectedVenue.rating}</p>
+                    <div className={styles.divideLine}></div>
+                    <h3>Description</h3>
                     <p>
   {getDescriptionPreview(selectedVenue.description)}{' '}
   {selectedVenue.description && selectedVenue.description.split(/\s+/).length > 50 && (
@@ -469,10 +474,13 @@ const getDescriptionPreview = (desc) => {
     </span>
   )}
 </p>
-                    <p><strong>Price:</strong> ${selectedVenue.price} <span>/ per night</span></p>
+<div className={styles.divideLine}></div>
+                    <p><strong>Price:</strong> $ {selectedVenue.price} <span>/ per night</span></p>
+                    <div className={styles.divideLine}></div>
                     <p><strong>Max Guests:</strong> {selectedVenue.maxGuests}</p>
+                    <div className={styles.divideLine}></div>
                     <p><strong>Amenities:</strong> {selectedVenue.meta.wifi ? 'WiFi, ' : ''}{selectedVenue.meta.parking ? 'Parking, ' : ''}{selectedVenue.meta.breakfast ? 'Breakfast, ' : ''}{selectedVenue.meta.pets ? 'Pets Allowed' : ''}</p>
-                    <p><strong>Location:</strong> {selectedVenue.location.city}, {selectedVenue.location.country}, {selectedVenue.location.address} {selectedVenue.location.zip}</p>
+                    <div className={styles.divideLine}></div>
                     <Link to={`/venue-details/${selectedVenue?.id}`} target="_blank" rel="noopener noreferrer">
                       View Venue
                     </Link>
