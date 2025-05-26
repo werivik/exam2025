@@ -571,11 +571,13 @@ if (!venue) return (
                 className={styles.venueRatingComponent}
               />
             )}
-<div className={styles.dividerLine}></div>
-            <p className={styles.description}>
-              <h3>Description</h3><br />
-              {venue.description}
-            </p>
+            <div className={styles.dividerLine}></div>
+            <div className={styles.description}>
+              <h3>Description</h3>
+              <p>
+                {venue.description}
+              </p>
+            </div>
             
             <p className={styles.pricepernight}>$ {venue.price} <span>/per night</span></p>
             
@@ -636,7 +638,6 @@ if (!venue) return (
                 </ul>
               </div>
             )}            
-            
             <div className={styles.dividerLine}></div>
             <div className={styles.venueOwner}>
               <h3>Venue Manager</h3>

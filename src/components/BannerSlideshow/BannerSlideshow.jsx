@@ -15,6 +15,7 @@ Video by <a href="https://pixabay.com/users/delmagrom_photography-32857503/?utm_
 const slides = [
   {
     img: img1,
+    alt: "Video by https://pixabay.com/users/delmagrom_photography-32857503/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=146632 Jor Delmagro from https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=146632 Pixabay",
     isVideo: true,
     h1: "Holidaze",
     span: "Elegance meets Comfort"

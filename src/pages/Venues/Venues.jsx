@@ -736,9 +736,7 @@ useEffect(() => {
               )}
               {window.innerWidth < 725 && visibleCount < filteredVenues.length && (
                 <div className={styles.loadMoreWrapper}>
-                  <button className={styles.loadMoreButton} onClick={loadMore}>
-                    Load More
-                  </button>
+                  <Buttons size='medium' version='v2' onClick={loadMore}>Load more</Buttons>
                 </div>
               )}
             </>
