@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import styles from './ViewProfile.module.css';
 import { PROFILES_SINGLE, PROFILES_SINGLE_BY_VENUES } from '../../constants';
 import { headers } from '../../headers';
-import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType';
+import VenueCard from '../../components/VenueCard/VenueCard';
 import Buttons from '../../components/Buttons/Buttons';
 
 import defaultAvatar from '../../../public/media/images/mdefault.jpg';
@@ -199,7 +199,7 @@ const ViewProfile = () => {
       {filteredVenues.length > 0 ? (
         <div className={styles.venueGrid}>
           {filteredVenues.map((venue) => (
-            <VenueCardSecondType
+            <VenueCard
               key={venue.id}
               venue={venue}
               onClick={() => handleVenueClick(venue)}

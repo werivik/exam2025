@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from './VenueCardSecondType.module.css';
+import styles from "./PopularCard.module.css";
 import stars from "/public/media/rating/christmas-stars.png";
 
-const VenueCardSecondType = ({ venue, onClick }) => {
+const PopularCard = ({ venue, onClick }) => {
   const isLoading = !venue;
 
   return onClick ? (
@@ -21,14 +21,19 @@ const VenueCardSecondType = ({ venue, onClick }) => {
         <>
           <div className={styles.starRating}>
             <span>{venue.rating?.toFixed(1) || "0.0"}</span>
-            <img 
-              src={stars} 
-              alt="Star" 
-              className={styles.singleStar} 
-            />
+            <div className={styles.starRow}>
+              {[...Array(1)].map((_, i) => (
+                <img
+                  key={i}
+                  src={stars}
+                  alt={i < Math.round(venue.rating || 0) ? "Filled Star" : "Empty Star"}
+                  className={i < Math.round(venue.rating || 0) ? styles.starFilled : styles.starEmpty}
+                />
+              ))}
+            </div>
           </div>
           <img
-            src={venue.media?.[0]?.url || '/media/logo/loadingScreen.png'}
+            src={venue.media?.[0]?.url || '/public/media/logo/loadingScreen.png'}
             alt={venue.media?.[0]?.alt || venue.name}
             className={styles.hotelImage}
           />
@@ -87,4 +92,4 @@ const VenueCardSecondType = ({ venue, onClick }) => {
   );
 };
 
-export default VenueCardSecondType;
+export default PopularCard;

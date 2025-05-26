@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from './VenueCardFirstType.module.css';
-import stars from "/media/rating/christmas-stars.png";
+import styles from './VenueCard.module.css';
+import stars from "/public/media/rating/christmas-stars.png";
 
-const VenueCardFirstType = ({ venue, onClick }) => {
+const VenueCard = ({ venue, onClick }) => {
   const isLoading = !venue;
 
   return onClick ? (
@@ -21,16 +21,11 @@ const VenueCardFirstType = ({ venue, onClick }) => {
         <>
           <div className={styles.starRating}>
             <span>{venue.rating?.toFixed(1) || "0.0"}</span>
-            <div className={styles.starRow}>
-              {[...Array(1)].map((_, i) => (
-                <img
-                  key={i}
-                  src={stars}
-                  alt={i < Math.round(venue.rating || 0) ? "Filled Star" : "Empty Star"}
-                  className={i < Math.round(venue.rating || 0) ? styles.starFilled : styles.starEmpty}
-                />
-              ))}
-            </div>
+            <img 
+              src={stars} 
+              alt="Star" 
+              className={styles.singleStar} 
+            />
           </div>
           <img
             src={venue.media?.[0]?.url || '/media/logo/loadingScreen.png'}
@@ -92,4 +87,4 @@ const VenueCardFirstType = ({ venue, onClick }) => {
   );
 };
 
-export default VenueCardFirstType;
+export default VenueCard;

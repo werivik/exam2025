@@ -15,8 +15,8 @@ import wifiImage from "../../../public/media/metaImages/wifi.jpeg";
 
 import { VENUES } from '../../constants';
 import { headers } from '../../headers';
-import VenueCardFirstType from '../../components/VenueCardFirstType/VenueCardFirstType';
-import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType';
+import VenueCardFirstType from '../../components/PopularCard/PopularCard';
+import PopularCard from '../../components/PopularCard/PopularCard';
 import CustomCalender from '../../components/CostumCalender/CostumCalender';
 import BannerSlideshow from '../../components/BannerSlideshow/BannerSlideshow';
 
@@ -864,11 +864,11 @@ setAllLocations(Array.from(locationsSet));
               <div className={styles.popularHotels}>
                 {venues.length === 0 ? (
                   Array.from({ length: window.innerWidth <= 690 ? 5 : window.innerWidth <= 1093 ? 3 : window.innerWidth <= 1375 ? 4 : 5 }).map((_, index) => (
-                    <VenueCardFirstType key={index} venue={null} />
+                    <PopularCard key={index} venue={null} />
                   ))
                 ) : (
                   displayedVenues.map((venue) => (
-                    <VenueCardFirstType key={venue.id} venue={venue} />
+                    <PopularCard key={venue.id} venue={venue} />
                   ))
                 )}
               </div>

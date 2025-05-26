@@ -4,7 +4,7 @@ import { headers } from '../../headers.js';
 import { motion } from "framer-motion";
 import styles from './Venues.module.css';
 import { useSearchParams, useLocation } from 'react-router-dom';
-import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType.jsx';
+import VenueCard from '../../components/VenueCard/VenueCard.jsx';
 import Buttons from '../../components/Buttons/Buttons.jsx';
 import Searchbar from '../../components/Searchbar/Searchbar.jsx';
 import Sidebar from '../../components/Sidebar/Sidebar.jsx';
@@ -700,7 +700,7 @@ useEffect(() => {
           {loading ? (
             <div className={styles.allHotels}>
               {Array.from({ length: 8 }).map((_, i) => (
-                <VenueCardSecondType key={i} venue={null} />
+                <VenueCard key={i} venue={null} />
               ))}
             </div>
           ) : noMatches ? (
@@ -709,7 +709,7 @@ useEffect(() => {
             <>
               <div className={styles.allHotels}>
                 {visibleVenues.map(venue => (
-                  <VenueCardSecondType key={venue.id} venue={venue} />
+                  <VenueCard key={venue.id} venue={venue} />
                 ))}
               </div>
               {window.innerWidth >= 725 && pageTotal > 1 && (

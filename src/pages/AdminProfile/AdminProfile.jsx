@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { PROFILES_SINGLE, PROFILES_SINGLE_BY_VENUES } from '../../constants';
 import { headers } from '../../headers';
 import defaultAvatar from '/media/images/mdefault.jpg';
-import VenueCardSecondType from '../../components/VenueCardSecondType/VenueCardSecondType.jsx';
+import VenueCard from '../../components/VenueCard/VenueCard.jsx';
 import Buttons from '../../components/Buttons/Buttons';
 import VenueDetailsPopup from '../../components/VenueDetailsPopup/VenueDetailsPopup';
 import CostumPopup from '../../components/CostumPopup/CostumPopup';
@@ -419,7 +419,7 @@ const handleSaveProfile = async () => {
                   {filteredVenues.length > 0 ? (
                     <div className={styles.venueGrid}>
                       {filteredVenues.map((venue) => (
-                        <VenueCardSecondType
+                        <VenueCard
                           key={venue.id}
                           venue={venue}
                           onClick={() => handleVenueClick(venue)}
@@ -480,7 +480,7 @@ const handleSaveProfile = async () => {
                 {filteredVenues.length > 0 ? (
                   <div className={styles.venueGrid}>
                     {filteredVenues.map((venue) => (
-                      <VenueCardSecondType
+                      <VenueCard
                         key={venue.id}
                         venue={venue}
                         onClick={() => handleVenueClick(venue)}
@@ -539,7 +539,7 @@ const handleSaveProfile = async () => {
                     {filteredVenues.length > 0 ? (
                       <div className={styles.venueGrid}>
                         {filteredVenues.map((venue) => (
-                          <VenueCardSecondType
+                          <VenueCard
                             key={venue.id}
                             venue={venue}
                             onClick={() => handleVenueClick(venue)}
