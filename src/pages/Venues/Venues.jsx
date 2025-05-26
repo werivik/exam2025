@@ -14,6 +14,7 @@ const pageVariants = {
   animate: { opacity: 1 },
   exit: { opacity: 0 },
 };
+
 const normalizeString = (str) => {
   return str
     ?.toLowerCase()
@@ -21,6 +22,7 @@ const normalizeString = (str) => {
     .replace(/\s+/g, ' ')
     .trim() || '';
 };
+
 const formatSuggestion = (str) => {
   return str
     ?.toLowerCase()
@@ -31,7 +33,9 @@ const formatSuggestion = (str) => {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ') || '';
 };
+
 const PAGE_SIZE = 20;
+
 const Venues = () => {
   const [venues, setVenues] = useState([]);
   const [filteredVenues, setFilteredVenues] = useState([]);
@@ -61,6 +65,7 @@ const Venues = () => {
     country: useRef(null),
     city: useRef(null),
   };
+
   const [filters, setFilters] = useState({
     continent: '',
     country: location.state?.filters?.country || '',
@@ -74,21 +79,25 @@ const Venues = () => {
     priceMin: 0,
     priceMax: 0
   });
+
   const [locationSuggestionList, setLocationSuggestionList] = useState({
     continent: [],
     country: [],
     city: [],
   });
+
   const [showLocationSuggestions, setShowLocationSuggestions] = useState({
     continent: false,
     country: false,
     city: false,
   });   
+
   const [inputValues, setInputValues] = useState({
   continent: '',
   country: location.state?.filters?.country || '',
   city: location.state?.filters?.city || '',
   });
+
   const extractLocationSuggestions = useCallback((venuesData) => {
     const continents = new Map();
     const countries = new Map();
@@ -122,6 +131,7 @@ const Venues = () => {
       city: Array.from(cities.values()),
     };
   }, []);
+
   const clearFilters = useCallback(() => {
     setFilters({
       continent: '',
@@ -144,6 +154,7 @@ const Venues = () => {
     });
     setCurrentPage(1);
   }, [minPrice, maxPrice]);
+  
   const handleFilterChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
 
@@ -159,6 +170,7 @@ const Venues = () => {
         return { ...prev, ratings: newRatings };
       });
     } 
+
     else if (type === 'checkbox') {
       setFilters(prev => ({
         ...prev,
@@ -168,6 +180,7 @@ const Venues = () => {
         }
       }));
     } 
+
     else {
       setFilters(prev => ({
         ...prev,
@@ -175,14 +188,17 @@ const Venues = () => {
       }));
     }
   }, []);
+
   const toggleSidebar = useCallback(() => {
     setShowSidebar(prev => !prev);
   }, []);
+
   const handleSearchInputChange = useCallback((e) => {
     const value = e.target.value;
     setSearchQuery(value);
     setCurrentPage(1);
   }, []);
+
 useEffect(() => {
   const fetchVenues = async () => {
     try {
@@ -250,6 +266,7 @@ useEffect(() => {
 
   fetchVenues();
 }, [extractLocationSuggestions]);
+
   useEffect(() => {
     const params = new URLSearchParams();
     if (filters.continent) params.set("continent", filters.continent);
@@ -266,6 +283,7 @@ useEffect(() => {
 
     setSearchParams(params, { replace: true });
   }, [filters, currentPage, setSearchParams]);
+
   useEffect(() => {
     if (!venues.length) return;
     
@@ -335,12 +353,14 @@ useEffect(() => {
     setNoMatches(filtered.length === 0);
     
   }, [filters, venues, sortOption, searchQuery]);
+
   useEffect(() => {
     document.body.style.overflow = showSidebar ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
   }, [showSidebar]);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       Object.entries(inputRefs).forEach(([key, ref]) => {
@@ -353,9 +373,11 @@ useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
 const pageTotal = useMemo(() => 
   Math.max(1, Math.ceil(filteredVenues.length / PAGE_SIZE)),
 [filteredVenues.length]);
+
 const getPageNumbers = (currentPage, totalPages) => {
   const maxPageNumbers = 5;
   let startPage;
@@ -373,34 +395,41 @@ const getPageNumbers = (currentPage, totalPages) => {
   }
   return Array.from({ length: Math.min(maxPageNumbers, totalPages) }, (_, i) => startPage + i);
 };
+
   const scrollToTop = useCallback(() => {
     topRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
+
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
   const loadMore = useCallback(() => {
     setVisibleCount(prev => Math.min(prev + 10, filteredVenues.length));
   }, [filteredVenues.length]);
+
   const handlePageClick = useCallback((pageNum) => {
     setCurrentPage(pageNum);
     scrollToTop();
   }, [scrollToTop]);
+
   const goToNextPage = useCallback(() => {
     if (currentPage < pageTotal) {
       setCurrentPage(prev => prev + 1);
       scrollToTop();
     }
   }, [currentPage, pageTotal, scrollToTop]);
+
   const goToPrevPage = useCallback(() => {
     if (currentPage > 1) {
       setCurrentPage(prev => prev - 1);
       scrollToTop();
     }
   }, [currentPage, scrollToTop]);
+
   const getSuggestions = useCallback((type) => {
     const input = inputValues[type]?.toLowerCase().replace(/[-_]/g, ' ').trim();
     if (!input) return [];
@@ -408,11 +437,13 @@ const getPageNumbers = (currentPage, totalPages) => {
       normalizeString(item).includes(input)
     );
   }, [inputValues, locationSuggestionList]);
+
   const handleLocationSuggestionClick = useCallback((type, value) => {
     setFilters(prev => ({ ...prev, [type]: value }));
     setInputValues(prev => ({ ...prev, [type]: value }));
     setShowLocationSuggestions(prev => ({ ...prev, [type]: false }));
   }, []);
+
 const visibleVenues = useMemo(() => {
   if (isMobile) {
     return filteredVenues.slice(0, visibleCount);
@@ -421,8 +452,10 @@ const visibleVenues = useMemo(() => {
     return filteredVenues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   }
 }, [filteredVenues, currentPage, visibleCount, isMobile]);
+
 useEffect(() => {
 }, [currentPage, visibleVenues]);
+
 useEffect(() => {
   if (!initialFiltersApplied) return;
   const params = new URLSearchParams();
@@ -439,6 +472,7 @@ useEffect(() => {
   params.set("page", currentPage.toString());
   setSearchParams(params, { replace: true });
 }, [filters, currentPage, setSearchParams, initialFiltersApplied]);
+
 useEffect(() => {
   if (!initialFiltersApplied && venues.length > 0) {
     const urlParams = new URLSearchParams(location.search);
@@ -532,6 +566,7 @@ useEffect(() => {
     setInitialFiltersApplied(true);
   }
 }, [venues, location.search, location.state, initialFiltersApplied, metaFilters, filters, currentPage]);
+
 useEffect(() => {
   if (location.state?.filters) {
     const { filters } = location.state;
@@ -562,6 +597,7 @@ useEffect(() => {
     }
   }
 }, [location.state]);
+
 useEffect(() => {
   if (!initialFiltersApplied) return;
   
