@@ -605,13 +605,13 @@ const handleSaveProfile = async () => {
       )}
 
       {showSuccessPopup && (
-  <CostumPopup
-    message={successPopupMessage}
-    title="Success"
-    showButtons={false}
-    disableAutoClose={true}
-  />
-)}
+        <CostumPopup
+          message={successPopupMessage}
+          title="Success"
+          showButtons={false}
+          disableAutoClose={true}
+        />
+      )}
     </motion.div>
   );
 };
