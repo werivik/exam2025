@@ -663,7 +663,7 @@ useEffect(() => {
 
           {loading ? (
             <div className={styles.allHotels}>
-              {Array.from({ length: 6 }).map((_, i) => (
+              {Array.from({ length: 8 }).map((_, i) => (
                 <VenueCardSecondType key={i} venue={null} />
               ))}
             </div>
