@@ -436,6 +436,9 @@ input[type="date"] {
     font-style: normal;
     width: 50%;
 }
+.venuesTitle h2 {
+  min-width: 700px;
+}
 .metaTitle p, .DestinationTitle p {
   display: flex;
   align-items: center;
@@ -958,6 +961,7 @@ input[type="date"] {
 }
 .venuesTitle h2 {
   font-size: 1.75rem;
+  min-width: 425px;
 }
 .metaTitle p, .DestinationTitle p, .venuesTitle p {
   font-size: 1.125rem;
