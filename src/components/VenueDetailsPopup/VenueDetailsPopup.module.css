@@ -479,6 +479,17 @@ color: white;
     width: 100%;
   }
 }
+@media (max-width: 768px) {
+  .currentlyStayingBadge {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+  
+  .bookDate {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
 @media (max-width: 480px) {
   .modalContent {
     width: 100%;
@@ -503,29 +514,7 @@ color: white;
     padding: 10px;
     max-height: 100vh;
   }
-}
-@media (max-width: 768px) {
-  .currentlyStayingBadge {
-    font-size: 0.85rem;
-    padding: 6px 10px;
-  }
-  
-  .bookDate {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .bookedVenueEditButtons {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .bookedVenueEditButtons button {
-    width: 100%;
-  }
-}
-@media (max-width: 480px) {
-  .currentlyStayingBadge {
+    .currentlyStayingBadge {
     font-size: 0.8rem;
     padding: 5px 8px;
   }
