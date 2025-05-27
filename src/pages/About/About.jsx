@@ -83,7 +83,7 @@ const About = () => {
               </p>
             </div>
             <div className={styles.imageContainer}>
-              <img src="/media/staff/staffGoal.jpg" alt="Holidaze experience" className={styles.aboutImage} />
+              <img src="/media/staff/staffGoal-min.jpg" alt="Holidaze experience" className={styles.aboutImage} />
             </div>
           </section>
 
@@ -127,7 +127,7 @@ const About = () => {
 
           <section className={styles.storySection}>
             <div className={styles.imageContainer}>
-              <img src="/media/staff/staffGroup.jpg" alt="Holidaze journey" className={styles.aboutImage} />
+              <img src="/media/staff/staffGroup-min.jpg" alt="Holidaze journey" className={styles.aboutImage} />
             </div>
             <div className={styles.sectionContent}>
               <h2>Our Story</h2>
