@@ -115,6 +115,9 @@ This project was developed as an educational assignment. If you'd like to sugges
 
 ## Contact
 
+[LinkedIn](https://www.linkedin.com/in/weronika-vik-0844022a6/)
+[GitHub](https://github.com/werivik)
+
 **Live Application:** [Holidaze on Netlify](https://werivik-holidaze.netlify.app/)
 
 **Project Resources:**
